@@ -61,3 +61,23 @@
     git=http://github.com/symfony/AsseticBundle.git
     target=/bundles/Symfony/Bundle/AsseticBundle
     version=v1.0.1
+
+# added manually
+
+[FOSUserBundle]
+    git=git://github.com/FriendsOfSymfony/FOSUserBundle.git
+    target=bundles/FOS/UserBundle
+    version=1.2.0
+
+[knp-components]
+    git=http://github.com/KnpLabs/knp-components.git
+
+[KnpPaginatorBundle]
+    git=http://github.com/KnpLabs/KnpPaginatorBundle.git
+    target=bundles/Knp/Bundle/PaginatorBundle
+
+
+[GenemuFormBundle]
+    git=git://github.com/genemu/GenemuFormBundle.git
+    target=bundles/Genemu/Bundle/FormBundle
+    version=origin/2.0

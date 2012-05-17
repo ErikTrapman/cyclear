@@ -5,16 +5,20 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Symfony'          => array(__DIR__.'/../vendor/symfony/src', __DIR__.'/../vendor/bundles'),
-    'Sensio'           => __DIR__.'/../vendor/bundles',
-    'JMS'              => __DIR__.'/../vendor/bundles',
-    'Doctrine\\Common' => __DIR__.'/../vendor/doctrine-common/lib',
-    'Doctrine\\DBAL'   => __DIR__.'/../vendor/doctrine-dbal/lib',
-    'Doctrine'         => __DIR__.'/../vendor/doctrine/lib',
-    'Monolog'          => __DIR__.'/../vendor/monolog/src',
-    'Assetic'          => __DIR__.'/../vendor/assetic/src',
-    'Metadata'         => __DIR__.'/../vendor/metadata/src',
-    'Cyclear'          => __DIR__.'/../src',
+    'Symfony'           => array(__DIR__.'/../vendor/symfony/src', __DIR__.'/../vendor/bundles'),
+    'Sensio'            => __DIR__.'/../vendor/bundles',
+    'JMS'               => __DIR__.'/../vendor/bundles',
+    'Doctrine\\Common'  => __DIR__.'/../vendor/doctrine-common/lib',
+    'Doctrine\\DBAL'    => __DIR__.'/../vendor/doctrine-dbal/lib',
+    'Doctrine'          => __DIR__.'/../vendor/doctrine/lib',
+    'Monolog'           => __DIR__.'/../vendor/monolog/src',
+    'Assetic'           => __DIR__.'/../vendor/assetic/src',
+    'Metadata'          => __DIR__.'/../vendor/metadata/src',
+    'FOS'               => __DIR__.'/../vendor/bundles',
+    'Cyclear'           => __DIR__.'/../src',
+    'Knp\\Component'      => __DIR__.'/../vendor/knp-components/src',
+    'Knp\\Bundle'         => __DIR__.'/../vendor/bundles',
+    'Genemu' => __DIR__.'/../vendor/bundles',
 ));
 $loader->registerPrefixes(array(
     'Twig_Extensions_' => __DIR__.'/../vendor/twig-extensions/lib',

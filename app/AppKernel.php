@@ -19,6 +19,10 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             
             new Cyclear\CQParserBundle\CyclearCQParserBundle(),
+            new Cyclear\GameBundle\CyclearGameBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             
         );
 
