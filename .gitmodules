@@ -1,6 +1,6 @@
-[submodule "src/CyclearGameBundle"]
-	path = src/CyclearGameBundle
-	url = git@github.com:ErikTrapman/CyclearGameBundle
-[submodule "src/CyclearCQParserBundle"]
-	path = src/CyclearCQParserBundle
+[submodule "src/Cyclear/CQParserBundle"]
+	path = src/Cyclear/CQParserBundle
 	url = git@github.com:ErikTrapman/CyclearCQParserBundle
+[submodule "src/Cyclear/GameBundle"]
+	path = src/Cyclear/GameBundle
+	url = git@github.com:ErikTrapman/CyclearGameBundle
