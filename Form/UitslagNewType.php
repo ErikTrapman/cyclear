@@ -10,7 +10,7 @@ class UitslagNewType extends AbstractType {
 
     public function buildForm(FormBuilder $builder, array $options) {
         $builder
-                ->add('datum', 'jquery_date', array('format' => 'dd-MM-y'))
+                ->add('datum', 'genemu_jquerydate', array('format' => 'dd-MM-y'))
                 ->add('url')
                 ->add('uitslagtype', 'entity', array('class' => 'CyclearGameBundle:UitslagType'))
                 ->add('refentiewedstrijd', 'entity', array('required' => false, 'class' => 'CyclearGameBundle:Wedstrijd',

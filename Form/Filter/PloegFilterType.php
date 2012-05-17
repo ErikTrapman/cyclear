@@ -22,7 +22,7 @@ class PloegFilterType extends AbstractType {
         $builder
                 ->add('naam', 'text', array('required' => false))
                 ->add('afkorting', 'text', array('required' => false));
-        $builder->add('user', 'entity', array('class' => 'Cyclear\UserBundle\Entity\User', 'required' => false));
+        $builder->add('user', 'entity', array('class' => 'Cyclear\GameBundle\Entity\User', 'required' => false));
     }
 
     public function getName() {

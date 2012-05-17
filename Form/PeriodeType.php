@@ -10,8 +10,8 @@ class PeriodeType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('start','jquery_date', array('format' => 'dd-MM-y', 'changeMonth' => true, 'changeYear' => true))
-            ->add('eind','jquery_date', array('format' => 'dd-MM-y', 'changeMonth'=>true, 'changeYear' => true))
+            ->add('start','genemu_jquerydate', array('format' => 'dd-MM-y', 'changeMonth' => true, 'changeYear' => true))
+            ->add('eind','genemu_jquerydate', array('format' => 'dd-MM-y', 'changeMonth'=>true, 'changeYear' => true))
             ->add('transfers',null, array('label'=>'Aantal transfers'))
         ;
     }

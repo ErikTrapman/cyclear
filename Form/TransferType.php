@@ -14,7 +14,7 @@ class TransferType extends AbstractType {
                 //->add('renner','jquery_entity_combobox', array('class' => 'Cyclear\GameBundle\Entity\Renner') )
                 ->add('renner', 'renner_selector')
                 ->add('ploegNaar', null, array('required' => true))
-                ->add('datum', 'jquery_date', array('format' => 'dd-MM-y'))
+                ->add('datum', 'genemu_jquerydate', array('format' => 'dd-MM-y'))
         ;
     }
 

@@ -10,7 +10,7 @@ class WedstrijdType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('datum', 'jquery_date', array('format' => 'dd-MM-y'))
+            ->add('datum', 'genemu_jquerydate', array('format' => 'dd-MM-y'))
             ->add('naam')
             ->add('uitslagtype', 'entity', array('class' => 'CyclearGameBundle:UitslagType'))    
         ;
