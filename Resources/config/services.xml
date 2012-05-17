@@ -1,0 +1,73 @@
+<?xml version="1.0" ?>
+<!-- 100 => 'DEBUG', 200 => 'INFO', 300 => 'WARNING', 400 => 'ERROR', 500 
+	=> 'CRITICAL', 550 => 'ALERT', -->
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:monolog="http://symfony.com/schema/dic/monolog"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
+    		http://symfony.com/schema/dic/monolog http://symfony.com/schema/dic/monolog/monolog-1.0.xsd">
+    
+  
+
+
+    <services>
+        <service id="cyclear_game.exceptionlistener.db" class="Cyclear\GameBundle\Listener\ExceptionListener">
+            <tag name="kernel.event_listener" event="kernel.exception"
+                 method="onKernelException" />
+            <argument type="service" id="dblog" />
+        </service>
+
+        <service id="cyclear_game.exceptionlistener.mail" class="Cyclear\GameBundle\Listener\ExceptionListener">
+            <tag name="kernel.event_listener" event="kernel.exception"
+                 method="onKernelException" />
+            <argument type="service" id="maillog" />
+        </service>
+
+        <service id="pdo" class="PDO">
+            <argument key="dsn">mysql:dbname=%database_name%;host=%database_host%</argument>
+            <argument key="user">%database_user%</argument>
+            <argument key="pass">%database_password%</argument>
+        </service>
+
+        <service id="cyclear_game.manager.transfer" class="Cyclear\GameBundle\EntityManager\TransferManager">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+        
+        <service id="cyclear_game.manager.wedstrijd" class="Cyclear\GameBundle\EntityManager\WedstrijdManager"/>
+            
+        <service id="cyclear_game.manager.uitslag" class="Cyclear\GameBundle\EntityManager\UitslagManager">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="cyclear_cqparser.parser"/>
+            <argument type="service" id="cyclear_game.calculator.punten"/>
+        </service>
+        
+        <service id="cyclear_game.type.renner_selector" class="Cyclear\GameBundle\Form\RennerSelectorType">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <tag name="form.type" alias="renner_selector" />
+        </service>
+        
+        <service id="cyclear_game.type.filter.ploeg" class="Cyclear\GameBundle\Form\Filter\PloegFilterType">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <tag name="form.type" alias="ploeg_filter" />
+        </service>
+        
+        <service id="cyclear_game.transfer_repository" class="Cyclear\GameBundle\Entity\TransferRepository"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>Cyclear\GameBundle\Entity\Transfer</argument>
+        </service>
+        
+        <service id="cyclear_game.calculator.punten" class="Cyclear\GameBundle\Calculator\PuntenCalculator">
+            <argument type="service" id="doctrine.orm.entity_manager"/>   
+        </service>
+        
+        
+        <service id="crawler" class="Symfony\Component\DomCrawler\Crawler"/>
+        
+        
+    </services>
+
+	<!-- <parameters> <parameter key="cyclear_game.example.class">Cyclear\GameBundle\Example</parameter> 
+		</parameters> <services> <service id="cyclear_game.example" class="%cyclear_game.example.class%"> 
+		<argument type="service" id="service_id" /> <argument>plain_value</argument> 
+		<argument>%parameter_name%</argument> </service> </services> -->
+</container>

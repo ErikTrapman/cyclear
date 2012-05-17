@@ -1,0 +1,30 @@
+{% extends '::admin.base.html.twig' %}
+
+{% block title %}Renner show{% endblock %}
+
+{% block content %}
+
+<h1>Renner edit</h1>
+
+<form action="{{ path('admin_renner_edit', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+    {{ form_widget(edit_form) }}
+    <p>
+        <button type="submit">Edit</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_renner') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('admin_renner_delete', { 'id': entity.id }) }}" method="post" {{ form_enctype(delete_form) }}>
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
+
+{% endblock %}

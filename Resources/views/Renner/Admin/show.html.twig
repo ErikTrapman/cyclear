@@ -1,0 +1,70 @@
+{% extends '::admin.base.html.twig' %}
+
+{% block title %}Renner show{% endblock %}
+
+{% block content %}
+
+<table class="record_properties">
+	<tbody>
+		<tr>
+			<th>Naam</th>
+			<td>{{ entity.naam }}</td>
+		</tr>
+		<tr>	
+			<th>Ploeg</th>
+			<td>
+			{% if entity.ploeg %}
+				{{ entity.ploeg }}
+			{% else %}
+				- (Geen ploeg)
+			{% endif %} 
+			</td>
+		</tr>
+
+                <tr>
+                    <th>Transfers</th>
+                    <!-- TODO default include maken -->
+                    <td>
+                    {% for transfer in entity.transfers %}
+                    <table cellspacing="2" cellpadding="2">
+                        <tr><td>{{ transfer.id }}</td><td>Van: {{ transfer.ploegvan }}</td><td>Naar:{{ transfer.ploegnaar }}</td><td>{{ transfer.datum|date('Y-m-d H:i:s') }}</td></tr>
+                    </table>
+
+                    {% endfor %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Custom transfer</th>
+                    <td>
+                    {% for lastTransfer in lastTransfers %}    
+                        {{ lastTransfer.id }}
+                    {% endfor %}
+                    </td>
+
+                </tr>
+	
+	</tbody>
+
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_renner') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('admin_renner_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('admin_renner_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
+
+{% endblock %}

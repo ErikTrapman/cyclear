@@ -1,0 +1,40 @@
+<h1>Ploeg</h1>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>                <td>{{ entity.id }}</td>        </tr>
+        <tr>
+            <th>Naam</th>                <td>{{ entity.naam }}</td>        </tr>
+        <tr>
+            <th>Afkorting</th>                <td>{{ entity.afkorting }}</td>        </tr>
+    </tbody>
+</table>
+<h2>Renners</h2>
+<table>
+	<tbody>
+    	<tr><th>Naam</th></tr>
+    	{% for renner in renners %}
+    	<tr><td>{{renner.naam}}</td></tr>
+    	{% endfor %}
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('ploeg') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('ploeg_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('ploeg_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>

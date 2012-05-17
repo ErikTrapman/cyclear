@@ -1,0 +1,37 @@
+{% extends '::admin.base.html.twig' %}
+
+{% block title %}Wedstrijd index{% endblock %}
+
+{% block content %}
+<h1>Wedstrijd list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Naam</th>
+            <th>{{ pagination.sortable('Datum', 'w.datum')|raw }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in pagination %}
+        <tr>
+            <td><a href="{{ path('admin_wedstrijd_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.naam }}</td>
+            <td>{{ entity.datum|date('d-m-Y') }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div id="navigation">
+    {{ pagination.render()|raw }}
+</div>
+
+<ul>
+    <li>
+        <a href="{{ path('admin_wedstrijd_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
+{% endblock %}

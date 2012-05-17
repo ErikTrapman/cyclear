@@ -1,0 +1,34 @@
+<?php
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+namespace Cyclear\GameBundle\Form\Filter;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilder;
+
+class PloegFilterType extends AbstractType {
+
+    private $em;
+
+    public function __construct(\Doctrine\ORM\EntityManager $em) {
+        $this->em = $em;
+    }
+
+    public function buildForm(FormBuilder $builder, array $options) {
+        $builder
+                ->add('naam', 'text', array('required' => false))
+                ->add('afkorting', 'text', array('required' => false));
+        $builder->add('user', 'entity', array('class' => 'Cyclear\UserBundle\Entity\User', 'required' => false));
+    }
+
+    public function getName() {
+        return 'cyclear_gamebundle_ploegfiltertype';
+    }
+
+}
+
+?>
