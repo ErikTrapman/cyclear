@@ -55,6 +55,13 @@ class Uitslag
      * @ORM\Column(name="punten", type="float")
      */
     private $punten;
+    
+    /**
+     * @var float $punten
+     *
+     * @ORM\Column(type="float")
+     */
+    private $rennerPunten;
 
     /**
      * @var datetime $datum
@@ -172,7 +179,18 @@ class Uitslag
     {
         return $this->punten;
     }
+    
+    
+    public function getRennerPunten()
+    {
+        return $this->rennerPunten;
+    }
 
+    public function setRennerPunten($rennerPunten)
+    {
+        $this->rennerPunten = $rennerPunten;
+    }
+    
     /**
      * Set datum
      *

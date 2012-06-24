@@ -32,7 +32,9 @@
             <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
         
-        <service id="cyclear_game.manager.wedstrijd" class="Cyclear\GameBundle\EntityManager\WedstrijdManager"/>
+        <service id="cyclear_game.manager.wedstrijd" class="Cyclear\GameBundle\EntityManager\WedstrijdManager">
+            <argument type="service" id="cyclear_cqparser.parser"/>
+        </service>
             
         <service id="cyclear_game.manager.uitslag" class="Cyclear\GameBundle\EntityManager\UitslagManager">
             <argument type="service" id="doctrine.orm.entity_manager" />

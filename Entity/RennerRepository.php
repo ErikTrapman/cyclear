@@ -30,20 +30,48 @@ class RennerRepository extends EntityRepository {
     }
 
     public function findOneByJoinedByLastTransferOnOrBeforeDate($id, \DateTime $date) {
-        
-        $query = $this->getEntityManager()->createQuery('SELECT r, t FROM CyclearGameBundle:Renner r JOIN transfer t WHERE t.datum <= :datum AND t.renner = :renner_id ORDER BY t.id DESC')
-                ->setMaxResults(1)
-                ->setParameter('renner_id', $id)
-                ->setParameter('datum', $date->format("Y-m-d 23:59:59"));
 
-        try {
-            return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+        $rsm->addEntityResult('Cyclear\GameBundle\Entity\Transfer', 't');
+        //$rsm->addFieldResult('r', 'r_id', 'id');
+        $cloneDate = clone $date;
+        $cloneDate->setTime("23", "59", "59");
+        $query = $this->getEntityManager()->createNativeQuery("SELECT * FROM transfer t
+                LEFT JOIN renner r ON t.renner_id = r.id 
+                LEFT JOIN ploeg p ON ploegnaar_id = p.id
+                WHERE t.renner_id = :rennerid AND t.datum < :parsedatum 
+                ORDER BY t.datum DESC LIMIT 1", $rsm)->setParameters(array('rennerid' => $id, 'parsedatum' => $cloneDate));
+        $result = $query->getResult();
+        if (count($result) == 0) {
             return null;
         }
+        return $result[0];
     }
 
     public function findOneJoinedByPloegOnDate($renner, \DateTime $date) {
+
+        /*
+         * SELECT * FROM transfer 
+          LEFT JOIN renner ON renner_id = renner.id
+          LEFT JOIN ploeg ON ploegnaar_id = ploeg.id
+          WHERE renner_id = 18367 AND DATE(datum) < '2011-10-15'
+          ORDER BY datum DESC LIMIT 1
+         */
+        //echo $renner->getId();
+        $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+        $rsm->addEntityResult('Cyclear\GameBundle\Entity\Transfer', 't');
+        $rsm->addFieldResult('r', 'r.id', 'id');
+        $cloneDate = clone $date;
+        $cloneDate->setTime("23", "59", "59");
+        $query = $this->getEntityManager()->createNativeQuery("SELECT * FROM transfer t
+                LEFT JOIN renner r ON t.renner_id = r.id 
+                LEFT JOIN ploeg p ON ploegnaar_id = p.id
+                WHERE t.renner_id = :rennerid AND t.datum < '2011-10-15'
+                ORDER BY t.datum DESC LIMIT 1", $rsm)->setParameters(array('rennerid' => $renner->getId() ) );// , 'parsedatum' => $cloneDate));
+        return $query->getResult();
+    }
+
+    public function findOneJoinedByPloegOnDate2($renner, \DateTime $date) {
 
         $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
         $rsm->addEntityResult('Cyclear\GameBundle\Entity\Renner', 'r');
@@ -61,10 +89,10 @@ class RennerRepository extends EntityRepository {
                 ->setParameter('datum', $date->format('Y-m-d 00:00:00'))
                 ->setParameter('renner', $renner->getId())
                 ->setParameter('renner2', $renner->getId())
-                ;
+        ;
         $query->setFetchMode("Cyclear\GameBundle\Entity\Renner", "ploeg", "LAZY");
         $r = $query->getSingleResult();
-        if(!is_null($r)){
+        if (!is_null($r)) {
             echo $r->getPloeg()->getId();
             echo $r->getPloeg()->getNaam();
             die(__METHOD__);

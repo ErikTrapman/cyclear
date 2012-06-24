@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Cyclear\GameBundle\Entity\Transfer
  *
  * @ORM\Table(name="Transfer")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\TransferRepository")
  */
 class Transfer
 {

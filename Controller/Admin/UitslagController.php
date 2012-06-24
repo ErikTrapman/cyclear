@@ -115,6 +115,7 @@ class UitslagController extends Controller {
             $currentUitslag->setPloeg($renner->getPloeg());
             $currentUitslag->setDatum( $wedstrijd->getDatum() );
             $currentUitslag->setWedstrijd( $wedstrijd );
+            $currentUitslag->setRennerPunten($uitslag['punten']);
             $em->persist($currentUitslag);
         }
         $em->flush();

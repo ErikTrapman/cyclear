@@ -25,10 +25,10 @@ class UitslagManager {
     private $puntenCalculator;
     private $cqParser;
 
-    public function __construct(EntityManager $em, $cqParser, \Cyclear\GameBundle\Calculator\PuntenCalculator $puntenCalculator) {
+    public function __construct(EntityManager $em, $parser, \Cyclear\GameBundle\Calculator\PuntenCalculator $puntenCalculator) {
         $this->entityManager = $em;
-        $this->cqParser = $cqParser;
         $this->puntenCalculator = $puntenCalculator;
+        $this->cqParser = $parser;
     }
 
     /**
@@ -42,19 +42,21 @@ class UitslagManager {
         $url = $form->get('url')->getData();
         $dateTime = $form->get('datum')->getData();
 
-        $parser = $this->cqParser; // new CQParser(new Crawler); // TODO make service
-        $uitslagregels = $parser->getResultRows($url, $form->get('uitslagtype')->getData()->getCqParsingStrategy());
+        $parseStrategyClassname = $form->get('uitslagtype')->getData()->getCqParsingStrategy();
+        $parseStrategy = new $parseStrategyClassname;
+        $uitslagregels = $this->cqParser->getResultRows($url, $parseStrategy);
         $rows = 0;
         $maxResults = $form->get('uitslagtype')->getData()->getMaxResults();
 
-        $puntenReferentieDatum = $form->get('datum')->getData();
+        $puntenReferentieDatum = new \DateTime('2011-10-15'); // $form->get('datum')->getData();
         // TODO if referentiewedstrijd: get datum
 
         $uitslagen = array();
         $rennerRepo = $this->entityManager->getRepository('CyclearGameBundle:Renner');
+        $transferRepo = $this->entityManager->getRepository('CyclearGameBundle:Transfer');
         foreach ($uitslagregels as $uitslagregel) {
 
-            if (strcmp(strtolower($uitslagregel['positie']), 'leader') === 0) {
+            if (strcmp(strtolower($uitslagregel['pos']), 'leader') === 0) {
                 continue;
             }
 
@@ -63,26 +65,33 @@ class UitslagManager {
             $renner = $rennerRepo->findOneByCQId($uitslagregel['cqranking_id']);
             if ($renner !== null) {
                 $uitslag->setRenner($renner);
-                $rennerLookup = $rennerRepo->findOneJoinedByPloegOnDate($renner, $puntenReferentieDatum);
-                if ($rennerLookup !== null && count($rennerLookup) == 1 ) {
-                    
-                    echo $rennerLookup[0]->getPloeg()->getId();die(__METHOD__);
-                    
-                    $uitslag->setPloeg($rennerLookup[0]->getPloeg());
-                } else {
+
+                $transfer = $transferRepo->findLastTransferForDate($renner, $puntenReferentieDatum);
+                if ($transfer === null) {
                     $uitslag->setPloeg(null);
+                } else {
+                    $uitslag->setPloeg($transfer->getPloegNaar());
                 }
+//                $rennerLookup = $rennerRepo->findOneJoinedByPloegOnDate($renner, $puntenReferentieDatum);
+//                if ($rennerLookup !== null && count($rennerLookup) == 1 ) {
+//                    
+//                    echo $rennerLookup[0]->getPloeg()->getId();die(__METHOD__);
+//                    
+//                    $uitslag->setPloeg($rennerLookup[0]->getPloeg());
+//                } else {
+//                    $uitslag->setPloeg(null);
+//                }
             } else {
                 $uitslag->setPloeg(null);
                 $renner = new \Cyclear\GameBundle\Entity\Renner();
-                $renner->setNaam($uitslagregel['naam']);
+                $renner->setNaam($uitslagregel['name']);
                 $renner->setCqRanking_id($uitslagregel['cqranking_id']);
                 $uitslag->setRenner($renner);
             }
-            $uitslag->setPositie($uitslagregel['positie']);
-
+            $uitslag->setPositie($uitslagregel['pos']);
+            $uitslag->setRennerPunten($uitslagregel['points']);
             if ($this->puntenCalculator->canGetPoints($renner, $puntenReferentieDatum)) {
-                $uitslag->setPunten($uitslagregel['punten']);
+                $uitslag->setPunten($uitslagregel['points']);
             } else {
                 $uitslag->setPunten(0);
             }

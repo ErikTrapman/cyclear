@@ -12,14 +12,51 @@ use Doctrine\ORM\EntityRepository;
  */
 class TransferRepository extends EntityRepository {
 
-    public function findByRenner(Renner $renner ) {
-        
+    public function findByRenner(Renner $renner) {
+
         $qb = $this->createQueryBuilder("t");
         $qb->where('t.renner = ?1');
         $qb->orderBy('t.id', 'DESC');
         $qb->setParameter('1', $renner);
         return $qb->getQuery()->getResult();
-        
+    }
+
+    public function findLastTransferForDate($renner, \DateTime $date) {
+        $cloneDate = clone $date;
+        $cloneDate->setTime("23","59","59");
+        $qb = $this->createQueryBuilder("t")->where("t.renner = :renner")->andWhere("t.datum <= :datum")->
+                setParameters(array("renner" => $renner, "datum" => $cloneDate))->orderBy("t.datum", "DESC")->setMaxResults(1);
+        $res = $qb->getQuery()->getResult();
+        if(count($res) == 0){
+            return null;
+        }
+        return $res[0];
+
+        $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+        $rsm->addEntityResult('Cyclear\GameBundle\Entity\Transfer', 't');
+        $rsm->addFieldResult('t', 'transferid', 'id');
+        $rsm->addFieldResult('t', 'transferdatum', 'datum');
+        //$rsm->addFieldResult('t', 'renner', 'renner');
+        //$rsm->addFieldResult('t', 'ploegvan', 'ploegVan');
+        //$rsm->addFieldResult('t', 'ploegnaar', 'ploegNaar');
+        $cloneDate = clone $date;
+        $cloneDate->setTime("23", "59", "59");
+        $query = $this->getEntityManager()->createNativeQuery("SELECT 
+                    t.id AS transferid, 
+                    t.datum AS transferdatum,
+                    t.renner_id AS renner,
+                    t.ploegvan_id AS ploegvan,
+                    t.ploegnaar_id AS ploegnaar
+                    FROM transfer t
+                LEFT JOIN renner r ON t.renner_id = r.id 
+                LEFT JOIN ploeg p ON ploegnaar_id = p.id
+                WHERE t.renner_id = :rennerid AND t.datum < :datum
+                ORDER BY t.datum DESC LIMIT 1", $rsm)->setParameters(array('rennerid' => $renner->getId(), 'datum' => $cloneDate));
+        $result = $query->getResult();
+        if (count($result) == 0) {
+            return null;
+        }
+        return $this->find($result[0]->getId());
     }
 
 }
