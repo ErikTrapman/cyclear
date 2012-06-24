@@ -26,7 +26,7 @@ class User extends BaseUser implements \Serializable
      * 
      * @ORM\OneToOne(targetEntity="Cyclear\GameBundle\Entity\Ploeg", mappedBy="user")
      */
-	private $ploeg;
+    private $ploeg;
     
     /**
      * Get id
@@ -51,5 +51,17 @@ class User extends BaseUser implements \Serializable
        $this->id
         ) = unserialize($data);
     }
+    
+    public function getPloeg() 
+    {
+        return $this->ploeg;
+    }
+
+    public function setPloeg($ploeg) 
+    {
+        $this->ploeg = $ploeg;
+    }
+
+
     
 }
