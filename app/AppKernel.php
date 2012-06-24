@@ -23,7 +23,8 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
-            
+
+            new Cyclear\UserBundle\CyclearUserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -4,3 +4,9 @@
 [submodule "src/Cyclear/GameBundle"]
 	path = src/Cyclear/GameBundle
 	url = git@github.com:ErikTrapman/CyclearGameBundle
+[submodule "src/Cyclear/CyclearUserBundle"]
+	path = src/Cyclear/CyclearUserBundle
+	url = git@github.com:ErikTrapman/CyclearUserBundle.git
+[submodule "src/Cyclear/UserBundle"]
+	path = src/Cyclear/UserBundle
+	url = git@github.com:ErikTrapman/CyclearUserBundle.git
