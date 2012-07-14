@@ -11,7 +11,7 @@ class RennerType extends AbstractType
     {
         $builder
             ->add('naam')
-            ->add('ploeg', 'jquery_entity_combobox', array('required'=>false, 'class' => 'Cyclear\GameBundle\Entity\Ploeg'))
+            ->add('ploeg', 'entity', array('required'=>false, 'class' => 'Cyclear\GameBundle\Entity\Ploeg'))
             ->add('cqranking_id')
         ;
     }

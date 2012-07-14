@@ -3,6 +3,9 @@
 namespace Cyclear\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+use Cyclear\GameBundle\Form\Validator\Constraints as CyclearAssert;
 
 /**
  * Cyclear\GameBundle\Entity\Transfer
@@ -51,6 +54,12 @@ class Transfer
      * @ORM\Column(name="datum", type="datetime")
      */
     private $datum;
+    
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $adminTransfer = false;
 
 
     /**
@@ -142,4 +151,15 @@ class Transfer
     {
         return $this->datum;
     }
+    
+    public function getAdminTransfer() 
+    {
+        return $this->adminTransfer;
+    }
+
+    public function setAdminTransfer($adminTransfer) 
+    {
+        $this->adminTransfer = $adminTransfer;
+    }
+
 }

@@ -1,0 +1,17 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Transfer{% endblock %}
+
+{% block content %}
+
+<h2>Transfer voor mijn ploeg</h2>
+<h3>Renner uit: {{ renner.naam }}</h3>
+
+<form action="{{ path('user_transfer', { id:ploeg.id, renner_id:renner.id }) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Transfer</button>
+    </p>
+</form>
+
+{% endblock %}

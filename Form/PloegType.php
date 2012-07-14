@@ -12,7 +12,7 @@ class PloegType extends AbstractType
         $builder
             ->add('naam')
             ->add('afkorting')
-            ->add('user', 'jquery_entity_combobox', array('class'=>'Cyclear\GameBundle\Entity\User'));
+            //->add('user', 'entity', array('class'=>'Cyclear\GameBundle\Entity\User'));
         ;
     }
 

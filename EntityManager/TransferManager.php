@@ -13,21 +13,15 @@ class TransferManager {
      * 
      * @var EntityManager
      */
-    private $doctrine;
+    private $em;
 
     /**
      * 
-     * @var Transfer
-     */
-    private $entity;
-
-    /**
-     * 
-     * @param EntityManager $registry
+     * @param EntityManager $em
      * @param Transfer $entity
      */
-    public function __construct(EntityManager $registry) {
-        $this->doctrine = $registry;
+    public function __construct(EntityManager $em) {
+        $this->em = $em;
     }
 
     /**
@@ -39,17 +33,37 @@ class TransferManager {
      * @return Transfer
      */
     public function doAdminTransfer(Renner $renner, Ploeg $ploegNaar = null, \DateTime $datum = null) {
-        $this->entity = new Transfer();
-        $this->entity->setRenner($renner);
-        $this->entity->setPloegVan($renner->getPloeg());
-        $this->entity->setPloegNaar($ploegNaar);
-        $this->entity->setDatum($datum);
-        $this->doctrine->persist($this->entity);
+        $transfer = new Transfer();
+        $transfer->setRenner($renner);
+        $transfer->setPloegVan($renner->getPloeg());
+        $transfer->setPloegNaar($ploegNaar);
+        $transfer->setDatum($datum);
+        $this->em->persist($transfer);
 
         $renner->setPloeg($ploegNaar);
-        $this->doctrine->persist($renner);
-        
-        return $this->entity;
+        $this->em->persist($renner);
+        $transfer->setAdminTransfer(true);
+        return $transfer;
+    }
+
+    public function doUserTransfer(Ploeg $ploeg, Renner $rennerUit, Renner $rennerIn) {
+        // behandel de uitgaande transfer eerst
+        $transfer = new Transfer();
+        $transfer->setRenner($rennerUit);
+        $transfer->setPloegVan($ploeg);
+        $transfer->setPloegNaar(null);
+        $transfer->setDatum(new \DateTime());
+        $this->em->persist($transfer);
+        $rennerUit->setPloeg(null);
+        // de binnenkomende transfer
+        $transfer = new Transfer();
+        $transfer->setRenner($rennerIn);
+        $transfer->setPloegVan(null);
+        $transfer->setPloegNaar($ploeg);
+        $transfer->setDatum(new \DateTime());
+        $this->em->persist($transfer);
+        $rennerIn->setPloeg($ploeg);
+        return true;
     }
 
 }

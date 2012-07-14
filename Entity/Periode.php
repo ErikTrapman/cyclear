@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Cyclear\GameBundle\Entity\Periode
  *
- * @ORM\Table()
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\PeriodeRepository")
  */
 class Periode
 {
@@ -24,14 +24,14 @@ class Periode
     /**
      * @var datetime $start
      *
-     * @ORM\Column(name="start", type="datetime")
+     * @ORM\Column(name="start", type="date")
      */
     private $start;
 
     /**
      * @var datetime $eind
      *
-     * @ORM\Column(name="eind", type="datetime")
+     * @ORM\Column(name="eind", type="date")
      */
     private $eind;
 

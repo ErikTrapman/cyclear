@@ -76,6 +76,13 @@
             <argument type="service" id="fos_user.user_manager" />
             <argument type="service" id="fos_user.mailer" />
             <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="security.acl.provider"/>
+        </service>
+        
+        
+        <service id="cyclear_game.validator.usertransfer" class="Cyclear\GameBundle\Validator\Constraints\UserTransferValidator">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
+            <tag name="validator.constraint_validator" alias="user_transfer" />
         </service>
         
     </services>

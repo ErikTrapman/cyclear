@@ -21,13 +21,21 @@ class TransferRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
 
+    public function getTransferCount($ploeg, $start, $end) {
+        $query= $this->getEntityManager()
+                ->createQuery("SELECT COUNT(t.id) AS freq FROM CyclearGameBundle:Transfer t WHERE t.ploegNaar = :ploeg AND t.datum BETWEEN :start AND :end AND t.adminTransfer = 0")
+                ->setParameters(array("ploeg" => $ploeg, "start" => $start, "end" => $end));
+        $res = $query->getSingleResult();
+        return (int) $res['freq'];
+    }
+
     public function findLastTransferForDate($renner, \DateTime $date) {
         $cloneDate = clone $date;
-        $cloneDate->setTime("23","59","59");
+        $cloneDate->setTime("23", "59", "59");
         $qb = $this->createQueryBuilder("t")->where("t.renner = :renner")->andWhere("t.datum <= :datum")->
-                setParameters(array("renner" => $renner, "datum" => $cloneDate))->orderBy("t.datum", "DESC")->setMaxResults(1);
+                        setParameters(array("renner" => $renner, "datum" => $cloneDate))->orderBy("t.datum", "DESC")->setMaxResults(1);
         $res = $qb->getQuery()->getResult();
-        if(count($res) == 0){
+        if (count($res) == 0) {
             return null;
         }
         return $res[0];
