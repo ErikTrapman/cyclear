@@ -18,11 +18,20 @@
                    <em>Notice</em>: {{ app.session.flash('notice') }}
                </div>
         {% endif %}
+
+        {% if is_granted("ROLE_USER") %}
+        <div id="adminmenu" class="adminmenu">
+        	{% include 'CyclearGameBundle:Default/User:inc_menu.html.twig' %}
+        </div>
+        {% endif %}
+
         <div id="maincontent" class="maincontent">
         {% block content %}
         	{% block fos_user_content %}{% endblock %}
         {% endblock %}
         </div>
+
+        
         
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
 		<div id="loggedin" class="loggedin">
