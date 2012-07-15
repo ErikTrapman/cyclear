@@ -14,3 +14,5 @@ app/config/parameters.yml
 
 # netbenas
 nbproject
+
+composer.phar
