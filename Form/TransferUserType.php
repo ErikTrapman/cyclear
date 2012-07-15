@@ -3,7 +3,7 @@
 namespace Cyclear\GameBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Cyclear\GameBundle\Validator\Constraints as CyclearAssert;
 
 /**
@@ -12,7 +12,7 @@ use Cyclear\GameBundle\Validator\Constraints as CyclearAssert;
  */
 class TransferUserType extends AbstractType {
 
-    public function buildForm(FormBuilder $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
                 ->add('renner_in', 'renner_selector', array('attr'=> array('size'=>40)))
         ;

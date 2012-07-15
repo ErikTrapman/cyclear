@@ -3,18 +3,18 @@
 namespace Cyclear\GameBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class TransferType extends AbstractType {
 
-    public function buildForm(FormBuilder $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         // 
         // , 'jquery_entity_combobox', array('required'=>true, 'class' => 'Cyclear\GameBundle\Entity\Ploeg')
         $builder
                 //->add('renner','jquery_entity_combobox', array('class' => 'Cyclear\GameBundle\Entity\Renner') )
                 ->add('renner', 'renner_selector')
                 ->add('ploegNaar', null, array('required' => true))
-                ->add('datum', 'genemu_jquerydate', array('format' => 'dd-MM-y'))
+                ->add('datum', 'date', array('format' => 'dd-MM-y'))
         ;
     }
 

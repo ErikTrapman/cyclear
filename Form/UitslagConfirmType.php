@@ -3,12 +3,12 @@
 namespace Cyclear\GameBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Cyclear\GameBundle\Form\UitslagType;
 
 class UitslagConfirmType extends AbstractType {
 
-    public function buildForm(FormBuilder $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
 
         $builder->add('wedstrijd', new WedstrijdType())
                 ->add('uitslag', 'collection', array('type' => new UitslagPrepareType(),

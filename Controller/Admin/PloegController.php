@@ -31,9 +31,9 @@ class PloegController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $query = $em->createQuery("SELECT p FROM Cyclear\GameBundle\Entity\Ploeg p");
 
-        //$config = $em->getConfiguration();
-        //$config->addFilter("naam", "Cyclear\GameBundle\Filter\Ploeg\PloegNaamFilter");
-        //$config->addFilter("user", "Cyclear\GameBundle\Filter\Ploeg\PloegUserFilter");
+        $config = $em->getConfiguration();
+        $config->addFilter("naam", "Cyclear\GameBundle\Filter\Ploeg\PloegNaamFilter");
+        $config->addFilter("user", "Cyclear\GameBundle\Filter\Ploeg\PloegUserFilter");
 
         if ($this->getRequest()->getMethod() == 'POST') {
             $filter->bindRequest($this->getRequest());

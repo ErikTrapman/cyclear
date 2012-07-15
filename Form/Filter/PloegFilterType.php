@@ -8,7 +8,7 @@
 namespace Cyclear\GameBundle\Form\Filter;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class PloegFilterType extends AbstractType {
 
@@ -18,7 +18,7 @@ class PloegFilterType extends AbstractType {
         $this->em = $em;
     }
 
-    public function buildForm(FormBuilder $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
                 ->add('naam', 'text', array('required' => false))
                 ->add('afkorting', 'text', array('required' => false));
@@ -26,7 +26,7 @@ class PloegFilterType extends AbstractType {
     }
 
     public function getName() {
-        return 'cyclear_gamebundle_ploegfiltertype';
+        return 'ploeg_filter';
     }
 
 }

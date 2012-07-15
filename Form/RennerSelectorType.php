@@ -3,9 +3,9 @@ namespace Cyclear\GameBundle\Form;
 
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
-class RennerSelectorType extends \Symfony\Component\Form\AbstractType {
+class RennerSelectorType extends AbstractType {
     
     /**
      *
@@ -17,19 +17,19 @@ class RennerSelectorType extends \Symfony\Component\Form\AbstractType {
         $this->em = $em;
     }
 
-    public function buildForm(FormBuilder $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         $transformer = new DataTransformer\RennerNameToRennerIdTransformer($this->em);
         //$builder->add('renner','text');
         $builder->appendClientTransformer($transformer);
     }
 
-    public function getDefaultOptions(array $options) {
+    public function getDefaultOptions() {
         return array(
             'invalid_message' => 'De ingevulde renner is niet teruggevonden'
         );
     }
 
-    public function getParent(array $options) {
+    public function getParent() {
         return 'text';
     }
 
