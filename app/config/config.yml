@@ -64,4 +64,10 @@ fos_user:
     registration:
       form:
         type: admin_user_new
-        handler: cyclear_game.user_form.handler.registration    
+        handler: cyclear_game.user_form.handler.registration
+
+stof_doctrine_extensions:
+    default_locale: %locale%
+    orm:
+        default: 
+          sluggable: true

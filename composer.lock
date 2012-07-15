@@ -1,5 +1,5 @@
 {
-    "hash": "c3cd1b737674d3d8957ddd56bcd660f2",
+    "hash": "a380829d9f9bec47074bb90b1494faaf",
     "packages": [
         {
             "package": "doctrine/common",
@@ -28,6 +28,18 @@
             "version": "dev-master",
             "source-reference": "73d48c442b1cccd90fbce4e555ac8f580f82d974",
             "commit-date": "1342293032"
+        },
+        {
+            "package": "gedmo/doctrine-extensions",
+            "version": "dev-master",
+            "alias-pretty-version": "2.3.x-dev",
+            "alias-version": "2.3.9999999.9999999-dev"
+        },
+        {
+            "package": "gedmo/doctrine-extensions",
+            "version": "dev-master",
+            "source-reference": "9e58bb76e7931f2eae909021a9549601c7a7e186",
+            "commit-date": "1342287539"
         },
         {
             "package": "jms/aop-bundle",
@@ -96,6 +108,12 @@
             "commit-date": "1342195488"
         },
         {
+            "package": "stof/doctrine-extensions-bundle",
+            "version": "dev-master",
+            "source-reference": "36356b158b74cb68f96dc0b657e8732422b9d5dd",
+            "commit-date": "1341954345"
+        },
+        {
             "package": "swiftmailer/swiftmailer",
             "version": "dev-master",
             "alias-pretty-version": "4.2.x-dev",
@@ -134,8 +152,8 @@
         {
             "package": "symfony/symfony",
             "version": "dev-master",
-            "source-reference": "d09bfe7552148d1d36b65487dfcbd378830b55a0",
-            "commit-date": "1342347592"
+            "source-reference": "v2.1.0-BETA3",
+            "commit-date": "1342375577"
         },
         {
             "package": "twig/extensions",
@@ -170,6 +188,7 @@
         "sensio/distribution-bundle": 20,
         "sensio/framework-extra-bundle": 20,
         "sensio/generator-bundle": 20,
-        "knplabs/knp-paginator-bundle": 20
+        "knplabs/knp-paginator-bundle": 20,
+        "stof/doctrine-extensions-bundle": 20
     }
 }
