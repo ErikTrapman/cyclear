@@ -41,6 +41,12 @@ class Ploeg {
      * @ORM\Column(name="afkorting", type="string", length=6)
      */
     private $afkorting;
+    
+    /**
+     * 
+     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
+     */
+    private $seizoen;
 
     /**
      * 
@@ -125,5 +131,15 @@ class Ploeg {
     public function __toString() {
         return (string) $this->getNaam();
     }
+    
+    public function getSeizoen() {
+        return $this->seizoen;
+    }
+
+    public function setSeizoen($seizoen) {
+        $this->seizoen = $seizoen;
+    }
+
+
 
 }

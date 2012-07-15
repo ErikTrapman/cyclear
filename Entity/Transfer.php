@@ -61,7 +61,12 @@ class Transfer
      */
     private $adminTransfer = false;
 
-
+    /**
+     * 
+     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
+     */
+    private $seizoen;
+    
     /**
      * Get id
      *
@@ -161,5 +166,15 @@ class Transfer
     {
         $this->adminTransfer = $adminTransfer;
     }
+    
+    public function getSeizoen() {
+        return $this->seizoen;
+    }
+
+    public function setSeizoen($seizoen) {
+        $this->seizoen = $seizoen;
+    }
+
+
 
 }

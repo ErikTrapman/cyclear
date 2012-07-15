@@ -14,7 +14,7 @@ use Cyclear\GameBundle\Form\PloegType;
 /**
  * Ploeg controller.
  *
- * @Route("/ploeg")
+ * @Route("/{seizoen}/ploeg/")
  */
 class PloegController extends Controller {
 
@@ -24,14 +24,16 @@ class PloegController extends Controller {
      * @Route("/{id}/show", name="ploeg_show")
      * @Template()
      */
-    public function showAction($id) {
+    public function showAction($seizoen, $id) {
         $em = $this->getDoctrine()->getEntityManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Ploeg')->find($id);
         if (null === $entity) {
             throw $this->createNotFoundException('Unable to find Ploeg entity.');
         }
-
+        
+        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
+        
         //$renners = $entity->getRenners();
         $renners = $em->getRepository('CyclearGameBundle:Ploeg')->getRennersWithPunten($entity);
         return array(

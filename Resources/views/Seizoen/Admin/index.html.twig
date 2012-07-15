@@ -1,0 +1,32 @@
+{% extends '::admin.base.html.twig' %}
+
+{% block content %}
+<h1>Seizoen list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Identifier</th>
+            <th>Huidig seizoen</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('admin_seizoen_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.identifier }}</td>
+            <td>{{ entity.current }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('admin_seizoen_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
+{% endblock %}

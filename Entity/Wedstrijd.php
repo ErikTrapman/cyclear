@@ -43,7 +43,11 @@ class Wedstrijd {
     private $uitslagtype;
     
     
-    
+    /**
+     * 
+     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
+     */
+    private $seizoen;
     
     public function __construct(){
         $this->uitslagen = array();
@@ -121,5 +125,16 @@ class Wedstrijd {
     public function __toString() {
         return $this->getNaam();
     }
+    
+    
+    public function getSeizoen() {
+        return $this->seizoen;
+    }
+
+    public function setSeizoen($seizoen) {
+        $this->seizoen = $seizoen;
+    }
+
+
 
 }

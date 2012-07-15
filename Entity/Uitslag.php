@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\UitslagRepository")
  */
-class Uitslag
-{
+class Uitslag {
+
     /**
      * @var integer $id
      *
@@ -55,7 +55,7 @@ class Uitslag
      * @ORM\Column(type="float")
      */
     private $ploegPunten;
-    
+
     /**
      * @var float $punten
      *
@@ -71,12 +71,17 @@ class Uitslag
     private $datum;
 
     /**
+     * 
+     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
+     */
+    private $seizoen;
+
+    /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -85,8 +90,7 @@ class Uitslag
      *
      * @param object $wedstrijd
      */
-    public function setWedstrijd($wedstrijd)
-    {
+    public function setWedstrijd($wedstrijd) {
         $this->wedstrijd = $wedstrijd;
     }
 
@@ -95,8 +99,7 @@ class Uitslag
      *
      * @return object 
      */
-    public function getWedstrijd()
-    {
+    public function getWedstrijd() {
         return $this->wedstrijd;
     }
 
@@ -105,8 +108,7 @@ class Uitslag
      *
      * @param object $renner
      */
-    public function setRenner($renner)
-    {
+    public function setRenner($renner) {
         $this->renner = $renner;
     }
 
@@ -115,8 +117,7 @@ class Uitslag
      *
      * @return object 
      */
-    public function getRenner()
-    {
+    public function getRenner() {
         return $this->renner;
     }
 
@@ -125,8 +126,7 @@ class Uitslag
      *
      * @param object $ploeg
      */
-    public function setPloeg($ploeg)
-    {
+    public function setPloeg($ploeg) {
         $this->ploeg = $ploeg;
     }
 
@@ -135,8 +135,7 @@ class Uitslag
      *
      * @return object 
      */
-    public function getPloeg()
-    {
+    public function getPloeg() {
         return $this->ploeg;
     }
 
@@ -145,8 +144,7 @@ class Uitslag
      *
      * @param smallint $positie
      */
-    public function setPositie($positie)
-    {
+    public function setPositie($positie) {
         $this->positie = $positie;
     }
 
@@ -155,8 +153,7 @@ class Uitslag
      *
      * @return smallint 
      */
-    public function getPositie()
-    {
+    public function getPositie() {
         return $this->positie;
     }
 
@@ -165,8 +162,7 @@ class Uitslag
      *
      * @param float $punten
      */
-    public function setPloegPunten($punten)
-    {
+    public function setPloegPunten($punten) {
         $this->ploegPunten = $punten;
     }
 
@@ -175,29 +171,24 @@ class Uitslag
      *
      * @return float 
      */
-    public function getPloegPunten()
-    {
+    public function getPloegPunten() {
         return $this->ploegPunten;
     }
-    
-    
-    public function getRennerPunten()
-    {
+
+    public function getRennerPunten() {
         return $this->rennerPunten;
     }
 
-    public function setRennerPunten($rennerPunten)
-    {
+    public function setRennerPunten($rennerPunten) {
         $this->rennerPunten = $rennerPunten;
     }
-    
+
     /**
      * Set datum
      *
      * @param datetime $datum
      */
-    public function setDatum($datum)
-    {
+    public function setDatum($datum) {
         $this->datum = $datum;
     }
 
@@ -206,13 +197,22 @@ class Uitslag
      *
      * @return datetime 
      */
-    public function getDatum()
-    {
+    public function getDatum() {
         return $this->datum;
     }
 
-    public function __toString(){
-    	return 'uitslag nr '.$this->getId();
+    public function __toString() {
+        return 'uitslag nr ' . $this->getId();
     }
     
+    public function getSeizoen() {
+        return $this->seizoen;
+    }
+
+    public function setSeizoen($seizoen) {
+        $this->seizoen = $seizoen;
+    }
+
+
+
 }

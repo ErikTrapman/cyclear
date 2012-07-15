@@ -3,6 +3,7 @@
 namespace Cyclear\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
@@ -20,12 +21,24 @@ class Seizoen {
      * @ORM\Column
      */
     private $identifier;
-    
+
+    /**
+     * @Gedmo\Slug(fields={"identifier"})
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
+
     /**
      *
      * @ORM\Column(type="boolean")
      */
-    private $closed;
+    private $closed = false;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $current = false;
 
     public function getId() {
         return $this->id;
@@ -38,7 +51,7 @@ class Seizoen {
     public function setIdentifier($identifier) {
         $this->identifier = $identifier;
     }
-    
+
     public function getClosed() {
         return $this->closed;
     }
@@ -47,6 +60,16 @@ class Seizoen {
         $this->closed = $closed;
     }
 
+    public function getSlug() {
+        return $this->slug;
+    }
 
+    public function isCurrent() {
+        return (bool) $this->current;
+    }
+    
+    public function setCurrent($current){
+        $this->current = $current;
+    }
 
 }
