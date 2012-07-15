@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Cyclear\GameBundle\Entity\Uitslag
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\UitslagRepository")
  */
 class Uitslag
 {
@@ -52,9 +52,9 @@ class Uitslag
     /**
      * @var float $punten
      *
-     * @ORM\Column(name="punten", type="float")
+     * @ORM\Column(type="float")
      */
-    private $punten;
+    private $ploegPunten;
     
     /**
      * @var float $punten
@@ -165,9 +165,9 @@ class Uitslag
      *
      * @param float $punten
      */
-    public function setPunten($punten)
+    public function setPloegPunten($punten)
     {
-        $this->punten = $punten;
+        $this->ploegPunten = $punten;
     }
 
     /**
@@ -175,9 +175,9 @@ class Uitslag
      *
      * @return float 
      */
-    public function getPunten()
+    public function getPloegPunten()
     {
-        return $this->punten;
+        return $this->ploegPunten;
     }
     
     

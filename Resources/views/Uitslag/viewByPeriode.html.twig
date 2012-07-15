@@ -1,25 +1,22 @@
 {% extends '::base.html.twig' %}
 
-{% block title "Ploeg" %}
+{% block title "Zeges" %}
 
 {% block content %}
-
 <table class="records_list">
     <thead>
         <tr>
-            <th>Id</th>
             <th>Naam</th>
             <th>Punten</th>
         </tr>
     </thead>
-    {% for renner in renners %}
+    <tbody>
+    {% for uitslag in list %}
         <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ renner.naam }}</td>
-            <td>{{ renner.ploegPunten }}</td>
+            <td>{{ uitslag.naam }}</td>
+            <td>{{ uitslag.punten }}</td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
-
 {% endblock %}

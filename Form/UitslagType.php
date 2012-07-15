@@ -12,7 +12,7 @@ class UitslagType extends AbstractType {
 
         // array( 'allow_add' => true, 'type' => $w)
         $builder->add('positie')
-                ->add('punten')
+                ->add('ploegPunten')
                 ->add('wedstrijd', 'entity', array('class' => 'Cyclear\GameBundle\Entity\Wedstrijd'))
                 ->add('ploeg', null, array('required' => false))
                 ->add('renner', 'renner_selector');

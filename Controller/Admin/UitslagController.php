@@ -115,7 +115,7 @@ class UitslagController extends Controller {
             $currentUitslag->setPloeg($renner->getPloeg());
             $currentUitslag->setDatum( $wedstrijd->getDatum() );
             $currentUitslag->setWedstrijd( $wedstrijd );
-            $currentUitslag->setRennerPunten($uitslag['punten']);
+            $currentUitslag->setRennerPunten($uitslag['ploegPunten']); // FIXME rennerPunten mogelijk maken
             $em->persist($currentUitslag);
         }
         $em->flush();

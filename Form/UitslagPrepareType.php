@@ -4,26 +4,28 @@ namespace Cyclear\GameBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class UitslagPrepareType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         // array( 'allow_add' => true, 'type' => $w)
         $builder->add('positie')
-                ->add('punten')
+                ->add('ploegPunten')
                 ->add('ploeg', null, array('required' => false))
-                ->add('renner', 'renner_selector' );
+                ->add('renner', 'renner_selector');
     }
 
     public function getName() {
         return 'cyclear_gamebundle_uitslagpreparetype';
     }
-    
-    
-    public function getDefaultOptions() {
-        return array('registry' => null);
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+        $resolver->setDefaults(array(
+            'data_class' => 'Cyclear\GameBundle\Entity\Uitslag', 'registry' => null
+        ));
     }
-    
+
 }
 
 ?>

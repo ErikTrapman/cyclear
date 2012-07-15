@@ -91,9 +91,9 @@ class UitslagManager {
             $uitslag->setPositie($uitslagregel['pos']);
             $uitslag->setRennerPunten($uitslagregel['points']);
             if ($this->puntenCalculator->canGetPoints($renner, $puntenReferentieDatum)) {
-                $uitslag->setPunten($uitslagregel['points']);
+                $uitslag->setPloegPunten($uitslagregel['points']);
             } else {
-                $uitslag->setPunten(0);
+                $uitslag->setPloegPunten(0);
             }
 
             $uitslag->setDatum(new \DateTime());

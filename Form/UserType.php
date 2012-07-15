@@ -17,7 +17,7 @@ class UserType extends BaseType {
     }
 
     public function getName() {
-        return 'cyclear_gamebundle_usertype';
+        return 'admin_user_new';
     }
 
 }

@@ -19,6 +19,11 @@ class RennerRepository extends EntityRepository {
     public function findOneByCQId($id) {
         return $this->findOneBy(array('cqranking_id' => $id));
     }
+    
+    public function getPunten(Ploeg $ploeg){
+        $qb = $this->getEntityManager()->createQuery();
+    }
+    
 
     public function findOneBySelectorString($rennerString) {
         $firstBracket = strpos($rennerString, '[');

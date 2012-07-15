@@ -1,4 +1,13 @@
 {% extends '::base.html.twig' %}
 {% block content %}
-<p>Welkom bij cyclear bitches</p>
+
+<h1>Stand</h1>
+{% render "CyclearGameBundle:Uitslag:viewByPloegen" %}
+
+<h1>Periode</h1>
+{% render "CyclearGameBundle:Uitslag:viewByPeriode" with {"periode_id": periode.id } %}
+
+<h1>Zeges</h1>
+{% render "CyclearGameBundle:Uitslag:viewByPosition" %}
+
 {% endblock %}
