@@ -2,24 +2,41 @@
 
 namespace Cyclear\GameBundle\Form;
 
+use Cyclear\GameBundle\Entity\Transfer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class TransferType extends AbstractType {
+class TransferType extends AbstractType
+{
 
-    public function buildForm(FormBuilderInterface $builder, array $options) {
-        // 
-        // , 'jquery_entity_combobox', array('required'=>true, 'class' => 'Cyclear\GameBundle\Entity\Ploeg')
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $choices = array(Transfer::DRAFTTRANSFER, Transfer::ADMINTRANSFER, Transfer::USERTRANSFER);
+        $choicelist = new ChoiceList($choices, array('draft transfer', 'admin transfer', 'user transfer'));
         $builder
-                //->add('renner','jquery_entity_combobox', array('class' => 'Cyclear\GameBundle\Entity\Renner') )
-                ->add('renner', 'renner_selector')
-                ->add('ploegNaar', null, array('required' => true))
-                ->add('datum', 'date', array('format' => 'dd-MM-y'))
+            ->add('renner', 'renner_selector')
+            ->add('ploegNaar', null, array('required' => true))
+            ->add('datum', 'date', array('format' => 'dd-MM-y'))
+            ->add('transferType', 'choice', array('choice_list' => $choicelist))
+            ->add('seizoen', 'entity', array(
+                'class' => 'CyclearGameBundle:Seizoen',
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $e) {
+                    return $e->createQueryBuilder('s')->where('s.current = 1');
+                }))
         ;
     }
 
-    public function getName() {
-        return 'cyclear_gamebundle_transfertype';
+    public function setOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array('admin' => true));
     }
 
+    //FIXME samenvoegen van transferusertype met options->admin = true/false
+
+    public function getName()
+    {
+        return 'cyclear_gamebundle_transfertype';
+    }
 }

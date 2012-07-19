@@ -4,7 +4,13 @@
 
 {% block content %}
 <h1>Transfer list</h1>
-
+<ul>
+    <li>
+        <a href="{{ path('admin_transfer_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
 <table class="records_list">
     <thead>
         <tr>
@@ -38,7 +44,9 @@
     {% endfor %}
     </tbody>
 </table>
-
+<div id="navigation">
+    {{ entities.render()|raw }}
+</div>
 <ul>
     <li>
         <a href="{{ path('admin_transfer_new') }}">

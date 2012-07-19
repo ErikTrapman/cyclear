@@ -26,9 +26,13 @@ class TransferController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
 
         $query = $em->createQuery('SELECT t FROM Cyclear\GameBundle\Entity\Transfer t ORDER BY t.id DESC');
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+                $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
+        );
         $entities = $query->getResult();
 
-        return array('entities' => $entities);
+        return array('entities' => $pagination);
     }
 
     /**
@@ -61,7 +65,8 @@ class TransferController extends Controller {
      */
     public function newAction() {
         $entity = new Transfer();
-        $form = $this->createForm(new TransferType(), $entity);
+        $formtype = new TransferType();
+        $form = $this->createForm($formtype, $entity );
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getEntityManager();
         if($request->getMethod() == 'POST'){
@@ -70,53 +75,15 @@ class TransferController extends Controller {
                 $renner = $form->get('renner')->getData();
                 $ploegNaar = $form->get('ploegNaar')->getData();
                 $datum = $form->get('datum')->getData();
+                $type = $form->get('transferType')->getData();
                 $datum->add( new \DateInterval("PT".date("H")."H".date("i")."M".date('s')."S") );
                 $transferManager = $this->get('cyclear_game.manager.transfer');
-                $transfer = $transferManager->doAdminTransfer($renner, $ploegNaar, $datum );
+                $transfer = $transferManager->doAdminTransfer($renner, $ploegNaar, $datum, $type );
                 $em->persist($transfer);
                 $em->flush();
                 return $this->redirect( $this->generateUrl('admin_transfer') );
             }
         }
-        
-        return array(
-            'entity' => $entity,
-            'form' => $form->createView()
-        );
-    }
-
-    /**
-     * Creates a new Transfer entity.
-     *
-     * @Route("/create", name="admin_transfer_create")
-     * @Method("post")
-     */
-    public function createAction() {
-        die('dfdfdf');
-        
-        $entity = new Transfer();
-        $request = $this->getRequest();
-        $form = $this->createForm(new TransferType(), $entity);
-        $form->bindRequest($request);
-        if ($form->isValid()) {
-
-            //$em = $this->getDoctrine()->getEntityManager();
-            $formData = $form->getData();
-            $renner = $formData->getRenner();
-            die();
-            //$transfer->setPloegVan( $renner->getPloeg() );
-            //$em->persist($transfer);
-            //$renner->setPloeg( $entity->getPloegNaar() );
-            //$em->persist($renner);
-            //$em->flush();
-
-            $transferManager = $this->get('cyclear_game.manager.transfer');
-            $newTransfer = $transferManager->doAdminTransfer($renner, $renner->getPloeg(), $formData->getPloegNaar(), $formData->getDatum());
-
-            return $this->redirect($this->generateUrl('admin_transfer_show', array('id' => $newTransfer->getId())));
-        }
-        
-        return $this->redirect( $this->generateUrl('admin_transfer_new', array('form' => $form,'entity'=>$entity ) ) );
         
         return array(
             'entity' => $entity,

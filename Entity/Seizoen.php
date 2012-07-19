@@ -71,5 +71,9 @@ class Seizoen {
     public function setCurrent($current){
         $this->current = $current;
     }
+    
+    public function __toString(){
+        return $this->identifier;
+    }
 
 }

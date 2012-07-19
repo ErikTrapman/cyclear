@@ -15,7 +15,11 @@ use Cyclear\GameBundle\Form\Validator\Constraints as CyclearAssert;
  */
 class Transfer
 {
-    /**
+    const DRAFTTRANSFER = 32, 
+          ADMINTRANSFER = 64, 
+          USERTRANSFER = 128;
+   
+     /**
      * @var integer $id
      *
      * @ORM\Column(name="id", type="integer")
@@ -57,9 +61,9 @@ class Transfer
     
     /**
      *
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer")
      */
-    private $adminTransfer = false;
+    private $transferType;
 
     /**
      * 
@@ -157,16 +161,15 @@ class Transfer
         return $this->datum;
     }
     
-    public function getAdminTransfer() 
-    {
-        return $this->adminTransfer;
+    public function getTransferType() {
+        return $this->transferType;
     }
 
-    public function setAdminTransfer($adminTransfer) 
-    {
-        $this->adminTransfer = $adminTransfer;
+    public function setTransferType($transferType) {
+        $this->transferType = $transferType;
     }
-    
+
+        
     public function getSeizoen() {
         return $this->seizoen;
     }

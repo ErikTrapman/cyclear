@@ -32,7 +32,7 @@ class TransferManager {
      * @param \DateTime $datum
      * @return Transfer
      */
-    public function doAdminTransfer(Renner $renner, Ploeg $ploegNaar = null, \DateTime $datum = null) {
+    public function doAdminTransfer(Renner $renner, Ploeg $ploegNaar, \DateTime $datum, $transferType) {
         $transfer = new Transfer();
         $transfer->setRenner($renner);
         $transfer->setPloegVan($renner->getPloeg());
@@ -42,7 +42,7 @@ class TransferManager {
 
         $renner->setPloeg($ploegNaar);
         $this->em->persist($renner);
-        $transfer->setAdminTransfer(true);
+        $transfer->setTransferType($transferType);
         return $transfer;
     }
 
