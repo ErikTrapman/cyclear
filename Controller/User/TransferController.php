@@ -15,7 +15,7 @@ use JMS\SecurityExtraBundle\Annotation\SecureParam;
 /**
  * Transfer controller.
  *
- * @Route("/user/transfer")
+ * @Route("/game/{seizoen}/user/transfer")
  */
 class TransferController extends Controller {
 
@@ -26,7 +26,7 @@ class TransferController extends Controller {
      * @Template("CyclearGameBundle:Transfer/User:index.html.twig")
      * @SecureParam(name="id", permissions="OWNER")
      */
-    public function indexAction($id, $renner_id) {
+    public function indexAction($seizoen, $id, $renner_id) {
 
         $em = $this->getDoctrine()->getEntityManager();
         $ploeg = $em->find("CyclearGameBundle:Ploeg", $id);
@@ -40,6 +40,7 @@ class TransferController extends Controller {
         if($renner->getPloeg() !== $ploeg){
             throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException("Renner is niet in je ploeg");
         }
+        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
         
         $transferUser = new \Cyclear\GameBundle\Form\Entity\UserTransfer();
         $transferUser->setPloeg($ploeg);
@@ -49,13 +50,14 @@ class TransferController extends Controller {
             if ($form->isValid()) {
                 $transferManager = $this->get('cyclear_game.manager.transfer');
                 $rennerIn = $form->get('renner_in')->getData();
-                $transferManager->doUserTransfer($ploeg, $renner, $rennerIn);
+                
+                $transferManager->doUserTransfer($ploeg, $renner, $rennerIn,$seizoen[0]);
                 $em->flush();
-                return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl("user_ploeg", array("id" => $ploeg->getId())));
+                return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl("user_ploeg", array("seizoen" => $seizoen[0]->getSlug(),  "id" => $ploeg->getId())));
             }
         }
 
-        return array('ploeg' => $ploeg, 'renner' => $renner, 'form' => $form->createView());
+        return array('ploeg' => $ploeg, 'renner' => $renner, 'form' => $form->createView(),'seizoen' => $seizoen[0]);
     }
 
 }

@@ -46,22 +46,29 @@ class TransferManager {
         return $transfer;
     }
 
-    public function doUserTransfer(Ploeg $ploeg, Renner $rennerUit, Renner $rennerIn) {
+    public function doUserTransfer(Ploeg $ploeg, Renner $rennerUit, Renner $rennerIn, $seizoen) {
+        $identifier = uniqid();
         // behandel de uitgaande transfer eerst
-        $transfer = new Transfer();
-        $transfer->setRenner($rennerUit);
-        $transfer->setPloegVan($ploeg);
-        $transfer->setPloegNaar(null);
-        $transfer->setDatum(new \DateTime());
-        $this->em->persist($transfer);
+        $transferUit = new Transfer();
+        $transferUit->setRenner($rennerUit);
+        $transferUit->setPloegVan($ploeg);
+        $transferUit->setPloegNaar(null);
+        $transferUit->setDatum(new \DateTime());
+        $transferUit->setTransferType(Transfer::USERTRANSFER);
+        $transferUit->setSeizoen($seizoen);
+        $transferUit->setIdentifier($identifier);
+        $this->em->persist($transferUit);
         $rennerUit->setPloeg(null);
         // de binnenkomende transfer
-        $transfer = new Transfer();
-        $transfer->setRenner($rennerIn);
-        $transfer->setPloegVan(null);
-        $transfer->setPloegNaar($ploeg);
-        $transfer->setDatum(new \DateTime());
-        $this->em->persist($transfer);
+        $transferIn = new Transfer();
+        $transferIn->setRenner($rennerIn);
+        $transferIn->setPloegVan(null);
+        $transferIn->setPloegNaar($ploeg);
+        $transferIn->setDatum(new \DateTime());
+        $transferIn->setTransferType(Transfer::USERTRANSFER);
+        $transferIn->setSeizoen($seizoen);
+        $transferIn->setIdentifier($identifier);
+        $this->em->persist($transferIn);
         $rennerIn->setPloeg($ploeg);
         return true;
     }

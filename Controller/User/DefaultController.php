@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  *
- * @Route("/user")
+ * @Route("/game/{seizoen}/user")
  */
 class DefaultController extends Controller
 {
@@ -16,8 +16,9 @@ class DefaultController extends Controller
      * @Route("/")
      * @Template("CyclearGameBundle:Default/User:index.html.twig")
      */
-    public function indexAction()
+    public function indexAction($seizoen)
     {
-    	return array();
+    	$seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
+        return array('seizoen' => $seizoen[0]);
     }
 }

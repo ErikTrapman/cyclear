@@ -4,12 +4,12 @@
 Cyclear, bitches!
 
 <h1>Stand</h1>
-{% render "CyclearGameBundle:Uitslag:viewByPloegen" %}
+{% render "CyclearGameBundle:Uitslag:viewByPloegen" with {"seizoen": seizoen.slug } %}
 
 <h1>Periode</h1>
-{% render "CyclearGameBundle:Uitslag:viewByPeriode" with {"periode_id": periode.id } %}
+{% render "CyclearGameBundle:Uitslag:viewByPeriode" with {"seizoen": seizoen.slug, "periode_id": periode.id } %}
 
 <h1>Zeges</h1>
-{% render "CyclearGameBundle:Uitslag:viewByPosition" %}
+{% render "CyclearGameBundle:Uitslag:viewByPosition" with {"seizoen": seizoen.slug } %}
 
 {% endblock %}

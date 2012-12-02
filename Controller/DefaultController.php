@@ -8,18 +8,18 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  *
- * @Route("/game")
+ * @Route("/game/{seizoen}")
  */
 class DefaultController extends Controller {
 
     /**
-     * @Route("/{seizoen}", name="game")
+     * @Route("/", name="game")
      * @Template()
      */
     public function indexAction($seizoen = null) {
         
         if (null === $seizoen) {
-            $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findOneBy(array("current" => 1));
+            $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
             return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl("game", array("seizoen" => $seizoen->getSlug())));
         }
 
@@ -28,8 +28,7 @@ class DefaultController extends Controller {
             throw new \Doctrine\ORM\EntityNotFoundException("Seizoen niet gevonden");
         }
         $periode = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode();
-
-        return array('periode' => $periode);
+        return array('periode' => $periode, 'seizoen' => $seizoen[0]);
     }
 
 }

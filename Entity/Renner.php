@@ -11,8 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="Renner")
  * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\RennerRepository")
  */
-class Renner {
-
+class Renner
+{
     /**
      * @var integer $id
      *
@@ -41,23 +41,25 @@ class Renner {
      * 
      */
     private $cqranking_id;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Transfer", mappedBy="renner")
      * @ORM\OrderBy({"id" = "DESC"}))
      */
     private $transfers;
-    
-    public function __construct(){
+
+    public function __construct()
+    {
         $this->transfers = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -66,7 +68,8 @@ class Renner {
      *
      * @param string $naam
      */
-    public function setNaam($naam) {
+    public function setNaam($naam)
+    {
         $this->naam = $naam;
     }
 
@@ -75,52 +78,61 @@ class Renner {
      *
      * @return string 
      */
-    public function getNaam() {
+    public function getNaam()
+    {
         return $this->naam;
     }
 
-    public function setPloeg(Ploeg $ploeg = null) {
+    public function setPloeg(Ploeg $ploeg = null)
+    {
         $this->ploeg = $ploeg;
     }
 
     /**
      * @return Ploeg $ploeg
      */
-    public function getPloeg() {
+    public function getPloeg()
+    {
         return $this->ploeg;
     }
 
-    public function getCqRanking_id() {
+    public function getCqRanking_id()
+    {
         return $this->cqranking_id;
     }
 
-    public function setCqRanking_id($id) {
+    public function setCqRanking_id($id)
+    {
         $this->cqranking_id = $id;
     }
-    
-    public function getCqRankingId(){
+
+    public function getCqRankingId()
+    {
         return $this->getCqRanking_id();
     }
 
-    public function setCqRankingId($id){
+    public function setCqRankingId($id)
+    {
         $this->setCqRanking_id($id);
     }
-    
-    public function getTransfers() {
+
+    public function getTransfers()
+    {
         return $this->transfers;
     }
 
-    public function setTransfers($transfers) {
+    public function setTransfers($transfers)
+    {
         $this->transfers = $transfers;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         $info = $this->getCqRanking_id();
-        $info .= (string) ' ['. $this->getNaam().']';
+        $info .= (string) ' ['.$this->getNaam().']';
         if ($this->getPloeg()) {
-            $info .= ' (' . $this->getPloeg()->__toString() . ')';
+            $info .= ' ('.$this->getPloeg()->__toString().')';
         }
         return $info;
     }
-
 }

@@ -1,0 +1,17 @@
+{% block content %}
+<table>
+<tbody>
+{% for entry in list %}
+    <tr>
+        <td>{{ entry.renner }}</td>
+        <td>{{ entry.ploegPunten }}</td>
+        <td>
+            {{ entry.transferred.datum.format('d-m-Y') }}
+        </td>
+        <td><a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:ploeg.id, renner_id:entry.renner.id} ) }}">transfer</a></td>
+    </tr>
+
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

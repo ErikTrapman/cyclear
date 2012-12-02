@@ -24,7 +24,7 @@ class Ploeg {
 
     /**
      * 
-     * @ORM\OneToOne(targetEntity="Cyclear\GameBundle\Entity\User", inversedBy="ploeg")
+     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\User", inversedBy="ploeg")
      */
     private $user;
 

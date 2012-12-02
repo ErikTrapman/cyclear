@@ -20,8 +20,12 @@ class UserTransferValidator extends ConstraintValidator {
         if(null === $value){
             return true;
         }
+        if(null === $value->getRennerIn()){
+            //$this->setMessage( "Onbekende renner opgegeven" );
+            return false;
+        }
         $periode = $this->em->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode();
-        $transferCount = $this->em->getRepository("CyclearGameBundle:Transfer")->getTransferCount($value->getPloeg(), $periode->getStart(), $periode->getEind());
+        $transferCount = $this->em->getRepository("CyclearGameBundle:Transfer")->getTransferCountForUserTransfer($value->getPloeg(), $periode->getStart(), $periode->getEind());
         if($transferCount == $periode->getTransfers()){
             $this->setMessage($constraint->message , array("%max%" => $periode->getTransfers()));
             return false;

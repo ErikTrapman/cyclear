@@ -42,6 +42,11 @@ class Periode
      */
     private $transfers;
 
+    /**
+     * 
+     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
+     */
+    private $seizoen;
 
     /**
      * Get id
@@ -111,5 +116,15 @@ class Periode
     public function getTransfers()
     {
         return $this->transfers;
+    }
+
+    public function getSeizoen()
+    {
+        return $this->seizoen;
+    }
+
+    public function setSeizoen($seizoen)
+    {
+        $this->seizoen = $seizoen;
     }
 }

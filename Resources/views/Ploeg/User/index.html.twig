@@ -4,18 +4,8 @@
 
 {% block content %}
 
-Mijn ploeg!
-
 <h2>{{ ploeg.naam }}</h2>
 
-<table>
-<tbody>
-{% for renner in ploeg.renners %}
-    
-    <tr><td>{{ renner.naam }}</td><td><a href="{{ path('user_transfer', {id:ploeg.id,renner_id:renner.id} ) }}">transfer</a></td></tr>
-
-{% endfor %}
-</tbody>
-</table>
+{% include "CyclearGameBundle:Ploeg:_list.html.twig" with { "list": ploeglist } %}
 
 {% endblock %}

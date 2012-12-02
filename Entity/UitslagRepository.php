@@ -2,55 +2,86 @@
 
 namespace Cyclear\GameBundle\Entity;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
-use Cyclear\GameBundle\Entity\Renner;
-use Cyclear\GameBundle\Entity\Ploeg;
 
-class UitslagRepository extends EntityRepository {
+class UitslagRepository extends EntityRepository
+{
 
-    public function getPuntenByPloeg() {
-        // FIXME RIGHT JOIN van maken om alle ploegen te listen
-        $qb = $this->getEntityManager()->createQuery("
-                SELECT p.id, p.naam, SUM(u.ploegPunten) AS punten 
-                FROM CyclearGameBundle:Uitslag u
-                LEFT JOIN u.ploeg p
-                WHERE u.ploeg IS NOT NULL
-                GROUP BY u.ploeg
-                ORDER BY punten DESC");
-        return $qb->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+    public function getPuntenByPloeg($seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $sql = "SELECT u.ploeg_id AS id, p.naam AS naam, IFNULL(SUM(u.ploegPunten),0) AS punten
+                FROM Uitslag u 
+                RIGHT JOIN Ploeg p ON u.ploeg_id = p.id
+                WHERE p.seizoen_id = :seizoen_id
+                GROUP BY p.id
+                ORDER BY punten DESC, p.naam ASC
+                ";
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(":seizoen_id" => $seizoen->getId()));
+        return $stmt->fetchAll(\PDO::FETCH_NAMED);
     }
 
-    public function getPuntenByPloegForPeriode(Periode $periode) {
-        // FIXME RIGHT JOIN van maken om alle ploegen te listen
+    public function getPuntenByPloegForPeriode(Periode $periode, $seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
         $start = clone $periode->getStart();
         $start->setTime('00', '00', '00');
         $end = clone $periode->getEind();
         $end->setTime('23', '59', '59');
 
-        $qb = $this->getEntityManager()->createQuery("
-                SELECT p.id, p.naam, SUM(u.ploegPunten) AS punten 
-                FROM CyclearGameBundle:Uitslag u
-                JOIN u.ploeg p
-                WHERE u.ploeg IS NOT NULL AND u.datum BETWEEN :start AND :end
-                GROUP BY u.ploeg
-                ORDER BY punten DESC")->setParameters(array('start' => $start, 'end' => $end));
-        return $qb->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-    }
-
-    public function getCountForPosition($pos = 1) {
-
-        $sql = "SELECT u.ploeg_id AS id, p.naam AS naam, SUM(IF(positie = :pos,1,0)) AS freqByPos
-                FROM Uitslag u 
-                RIGHT JOIN Ploeg p ON u.ploeg_id = p.id
+        $sql = "SELECT *,
+                    ( SELECT IFNULL(SUM(u.ploegPunten),0)
+                    FROM uitslag u 
+                    WHERE u.datum BETWEEN :start AND :end AND u.ploeg_id = p.id
+                     ) AS punten
+                FROM ploeg p WHERE p.seizoen_id = :seizoen_id
                 GROUP BY p.id
-                ORDER BY freqByPos DESC, p.naam ASC
+                ORDER BY punten DESC, p.naam ASC
                 ";
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(":pos", $pos);
-        $stmt->execute();
+        $stmt->execute(array(":seizoen_id" => $seizoen->getId(), ":start" => $start->format('Y-m-d'), ":end" => $end->format('Y-m-d')));
+        $res = $stmt->fetchAll(\PDO::FETCH_NAMED);
+        return $res;
+    }
+
+    public function getCountForPosition($seizoen = null, $pos = 1)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+
+        $sql = "SELECT *,
+                    IFNULL(( SELECT SUM(IF(u.positie = :pos,1,0)) AS freqByPos
+                    FROM uitslag u 
+                    WHERE u.ploeg_id = p.id AND u.seizoen_id = :seizoen_id
+                     ),0) AS freqByPos
+                FROM ploeg p WHERE p.seizoen_id = :seizoen_id
+                GROUP BY p.id
+                ORDER BY freqByPos DESC, p.naam ASC";
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(":pos" => $pos, ":seizoen_id" => $seizoen->getId()));
         return $stmt->fetchAll(\PDO::FETCH_NAMED);
     }
 
+    public function getPuntenForRenner($renner, $seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $qb = $this->createQueryBuilder("u")
+            ->where("u.seizoen = :seizoen")
+            ->andWhere("u.renner = :renner")
+            ->setParameters(array(":seizoen" => $seizoen, ":renner" => $renner))
+            ->orderBy("u.datum", "DESC")
+        ;
+        return $qb->getQuery()->getResult();
+    }
 }

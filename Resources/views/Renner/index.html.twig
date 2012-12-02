@@ -1,26 +1,35 @@
-<h1>Renner list TODO</h1>
+{% extends '::base.html.twig' %}
+
+{% block title "Renner" %}
+
+{% block content %}
+
+<form action="{{ path('renner', {"seizoen":seizoen}) }}" method="post" {{ form_enctype(filter) }}>
+    {{ form_widget(filter) }}
+    <p>
+        <button type="submit">Zoek</button>
+    </p>
+</form>
 
 <table class="records_list">
     <thead>
         <tr>
             <th>Id</th>
             <th>Naam</th>
-            <th>Afkorting</th>
+            <th>Ploeg</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-    {% for entity in entities %}
+    {% for entity in pagination %}
         <tr>
-            <td><a href="{{ path('admin_ploeg_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td><a href="{{ path('renner_show', { 'id': entity.id, 'seizoen':seizoen.slug  }) }}">{{ entity.id }}</a></td>
             <td>{{ entity.naam }}</td>
+            <td>{% if entity.ploeg %}{{ entity.ploeg.naam }}{% else %}-{% endif %}</td>
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('admin_ploeg_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('admin_ploeg_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:5, renner_id:entity.id} ) }}">transfer</a>
                     </li>
                 </ul>
             </td>
@@ -28,11 +37,7 @@
     {% endfor %}
     </tbody>
 </table>
-
-<ul>
-    <li>
-        <a href="{{ path('admin_ploeg_new') }}">
-            Create a new entry
-        </a>
-    </li>
-</ul>
+<div id="navigation">
+    {{ pagination.render()|raw }}
+</div>
+{% endblock %}

@@ -8,7 +8,10 @@ use Cyclear\GameBundle\Entity\Ploeg;
 class PloegRepository extends EntityRepository {
 
     public function getRennersWithPunten($ploeg){
-        $sql = "SELECT u.ploeg_id AS id, r.id AS rennerId, r.naam, IFNULL(SUM(ploegPunten),0) AS ploegPunten
+        
+        $sql = "SELECT u.ploeg_id AS id, r.id AS rennerId, r.naam, 
+                    IFNULL(SUM(ploegPunten),0) AS ploegPunten, 
+                    IFNULL(SUM(rennerPunten),0) AS rennerPunten
                 FROM Uitslag u 
                 RIGHT JOIN Renner r ON u.renner_id = r.id
                 WHERE r.ploeg_id = :ploeg

@@ -24,7 +24,7 @@ class User extends BaseUser implements \Serializable
 
     /**
      * 
-     * @ORM\OneToOne(targetEntity="Cyclear\GameBundle\Entity\Ploeg", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Ploeg", mappedBy="user")
      */
     private $ploeg;
     

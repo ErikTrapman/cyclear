@@ -4,7 +4,6 @@ namespace Cyclear\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
 use Cyclear\GameBundle\Form\Validator\Constraints as CyclearAssert;
 
 /**
@@ -15,11 +14,11 @@ use Cyclear\GameBundle\Form\Validator\Constraints as CyclearAssert;
  */
 class Transfer
 {
-    const DRAFTTRANSFER = 32, 
-          ADMINTRANSFER = 64, 
-          USERTRANSFER = 128;
-   
-     /**
+    const DRAFTTRANSFER = 32,
+        ADMINTRANSFER = 64,
+        USERTRANSFER = 128;
+
+    /**
      * @var integer $id
      *
      * @ORM\Column(name="id", type="integer")
@@ -32,7 +31,7 @@ class Transfer
      * @var Renner $renner
      *
      * @ORM\JoinColumn(name="renner_id")
-     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Renner")
+     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Renner",inversedBy="transfers")
      */
     private $renner;
 
@@ -58,7 +57,7 @@ class Transfer
      * @ORM\Column(name="datum", type="datetime")
      */
     private $datum;
-    
+
     /**
      *
      * @ORM\Column(type="integer")
@@ -70,7 +69,13 @@ class Transfer
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
      */
     private $seizoen;
-    
+
+    /**
+     *
+     * @ORM\Column()
+     */
+    private $identifier;
+
     /**
      * Get id
      *
@@ -160,24 +165,46 @@ class Transfer
     {
         return $this->datum;
     }
-    
-    public function getTransferType() {
+
+    public function getTransferType()
+    {
         return $this->transferType;
     }
 
-    public function setTransferType($transferType) {
+    public function getTransferTypeFormatted()
+    {
+        switch ($this->transferType) {
+            case self::ADMINTRANSFER:
+                return "admin-transfer";
+            case self::DRAFTTRANSFER:
+                return "draft";
+            case self::USERTRANSFER:
+                return "gebruiker";
+        }
+    }
+
+    public function setTransferType($transferType)
+    {
         $this->transferType = $transferType;
     }
 
-        
-    public function getSeizoen() {
+    public function getSeizoen()
+    {
         return $this->seizoen;
     }
 
-    public function setSeizoen($seizoen) {
+    public function setSeizoen($seizoen)
+    {
         $this->seizoen = $seizoen;
     }
 
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
 
-
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
 }
