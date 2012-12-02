@@ -17,7 +17,8 @@ use JMS\SecurityExtraBundle\Annotation\SecureParam;
  *
  * @Route("/game/{seizoen}/user/transfer")
  */
-class TransferController extends Controller {
+class TransferController extends Controller
+{
 
     /**
      * My team.
@@ -26,7 +27,8 @@ class TransferController extends Controller {
      * @Template("CyclearGameBundle:Transfer/User:index.html.twig")
      * @SecureParam(name="id", permissions="OWNER")
      */
-    public function indexAction($seizoen, $id, $renner_id) {
+    public function indexAction($seizoen, $id, $renner_id)
+    {
 
         $em = $this->getDoctrine()->getEntityManager();
         $ploeg = $em->find("CyclearGameBundle:Ploeg", $id);
@@ -37,27 +39,34 @@ class TransferController extends Controller {
         if (null === $renner) {
             throw new \RuntimeException("Unknown renner");
         }
-        if($renner->getPloeg() !== $ploeg){
-            throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException("Renner is niet in je ploeg");
-        }
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        
         $transferUser = new \Cyclear\GameBundle\Form\Entity\UserTransfer();
         $transferUser->setPloeg($ploeg);
-        $form = $this->createForm(new \Cyclear\GameBundle\Form\TransferUserType(), $transferUser);
+
+        $options = array();
+        if ($renner->getPloeg() !== $ploeg) {
+            $options['renner_in'] = $renner;
+            //throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException("Renner is niet in je ploeg");
+        } else {
+            $options['renner_uit'] = $renner;
+        }
+        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
+
+        $options['ploeg'] = $ploeg;
+        $form = $this->createForm(new \Cyclear\GameBundle\Form\TransferUserType(), $transferUser, $options);
         if ($this->getRequest()->getMethod() == 'POST') {
             $form->bindRequest($this->getRequest());
             if ($form->isValid()) {
                 $transferManager = $this->get('cyclear_game.manager.transfer');
-                $rennerIn = $form->get('renner_in')->getData();
-                
-                $transferManager->doUserTransfer($ploeg, $renner, $rennerIn,$seizoen[0]);
+                if ($renner->getPloeg() !== $ploeg) {
+                    $transferManager->doUserTransfer($ploeg, $form->get('renner_uit')->getData(), $renner, $seizoen[0]);
+                } else {
+                    $transferManager->doUserTransfer($ploeg, $renner, $form->get('renner_in')->getData(), $seizoen[0]);
+                }
                 $em->flush();
-                return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl("user_ploeg", array("seizoen" => $seizoen[0]->getSlug(),  "id" => $ploeg->getId())));
+                return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl("user_ploeg", array("seizoen" => $seizoen[0]->getSlug(), "id" => $ploeg->getId())));
             }
         }
 
-        return array('ploeg' => $ploeg, 'renner' => $renner, 'form' => $form->createView(),'seizoen' => $seizoen[0]);
+        return array('ploeg' => $ploeg, 'renner' => $renner, 'form' => $form->createView(), 'seizoen' => $seizoen[0]);
     }
-
 }

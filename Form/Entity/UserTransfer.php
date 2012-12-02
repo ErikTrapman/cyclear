@@ -1,5 +1,4 @@
 <?php
-
 namespace Cyclear\GameBundle\Form\Entity;
 
 use Cyclear\GameBundle\Validator\Constraints as CyclearAssert;
