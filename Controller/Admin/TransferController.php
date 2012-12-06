@@ -30,7 +30,7 @@ class TransferController extends Controller {
         $pagination = $paginator->paginate(
                 $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
-        $entities = $query->getResult();
+        //$entities = $query->getResult();
 
         return array('entities' => $pagination);
     }
