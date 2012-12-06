@@ -5,6 +5,8 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/jquery-ui-1.8.16.custom.css') }}" media="all" />
+        <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/select2.css') }}" media="all" />
+        <link rel="stylesheet" href="{{ asset('bundles/samsonautocomplete/css/autocomplete.css') }}" media="all" />
         {% stylesheets filter='cssrewrite' output='css/twitter.css'
             '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/css/bootstrap.css'
             '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/css/bootstrap-responsive.css'
@@ -13,16 +15,19 @@
         {% endstylesheets %}
         {% endblock %}
         
-        
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% block javascripts %}
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-        {% javascripts output='js/bootstrap-collection.js' 
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        {# <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script> #}
+        {# javascripts output='js/bootstrap-collection.js' 
             '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap*.js'
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts %}
+        {% endjavascripts #}
+        
+        <script type="text/javascript" src="{{ asset('bundles/cycleargame/js/select2.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/samsonautocomplete/js/autocomplete.js') }}"></script>
+        
         {% endblock %}
     </head>
     <body>
