@@ -26,7 +26,8 @@
         "knplabs/knp-paginator-bundle": "dev-master",
         "stof/doctrine-extensions-bundle":"dev-master",
         
-        "twitter/bootstrap": "master"
+        "twitter/bootstrap": "master",
+        "samson/autocomplete-bundle": "dev-master"
 
     },
     "scripts": {

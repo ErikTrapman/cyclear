@@ -18,7 +18,10 @@ framework:
 # Twig Configuration
 twig:
     debug:            %kernel.debug%
-    strict_variables: %kernel.debug%
+    strict_variables: true
+    form:
+      resources:
+        - 'SamsonAutocompleteBundle:Form:autocomplete.html.twig'
 
 # Assetic Configuration
 assetic:

@@ -29,6 +29,9 @@ class AppKernel extends Kernel
             new Cyclear\UserBundle\CyclearUserBundle(),
             
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            
+            new \Samson\Bundle\AutocompleteBundle\SamsonAutocompleteBundle(),
+            new \Samson\Bundle\UnexpectedResponseBundle\SamsonUnexpectedResponseBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
