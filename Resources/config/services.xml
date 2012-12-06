@@ -47,6 +47,10 @@
             <tag name="form.type" alias="renner_selector" />
         </service>
         
+        <service id="cyclear_game.type.renner_autocomplete" class="Cyclear\GameBundle\Form\RennerAutocompleteType">
+            <tag name="form.type" alias="renner_autocomplete" />
+        </service>
+        
         <service id="cyclear_game.type.filter.ploeg" class="Cyclear\GameBundle\Form\Filter\PloegFilterType">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <tag name="form.type" alias="ploeg_filter" />
