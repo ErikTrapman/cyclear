@@ -25,63 +25,77 @@ class UitslagType
      * @ORM\Column(name="naam", type="string")
      */
     private $naam;
-    
+
     /**
      * @ORM\Column(name="maxResults", type="integer")
      *
      */
     private $maxResults;
-    
+
     /**
      * @ORM\Column(name="isGeneralClassification", type="boolean")
      * 
      */
     private $isGeneralClassification;
-    
+
     /**
-     * @ORM\Column(name="cqParsingStrategy", type="string")
+     * @ORM\Column(name="cqParsingStrategy", type="object")
      */
     private $cqParsingStrategy;
-    
-    
-    public function getId() {
+
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    public function getNaam() {
+    public function getNaam()
+    {
         return $this->naam;
     }
 
-    public function setNaam($naam) {
+    public function setNaam($naam)
+    {
         $this->naam = $naam;
     }
 
-    public function getMaxResults() {
+    public function getMaxResults()
+    {
         return $this->maxResults;
     }
 
-    public function setMaxResults($maxResults) {
+    public function setMaxResults($maxResults)
+    {
         $this->maxResults = $maxResults;
     }
 
-    public function getIsGeneralClassification() {
+    public function getIsGeneralClassification()
+    {
         return $this->isGeneralClassification;
     }
 
-    public function setIsGeneralClassification($isGeneralClassification) {
+    public function setIsGeneralClassification($isGeneralClassification)
+    {
         $this->isGeneralClassification = $isGeneralClassification;
     }
     
-    public function getCqParsingStrategy() {
+    public function getCqParsingStrategy()
+    {
         return $this->cqParsingStrategy;
     }
 
-    public function __toString(){
-        return $this->getNaam();
+    public function setCqParsingStrategy($cqParsingStrategy)
+    {
+        $this->cqParsingStrategy = $cqParsingStrategy;
     }
 
+    
+    public function __toString()
+    {
+        return $this->getNaam();
+    }
 }

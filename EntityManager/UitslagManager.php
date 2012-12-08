@@ -40,16 +40,15 @@ class UitslagManager {
     public function prepareUitslagen(Form $form) {
 
         $url = $form->get('url')->getData();
-        $dateTime = $form->get('datum')->getData();
 
-        //$parseStrategyClassname = $form->get('uitslagtype')->getData()->getCqParsingStrategy();
-        $parseStrategy = $form->get('uitslagtype')->getData();
+        $uitslagType = $form->get('uitslagtype')->getData();
+        $parseStrategy = $uitslagType->getCqParsingStrategy();
+        //$parseStrategy = new $parseStrategyClassname;
         $uitslagregels = $this->cqParser->getResultRows($url, $parseStrategy);
         $rows = 0;
-        $maxResults = $form->get('uitslagtype')->getData()->getMaxResults();
+        $maxResults = $uitslagType->getMaxResults();
 
-        $puntenReferentieDatum = new \DateTime('2011-10-15'); // $form->get('datum')->getData();
-        // TODO if referentiewedstrijd: get datum
+        $puntenReferentieDatum = $form->get('datum')->getData();
 
         $uitslagen = array();
         $rennerRepo = $this->entityManager->getRepository('CyclearGameBundle:Renner');
@@ -96,7 +95,7 @@ class UitslagManager {
                 $uitslag->setPloegPunten(0);
             }
 
-            $uitslag->setDatum(new \DateTime());
+            $uitslag->setDatum($form->get('datum')->getData());
             $uitslagen[] = $uitslag;
             $rows++;
             if ($rows == $maxResults) {

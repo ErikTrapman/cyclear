@@ -77,6 +77,10 @@
             <tag name="form.type" alias="admin_user_new" />
             <argument>%fos_user.model.user.class%</argument>
         </service>
+        <service id="cyclear_game.user_edit.form.type" class="Cyclear\GameBundle\Form\UserEditType">
+            <tag name="form.type" alias="admin_user_edit" />
+            <argument>%fos_user.model.user.class%</argument>
+        </service>
         
         <service id="cyclear_game.user_form.handler.registration" class="Cyclear\GameBundle\Form\Handler\UserFormHandler" scope="request" public="false">
             <argument type="service" id="fos_user.registration.form" />

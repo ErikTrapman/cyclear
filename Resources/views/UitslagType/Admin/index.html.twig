@@ -1,0 +1,44 @@
+{% extends '::admin.base.html.twig' %}
+
+{% block content %}
+<h1>UitslagType list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Naam</th>
+            <th>Max. resultaten</th>
+            <th>Alg. klassement</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('admin_uitslagtype_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.naam }}</td>
+            <td>{{ entity.maxResults }}</td>
+            <td>{{ entity.isGeneralClassification }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('admin_uitslagtype_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_uitslagtype_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('admin_uitslagtype_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
+{% endblock %}

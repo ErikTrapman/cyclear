@@ -74,6 +74,7 @@ class UserController extends Controller
      * @Method("post")
      */
     public function createAction() {
+        
         $form = $this->get('fos_user.registration.form');
         $request = $this->getRequest();
         $form->bindRequest($request);
@@ -85,6 +86,71 @@ class UserController extends Controller
 
         return array(
             'form' => $form->createView()
+        );
+    }
+    
+    
+    
+    /**
+     * Displays a form to edit an existing User entity.
+     *
+     * @Route("/{id}/edit", name="admin_user_edit")
+     * @Template("CyclearGameBundle:User/Admin:edit.html.twig")
+     */
+    public function editAction($id)
+    {
+        // TODO: ACL voor ploegen, rollen in formulier.
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $entity = $em->getRepository('CyclearGameBundle:User')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find User entity.');
+        }
+
+        //$editForm = $this->get('fos_user.profile.form');
+        $editForm = $this->createForm('admin_user_edit', $entity);
+        //$deleteForm = $this->createDeleteForm($id);
+
+        return array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView()
+            //'delete_form' => $deleteForm->createView(),
+        );
+    }
+
+    /**
+     * Edits an existing User entity.
+     *
+     * @Route("/{id}/update", name="admin_user_update")
+     * @Method("post")
+     */
+    public function updateAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $entity = $em->getRepository('CyclearGameBundle:User')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find User entity.');
+        }
+        
+        $editForm   = $this->createForm(new UserType(), $entity);
+
+        $request = $this->getRequest();
+
+        $editForm->bindRequest($request);
+
+        if ($editForm->isValid()) {
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('admin_user_edit', array('id' => $id)));
+        }
+
+        return array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView()
         );
     }
 

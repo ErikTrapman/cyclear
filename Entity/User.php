@@ -27,7 +27,12 @@ class User extends BaseUser implements \Serializable
      * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Ploeg", mappedBy="user")
      */
     private $ploeg;
-    
+
+    public function __construct()
+    {
+        $this->ploeg = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get id
      *
@@ -37,31 +42,28 @@ class User extends BaseUser implements \Serializable
     {
         return $this->id;
     }
-    
+
     public function serialize()
     {
         return serialize(array(
-            $this->id,
+                $this->id,
             ));
     }
 
     public function unserialize($data)
     {
         list(
-       $this->id
-        ) = unserialize($data);
+            $this->id
+            ) = unserialize($data);
     }
-    
-    public function getPloeg() 
+
+    public function getPloeg()
     {
         return $this->ploeg;
     }
 
-    public function setPloeg($ploeg) 
+    public function setPloeg($ploeg)
     {
         $this->ploeg = $ploeg;
     }
-
-
-    
 }
