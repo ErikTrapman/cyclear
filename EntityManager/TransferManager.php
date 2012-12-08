@@ -32,12 +32,15 @@ class TransferManager {
      * @param \DateTime $datum
      * @return Transfer
      */
-    public function doAdminTransfer(Renner $renner, Ploeg $ploegNaar, \DateTime $datum, $transferType) {
+    public function doAdminTransfer(Renner $renner, Ploeg $ploegNaar, \DateTime $datum, $transferType, $seizoen) {
+        $identifier = uniqid();
         $transfer = new Transfer();
         $transfer->setRenner($renner);
         $transfer->setPloegVan($renner->getPloeg());
         $transfer->setPloegNaar($ploegNaar);
         $transfer->setDatum($datum);
+        $transfer->setIdentifier($identifier);
+        $transfer->setSeizoen($seizoen);
         $this->em->persist($transfer);
 
         $renner->setPloeg($ploegNaar);

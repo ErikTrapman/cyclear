@@ -10,9 +10,10 @@ class PeriodeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('start','date', array('format' => 'dd-MM-y', 'changeMonth' => true, 'changeYear' => true))
-            ->add('eind','date', array('format' => 'dd-MM-y', 'changeMonth'=>true, 'changeYear' => true))
+            ->add('start','date')
+            ->add('eind','date')
             ->add('transfers',null, array('label'=>'Aantal transfers'))
+            ->add('seizoen','entity', array('class'=>'CyclearGameBundle:Seizoen'))
         ;
     }
 

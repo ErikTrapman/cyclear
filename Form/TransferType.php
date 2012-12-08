@@ -24,7 +24,7 @@ class TransferType extends AbstractType
             ->add('seizoen', 'entity', array(
                 'class' => 'CyclearGameBundle:Seizoen',
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $e) {
-                    return $e->createQueryBuilder('s')->where('s.current = 1');
+                    return $e->createQueryBuilder('s');//->where('s.current = 1');
                 }))
         ;
     }

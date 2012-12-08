@@ -42,8 +42,8 @@ class UitslagManager {
         $url = $form->get('url')->getData();
         $dateTime = $form->get('datum')->getData();
 
-        $parseStrategyClassname = $form->get('uitslagtype')->getData()->getCqParsingStrategy();
-        $parseStrategy = new $parseStrategyClassname;
+        //$parseStrategyClassname = $form->get('uitslagtype')->getData()->getCqParsingStrategy();
+        $parseStrategy = $form->get('uitslagtype')->getData();
         $uitslagregels = $this->cqParser->getResultRows($url, $parseStrategy);
         $rows = 0;
         $maxResults = $form->get('uitslagtype')->getData()->getMaxResults();

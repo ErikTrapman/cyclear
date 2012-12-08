@@ -65,6 +65,11 @@ class TransferController extends Controller {
      */
     public function newAction() {
         $entity = new Transfer();
+        $entity->setDatum(new \DateTime());
+        
+        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        
+        $entity->setSeizoen( $seizoen );
         $formtype = new TransferType();
         $form = $this->createForm($formtype, $entity );
         $request = $this->getRequest();
@@ -78,7 +83,8 @@ class TransferController extends Controller {
                 $type = $form->get('transferType')->getData();
                 $datum->add( new \DateInterval("PT".date("H")."H".date("i")."M".date('s')."S") );
                 $transferManager = $this->get('cyclear_game.manager.transfer');
-                $transfer = $transferManager->doAdminTransfer($renner, $ploegNaar, $datum, $type );
+                $seizoen = $form->get('seizoen')->getData();
+                $transfer = $transferManager->doAdminTransfer($renner, $ploegNaar, $datum, $type, $seizoen );
                 $em->persist($transfer);
                 $em->flush();
                 return $this->redirect( $this->generateUrl('admin_transfer') );
