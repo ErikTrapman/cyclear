@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Cyclear{% endblock %}{% if is_granted("ROLE_ADMIN") %} - Admin{% else %}{% if is_granted("ROLE_USER") %} - User {% endif %}{% endif %}</title>
         {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/jquery-ui-1.8.16.custom.css') }}" media="all" />
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/select2.css') }}" media="all" />
@@ -24,6 +24,11 @@
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts #}
+        {% javascripts output='js/bootstrap-min.js' 
+            '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap.min.js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
         
         <script type="text/javascript" src="{{ asset('bundles/cycleargame/js/select2.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/samsonautocomplete/js/autocomplete.js') }}"></script>
@@ -36,10 +41,20 @@
                    <em>Notice</em>: {{ app.session.flash('notice') }}
                </div>
         {% endif %}
+        {% if app.session.flash('error') %}
+            <div class="flash-message">
+                   <em>Error</em>: {{ app.session.flash('error') }}
+               </div>
+        {% endif %}
 
         {% if is_granted("ROLE_USER") %}
         <div id="adminmenu" class="adminmenu">
         	{% include 'CyclearGameBundle:Default/User:inc_menu.html.twig' %}
+        </div>
+        {% endif %}
+        {% if is_granted("ROLE_ADMIN") %}
+        <div id="adminmenu" class="adminmenu">
+        	{% include 'CyclearGameBundle:Default/Admin:inc_menu.html.twig' %}
         </div>
         {% endif %}
 
@@ -53,13 +68,13 @@
         
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
 		<div id="loggedin" class="loggedin">
-       {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-       <a href="{{ path('fos_user_security_logout') }}">
-             {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-       </a>
-       {% else %}
-           <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+               <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
        </div>
+       {% else %}
+       <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+       
+       <a href="{{ path('fos_user_resetting_request') }}">Wachtwoord vergeten?</a>
        {% endif %}
         
     </body>

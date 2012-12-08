@@ -68,6 +68,9 @@ fos_user:
       form:
         type: admin_user_new
         handler: cyclear_game.user_form.handler.registration
+    from_email:
+        address:        noreply@cyclear.nl
+        sender_name:    Cyclear
 
 stof_doctrine_extensions:
     default_locale: %locale%
