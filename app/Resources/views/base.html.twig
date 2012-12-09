@@ -1,7 +1,8 @@
 <!DOCTYPE html> 
-<html>
+<html lang="nl">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Cyclear{% endblock %}{% if is_granted("ROLE_ADMIN") %} - Admin{% else %}{% if is_granted("ROLE_USER") %} - User {% endif %}{% endif %}</title>
         {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/jquery-ui-1.8.16.custom.css') }}" media="all" />
@@ -14,26 +15,46 @@
         <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
         {% endstylesheets %}
         {% endblock %}
-        
+        <style type="text/css">
+                /* http://twitter.github.com/bootstrap/examples/sticky-footer.html */
+                html,
+                body {
+                  height: 100%;
+                  /* The html and body elements cannot have any padding or margin. */
+                }
+
+                /* Wrapper for page content to push down footer */
+                #wrap {
+                  min-height: 100%;
+                  height: auto !important;
+                  height: 100%;
+                  /* Negative indent footer by it's height */
+                  margin: 0 auto -60px;
+                }
+
+                /* Set the fixed height of the footer here */
+                #push,
+                #footer {
+                  height: 60px;
+                }
+                #footer {
+                  background-color: #f5f5f5;
+                }
+
+                /* Lastly, apply responsive CSS fixes as necessary */
+                @media (max-width: 767px) {
+                  #footer {
+                    margin-left: -20px;
+                    margin-right: -20px;
+                    padding-left: 20px;
+                    padding-right: 20px;
+                  }
+                }
+                .container .credit {
+                   margin: 20px 0;
+                }
+        </style>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
-        {% block javascripts %}
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        {# <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script> #}
-        {# javascripts output='js/bootstrap-collection.js' 
-            '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap*.js'
-        %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts #}
-        {% javascripts output='js/bootstrap-min.js' 
-            '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap.min.js'
-        %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-        
-        <script type="text/javascript" src="{{ asset('bundles/cycleargame/js/select2.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('bundles/samsonautocomplete/js/autocomplete.js') }}"></script>
-        
-        {% endblock %}
     </head>
     <body>
         {% if app.session.flash('notice') %}
@@ -46,36 +67,70 @@
                    <em>Error</em>: {{ app.session.flash('error') }}
                </div>
         {% endif %}
-
-        {% if is_granted("ROLE_USER") %}
-        <div id="adminmenu" class="adminmenu">
-        	{% include 'CyclearGameBundle:Default/User:inc_menu.html.twig' %}
-        </div>
-        {% endif %}
-        {% if is_granted("ROLE_ADMIN") %}
-        <div id="adminmenu" class="adminmenu">
-        	{% include 'CyclearGameBundle:Default/Admin:inc_menu.html.twig' %}
-        </div>
-        {% endif %}
-
-        <div id="maincontent" class="maincontent">
-        {% block content %}
-        	{% block fos_user_content %}{% endblock %}
-        {% endblock %}
-        </div>
-
+          
         
-        
-        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-		<div id="loggedin" class="loggedin">
-                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-               <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
-       </div>
-       {% else %}
-       <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+       <div id="wrap">
+            <div class="navbar navbar-inverse">
+                <div class="navbar-inner ">
+                    <div class="container">
+                        <a class="brand" href="/">Cyclear</a>
+                        <ul class="nav" role="navigation">
+                        {% if is_granted("ROLE_USER") %}
+                            {% include 'CyclearGameBundle:Default/User:inc_menu.html.twig' %}
+                        {% endif %}
+                        {% if is_granted("ROLE_ADMIN") %}
+                            {% include 'CyclearGameBundle:Default/Admin:inc_menu.html.twig' %}
+                        {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>  
+            
+            
+
        
-       <a href="{{ path('fos_user_resetting_request') }}">Wachtwoord vergeten?</a>
-       {% endif %}
+            <div class="container">
+                {% block content %}
+                    {% block fos_user_content %}{% endblock %}
+                {% endblock %}
+            </div>  
+            <div id="push"></div>
+        </div>
+            
+        <div id="footer">
+            <div class="container">
+                <p class="muted credit">
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+                <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+               {% else %}
+                    <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+                    | 
+                    <a href="{{ path('fos_user_resetting_request') }}">Wachtwoord vergeten?</a>
+               {% endif %}
+                    | <a href="https://github.com/ErikTrapman" target="_blank">github.com/Cyclear</a>
+               </p>
+            </div>
+        </div>
+       
+       {% block javascripts %}
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        {# <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script> #}
+        {% javascripts output='js/bootstrap-collection.js' 
+            '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap.min.js'
+            '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap-dropdown.js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
         
+        <script type="text/javascript" src="{{ asset('bundles/cycleargame/js/select2.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/samsonautocomplete/js/autocomplete.js') }}"></script>
+        <script type="text/javascript">
+            $(document).ready( function(){
+                $('.dropdown-toggle').dropdown();
+            });
+        </script>
+        {% endblock %}
+       
     </body>
 </html>
