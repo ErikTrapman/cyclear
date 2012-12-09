@@ -3,7 +3,7 @@
 {% block title "Ploeg" %}
 
 {% block content %}
-
+<h2>Renners</h2>
 <table class="records_list">
     <thead>
         <tr>
@@ -15,11 +15,13 @@
     {% for renner in renners %}
         <tr>
             <td>{{ loop.index }}</td>
-            <td>{{ renner.naam }}</td>
+            <td><a href="{{ path('renner_show',{ seizoen:seizoen.slug, renner:renner.id }) }}">{{ renner.naam }}</a></td>
             <td>{{ renner.ploegPunten }}</td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
+<h2>Gescoorde punten</h2>
+{% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':uitslagen} %}
 
 {% endblock %}

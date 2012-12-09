@@ -12,12 +12,10 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
-        $sql = "SELECT u.ploeg_id AS id, p.naam AS naam, IFNULL(SUM(u.ploegPunten),0) AS punten
-                FROM Uitslag u 
-                RIGHT JOIN Ploeg p ON u.ploeg_id = p.id
-                WHERE p.seizoen_id = :seizoen_id
-                GROUP BY p.id
-                ORDER BY punten DESC, p.naam ASC
+        $sql = "SELECT p.id AS id, p.naam AS naam, 
+                ( SELECT IFNULL(SUM(u.ploegPunten),0) FROM uitslag u WHERE u.seizoen_id = :seizoen_id AND u.ploeg_id = p.id ) AS punten 
+                FROM ploeg p WHERE p.seizoen_id = :seizoen_id ORDER 
+                BY punten DESC
                 ";
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);

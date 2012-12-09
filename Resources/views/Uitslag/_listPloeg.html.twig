@@ -1,0 +1,22 @@
+{% block content %}
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Wedstrijd</th>
+            <th>Renner</th>
+            <th>Ploeg Punten</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for uitslag in uitslagen %}
+        <tr>
+            <td>{{ uitslag.datum|date('d-m-Y') }}</td>
+            <td>{{ uitslag.wedstrijd.naam }}</td>
+            <td>{{ uitslag.renner.naam }}</td>
+            <td>{{ uitslag.ploegPunten }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

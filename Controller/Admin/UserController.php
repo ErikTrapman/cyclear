@@ -16,6 +16,7 @@ use Cyclear\GameBundle\Form\UserType;
  */
 class UserController extends Controller
 {
+
     /**
      * Lists all User entities.
      *
@@ -48,17 +49,18 @@ class UserController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
+            'entity' => $entity,
         );
     }
-    
+
     /**
      * Displays a form to create a new Ploeg entity.
      *
      * @Route("/new", name="admin_user_new")
      * @Template("CyclearGameBundle:User/Admin:new.html.twig")
      */
-    public function newAction() {
+    public function newAction()
+    {
         $form = $this->get('fos_user.registration.form');
         //$form = $this->createForm($this->get('fos_user.registration.form'), $entity);
 
@@ -66,15 +68,16 @@ class UserController extends Controller
             'form' => $form->createView()
         );
     }
-    
+
     /**
      * Creates a new User entity.
      *
      * @Route("/create", name="admin_user_create")
      * @Method("post")
      */
-    public function createAction() {
-        
+    public function createAction()
+    {
+
         $form = $this->get('fos_user.registration.form');
         $request = $this->getRequest();
         $form->bindRequest($request);
@@ -88,9 +91,7 @@ class UserController extends Controller
             'form' => $form->createView()
         );
     }
-    
-    
-    
+
     /**
      * Displays a form to edit an existing User entity.
      *
@@ -99,7 +100,7 @@ class UserController extends Controller
      */
     public function editAction($id)
     {
-        // TODO: ACL voor ploegen, rollen in formulier.
+        // TODO: rollen in formulier.
         $em = $this->getDoctrine()->getEntityManager();
 
         $entity = $em->getRepository('CyclearGameBundle:User')->find($id);
@@ -107,14 +108,11 @@ class UserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-
-        //$editForm = $this->get('fos_user.profile.form');
-        $editForm = $this->createForm('admin_user_edit', $entity);
-        //$deleteForm = $this->createDeleteForm($id);
+        $editForm = $this->createForm('admin_user_edit', $entity, array('user' => $entity));
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView()
+            'entity' => $entity,
+            'edit_form' => $editForm->createView()
             //'delete_form' => $deleteForm->createView(),
         );
     }
@@ -123,6 +121,7 @@ class UserController extends Controller
      * Edits an existing User entity.
      *
      * @Route("/{id}/update", name="admin_user_update")
+     * @Template("CyclearGameBundle:User/Admin:edit.html.twig")
      * @Method("post")
      */
     public function updateAction($id)
@@ -134,14 +133,46 @@ class UserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-        
-        $editForm   = $this->createForm(new UserType(), $entity);
-
+        $editForm = $this->createForm('admin_user_edit', $entity);
         $request = $this->getRequest();
 
-        $editForm->bindRequest($request);
 
+        // http://symfony.com/doc/master/cookbook/form/form_collections.html - Ensuring the database persistence
+        $originalPloegen = array();
+        // Create an array of the current Tag objects in the database
+        foreach ($entity->getPloeg() as $ploeg) {
+            $originalPloegen[] = $ploeg;
+        }
+
+        $editForm->bindRequest($request);
         if ($editForm->isValid()) {
+
+            $usermanager = $this->get('cyclear_game.manager.user');
+            //$usermanager->updatePloegen($editForm, $entity);
+            foreach ($entity->getPloeg() as $ploeg) {
+                foreach ($originalPloegen as $key => $toDel) {
+                    if ($toDel->getId() === $ploeg->getId()) {
+                        unset($originalPloegen[$key]);
+                    }
+                }
+                $usermanager->setOwnerAcl($entity, $ploeg);
+            }
+
+            // remove the relationship between the tag and the Task
+            foreach ($originalPloegen as $ploeg) {
+                // remove the Task from the Tag
+                $ploeg->setUser(null);
+                $usermanager->unsetOwnerAcl($entity, $ploeg);
+
+                // if it were a ManyToOne relationship, remove the relationship like this
+                // $tag->setTask(null);
+
+                $em->persist($ploeg);
+
+                // if you wanted to delete the Tag entirely, you can also do that
+                // $em->remove($tag);
+            }
+
             $em->persist($entity);
             $em->flush();
 
@@ -149,9 +180,8 @@ class UserController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView()
+            'entity' => $entity,
+            'edit_form' => $editForm->createView()
         );
     }
-
 }

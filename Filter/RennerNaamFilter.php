@@ -13,7 +13,11 @@ class RennerNaamFilter extends \Doctrine\ORM\Query\Filter\SQLFilter {
         if ($targetEntity->name != "Cyclear\GameBundle\Entity\Renner") {
             return "";
         }
-        return $targetTableAlias . '.naam LIKE ' . $this->getParameter('naam');
+        
+        $value = $this->getParameter('naam');
+        $value = trim($value,"'");
+        $sql = sprintf("%s.naam LIKE '%%%s%%'", $targetTableAlias, $value);
+        return $sql;
     }
 
 }

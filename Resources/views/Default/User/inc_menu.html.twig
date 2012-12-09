@@ -1,3 +1,8 @@
-<ul>
-<li>De link naar mijn ploeg</li>
-</ul>
+{% if app.request.attributes.get('seizoen-ploeg') != null %}
+    <li><a href="{{ path('user_ploeg', 
+            {
+            id:app.user.id,
+            seizoen:app.request.attributes.get('seizoen'),
+            ploeg:app.request.attributes.get('seizoen-ploeg')} ) }}">Mijn ploeg</a>
+    </li>
+{% endif %}

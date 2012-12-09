@@ -12,16 +12,6 @@ class UserType extends BaseType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-
-        $builder
-            ->add('ploeg', 'entity', array(
-                'required' => false,
-                'class' => 'CyclearGameBundle:Ploeg',
-                'query_builder' => function(\Doctrine\ORM\EntityRepository $e){
-                    return $e->createQueryBuilder("p")->where("p.user IS NULL");
-                }
-                ))
-        ;
     }
 
     public function getName()

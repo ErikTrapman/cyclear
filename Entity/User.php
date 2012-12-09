@@ -9,7 +9,7 @@ use FOS\UserBundle\Entity\User as BaseUser;
  * Cyclear\GameBundle\Entity\User
  *
  * @ORM\Table(name="User")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\UserRepository")
  */
 class User extends BaseUser implements \Serializable
 {
@@ -24,7 +24,9 @@ class User extends BaseUser implements \Serializable
 
     /**
      * 
-     * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Ploeg", mappedBy="user")
+     * @ORM\OneToMany(
+     *  targetEntity="Cyclear\GameBundle\Entity\Ploeg", mappedBy="user"
+     * )
      */
     private $ploeg;
 
@@ -65,5 +67,15 @@ class User extends BaseUser implements \Serializable
     public function setPloeg($ploeg)
     {
         $this->ploeg = $ploeg;
+    }
+
+    public function getPloegBySeizoen($seizoen)
+    {
+        foreach($this->getPloeg() as $ploeg){
+            if($ploeg->getSeizoen() === $seizoen){
+                return $ploeg;
+            }
+        }
+        return null;
     }
 }

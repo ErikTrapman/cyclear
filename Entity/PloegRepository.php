@@ -9,7 +9,7 @@ class PloegRepository extends EntityRepository {
 
     public function getRennersWithPunten($ploeg){
         
-        $sql = "SELECT u.ploeg_id AS id, r.id AS rennerId, r.naam, 
+        $sql = "SELECT r.id AS id, r.naam, 
                     IFNULL(SUM(ploegPunten),0) AS ploegPunten, 
                     IFNULL(SUM(rennerPunten),0) AS rennerPunten
                 FROM Uitslag u 

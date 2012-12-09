@@ -1,16 +1,7 @@
 <?php
 namespace Cyclear\GameBundle\Listener;
 
-use Cyclear\GameBundle\Log\CyclearLogHandler;
-use Symfony\Component\DependencyInjection\Container;
-
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-
-use Symfony\Component\HttpFoundation\RedirectResponse;
-
-use Symfony\Component\BrowserKit\Response;
-
-use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class ExceptionListener {
 

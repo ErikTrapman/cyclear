@@ -1,15 +1,24 @@
 {% extends '::base.html.twig' %}
 {% block content %}
 
-Cyclear, voorkant!
+<div class="hero-unit">
+    <h1>Cyclear</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras luctus gravida risus a accumsan. Integer elementum sodales enim et tempor. Nullam condimentum egestas urna, vel dictum sem consectetur in. Donec tristique risus et leo volutpat facilisis accumsan elit dapibus. Nulla vulputate est ac justo blandit hendrerit. Nam vel enim erat, vitae pharetra nisl. Suspendisse potenti. Phasellus viverra vulputate tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
+</div>
 
-<h1>Stand</h1>
-{% render "CyclearGameBundle:Uitslag:viewByPloegen" with {"seizoen": seizoen.slug } %}
-
-<h1>Periode</h1>
-{% render "CyclearGameBundle:Uitslag:viewByPeriode" with {"seizoen": seizoen.slug, "periode_id": periode.id } %}
-
-<h1>Zeges</h1>
-{% render "CyclearGameBundle:Uitslag:viewByPosition" with {"seizoen": seizoen.slug } %}
+<div class="row">
+    <div class="span4">
+        <h2>Stand</h2>
+        {% render "CyclearGameBundle:Uitslag:viewByPloegen" with {"seizoen": seizoen.slug } %}
+    </div>
+    <div class="span4">
+        <h2>Periode</h2>
+        {% render "CyclearGameBundle:Uitslag:viewByPeriode" with {"seizoen": seizoen.slug, "periode_id": periode.id } %}
+    </div>    
+    <div class="span4">
+        <h2>Zeges</h2>
+        {% render "CyclearGameBundle:Uitslag:viewByPosition" with {"seizoen": seizoen.slug } %}
+    </div>
+</div>
 
 {% endblock %}

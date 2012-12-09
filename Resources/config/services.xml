@@ -1,19 +1,22 @@
 <?xml version="1.0" ?>
 <!-- 100 => 'DEBUG', 200 => 'INFO', 300 => 'WARNING', 400 => 'ERROR', 500 
-	=> 'CRITICAL', 550 => 'ALERT', -->
+=> 'CRITICAL', 550 => 'ALERT', -->
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:monolog="http://symfony.com/schema/dic/monolog"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
     		http://symfony.com/schema/dic/monolog http://symfony.com/schema/dic/monolog/monolog-1.0.xsd">
-    
-  
-
 
     <services>
         <service id="cyclear_game.exceptionlistener.db" class="Cyclear\GameBundle\Listener\ExceptionListener">
             <tag name="kernel.event_listener" event="kernel.exception"
                  method="onKernelException" />
             <argument type="service" id="dblog" />
+        </service>
+        
+        <service id="cyclear_game.requestlistener" class="Cyclear\GameBundle\Listener\RequestListener">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="security.context" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
         </service>
 
         <service id="cyclear_game.exceptionlistener.mail" class="Cyclear\GameBundle\Listener\ExceptionListener">
@@ -40,6 +43,10 @@
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="cyclear_cqparser.parser"/>
             <argument type="service" id="cyclear_game.calculator.punten"/>
+        </service>
+        
+        <service id="cyclear_game.manager.user" class="Cyclear\GameBundle\EntityManager\UserManager">
+            <argument type="service" id="security.acl.provider"/>
         </service>
         
         <service id="cyclear_game.type.renner_selector" class="Cyclear\GameBundle\Form\RennerSelectorType">
@@ -99,8 +106,8 @@
         
     </services>
 
-	<!-- <parameters> <parameter key="cyclear_game.example.class">Cyclear\GameBundle\Example</parameter> 
-		</parameters> <services> <service id="cyclear_game.example" class="%cyclear_game.example.class%"> 
-		<argument type="service" id="service_id" /> <argument>plain_value</argument> 
-		<argument>%parameter_name%</argument> </service> </services> -->
+    <!-- <parameters> <parameter key="cyclear_game.example.class">Cyclear\GameBundle\Example</parameter> 
+  		</parameters> <services> <service id="cyclear_game.example" class="%cyclear_game.example.class%"> 
+  		<argument type="service" id="service_id" /> <argument>plain_value</argument> 
+  		<argument>%parameter_name%</argument> </service> </services> -->
 </container>

@@ -7,10 +7,10 @@
         </tr>
     </thead>
     <tbody>
-    {% for uitslag in list %}
+    {% for ploeg in list %}
         <tr>
-            <td>{{ uitslag.naam }}</td>
-            <td>{{ uitslag.punten }}</td>
+            <td><a href="{{ path('ploeg_show', { "seizoen": seizoen.slug, id:ploeg.id}) }}">{{ ploeg.naam }}</a></td>
+            <td>{{ ploeg.punten }}</td>
         </tr>
     {% endfor %}
     </tbody>

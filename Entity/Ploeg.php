@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="Ploeg")
  * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\PloegRepository")
  */
-class Ploeg {
-
+class Ploeg
+{
     /**
      * @var integer $id
      *
@@ -41,7 +41,7 @@ class Ploeg {
      * @ORM\Column(name="afkorting", type="string", length=6)
      */
     private $afkorting;
-    
+
     /**
      * 
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
@@ -55,21 +55,24 @@ class Ploeg {
      */
     private $renners;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->renners = new ArrayCollection ();
     }
 
     /**
      * @return the $user
      */
-    public function getUser() {
+    public function getUser()
+    {
         return $this->user;
     }
 
     /**
      * @param field_type $user
      */
-    public function setUser($user) {
+    public function setUser($user)
+    {
         $this->user = $user;
     }
 
@@ -78,7 +81,8 @@ class Ploeg {
      *
      * @return integer 
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -87,7 +91,8 @@ class Ploeg {
      *
      * @param string $naam
      */
-    public function setNaam($naam) {
+    public function setNaam($naam)
+    {
         $this->naam = $naam;
     }
 
@@ -96,50 +101,60 @@ class Ploeg {
      *
      * @return string 
      */
-    public function getNaam() {
+    public function getNaam()
+    {
         return $this->naam;
     }
 
     /**
      * @return the $afkorting
      */
-    public function getAfkorting() {
+    public function getAfkorting()
+    {
         return $this->afkorting;
     }
 
     /**
      * @param string $afkorting
      */
-    public function setAfkorting($afkorting) {
+    public function setAfkorting($afkorting)
+    {
         $this->afkorting = $afkorting;
     }
 
     /**
      * @return the $renners
      */
-    public function getRenners() {
+    public function getRenners()
+    {
         return $this->renners;
     }
 
     /**
      * @param ArrayCollection $renners
      */
-    public function setRenners($renners) {
+    public function setRenners($renners)
+    {
         $this->renners = $renners;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return (string) $this->getNaam();
     }
-    
-    public function getSeizoen() {
+
+    public function getSeizoen()
+    {
         return $this->seizoen;
     }
 
-    public function setSeizoen($seizoen) {
+    public function setSeizoen($seizoen)
+    {
         $this->seizoen = $seizoen;
     }
 
-
-
+    public function getNaamWithSeizoen()
+    {
+        return $this->getSeizoen()->getIdentifier().' '.$this->getNaam();
+    }
 }
