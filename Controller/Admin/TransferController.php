@@ -84,8 +84,7 @@ class TransferController extends Controller {
                 $datum->add( new \DateInterval("PT".date("H")."H".date("i")."M".date('s')."S") );
                 $transferManager = $this->get('cyclear_game.manager.transfer');
                 $seizoen = $form->get('seizoen')->getData();
-                $transfer = $transferManager->doAdminTransfer($renner, $ploegNaar, $datum, $type, $seizoen );
-                $em->persist($transfer);
+                $transferManager->doAdminTransfer($renner, $ploegNaar, $datum, $type, $seizoen );
                 $em->flush();
                 return $this->redirect( $this->generateUrl('admin_transfer') );
             }

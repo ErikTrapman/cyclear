@@ -39,7 +39,7 @@ class PloegController extends Controller
         $ploeglist = $this->getDoctrine()->getRepository("CyclearGameBundle:Ploeg")->getRennersWithPunten($ploeg);
         // TODO make this a service
         foreach($ploeglist as $index => $listentry){ 
-            $renner = $em->getRepository("CyclearGameBundle:Renner")->find($listentry['rennerId']);
+            $renner = $em->getRepository("CyclearGameBundle:Renner")->find($listentry['id']);
             $ploeglist[$index]['renner'] = $renner;
             $transfer = $em->getRepository("CyclearGameBundle:Transfer")->findLastByRenner($renner);
             $ploeglist[$index]['transferred'] = $transfer;

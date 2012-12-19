@@ -33,6 +33,7 @@
 
         <service id="cyclear_game.manager.transfer" class="Cyclear\GameBundle\EntityManager\TransferManager">
             <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="cyclear_game.manager.contract" />
         </service>
         
         <service id="cyclear_game.manager.wedstrijd" class="Cyclear\GameBundle\EntityManager\WedstrijdManager">
@@ -47,6 +48,10 @@
         
         <service id="cyclear_game.manager.user" class="Cyclear\GameBundle\EntityManager\UserManager">
             <argument type="service" id="security.acl.provider"/>
+        </service>
+        
+        <service id="cyclear_game.manager.contract" class="Cyclear\GameBundle\EntityManager\ContractManager">
+            <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
         
         <service id="cyclear_game.type.renner_selector" class="Cyclear\GameBundle\Form\RennerSelectorType">
@@ -103,6 +108,7 @@
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <tag name="validator.constraint_validator" alias="user_transfer" />
         </service>
+        
         
     </services>
 
