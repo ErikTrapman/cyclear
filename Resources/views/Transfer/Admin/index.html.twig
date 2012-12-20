@@ -11,13 +11,13 @@
         </a>
     </li>
 </ul>
-<table class="records_list table ">
+<table class="records_list table table-condensed">
     <thead>
         <tr>
             <th>Id</th>
             <th>Renner</th>
-            <th>Ploegvan</th>
-            <th>Ploegnaar</th>
+            <th>Van</th>
+            <th>Naar</th>
             <th>Datum</th>
             <th>Actions</th>
         </tr>
@@ -26,9 +26,9 @@
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('admin_transfer_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td>{{ entity.renner }}</td>
-            <td>{{ entity.ploegVan }}</td>
-            <td>{{ entity.ploegNaar }}</td>
+            <td>{{ entity.renner.naam }}</td>
+            <td>{% if entity.ploegVan is not null %}{{ entity.ploegVan.afkorting }}{% endif %}</td>
+            <td>{% if entity.ploegNaar is not null %}{{ entity.ploegNaar.afkorting }}{% endif %}</td>
             <td>{{ entity.datum|date('Y-m-d H:i:s') }}</td>
             <td>
                 <ul>

@@ -38,17 +38,30 @@ class RennerRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
-        $contracts = $this->_em->getRepository("CyclearGameBundle:Contract")
-                ->createQueryBuilder('c')
-                ->where('c.renner = :renner')
-                ->andWhere('c.eind IS NOT NULL')
-                ->andWhere('c.seizoen = :seizoen')
-                ->setParameters(array('renner' => $renner, 'seizoen' => $seizoen))
-                ->getQuery()->getResult();
+        $contract = $this->_em->getRepository("CyclearGameBundle:Contract")->getCurrentContract($renner, $seizoen);
+        if (null === $contract) {
+            return null;
+        }
+        return $contract->getPloeg();
+    }
+
+    public function getPloegOnDate($renner, $seizoen, $date)
+    {
+        //c.start <= DATE(m.date) AND ( c.end IS NULL OR c.end >= DATE(m.date) )
+        $qb = $this->_em->getRepository("CyclearGameBundle:Contract")->createQueryBuilder('c');
+        $qb->where('c.renner = :renner')
+            ->andWhere('c.start <= DATE(:date) AND ( c.end IS NULL OR c.end >= DATE(:date) )')
+            ->andWhere('c.seizoen = :seizoen')
+        ;
+        $qb->setParameters(array('renner' => $renner, 'date' => $date, 'seizoen' => $seizoen));
+        $contracts = $qb->getQuery()->getResult();
         if (empty($contracts)) {
             return null;
         }
-        return $contracts[0];
+        if (count($contracts) > 0) {
+            throw new \RuntimeException("Cannot have multiple ploegen from this query");
+        }
+        return $contracts[0]->getPloeg();
     }
 
     public function findOneByJoinedByLastTransferOnOrBeforeDate($id, \DateTime $date)

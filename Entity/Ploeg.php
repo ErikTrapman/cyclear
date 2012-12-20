@@ -48,16 +48,8 @@ class Ploeg
      */
     private $seizoen;
 
-    /**
-     * 
-     * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Renner", mappedBy="ploeg")
-     * @var ArrayCollection
-     */
-    private $renners;
-
     public function __construct()
     {
-        $this->renners = new ArrayCollection ();
     }
 
     /**
@@ -120,22 +112,6 @@ class Ploeg
     public function setAfkorting($afkorting)
     {
         $this->afkorting = $afkorting;
-    }
-
-    /**
-     * @return the $renners
-     */
-    public function getRenners()
-    {
-        return $this->renners;
-    }
-
-    /**
-     * @param ArrayCollection $renners
-     */
-    public function setRenners($renners)
-    {
-        $this->renners = $renners;
     }
 
     public function __toString()

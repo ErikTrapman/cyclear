@@ -12,7 +12,7 @@ class UitslagNewType extends AbstractType
     {
         $builder
             ->add('datum', 'date', array('format' => 'dd-MM-y'))
-            ->add('url', 'text', array('attr' => array('size' => 100),'mapped'=>false))
+            ->add('url', 'text', array('attr' => array('size' => 100), 'mapped' => false))
             ->add('uitslagtype', 'entity', array('mapped' => false, 'class' => 'CyclearGameBundle:UitslagType'))
             ->add('refentiewedstrijd', 'entity', array('required' => false, 'mapped' => false, 'class' => 'CyclearGameBundle:Wedstrijd',
                 'query_builder' => function( \Doctrine\ORM\EntityRepository $r ) {
@@ -27,5 +27,4 @@ class UitslagNewType extends AbstractType
     {
         return 'cyclear_gamebundle_uitslagnewtype';
     }
-
 }

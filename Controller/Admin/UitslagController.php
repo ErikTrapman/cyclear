@@ -106,6 +106,7 @@ class UitslagController extends Controller
         $em->persist($wedstrijd);
 
         $uitslagen = $request['uitslag'];
+        $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->find($request['seizoen']);
         foreach ($uitslagen as $uitslag) {
             $currentUitslag = new \Cyclear\GameBundle\Entity\Uitslag();
             $uitslagForm = $this->createForm(new \Cyclear\GameBundle\Form\UitslagType(), $currentUitslag);
@@ -119,7 +120,8 @@ class UitslagController extends Controller
             $uitslagForm->bind($uitslag);
 
             $currentUitslag->setRenner($renner);
-            $currentUitslag->setPloeg($renner->getPloeg());
+            $currentUitslag->setPloeg($uitslagForm->get('ploeg')->getData());
+            $currentUitslag->setSeizoen($seizoen);
             $currentUitslag->setDatum($wedstrijd->getDatum());
             $currentUitslag->setWedstrijd($wedstrijd);
             $currentUitslag->setRennerPunten($uitslag['ploegPunten']); // FIXME rennerPunten mogelijk maken

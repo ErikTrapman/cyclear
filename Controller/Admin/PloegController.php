@@ -69,10 +69,10 @@ class PloegController extends Controller {
         }
 
         $deleteForm = $this->createDeleteForm($id);
-
+        $renners = $em->getRepository('CyclearGameBundle:Ploeg')->getRenners($entity);
         return array(
             'entity' => $entity,
-            'renners' => $entity->getRenners(),
+            'renners' => $renners,
             'delete_form' => $deleteForm->createView(),);
     }
 

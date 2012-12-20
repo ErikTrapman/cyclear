@@ -30,13 +30,6 @@ class Renner
     private $naam;
 
     /**
-     * @var Ploeg $ploeg
-     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Ploeg", inversedBy="renners")
-     * @ORM\JoinColumn(name="ploeg_id", nullable=true)
-     */
-    private $ploeg;
-
-    /**
      * @ORM\Column(name="cqranking_id", type="integer", length=11, nullable=true, unique=true)
      * 
      */
@@ -83,19 +76,6 @@ class Renner
         return $this->naam;
     }
 
-    public function setPloeg(Ploeg $ploeg = null)
-    {
-        $this->ploeg = $ploeg;
-    }
-
-    /**
-     * @return Ploeg $ploeg
-     */
-    public function getPloeg()
-    {
-        return $this->ploeg;
-    }
-
     public function getCqRanking_id()
     {
         return $this->cqranking_id;
@@ -130,9 +110,6 @@ class Renner
     {
         $info = $this->getCqRanking_id();
         $info .= (string) ' ['.$this->getNaam().']';
-        if ($this->getPloeg()) {
-            $info .= ' ('.$this->getPloeg()->__toString().')';
-        }
         return $info;
     }
 }
