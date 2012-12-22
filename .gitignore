@@ -19,3 +19,4 @@ app/config/config_local.yml
 nbproject
 
 composer.phar
+__*

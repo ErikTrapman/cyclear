@@ -77,18 +77,6 @@
         <!-- <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" /> -->
     </head>
     <body>
-        {% if app.session.flash('notice') %}
-               <div class="flash-message">
-                   <em>Notice</em>: {{ app.session.flash('notice') }}
-               </div>
-        {% endif %}
-        {% if app.session.flash('error') %}
-            <div class="flash-message">
-                   <em>Error</em>: {{ app.session.flash('error') }}
-               </div>
-        {% endif %}
-          
-        
        <div id="wrap">
             <div class="navbar navbar-inverse">
                 <div class="navbar-inner ">
@@ -110,6 +98,21 @@
 
        
             <div class="container">
+                
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="alert-info">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <p>{{ flashMessage|raw }}</p>
+                    </div>
+                {% endfor %}
+                
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <div class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <p>{{ flashMessage|raw }}</p>
+                    </div>
+                {% endfor %}
+                
                 {% block content %}
                     {% block fos_user_content %}{% endblock %}
                 {% endblock %}

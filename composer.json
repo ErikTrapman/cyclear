@@ -27,7 +27,8 @@
         "stof/doctrine-extensions-bundle":"dev-master",
         
         "twitter/bootstrap": "master",
-        "samson/autocomplete-bundle": "dev-master"
+        "samson/autocomplete-bundle": "dev-master",
+        "eriktrapman/webcommand-bundle": "dev-master"
 
     },
     "scripts": {

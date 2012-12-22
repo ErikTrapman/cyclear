@@ -31,7 +31,8 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             
             new \Samson\Bundle\AutocompleteBundle\SamsonAutocompleteBundle(),
-            new \Samson\Bundle\UnexpectedResponseBundle\SamsonUnexpectedResponseBundle()
+            new \Samson\Bundle\UnexpectedResponseBundle\SamsonUnexpectedResponseBundle(),
+            new ErikTrapman\Bundle\WebCommandBundle\ErikTrapmanWebCommandBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
