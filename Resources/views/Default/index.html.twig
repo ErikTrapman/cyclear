@@ -1,24 +1,118 @@
 {% extends '::base.html.twig' %}
 {% block content %}
 
-<div class="hero-unit">
-    <h1>Cyclear</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras luctus gravida risus a accumsan. Integer elementum sodales enim et tempor. Nullam condimentum egestas urna, vel dictum sem consectetur in. Donec tristique risus et leo volutpat facilisis accumsan elit dapibus. Nulla vulputate est ac justo blandit hendrerit. Nam vel enim erat, vitae pharetra nisl. Suspendisse potenti. Phasellus viverra vulputate tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
-</div>
-
 <div class="row">
     <div class="span4">
-        <h2>Stand</h2>
-        {% render "CyclearGameBundle:Uitslag:viewByPloegen" with {"seizoen": seizoen.slug } %}
+        <div class="hero-unit">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras luctus gravida risus a accumsan. Integer elementum sodales enim et tempor. Nullam condimentum egestas urna, vel dictum sem consectetur in. Donec tristique risus et leo volutpat facilisis accumsan elit dapibus. Nulla vulputate est ac justo blandit hendrerit. Nam vel enim erat, vitae pharetra nisl. Suspendisse potenti. Phasellus viverra vulputate tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
+        </div>
     </div>
-    <div class="span4">
-        <h2>Periode</h2>
-        {% render "CyclearGameBundle:Uitslag:viewByPeriode" with {"seizoen": seizoen.slug, "periode_id": periode.id } %}
+    <div class="span8">
+        
+        <ul class="nav nav-tabs" id="tabs">
+            <li class="active"><a href="#stand">Stand</a></li>
+            <li><a href="#periode">Periode</a></li>
+            <li><a href="#zeges">Zeges</a></li>
+            <li><a href="#transfers">Transfers</a></li>
+            <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Overig <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a data-toggle="tab" href="#draft-klass">Draftklassement</a></li>
+                  <li><a data-toggle="tab" href="#transfer-klass">Transferklassement</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="stand">
+                {% render "CyclearGameBundle:Uitslag:viewByPloegen" with {"seizoen": seizoen.slug } %}
+            </div>
+            <div class="tab-pane" id="periode">
+                <img src="/bundles/cycleargame/img/ajax-loader.gif">
+            </div>
+            <div class="tab-pane" id="transfers">
+                <img src="/bundles/cycleargame/img/ajax-loader.gif">
+            </div>
+            <div class="tab-pane" id="zeges">
+                <img src="/bundles/cycleargame/img/ajax-loader.gif">
+            </div>
+            <div class="tab-pane" id="draft-klass">
+                <img src="/bundles/cycleargame/img/ajax-loader.gif">
+            </div>
+            <div class="tab-pane" id="transfer-klass">
+                <img src="/bundles/cycleargame/img/ajax-loader.gif">
+            </div>
+        </div>
+        
     </div>    
-    <div class="span4">
-        <h2>Zeges</h2>
-        {% render "CyclearGameBundle:Uitslag:viewByPosition" with {"seizoen": seizoen.slug } %}
-    </div>
 </div>
 
+
+<script type="text/javascript">
+    
+    $('#tabs a[href="#stand"]').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+    $('#tabs a[href="#periode"]').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        $.ajax({ // TODO JS-route gebruiken
+            url: "/game/{{seizoen.slug}}/uitslag/periode/{{periode.id}}"
+        }).done(function(data){
+            $("#periode").html(data);
+        }).fail(function(){
+            $("#periode").html('<p>Er ging iets fout...</p>');
+        });
+    })
+    $('#tabs a[href="#transfers"]').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        $.ajax({ // TODO JS-route gebruiken
+            url: "/game/{{seizoen.slug}}/transfer/latest"
+        }).done(function(data){
+            $("#transfers").html(data);
+        }).fail(function(){
+            $("#transfers").html('<p>Er ging iets fout...</p>');
+        });
+    })
+    
+    $('#tabs a[href="#zeges"]').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        $.ajax({ // TODO JS-route gebruiken
+            url: "/game/{{seizoen.slug}}/uitslag/zeges"
+        }).done(function(data){
+            $("#zeges").html(data);
+        }).fail(function(){
+            $("#zeges").html('<p>Er ging iets fout...</p>');
+        });
+    })
+    
+    $('#tabs a[href="#draft-klass"]').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        $.ajax({ // TODO JS-route gebruiken
+            url: "/game/{{seizoen.slug}}/uitslag/draft-klassement"
+        }).done(function(data){
+            $("#draft-klass").html(data);
+        }).fail(function(){
+            $("#draft-klass").html('<p>Er ging iets fout...</p>');
+        });
+    });
+    $('#tabs a[href="#transfer-klass"]').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        $.ajax({ // TODO JS-route gebruiken
+            url: "/game/{{seizoen.slug}}/uitslag/transfer-klassement"
+        }).done(function(data){
+            $("#transfer-klass").html(data);
+        }).fail(function(){
+            $("#transfer-klass").html('<p>Er ging iets fout...</p>');
+        });
+    });
+    
+
+    
+</script>
 {% endblock %}

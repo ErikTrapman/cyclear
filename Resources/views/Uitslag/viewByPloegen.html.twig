@@ -2,14 +2,18 @@
 <table class="records_list table table-condensed ">
     <thead>
         <tr>
-            <th>Naam</th>
+            <th/>
+            <th>Ploeg</th>
+            <th/>
             <th>Punten</th>
         </tr>
     </thead>
     <tbody>
     {% for ploeg in list %}
         <tr>
+            <td>{{ loop.index }}</td>
             <td><a href="{{ path('ploeg_show', { "seizoen": seizoen.slug, id:ploeg.id}) }}">{{ ploeg.naam }}</a></td>
+            <td>{{ ploeg.afkorting }}</td>
             <td>{{ ploeg.punten }}</td>
         </tr>
     {% endfor %}

@@ -43,6 +43,35 @@ class TransferRepository extends EntityRepository
         return $qb;
     }
 
+    public function getLatestWithInversion($seizoen = null, $types = array(), $limit = 20)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $qb = $this
+            ->createQueryBuilder('t')
+            ->add('select', '( SELECT r.naam FROM Cyclear\GameBundle\Entity\Transfer tr INNER JOIN CyclearGameBundle:Renner r WITH tr.renner = r 
+                WHERE tr.identifier = t.identifier AND tr.id <> t.id ) AS inverse',true)
+            ->where('t.ploegNaar IS NOT NULL')
+            ->andWhere('t.seizoen = :seizoen')
+            ->setParameters(array('seizoen' => $seizoen))
+            ->setMaxResults($limit)
+            ->orderBy('t.datum', 'DESC')
+            ;
+        if(!empty($types)){
+            $qb->andWhere('t.transferType IN ( :types )')->setParameter('types', $types);
+        }
+        return $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+        
+        $q = "SELECT *, identifier AS id1, id AS id2,
+            ( SELECT r.naam FROM transfer t
+    	INNER JOIN renner r ON renner_id = r.id						
+        WHERE identifier = id1 AND id2 <> t.id
+                ) AS inverse
+           FROM transfer 
+           WHERE ploegnaar_id IS NOT NULL";
+    }
+
     public function findInversionRenner($transfer)
     {
         $qb = $this->createQueryBuilder("t")->where("t != :transfer")->andWhere("t.identifier = :identifier");

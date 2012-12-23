@@ -20,7 +20,7 @@ class UitslagController extends Controller
     public function viewByPositionAction($seizoen, $pos = 1)
     {
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getCountForPosition( $seizoen[0], $pos);
+        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getCountForPosition($seizoen[0], $pos);
         return array('list' => $list, 'seizoen' => $seizoen[0]);
     }
 
@@ -46,10 +46,32 @@ class UitslagController extends Controller
             return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl("uitslag_periode", array("seizoen" => $seizoen, "periode_id" => $periode->getId())));
         }
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        
+
         $em = $this->getDoctrine()->getEntityManager();
         $periode = $em->find("CyclearGameBundle:Periode", $periode_id);
         $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen[0]);
+        return array('list' => $list, 'seizoen' => $seizoen[0]);
+    }
+
+    /**
+     * @Route("/draft-klassement", name="uitslag_draft")
+     * @Template()
+     */
+    public function viewByDraftTransferAction($seizoen)
+    {
+        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
+        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen[0]);
+        return array('list' => $list, 'seizoen' => $seizoen[0]);
+    }
+    
+    /**
+     * @Route("/transfer-klassement", name="uitslag_transfers")
+     * @Template()
+     */
+    public function viewByUserTransferAction($seizoen)
+    {
+        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
+        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen[0]);
         return array('list' => $list, 'seizoen' => $seizoen[0]);
     }
 }

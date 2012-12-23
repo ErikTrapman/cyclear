@@ -156,6 +156,7 @@ class UserController extends Controller
                     }
                 }
                 $usermanager->setOwnerAcl($entity, $ploeg);
+                $ploeg->setUser($entity);
             }
 
             // remove the relationship between the tag and the Task

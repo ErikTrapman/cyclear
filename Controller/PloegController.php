@@ -41,7 +41,7 @@ class PloegController extends Controller
             ->createQueryBuilder("u")
             ->where('u.seizoen = :seizoen')->andWhere('u.ploeg = :ploeg')->andWhere('u.ploegPunten > 0')
             ->setParameters(array("seizoen" => $seizoen[0], "ploeg" => $entity))
-            ->orderBy("u.renner")
+            ->orderBy("u.renner")->orderBy('u.datum', 'DESC')
             ;
         $uitslagen = $uitslagenQb->getQuery()->getResult();
         return array(

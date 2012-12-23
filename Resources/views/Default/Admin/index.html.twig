@@ -1,6 +1,10 @@
 {% extends "::admin.base.html.twig" %}
 
 {% block content %}    
-Hello Admin bitches!
-
+<form action="{{ path('admin_index') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Go</button>
+    </p>
+</form>
 {% endblock %}
