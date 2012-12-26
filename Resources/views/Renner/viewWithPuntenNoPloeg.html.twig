@@ -1,0 +1,25 @@
+{% block content %}
+<table class="records_list table table-condensed ">
+    <thead>
+        <tr>
+            <th/>
+            <th>Renner</th>
+            <th>Ploeg</th>
+            <th>Punten</th>
+            <th/>
+        </tr>
+    </thead>
+    <tbody>
+    {% for renner in listWithPuntenNoPloeg %}
+            {% set rennerploeg = rennerRepo.getPloeg(renner[0], seizoen) %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ renner[0].naam }}</td>
+            <td>{% if rennerploeg %}{{ rennerploeg.afkorting }}{% else %}-{% endif %}</td>
+            <td>{{ renner.punten }}</td>
+            <td><a>transfer</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

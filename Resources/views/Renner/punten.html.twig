@@ -1,0 +1,74 @@
+{% extends '::base.html.twig' %}
+
+{% block title "Renners" %}
+
+{% block content %}
+<div class="span6">
+   <form action="{{ path('renner_punten', {"seizoen":seizoen.slug}) }}" method="post" {{ form_enctype(filter) }}>
+    {{ form_widget(filter) }}
+    <p>
+        <button type="submit">Zoek</button>
+    </p>
+</form>
+
+<table class="records_list table ">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Naam</th>
+            <th>Ploeg</th>
+            <th/>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in pagination %}
+        {% set rennerploegIndex = rennerRepo.getPloeg(entity, seizoen) %}
+        <tr>
+            <td><a href="{{ path('renner_show', { 'renner': entity.id, 'seizoen':seizoen.slug  }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.naam }}</td>
+            <td>{% if rennerploegIndex %}{{ rennerploegIndex.afkorting }}{% else %}-{% endif %}</td>
+            <td>
+                {% if is_granted("ROLE_USER") %}
+                    <a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner_id:entity.id} ) }}">transfer</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div id="navigation">
+    {{ pagination.render()|raw }}
+</div>
+</div>
+
+<div class="span4">
+    
+    
+        <ul class="nav nav-tabs" id="tabs">
+            <li class="active"><a href="#leaderboard">Leaderboard</a></li>
+            <li><a href="#available">Vrij</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="leaderboard">
+                {% include 'CyclearGameBundle:Renner:viewWithPunten.html.twig' %}
+            </div>
+            <div class="tab-pane" id="available">
+                {% include 'CyclearGameBundle:Renner:viewWithPuntenNoPloeg.html.twig' %}
+            </div>
+        </div>
+</div>
+
+<script type="text/javascript">
+    
+    $('#tabs a[href="#leaderboard"]').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+    $('#tabs a[href="#available"]').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+</script>
+
+{% endblock %}

@@ -20,4 +20,5 @@ class ContractRepository extends \Doctrine\ORM\EntityRepository
         }
         return $res[0];
     }
+    
 }

@@ -83,6 +83,51 @@ class UitslagRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getPuntenWithRenners($seizoen = null, $limit = 20)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $qb = $this->createQueryBuilder('u')
+            ->where('u.seizoen =:seizoen')
+            ->leftJoin('u.renner', 'r')
+            ->groupBy('u.renner')->add('select', 'IFNULL(SUM(u.rennerPunten),0) AS punten', true)
+            ->setMaxResults($limit)
+            ->setParameters(array('seizoen' => $seizoen))
+            ->orderBy('punten DESC, r.naam', 'ASC')
+        ;
+        $ret = array();
+        foreach ($qb->getQuery()->getResult() as $result) {
+            $ret[] = array(0 => $result[0]->getRenner(), 'punten' => $result['punten']);
+        }
+        return $ret;
+    }
+
+    public function getPuntenWithRennersNoPloeg($seizoen = null, $limit = 20)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $rennersWithPloeg = array();
+        foreach ($this->_em->getRepository("CyclearGameBundle:Renner")->getRennersWithPloeg() as $renner){
+            $rennersWithPloeg [] = $renner->getId();
+        }
+        $qb = $this->createQueryBuilder('u')
+            ->where('u.seizoen =:seizoen')
+            ->leftJoin('u.renner', 'r')
+            ->groupBy('u.renner')->add('select', 'IFNULL(SUM(u.rennerPunten),0) AS punten', true)
+            ->setMaxResults($limit)
+            ->setParameters(array('seizoen' => $seizoen))
+            ->orderBy('punten DESC, r.naam', 'ASC')
+        ;
+        $qb->andWhere($qb->expr()->notIn('u.renner', $rennersWithPloeg));
+        $ret = array();
+        foreach ($qb->getQuery()->getResult() as $result) {
+            $ret[] = array(0 => $result[0]->getRenner(), 'punten' => $result['punten']);
+        }
+        return $ret;
+    }
+
     public function getPuntenByPloegForDraftTransfers($seizoen = null)
     {
         if (null === $seizoen) {

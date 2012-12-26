@@ -64,6 +64,22 @@ class RennerRepository extends EntityRepository
         return $contracts[0]->getPloeg();
     }
 
+    public function getRennersWithPloeg($seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $rennersWithPloeg = array();
+        foreach ($this->_em->getRepository("CyclearGameBundle:Contract")
+            ->createQueryBuilder('c')
+            ->where('c.seizoen = :seizoen')
+            ->andWhere('c.eind IS NULL')->setParameter('seizoen', $seizoen)
+            ->getQuery()->getResult() as $contract) {
+            $rennersWithPloeg [] = $contract->getRenner();
+        }
+        return $rennersWithPloeg;
+    }
+
     public function findOneByJoinedByLastTransferOnOrBeforeDate($id, \DateTime $date)
     {
 

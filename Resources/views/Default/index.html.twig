@@ -2,25 +2,23 @@
 {% block content %}
 
 <div class="row">
-    <div class="span4">
+    <div class="span5">
         <div class="hero-unit">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras luctus gravida risus a accumsan. Integer elementum sodales enim et tempor. Nullam condimentum egestas urna, vel dictum sem consectetur in. Donec tristique risus et leo volutpat facilisis accumsan elit dapibus. Nulla vulputate est ac justo blandit hendrerit. Nam vel enim erat, vitae pharetra nisl. Suspendisse potenti. Phasellus viverra vulputate tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
+            {% if nieuws is not null %}
+                <h2>{{ nieuws.titel }}</h2>
+                <p style="font-size:70%">{{ nieuws.content|nl2br }}</p>
+            {% endif %}
         </div>
     </div>
-    <div class="span8">
+    <div class="span7">
         
         <ul class="nav nav-tabs" id="tabs">
             <li class="active"><a href="#stand">Stand</a></li>
             <li><a href="#periode">Periode</a></li>
             <li><a href="#zeges">Zeges</a></li>
             <li><a href="#transfers">Transfers</a></li>
-            <li class="dropdown">
-                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Overig <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a data-toggle="tab" href="#draft-klass">Draftklassement</a></li>
-                  <li><a data-toggle="tab" href="#transfer-klass">Transferklassement</a></li>
-                </ul>
-            </li>
+            <li><a data-toggle="tab" href="#draft-klass">Draftklassement</a></li>
+            <li><a data-toggle="tab" href="#transfer-klass">Transferklassement</a></li>
         </ul>
 
         <div class="tab-content">

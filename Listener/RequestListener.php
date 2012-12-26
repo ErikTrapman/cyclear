@@ -29,13 +29,16 @@ class RequestListener
         $request = $event->getRequest();
         if (null !== $request->get('seizoen')) {
             $seizoen = $this->em->getRepository("CyclearGameBundle:Seizoen")->findBySlug($request->get('seizoen'));
-            // TODO vervang dit door 'seizoen' zodat seizoen in alle controllers voorhanden is
-            $request->attributes->set('seizoen-object', $seizoen[0]);
-            if (null !== $token = $this->security->getToken()) {
-                $user = $token->getUser();
-                if ($user instanceof \Cyclear\GameBundle\Entity\User) {
-                    $request->attributes->set('seizoen-ploeg', $user->getPloegBySeizoen($seizoen[0]));
-                }
+            $seizoen = $seizoen[0];
+        } else {
+            $seizoen = $this->em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+            $request->attributes->set('seizoen', $seizoen->getSlug());
+        }
+        $request->attributes->set('seizoen-object', $seizoen);
+        if (null !== $token = $this->security->getToken()) {
+            $user = $token->getUser();
+            if ($user instanceof \Cyclear\GameBundle\Entity\User) {
+                $request->attributes->set('seizoen-ploeg', $user->getPloegBySeizoen($seizoen));
             }
         }
     }
