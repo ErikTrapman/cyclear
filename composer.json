@@ -22,13 +22,14 @@
         "jms/di-extra-bundle": "1.1.*",
         "kriswallsmith/assetic": "1.1.*@dev",
         
-        "friendsofsymfony/user-bundle": "*",
+        "friendsofsymfony/user-bundle": "dev-master#f5fd8a0f528a63b7c40bea7d0fa94e43b905ae7b",
         "knplabs/knp-paginator-bundle": "dev-master",
         "stof/doctrine-extensions-bundle":"dev-master",
         
         "twitter/bootstrap": "master",
         "samson/autocomplete-bundle": "dev-master",
-        "eriktrapman/webcommand-bundle": "dev-master"
+        "eriktrapman/webcommand-bundle": "dev-master",
+        "beberlei/DoctrineExtensions": "dev-master"
 
     },
     "scripts": {

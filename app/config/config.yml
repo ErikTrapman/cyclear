@@ -49,6 +49,10 @@ doctrine:
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
+        dql:
+          string_functions:
+            ifnull: DoctrineExtensions\Query\Mysql\IfNull
+    
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -67,7 +71,7 @@ fos_user:
     registration:
       form:
         type: admin_user_new
-        handler: cyclear_game.user_form.handler.registration
+        #handler: cyclear_game.user_form.handler.registration
     from_email:
         address:        noreply@cyclear.nl
         sender_name:    Cyclear

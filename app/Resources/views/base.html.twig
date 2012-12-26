@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}Cyclear{% endblock %}{% if is_granted("ROLE_ADMIN") %} - Admin{% else %}{% if is_granted("ROLE_USER") %} - User {% endif %}{% endif %}</title>
+        <title>{% block title %}Cyclear{% endblock %}{% if is_granted("ROLE_ADMIN") %} - Adminstrator{% else %}{% if is_granted("ROLE_USER") %} - User {% endif %}{% endif %}</title>
         {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/jquery-ui-1.8.16.custom.css') }}" media="all" />
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/select2.css') }}" media="all" />
@@ -85,6 +85,11 @@
                     <div class="container">
                         <a class="brand" href="/">Cyclear</a>
                         <ul class="nav" role="navigation">
+                            {% if app.request.attributes.get('seizoen') %}
+                                <li><a href="{{ path('renner_punten', {'seizoen':app.request.attributes.get('seizoen')} ) }}">Renners</a></li>
+                            {% else %}
+                                <li><a href="{{ path('renner_punten', {'seizoen':null} ) }}">Renners</a></li>
+                            {% endif %}
                         {% if is_granted("ROLE_USER") %}
                             {% include 'CyclearGameBundle:Default/User:inc_menu.html.twig' %}
                         {% endif %}
@@ -127,11 +132,11 @@
                 <p class="muted credit">
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-                <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                <a href="{{ path('fos_user_security_logout', {'seizoen': app.request.attributes.get('seizoen')}) }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
                {% else %}
-                    <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+                    <a href="{{ path('fos_user_security_login', {'seizoen': app.request.attributes.get('seizoen')}) }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
                     | 
-                    <a href="{{ path('fos_user_resetting_request') }}">Wachtwoord vergeten?</a>
+                    <a href="{{ path('fos_user_resetting_request', {'seizoen': app.request.attributes.get('seizoen')}) }}">Wachtwoord vergeten?</a>
                {% endif %}
                     | <a href="https://github.com/ErikTrapman" target="_blank">github.com/Cyclear</a>
                </p>
