@@ -22,6 +22,7 @@ twig:
     form:
       resources:
         - 'SamsonAutocompleteBundle:Form:autocomplete.html.twig'
+        #- 'MopaBootstrapBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -81,3 +82,7 @@ stof_doctrine_extensions:
     orm:
         default: 
           sluggable: true
+
+mopa_bootstrap:
+    form:
+        show_legend: false

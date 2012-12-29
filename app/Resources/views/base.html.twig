@@ -33,6 +33,16 @@
             <script type="text/javascript">
                 $(document).ready( function(){
                     $('.dropdown-toggle').dropdown();
+                    
+                    var $thisform = $(this).find('form')
+                    $thisform.addClass('form-horizontal');
+                    var $button = $(this).find('button')
+                    $button.addClass('btn');
+                    var $lastgroup = $(this).find('fieldset').last('div.controls');
+                    var $newlastgroup = $('<div/>').appendTo($lastgroup);
+                    $newlastgroup.addClass('controls');
+                    $button.clone().appendTo($newlastgroup);
+                    $button.remove();
                 });
             </script>
             {% endblock %}

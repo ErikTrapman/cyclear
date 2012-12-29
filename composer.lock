@@ -1,5 +1,5 @@
 {
-    "hash": "776438cf15c1b0eed18a7b646444869e",
+    "hash": "99e8e5b1165bf1d0ba1e1ec5a94c511c",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -367,7 +367,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/FriendsOfSymfony/FOSUserBundle/archive/8a129b88ab18b9b2d1518ac40937ecfafd4aac53.zip",
+                "url": "https://github.com/FriendsOfSymfony/FOSUserBundle/archive/401434d6c0ee395e91aebd42caf353d001bed282.zip",
                 "reference": "f5fd8a0f528a63b7c40bea7d0fa94e43b905ae7b",
                 "shasum": ""
             },
@@ -502,18 +502,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/jdorn/sql-formatter.git",
-                "reference": "6b3516f87d6636dcc3f847887eec82e852943247"
+                "reference": "9aac5ea51a1c13af3e67a7d7ba7e528f94c52485"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/jdorn/sql-formatter/archive/6b3516f87d6636dcc3f847887eec82e852943247.zip",
-                "reference": "6b3516f87d6636dcc3f847887eec82e852943247",
+                "url": "https://github.com/jdorn/sql-formatter/archive/9aac5ea51a1c13af3e67a7d7ba7e528f94c52485.zip",
+                "reference": "9aac5ea51a1c13af3e67a7d7ba7e528f94c52485",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2012-12-25 00:51:26",
+            "time": "2012-12-27 16:16:30",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1035,6 +1035,116 @@
             ]
         },
         {
+            "name": "mopa/bootstrap-bundle",
+            "version": "dev-master",
+            "target-dir": "Mopa/Bundle/BootstrapBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phiamo/MopaBootstrapBundle.git",
+                "reference": "1c24caefbd25b508b39811d402bf6682a26fcf74"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/phiamo/MopaBootstrapBundle/archive/1c24caefbd25b508b39811d402bf6682a26fcf74.zip",
+                "reference": "1c24caefbd25b508b39811d402bf6682a26fcf74",
+                "shasum": ""
+            },
+            "require": {
+                "mopa/composer-bridge": "dev-master",
+                "symfony/symfony": ">=2.1,<2.3-dev"
+            },
+            "suggest": {
+                "knplabs/knp-paginator-bundle": "dev-master",
+                "craue/formflow-bundle": "dev-master",
+                "twitter/bootstrap": "2.0.*",
+                "knplabs/knp-menu-bundle": "1.1.*",
+                "jlong/sass-twitter-bootstrap": "dev-master"
+            },
+            "time": "2012-12-19 11:26:30",
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1.x-dev"
+                }
+            },
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Mopa\\Bundle\\BootstrapBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philipp A. Mohrenweiser",
+                    "email": "phiamo@googlemail.com",
+                    "homepage": "http://bootstrap.mohrenweiserpartner.de"
+                },
+                {
+                    "name": "Community contributions",
+                    "homepage": "https://github.com/phiamo/MopaBootstrapBundle/contributors"
+                }
+            ],
+            "description": "Easy integration of twitters bootstrap into symfony2",
+            "keywords": [
+                "form",
+                "extra form",
+                "bootstrap",
+                "bootstrap form",
+                "template"
+            ]
+        },
+        {
+            "name": "mopa/composer-bridge",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/phiamo/MopaComposerBridge.git",
+                "reference": "v1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/phiamo/MopaComposerBridge/archive/v1.0.0.zip",
+                "reference": "v1.0.0",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/console": "2.*"
+            },
+            "time": "2012-10-11 18:29:49",
+            "type": "symfony-bridge",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Mopa\\Bridge\\Composer": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philipp A. Mohrenweiser",
+                    "email": "phiamo@googlemail.com",
+                    "homepage": "http://bootstrap.mohrenweiserpartner.de"
+                },
+                {
+                    "name": "Community contributions",
+                    "homepage": "https://github.com/phiamo/MopaComposerBridge/contributors"
+                }
+            ],
+            "description": "Symfony2 Composer Bridge",
+            "homepage": "http://bootstrap.mohrenweiserpartner.de",
+            "keywords": [
+                "Symfony2",
+                "composer"
+            ]
+        },
+        {
             "name": "samson/autocomplete-bundle",
             "version": "dev-master",
             "target-dir": "Samson/Bundle/AutocompleteBundle",
@@ -1238,12 +1348,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensio/SensioGeneratorBundle",
-                "reference": "v2.1.4"
+                "reference": "v2.1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/sensio/SensioGeneratorBundle/archive/v2.1.4.zip",
-                "reference": "v2.1.4",
+                "url": "https://github.com/sensio/SensioGeneratorBundle/archive/v2.1.5.zip",
+                "reference": "v2.1.5",
                 "shasum": ""
             },
             "require": {
@@ -1575,12 +1685,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/symfony/symfony.git",
-                "reference": "8fd34e4eae26c55c7aec04b9f452e10557b8bc89"
+                "reference": "9b71f30ade6b1458567dc2bcd4e09cfff0875178"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/symfony/archive/8fd34e4eae26c55c7aec04b9f452e10557b8bc89.zip",
-                "reference": "8fd34e4eae26c55c7aec04b9f452e10557b8bc89",
+                "url": "https://github.com/symfony/symfony/archive/9b71f30ade6b1458567dc2bcd4e09cfff0875178.zip",
+                "reference": "9b71f30ade6b1458567dc2bcd4e09cfff0875178",
                 "shasum": ""
             },
             "require": {
@@ -1629,7 +1739,7 @@
                 "propel/propel1": "dev-master",
                 "monolog/monolog": "1.*"
             },
-            "time": "2012-12-23 18:08:33",
+            "time": "2012-12-28 22:58:46",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -1712,18 +1822,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "a65e7e4e2e5726a42a29e609fad008f8a9600594"
+                "reference": "1b1a6e7de018d300e6eb67727f3717c24f4540ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/a65e7e4e2e5726a42a29e609fad008f8a9600594.zip",
-                "reference": "a65e7e4e2e5726a42a29e609fad008f8a9600594",
+                "url": "https://github.com/fabpot/Twig/archive/1b1a6e7de018d300e6eb67727f3717c24f4540ba.zip",
+                "reference": "1b1a6e7de018d300e6eb67727f3717c24f4540ba",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2012-12-25 10:06:30",
+            "time": "2012-12-27 16:33:50",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1788,6 +1898,7 @@
         "stof/doctrine-extensions-bundle": 20,
         "samson/autocomplete-bundle": 20,
         "eriktrapman/webcommand-bundle": 20,
-        "beberlei/doctrineextensions": 20
+        "beberlei/doctrineextensions": 20,
+        "mopa/bootstrap-bundle": 20
     }
 }

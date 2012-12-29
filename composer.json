@@ -29,7 +29,8 @@
         "twitter/bootstrap": "master",
         "samson/autocomplete-bundle": "dev-master",
         "eriktrapman/webcommand-bundle": "dev-master",
-        "beberlei/DoctrineExtensions": "dev-master"
+        "beberlei/DoctrineExtensions": "dev-master",
+        "mopa/bootstrap-bundle": "dev-master"
 
     },
     "scripts": {
