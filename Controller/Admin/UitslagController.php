@@ -77,6 +77,7 @@ class UitslagController extends Controller
             $datum->add(new \DateInterval("PT11H"));
             $uitslagen = $uitslagManager->prepareUitslagen($form);
             $wedstrijd = $wedstrijdManager->createWedstrijdFromUrl($url, $datum);
+            $wedstrijd->setSeizoen($form->get('seizoen')->getData());
             $confirmForm = $this->createForm(new UitslagConfirmType(), array('wedstrijd' => $wedstrijd, 'uitslag' => $uitslagen, 'registry' => $this->get('doctrine')));
 
             return( array('form' => $confirmForm->createView()) );
@@ -106,7 +107,7 @@ class UitslagController extends Controller
         $em->persist($wedstrijd);
 
         $uitslagen = $request['uitslag'];
-        $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->find($request['seizoen']);
+        $seizoen = $wedstrijd->getSeizoen();// $em->getRepository("CyclearGameBundle:Seizoen")->find($request['seizoen']);
         foreach ($uitslagen as $uitslag) {
             $currentUitslag = new \Cyclear\GameBundle\Entity\Uitslag();
             $uitslagForm = $this->createForm(new \Cyclear\GameBundle\Form\UitslagType(), $currentUitslag);
@@ -124,7 +125,7 @@ class UitslagController extends Controller
             $currentUitslag->setSeizoen($seizoen);
             $currentUitslag->setDatum($wedstrijd->getDatum());
             $currentUitslag->setWedstrijd($wedstrijd);
-            $currentUitslag->setRennerPunten($uitslag['ploegPunten']); // FIXME rennerPunten mogelijk maken
+            $currentUitslag->setRennerPunten($uitslag['rennerPunten']); // FIXME rennerPunten mogelijk maken
             $em->persist($currentUitslag);
         }
         $em->flush();

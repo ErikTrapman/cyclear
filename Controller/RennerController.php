@@ -69,20 +69,24 @@ class RennerController extends Controller
 
         $filter = $this->createForm('renner_filter');
         $em = $this->getDoctrine()->getEntityManager();
-        $query = $em->createQuery("SELECT r FROM Cyclear\GameBundle\Entity\Renner r ORDER BY r.naam");
-
+        $sql = "SELECT * FROM Renner r ORDER BY r.naam";
+        $conn = $em->getConnection();
+        $params = array();
         $config = $em->getConfiguration();
         $config->addFilter("naam", "Cyclear\GameBundle\Filter\RennerNaamFilter");
-
         if ($this->getRequest()->getMethod() == 'POST') {
             $filter->bindRequest($this->getRequest());
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
                     $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData());
+                    $sql = "SELECT * FROM Renner r WHERE r.naam LIKE :naam ORDER BY r.naam";
+                    $params = array(":naam" => "%".$filter->get('naam')->getData()."%" );
                 }
             }
         }
-        $entities = $query->getResult();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        $entities = $stmt->fetchAll(\PDO::FETCH_NAMED);
         if (array_key_exists('naam', $em->getFilters()->getEnabledFilters())) {
             $em->getFilters()->disable('naam');
         }

@@ -3,6 +3,8 @@
 {% block content %}
 <h1>Uitslag confirm</h1>
 
+{% form_theme _self %}
+
 <form action="{{ path('admin_uitslag_post') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>

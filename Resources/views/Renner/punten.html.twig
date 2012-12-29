@@ -22,7 +22,7 @@
     </thead>
     <tbody>
     {% for entity in pagination %}
-        {% set rennerploegIndex = rennerRepo.getPloeg(entity, seizoen) %}
+        {% set rennerploegIndex = rennerRepo.getPloeg(entity.id, seizoen) %}
         <tr>
             <td><a href="{{ path('renner_show', { 'renner': entity.id, 'seizoen':seizoen.slug  }) }}">{{ entity.id }}</a></td>
             <td>{{ entity.naam }}</td>

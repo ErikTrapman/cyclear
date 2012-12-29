@@ -1,13 +1,51 @@
 {% extends '::admin.base.html.twig' %}
 
+{% form_theme form _self %}
+
+{% block _cyclear_gamebundle_uitslagconfirmtype_uitslag_widget %}
+    <div class="control-group">
+        <label class="control-label">Punten</label>
+        <div class="controls">
+            <table class="punten-confirm">
+                <tr>
+                    <thead>
+                        <th>Positie</th>
+                        <th>Renner</th>
+                        <th>Ploeg</th>
+                        <th>Punten</th>
+                        <th>Punten-renner</th>
+                    </thead>
+                </tr>
+                {% for rows in form %}
+                <tr>
+                    <td>{{ form_widget(rows.positie, { 'attr': {'class': 'positie'} }) }}</td>
+                    <td>{{ form_widget(rows.renner) }}</td>
+                    <td>{{ form_widget(rows.ploeg) }}</td>
+                    <td>{{ form_widget(rows.ploegPunten, { 'attr': {'class': 'punten'} }) }}</td>
+                    <td>{{ form_widget(rows.rennerPunten, { 'attr': {'class': 'punten'} }) }}</td>
+               </tr>   
+                {% endfor %}
+            </table>
+        </div>
+        </div>
+{% endblock %}
+
 {% block content %}
-<h1>Uitslag confirm</h1>
+<style type="text/css">
+        table.punten-confirm input.positie, table.punten-confirm input.punten { width: 40px; }
+</style>
+
+<h2>Bevestig uitslag</h2>
 
 <form action="{{ path('admin_uitslag_confirm') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
+    <fieldset>
+        {{ form_widget(form.wedstrijd) }}
+        {{ form_widget(form.uitslag) }}
+     </fieldset>
     <p>
         <button type="submit">Create</button>
     </p>
+    {{ form_rest(form) }}
 </form>
 
 <ul class="record_actions">
