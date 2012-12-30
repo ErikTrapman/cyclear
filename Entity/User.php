@@ -32,6 +32,7 @@ class User extends BaseUser implements \Serializable
 
     public function __construct()
     {
+        parent::__construct();
         $this->ploeg = new \Doctrine\Common\Collections\ArrayCollection();
     }
 

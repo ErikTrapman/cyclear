@@ -39,7 +39,7 @@ class RennerRepository extends EntityRepository
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         if(is_numeric($renner)){
-            $renner = $this->createQueryBuilder('r')->where('r.id = '.$renner)->getFirstResult();
+            $renner = $this->_em->getRepository("CyclearGameBundle:Renner")->find($renner);  
         }
         $contract = $this->_em->getRepository("CyclearGameBundle:Contract")->getCurrentContract($renner, $seizoen);
         if (null === $contract) {

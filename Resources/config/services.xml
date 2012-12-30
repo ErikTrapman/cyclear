@@ -109,6 +109,14 @@
             <tag name="validator.constraint_validator" alias="user_transfer" />
         </service>
         
+        <service class="Cyclear\GameBundle\EventListener\UserCreateListener" >
+            <argument type="service" id="fos_user.user_manager" />
+            <argument type="service" id="fos_user.mailer" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="security.acl.provider"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+        
         
     </services>
 

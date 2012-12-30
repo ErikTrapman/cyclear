@@ -42,6 +42,11 @@ class Wedstrijd {
      */
     private $uitslagtype;
     
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Uitslag", mappedBy="wedstrijd", cascade={"remove"})
+     */
+    private $uitslagen;
     
     /**
      * 
@@ -50,7 +55,6 @@ class Wedstrijd {
     private $seizoen;
     
     public function __construct(){
-        $this->uitslagen = array();
     }
     
     /**

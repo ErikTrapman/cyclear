@@ -48,4 +48,19 @@ class UserManager
         $objectIdentity = ObjectIdentity::fromDomainObject($ploeg);
         $this->aclprovider->deleteAcl($objectIdentity);
     }
+
+    public function isOwner($user, $ploeg)
+    {
+        $securityIdentity = UserSecurityIdentity::fromAccount($user);
+        $objectIdentity = ObjectIdentity::fromDomainObject($ploeg);
+        try {
+            $acl = $this->aclprovider->findAcl($objectIdentity);
+            return $acl->isGranted(array(MaskBuilder::MASK_OWNER), array($securityIdentity));
+        } catch (AclNotFoundException $e) {
+            return false;
+        } catch(\Symfony\Component\Security\Acl\Exception\NoAceFoundException $e){
+            return false;
+        }
+        return false;
+    }
 }

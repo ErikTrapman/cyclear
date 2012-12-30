@@ -1,11 +1,2 @@
-{% extends '::base.html.twig' %}
+{% extends 'CyclearGameBundle:Ploeg:show.html.twig' %}
 
-{% block title %}Ploeg {% endblock %}
-
-{% block content %}
-
-<h2>{{ ploeg.naam }}</h2>
-
-{% include "CyclearGameBundle:Ploeg:_list.html.twig" with { "list": ploeglist } %}
-
-{% endblock %}

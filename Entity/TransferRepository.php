@@ -43,7 +43,7 @@ class TransferRepository extends EntityRepository
         return $qb;
     }
 
-    public function getLatestWithInversion($seizoen = null, $types = array(), $limit = 20)
+    public function getLatestWithInversion($seizoen = null, $types = array(), $limit = 20, $ploegNaar = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
@@ -58,18 +58,13 @@ class TransferRepository extends EntityRepository
             ->setMaxResults($limit)
             ->orderBy('t.datum', 'DESC')
             ;
+        if(null !== $ploegNaar){
+            $qb->andWhere('t.ploegNaar = :ploegNaar')->setParameter('ploegNaar', $ploegNaar);
+        }
         if(!empty($types)){
             $qb->andWhere('t.transferType IN ( :types )')->setParameter('types', $types);
         }
         return $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-        
-        $q = "SELECT *, identifier AS id1, id AS id2,
-            ( SELECT r.naam FROM transfer t
-    	INNER JOIN renner r ON renner_id = r.id						
-        WHERE identifier = id1 AND id2 <> t.id
-                ) AS inverse
-           FROM transfer 
-           WHERE ploegnaar_id IS NOT NULL";
     }
 
     public function findInversionRenner($transfer)
@@ -82,14 +77,17 @@ class TransferRepository extends EntityRepository
 
     public function getTransferCountForUserTransfer($ploeg, $start, $end)
     {
-        return $this->getTransferCountByType($ploeg, $start, $end, Transfer::USERTRANSFER);
+        return $this->getTransferCountByType($ploeg, $start, $end, array(Transfer::USERTRANSFER, Transfer::ADMINTRANSFER));
     }
 
-    private function getTransferCountByType($ploeg, $start, $end, $type)
+    public function getTransferCountByType($ploeg, $start, $end, $type)
     {
+        if(!is_array($type)){
+            $type = array($type);
+        }
         $query = $this->getEntityManager()
             ->createQuery("SELECT COUNT(t.id) AS freq FROM CyclearGameBundle:Transfer t 
-                WHERE t.ploegNaar = :ploeg AND t.datum BETWEEN :start AND :end AND t.transferType = :type")
+                WHERE t.ploegNaar = :ploeg AND t.datum BETWEEN :start AND :end AND t.transferType IN( :type )")
             ->setParameters(array("type" => $type, "ploeg" => $ploeg, "start" => $start, "end" => $end));
         $res = $query->getSingleResult();
         return (int) $res['freq'];

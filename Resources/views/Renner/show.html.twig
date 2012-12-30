@@ -4,56 +4,10 @@
 
 {% block content %}
 
-<h1>{{ renner }}</h1>
-<h2>Transfers</h2>
-<table>
-    <thead>
-        <th>datum</th>
-        <th>type</th>
-        <th>van</th>
-        <th>naar</th>
-        <th>inversie</th>
-    </thead>
-    <tbody>
-        {# TODO gebruik transfer _list.html #}
-        {% for transfer in transfers %}
-            <tr>
-                <td>{{ transfer.datum.format('d-m-Y') }}</td>
-                <td>{{ transfer.getTransferTypeFormatted }}</td>
-                <td>{{ transfer.ploegVan }}</td>
-                <td>{{ transfer.ploegNaar }}</td>
-                <td>{{ transferrepo.findInversionRenner(transfer) }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{# TODO gebruik uitslag viewByRenner.html oid #}
+<h1>{{ renner.naam }}</h1>
 <h2>Uitslagen</h2>
-<table>
-    <thead>
-        <th>{{ uitslagen.sortable('datum', 'u.datum')|raw }}</th>
-        <th>wedstrijd</th>
-        <th>{{ uitslagen.sortable('ploeg', 'u.ploeg')|raw }}</th>
-        <th>ploeg-punten</th>
-        <th>renner-punten</th>
-    </thead>
-    <tbody>
-        {% for entity in uitslagen %}
-            <tr>
-                <td>{{ entity.datum.format('d-m-Y') }}</td>
-                <td>{{ entity.wedstrijd }}</td>
-                <td>{{ entity.ploeg }}</td>
-                <td>{{ entity.ploegPunten }}</td>
-                <td>{{ entity.rennerPunten }}</td>
-            </tr>
-        {% endfor %}    
-    </tbody>
-    <tfoot>
-        <tr><td colspan="4">
-                <div id="navigation">
-                {{ uitslagen.render()|raw }}
-                </div></td></tr>
-    </tfoot>
-</table>
+{% include "CyclearGameBundle:Uitslag:_listRenner.html.twig" with {'uitslagen':uitslagen} %}
+<h2>Transfers</h2>
+{% include "CyclearGameBundle:Transfer:_listWithInversion.html.twig" with {'listWithInversion':transfers} %}
 
 {% endblock %}

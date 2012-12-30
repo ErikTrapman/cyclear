@@ -19,7 +19,6 @@ class DefaultController extends Controller
      */
     public function indexAction($seizoen = null)
     {
-
         if (null === $seizoen) {
             $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
             return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl("game", array("seizoen" => $seizoen->getSlug())));

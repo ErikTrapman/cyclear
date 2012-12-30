@@ -12,6 +12,7 @@ class PloegType extends AbstractType
         $builder
             ->add('naam')
             ->add('afkorting')
+            ->add('seizoen','entity',array('class'=>'CyclearGameBundle:Seizoen'))
             //->add('user', 'entity', array('class'=>'Cyclear\GameBundle\Entity\User'));
         ;
     }

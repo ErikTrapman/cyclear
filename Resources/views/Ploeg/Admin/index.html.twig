@@ -4,14 +4,19 @@
 
 {% block content %}
 <h1>Ploeg index</h1>
-
-<form action="{{ path('admin_ploeg') }}" method="post" {{ form_enctype(filter) }}>
+<form class="form-inline" action="{{ path('admin_ploeg') }}" method="post" {{ form_enctype(filter) }}>
     {{ form_widget(filter) }}
     <p>
         <button type="submit">Zoek</button>
     </p>
 </form>
-
+<ul>
+    <li>
+        <a href="{{ path('admin_ploeg_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
 <table class="records_list table ">
     <thead>
         <tr>
@@ -41,12 +46,7 @@
     {% endfor %}
     </tbody>
 </table>
-
-<ul>
-    <li>
-        <a href="{{ path('admin_ploeg_new') }}">
-            Create a new entry
-        </a>
-    </li>
-</ul>
+<div id="navigation">
+    {{ entities.render()|raw }}
+</div>
 {% endblock %}

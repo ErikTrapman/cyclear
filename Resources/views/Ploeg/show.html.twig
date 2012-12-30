@@ -1,27 +1,65 @@
 {% extends '::base.html.twig' %}
 
-{% block title "Ploeg" %}
+{% block title %}
+{{ entity.naam }}
+{% endblock %}
 
 {% block content %}
-<h2>Renners</h2>
-<table class="records_list table ">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Naam</th>
-            <th>Punten</th>
-        </tr>
-    </thead>
-    {% for renner in renners %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td><a href="{{ path('renner_show',{ seizoen:seizoen.slug, renner:renner.id }) }}">{{ renner.naam }}</a></td>
-            <td>{{ renner.ploegPunten }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-<h2>Gescoorde punten</h2>
-{% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':uitslagen} %}
+<h2>{{ entity.naam }}</h2>
+<div class="span4">
+    <table class="records_list table ">
+        <thead>
+            <tr>
+                <th/>
+                <th>Naam</th>
+                <th>Punten</th>
+                {% if is_granted("ROLE_USER") and is_granted('OWNER', entity) %}
+                    <th/>
+                {% endif %}
+            </tr>
+        </thead>
+        {% for renner in renners %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td><a href="{{ path('renner_show',{ seizoen:seizoen.slug, renner:renner.id }) }}">{{ renner.naam }}</a></td>
+                <td>{{ renner.ploegPunten }}</td>
+                {% if is_granted("ROLE_USER") and is_granted('OWNER', entity) %}
+                <td><a href="{{ path('user_transfer', {'id':entity.id,'renner_id':renner.id,'seizoen':seizoen.slug} ) }}">
+                        <img src="/bundles/cycleargame/icons/famfamfam/coins_delete.png"/></a>
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="span7">
+    
+    <ul class="nav nav-tabs" id="tabs">
+            <li class="active"><a href="#punten">Gescoorde punten</a></li>
+            <li><a href="#transfers">Transfers</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="punten">
+            {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':uitslagen} %}
+        </div>
+        <div class="tab-pane" id="transfers">
+            {% include "CyclearGameBundle:Transfer:_listWithInversion.html.twig" with {'listWithInversion':transfers} %}
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+    $('#tabs a[href="#punten"]').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+    $('#tabs a[href="#transfers"]').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+</script>
 
 {% endblock %}

@@ -2,14 +2,18 @@
 
 namespace Cyclear\GameBundle\Controller;
 
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Cyclear\GameBundle\Entity\Ploeg;
+use Cyclear\GameBundle\Entity\Renner;
+use Cyclear\GameBundle\Entity\Transfer;
+use Cyclear\GameBundle\Form\PloegType;
+use PDO;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Cyclear\GameBundle\Entity\Ploeg;
-use Cyclear\GameBundle\Form\PloegType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Ploeg controller.
@@ -63,7 +67,7 @@ class RennerController extends Controller
      * 
      * @Template()
      */
-    public function puntenAction(\Symfony\Component\HttpFoundation\Request $request)
+    public function puntenAction(Request $request)
     {
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($request->get('seizoen'));
 
@@ -86,7 +90,7 @@ class RennerController extends Controller
         }
         $stmt = $conn->prepare($sql);
         $stmt->execute($params);
-        $entities = $stmt->fetchAll(\PDO::FETCH_NAMED);
+        $entities = $stmt->fetchAll(PDO::FETCH_NAMED);
         if (array_key_exists('naam', $em->getFilters()->getEnabledFilters())) {
             $em->getFilters()->disable('naam');
         }
@@ -112,10 +116,13 @@ class RennerController extends Controller
      * @Route("/{renner}", name="renner_show")
      * @Template("CyclearGameBundle:Renner:show.html.twig")
      */
-    public function showAction($seizoen, \Cyclear\GameBundle\Entity\Renner $renner)
+    public function showAction($seizoen, Renner $renner)
     {
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        $transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->findByRenner($renner, $seizoen[0]);
+        
+        $transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->getLatestWithInversion(
+            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 999);
+        //$transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->findByRenner($renner, $seizoen[0]);
         $transferrepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
 
         $uitslagen = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenForRenner($renner, $seizoen[0]);

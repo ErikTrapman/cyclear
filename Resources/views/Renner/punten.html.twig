@@ -14,7 +14,6 @@
 <table class="records_list table ">
     <thead>
         <tr>
-            <th>Id</th>
             <th>Naam</th>
             <th>Ploeg</th>
             <th/>
@@ -23,13 +22,23 @@
     <tbody>
     {% for entity in pagination %}
         {% set rennerploegIndex = rennerRepo.getPloeg(entity.id, seizoen) %}
+        {% set ingelogdPloeg = app.request.attributes.get('seizoen-ploeg') %}
         <tr>
-            <td><a href="{{ path('renner_show', { 'renner': entity.id, 'seizoen':seizoen.slug  }) }}">{{ entity.id }}</a></td>
-            <td>{{ entity.naam }}</td>
+            <td><a href="{{ path('renner_show', { 'renner': entity.id, 'seizoen':seizoen.slug  }) }}">{{ entity.naam }}</a></td>
             <td>{% if rennerploegIndex %}{{ rennerploegIndex.afkorting }}{% else %}-{% endif %}</td>
             <td>
                 {% if is_granted("ROLE_USER") %}
-                    <a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner_id:entity.id} ) }}">transfer</a>
+                    {% if ingelogdPloeg and rennerploegIndex == null %}
+                        <a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner_id:entity.id} ) }}">
+                            <img src="/bundles/cycleargame/icons/famfamfam/coins_add.png">
+                        </a>
+                    {% elseif ingelogdPloeg and ingelogdPloeg.id == rennerploegIndex.id %}
+                        <a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner_id:entity.id} ) }}">
+                            <img src="/bundles/cycleargame/icons/famfamfam/coins_delete.png">
+                        </a>
+                    {% elseif ingelogdPloeg and ingelogdPloeg.id != rennerploegIndex.id %}
+                        &nbsp;
+                    {% endif %}
                 {% endif %}
             </td>
         </tr>

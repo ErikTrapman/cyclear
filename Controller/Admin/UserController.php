@@ -61,8 +61,10 @@ class UserController extends Controller
      */
     public function newAction()
     {
-        $form = $this->get('fos_user.registration.form');
-        //$form = $this->createForm($this->get('fos_user.registration.form'), $entity);
+        echo 'TODO';
+        die;
+        //$form = $this->get('fos_user.registration.form.type');
+        $form = $this->createForm('fos_user_registration');
 
         return array(
             'form' => $form->createView()
@@ -78,12 +80,13 @@ class UserController extends Controller
     public function createAction()
     {
 
-        $form = $this->get('fos_user.registration.form');
+        $form = $this->createForm('fos_user_registration');
         $request = $this->getRequest();
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-
+            var_dump($form);
+            die;
             return $this->redirect($this->generateUrl('admin_user'));
         }
 

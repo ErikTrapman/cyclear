@@ -2,14 +2,11 @@
 
 namespace Cyclear\GameBundle\Controller;
 
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Cyclear\GameBundle\Entity\Transfer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Cyclear\GameBundle\Entity\Ploeg;
-use Cyclear\GameBundle\Form\PloegType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Ploeg controller.
@@ -37,17 +34,32 @@ class PloegController extends Controller
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
         //$renners = $entity->getRenners();
         $renners = $em->getRepository('CyclearGameBundle:Ploeg')->getRennersWithPunten($entity);
+        // TODO repository function maken
         $uitslagenQb = $em->getRepository('CyclearGameBundle:Uitslag')
-            ->createQueryBuilder("u")
-            ->where('u.seizoen = :seizoen')->andWhere('u.ploeg = :ploeg')->andWhere('u.ploegPunten > 0')
-            ->setParameters(array("seizoen" => $seizoen[0], "ploeg" => $entity))
-            ->orderBy("u.renner")->orderBy('u.datum', 'DESC')
-            ;
-        $uitslagen = $uitslagenQb->getQuery()->getResult();
+                ->createQueryBuilder("u")
+                ->where('u.seizoen = :seizoen')->andWhere('u.ploeg = :ploeg')->andWhere('u.ploegPunten > 0')
+                ->setParameters(array("seizoen" => $seizoen[0], "ploeg" => $entity))
+                ->orderBy("u.renner")->orderBy('u.datum', 'DESC')
+        ;
+        //$uitslagen = $uitslagenQb->getQuery()->getResult();
+
+        $paginator = $this->get('knp_paginator');
+        $uitslagen = $paginator->paginate(
+            $uitslagenQb->getQuery(), $this->get('request')->query->get('page', 1)/* page number */, 20/* limit per page */
+        );
+
+        // $seizoen = null, $types = array(), $limit = 20, $ploegNaar = null
+        $transfers = $em->getRepository("CyclearGameBundle:Transfer")->getLatestWithInversion(
+            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 20, $entity);
+        
+        
+        
         return array(
             'entity' => $entity,
             'renners' => $renners,
             'uitslagen' => $uitslagen,
-            'seizoen' => $seizoen[0]);
+            'seizoen' => $seizoen[0],
+            'transfers' => $transfers
+            );
     }
 }

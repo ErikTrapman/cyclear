@@ -24,7 +24,7 @@ class Uitslag {
     /**
      * @var object $wedstrijd
      *
-     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Wedstrijd")
+     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Wedstrijd", inversedBy="uitslagen", cascade={"all"})
      */
     private $wedstrijd;
 

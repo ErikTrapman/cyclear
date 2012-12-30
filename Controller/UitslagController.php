@@ -50,7 +50,22 @@ class UitslagController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $periode = $em->find("CyclearGameBundle:Periode", $periode_id);
         $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen[0]);
-        return array('list' => $list, 'seizoen' => $seizoen[0]);
+        return array('list' => $list, 'seizoen' => $seizoen[0],'periode'=>$periode);
+    }
+
+    /**
+     * @Route("/periodes/{periode_id}", name="uitslag_periodes")
+     * @Template()
+     */
+    public function periodesAction($seizoen, $periode_id)
+    {
+        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $periode = $em->find("CyclearGameBundle:Periode", $periode_id);
+        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen[0]);
+        $periodes = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->findBy(array("seizoen" => $seizoen[0]));
+        return array('list' => $list, 'seizoen' => $seizoen[0],'periodes'=>$periodes,'current_periode'=>$periode);
     }
 
     /**
@@ -63,7 +78,7 @@ class UitslagController extends Controller
         $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen[0]);
         return array('list' => $list, 'seizoen' => $seizoen[0]);
     }
-    
+
     /**
      * @Route("/transfer-klassement", name="uitslag_transfers")
      * @Template()

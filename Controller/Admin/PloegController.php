@@ -2,14 +2,15 @@
 
 namespace Cyclear\GameBundle\Controller\Admin;
 
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Cyclear\GameBundle\Entity\Ploeg;
+use Cyclear\GameBundle\Form\PloegType;
+use Doctrine\DBAL\Types\Type;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Cyclear\GameBundle\Entity\Ploeg;
-use Cyclear\GameBundle\Form\PloegType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Ploeg controller.
@@ -29,26 +30,35 @@ class PloegController extends Controller {
         $filter = $this->createForm('ploeg_filter');
 
         $em = $this->getDoctrine()->getEntityManager();
-        $query = $em->createQuery("SELECT p FROM Cyclear\GameBundle\Entity\Ploeg p");
+        $query = $em->createQuery("SELECT p FROM Cyclear\GameBundle\Entity\Ploeg p ORDER BY p.id DESC");
 
         $config = $em->getConfiguration();
         $config->addFilter("naam", "Cyclear\GameBundle\Filter\Ploeg\PloegNaamFilter");
         $config->addFilter("user", "Cyclear\GameBundle\Filter\Ploeg\PloegUserFilter");
+        $config->addFilter("seizoen", "Cyclear\GameBundle\Filter\SeizoenFilter");
 
         if ($this->getRequest()->getMethod() == 'POST') {
             $filter->bindRequest($this->getRequest());
             //$data = $filter->get('user')->getData();
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
-                    $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData(), \Doctrine\DBAL\Types\Type::getType(\Doctrine\DBAL\Types\Type::STRING)->getBindingType());
+                    $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData(), Type::getType(Type::STRING)->getBindingType());
                 }
                 if ($filter->get('user')->getData()) {
-                    $em->getFilters()->enable("user")->setParameter("user", $filter->get('user')->getData(), \Doctrine\DBAL\Types\Type::getType(\Doctrine\DBAL\Types\Type::STRING)->getBindingType());
+                    $em->getFilters()->enable("user")->setParameter("user", $filter->get('user')->getData(), Type::getType(Type::STRING)->getBindingType());
+                }
+                if ($filter->get('seizoen')->getData()) {
+                    $em->getFilters()->enable("seizoen")->setParameter("seizoen", $filter->get('seizoen')->getData(), Type::getType(Type::STRING)->getBindingType());
                 }
             }
         }
+        $paginator = $this->get('knp_paginator');
+        $entities = $paginator->paginate(
+            $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
+        );
+        
         //$entities = $em->getRepository('CyclearGameBundle:Ploeg')->findAll();
-        $entities = $query->getResult();
+        //$entities = $query->getResult();
 
         return array('entities' => $entities, 'filter' => $filter->createView());
     }

@@ -31,6 +31,9 @@ class PloegController extends Controller
      */
     public function indexAction($seizoen, Ploeg $ploeg)
     {
+        return $this->forward("CyclearGameBundle:Ploeg:show", array('seizoen'=>$seizoen,'id'=>$ploeg->getId()));
+        
+        /*
         $em = $this->getDoctrine()->getEntityManager();
         if (null === $ploeg) {
             throw new \RuntimeException("Unknown ploeg");
@@ -45,5 +48,6 @@ class PloegController extends Controller
             $ploeglist[$index]['transferred'] = $transfer;
         }
         return array('ploeg' => $ploeg, 'ploeglist' => $ploeglist, 'seizoen' => $seizoen[0]);
+        */
     }
 }
