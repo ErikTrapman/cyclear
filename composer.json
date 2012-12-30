@@ -22,7 +22,7 @@
         "jms/di-extra-bundle": "1.1.*",
         "kriswallsmith/assetic": "1.1.*@dev",
         
-        "friendsofsymfony/user-bundle": "dev-master#f5fd8a0f528a63b7c40bea7d0fa94e43b905ae7b",
+        "friendsofsymfony/user-bundle": "dev-master",
         "knplabs/knp-paginator-bundle": "dev-master",
         "stof/doctrine-extensions-bundle":"dev-master",
         
@@ -47,7 +47,7 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
         ]
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "web"

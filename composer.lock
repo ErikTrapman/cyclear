@@ -1,5 +1,5 @@
 {
-    "hash": "99e8e5b1165bf1d0ba1e1ec5a94c511c",
+    "hash": "0a692fa53e3a58d2bf4126206a2c68aa",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -363,12 +363,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle",
-                "reference": "f5fd8a0f528a63b7c40bea7d0fa94e43b905ae7b"
+                "reference": "401434d6c0ee395e91aebd42caf353d001bed282"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle/archive/401434d6c0ee395e91aebd42caf353d001bed282.zip",
-                "reference": "f5fd8a0f528a63b7c40bea7d0fa94e43b905ae7b",
+                "reference": "401434d6c0ee395e91aebd42caf353d001bed282",
                 "shasum": ""
             },
             "require": {
@@ -389,7 +389,7 @@
                 "doctrine/doctrine-bundle": "*",
                 "doctrine/mongodb-odm-bundle": "*"
             },
-            "time": "2012-12-18 21:44:15",
+            "time": "2012-12-28 16:42:49",
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -1889,7 +1889,7 @@
     "aliases": [
 
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": {
         "twig/extensions": 20,
         "kriswallsmith/assetic": 20,

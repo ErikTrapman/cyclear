@@ -22,7 +22,7 @@ fos_user_profile:
 
 fos_user_register:
     resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
-    prefix: /game/{seizoen}/
+    prefix: /admin/user/new
 
 fos_user_resetting:
     resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
@@ -35,3 +35,7 @@ fos_user_change_password:
 fos_user_security_check:
     prefix: /game/{seizoen}/
     pattern: /login_check
+    
+fos_user_security_logout:
+    prefix: /
+    pattern: /logout
