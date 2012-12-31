@@ -1,4 +1,7 @@
 {% block content %}
+        {% if periode is defined %}
+            <div style="text-align: center;"><a href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode_id':periode.id} ) }}">Alle periodes</a></div>
+        {% endif %}
 <table class="records_list table table-condensed ">
     <thead>
         <tr>
@@ -17,9 +20,6 @@
             <td>{{ ploeg.punten }}</td>
         </tr>
     {% endfor %}
-        {% if periode is defined %}
-            <tr><td colspan="4"><a href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode_id':periode.id} ) }}">Alle periodes</a></td></tr>
-        {% endif %}
     </tbody>
 </table>
 {% endblock %}

@@ -42,8 +42,9 @@ class TransferRepository extends EntityRepository
         $qb->setParameter('1', $renner);
         return $qb;
     }
-
-    public function getLatestWithInversion($seizoen = null, $types = array(), $limit = 20, $ploegNaar = null)
+    
+    // TODO: teveel argumenten. maak losse methoden!
+    public function getLatestWithInversion($seizoen = null, $types = array(), $limit = 20, $ploegNaar = null, $renner = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
@@ -51,17 +52,20 @@ class TransferRepository extends EntityRepository
         $qb = $this
             ->createQueryBuilder('t')
             ->add('select', '( SELECT r.naam FROM Cyclear\GameBundle\Entity\Transfer tr INNER JOIN CyclearGameBundle:Renner r WITH tr.renner = r 
-                WHERE tr.identifier = t.identifier AND tr.id <> t.id ) AS inverse',true)
+                WHERE tr.identifier = t.identifier AND tr.id <> t.id ) AS inverse', true)
             ->where('t.ploegNaar IS NOT NULL')
             ->andWhere('t.seizoen = :seizoen')
             ->setParameters(array('seizoen' => $seizoen))
             ->setMaxResults($limit)
             ->orderBy('t.datum', 'DESC')
-            ;
-        if(null !== $ploegNaar){
+        ;
+        if (null !== $ploegNaar) {
             $qb->andWhere('t.ploegNaar = :ploegNaar')->setParameter('ploegNaar', $ploegNaar);
         }
-        if(!empty($types)){
+        if (null !== $renner) {
+            $qb->andWhere('t.renner = :renner')->setParameter('renner', $renner);
+        }
+        if (!empty($types)) {
             $qb->andWhere('t.transferType IN ( :types )')->setParameter('types', $types);
         }
         return $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
@@ -82,7 +86,7 @@ class TransferRepository extends EntityRepository
 
     public function getTransferCountByType($ploeg, $start, $end, $type)
     {
-        if(!is_array($type)){
+        if (!is_array($type)) {
             $type = array($type);
         }
         $query = $this->getEntityManager()

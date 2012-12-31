@@ -61,10 +61,8 @@ class UserController extends Controller
      */
     public function newAction()
     {
-        echo 'TODO';
-        die;
         //$form = $this->get('fos_user.registration.form.type');
-        $form = $this->createForm('fos_user_registration');
+        $form = $this->createForm('admin_user_new');
 
         return array(
             'form' => $form->createView()
@@ -79,15 +77,21 @@ class UserController extends Controller
      */
     public function createAction()
     {
-
-        $form = $this->createForm('fos_user_registration');
         $request = $this->getRequest();
-        $form->bindRequest($request);
 
+        $form = $this->createForm('admin_user_new');
+        $userManager = $this->container->get('fos_user.user_manager');
+
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
+
+        $form->setData($user);
+        // IMPORTANT. We vragen niet om een password in het formulier. Zet hier dus tenminste een wachtwoord!
+        $user->setPlainPassword(uniqid());
+        $form->bindRequest($request);
         if ($form->isValid()) {
-            var_dump($form);
-            die;
-            return $this->redirect($this->generateUrl('admin_user'));
+            $userManager->updateUser($user);
+            return $this->redirect($this->generateUrl('admin_user_edit', array('id' => $user->getId())));
         }
 
         return array(

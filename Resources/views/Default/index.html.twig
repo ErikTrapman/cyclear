@@ -14,6 +14,7 @@
         
         <ul class="nav nav-tabs" id="tabs">
             <li class="active"><a href="#stand">Stand</a></li>
+            <li><a href="#uitslagen">Uitslagen</a></li>
             <li><a href="#periode">Periode</a></li>
             <li><a href="#zeges">Zeges</a></li>
             <li><a href="#transfers">Transfers</a></li>
@@ -22,22 +23,25 @@
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane active" id="stand">
+            <div class="tab-pane active frontpage-stand" id="stand">
                 {% render "CyclearGameBundle:Uitslag:viewByPloegen" with {"seizoen": seizoen.slug } %}
             </div>
-            <div class="tab-pane" id="periode">
+            <div class="tab-pane frontpage-stand" id="periode">
                 <img src="/bundles/cycleargame/img/ajax-loader.gif">
             </div>
-            <div class="tab-pane" id="transfers">
+            <div class="tab-pane frontpage-stand" id="uitslagen">
                 <img src="/bundles/cycleargame/img/ajax-loader.gif">
             </div>
-            <div class="tab-pane" id="zeges">
+            <div class="tab-pane frontpage-stand" id="transfers">
                 <img src="/bundles/cycleargame/img/ajax-loader.gif">
             </div>
-            <div class="tab-pane" id="draft-klass">
+            <div class="tab-pane frontpage-stand" id="zeges">
                 <img src="/bundles/cycleargame/img/ajax-loader.gif">
             </div>
-            <div class="tab-pane" id="transfer-klass">
+            <div class="tab-pane frontpage-stand" id="draft-klass">
+                <img src="/bundles/cycleargame/img/ajax-loader.gif">
+            </div>
+            <div class="tab-pane frontpage-stand" id="transfer-klass">
                 <img src="/bundles/cycleargame/img/ajax-loader.gif">
             </div>
         </div>
@@ -45,7 +49,9 @@
     </div>    
 </div>
 
-
+<style type="text/css">
+div.frontpage-stand{ min-height: 630px; }
+</style>
 <script type="text/javascript">
     
     $('#tabs a[href="#stand"]').click(function (e) {
@@ -107,6 +113,18 @@
             $("#transfer-klass").html(data);
         }).fail(function(){
             $("#transfer-klass").html('<p>Er ging iets fout...</p>');
+        });
+    });
+    
+    $('#tabs a[href="#uitslagen"]').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        $.ajax({ // TODO JS-route gebruiken
+            url: "/game/{{seizoen.slug}}/wedstrijd/latest"
+        }).done(function(data){
+            $("#uitslagen").html(data);
+        }).fail(function(){
+            $("#uitslagen").html('<p>Er ging iets fout...</p>');
         });
     });
     

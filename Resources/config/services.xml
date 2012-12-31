@@ -44,6 +44,7 @@
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="cyclear_cqparser.parser"/>
             <argument type="service" id="cyclear_game.calculator.punten"/>
+            <argument>%cq_ranking-wedstrijdurl%</argument>
         </service>
         
         <service id="cyclear_game.manager.user" class="Cyclear\GameBundle\EntityManager\UserManager">

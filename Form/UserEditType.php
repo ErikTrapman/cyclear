@@ -10,7 +10,6 @@ class UserEditType extends BaseType
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-        // TODO ploeg-veld zou ook via listener kunnen?
         $user = $options['user'];
         $this->buildUserForm($builder, $options);
         $builder
@@ -28,6 +27,7 @@ class UserEditType extends BaseType
                 'multiple' => true,
                 'expanded' => false
             ))
+                    ->add('enabled', null, array('required'=>false))
         ;
         $subscriber = new IsAdminFieldSubscriber($builder->getFormFactory());
         $builder->addEventSubscriber($subscriber);

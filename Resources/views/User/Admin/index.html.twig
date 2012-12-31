@@ -8,28 +8,23 @@
 <table class="records_list table ">
     <thead>
         <tr>
-            <th>Id</th>
             <th>Username</th>
             <th>Email</th>
             <th>Enabled</th>
             <th>Lastlogin</th>
-            <th>Roles</th>
+            <th>Admin</th>
         </tr>
     </thead>
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td>{{ entity.id }}</td>
-            <td><a href="{{ path('admin_user_show', { 'id': entity.id }) }}">{{ entity.username }}</a></td>
+            <td><a href="{{ path('admin_user_edit', { 'id': entity.id }) }}">{{ entity.username }}</a></td>
             <td>{{ entity.email }}</td>
             <td>{{ entity.enabled }}</td>
             <td>{% if entity.lastLogin %}{{ entity.lastLogin|date('Y-m-d H:i:s') }}{% endif%}</td>
-            <td>{{ entity.roles }}</td>
+            <td>{% if entity.hasRole("ROLE_ADMIN") %}1{% endif %}{# entity.roles #}</td>
             <td>
                 <ul>
-                    <li>
-                        <a href="{{ path('admin_user_show', { 'id': entity.id }) }}">show</a>
-                    </li>
                     <li>
                         <a href="{{ path('admin_user_edit', { 'id': entity.id }) }}">edit</a>
                     </li>

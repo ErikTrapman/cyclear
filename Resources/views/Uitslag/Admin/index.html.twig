@@ -8,6 +8,7 @@
 <table class="records_list table ">
     <thead>
         <tr>
+            <th/>
             <th>Wedstrijd</th>
             <th>Renner</th>
             <th>Renner punten</th>
@@ -19,6 +20,7 @@
     <tbody>
     {% for entity in pagination %}
         <tr>
+            <td><a href="{{ path('admin_uitslag_edit',{uitslag:entity.id}) }}">{{ entity.id }}</a></td>
             <td>{{ entity.wedstrijd.naam }}</td>
             <td>{{ entity.renner.naam }}</td>
             <td>{{ entity.rennerPunten }}</td>

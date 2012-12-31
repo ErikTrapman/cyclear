@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Cyclear\GameBundle\Form\UitslagNewType,
     Cyclear\GameBundle\Form\UitslagConfirmType,
     Cyclear\GameBundle\EntityManager\UitslagManager;
@@ -37,6 +38,26 @@ class UitslagController extends Controller
     }
 
     /**
+     * @Route("/{uitslag}/edit", name="admin_uitslag_edit")
+     * @Template("CyclearGameBundle:Uitslag/Admin:edit.html.twig")
+     */
+    public function editAction(\Symfony\Component\HttpFoundation\Request $request, \Cyclear\GameBundle\Entity\Uitslag $uitslag)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $seizoen = $uitslag->getSeizoen();
+        $form = $this->createForm(new \Cyclear\GameBundle\Form\UitslagType(), $uitslag, array('seizoen'=>$seizoen));
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $em->flush();
+                return $this->redirect($this->generateUrl('admin_uitslag_edit', array('uitslag'=>$uitslag->getId())));
+            }
+        }
+
+        return array('form' => $form->createView(), 'entity' => $uitslag);
+    }
+
+    /**
      * Displays a form to create a new Periode entity.
      *
      * @Route("/new", name="admin_uitslag_new")
@@ -46,7 +67,7 @@ class UitslagController extends Controller
     {
         $stdClass = new \stdClass();
         $stdClass->datum = new \DateTime('now');
-        $form = $this->createForm(new UitslagNewType(),$stdClass );
+        $form = $this->createForm(new UitslagNewType(), $stdClass);
 
         return array(
             'form' => $form->createView()
@@ -76,6 +97,10 @@ class UitslagController extends Controller
             $datum = $form->get('datum')->getData();
             $datum->add(new \DateInterval("PT11H"));
             $uitslagen = $uitslagManager->prepareUitslagen($form);
+            // TODO fixme data-transformer ofzo? Ook in prepare-uitslagen gebeurt onderstaande...
+            if (!$url) {
+                $url = $this->container->getParameter('cq_ranking-wedstrijdurl').$form->get('cq_wedstrijd-id')->getData();
+            }
             $wedstrijd = $wedstrijdManager->createWedstrijdFromUrl($url, $datum);
             $wedstrijd->setSeizoen($form->get('seizoen')->getData());
             $confirmForm = $this->createForm(new UitslagConfirmType(), array('wedstrijd' => $wedstrijd, 'uitslag' => $uitslagen, 'registry' => $this->get('doctrine')));
@@ -107,7 +132,7 @@ class UitslagController extends Controller
         $em->persist($wedstrijd);
 
         $uitslagen = $request['uitslag'];
-        $seizoen = $wedstrijd->getSeizoen();// $em->getRepository("CyclearGameBundle:Seizoen")->find($request['seizoen']);
+        $seizoen = $wedstrijd->getSeizoen(); // $em->getRepository("CyclearGameBundle:Seizoen")->find($request['seizoen']);
         foreach ($uitslagen as $uitslag) {
             $currentUitslag = new \Cyclear\GameBundle\Entity\Uitslag();
             $uitslagForm = $this->createForm(new \Cyclear\GameBundle\Form\UitslagType(), $currentUitslag);

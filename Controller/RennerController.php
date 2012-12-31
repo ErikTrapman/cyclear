@@ -84,7 +84,7 @@ class RennerController extends Controller
                 if ($filter->get('naam')->getData()) {
                     $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData());
                     $sql = "SELECT * FROM Renner r WHERE r.naam LIKE :naam ORDER BY r.naam";
-                    $params = array(":naam" => "%".$filter->get('naam')->getData()."%" );
+                    $params = array(":naam" => "%".$filter->get('naam')->getData()."%");
                 }
             }
         }
@@ -119,9 +119,9 @@ class RennerController extends Controller
     public function showAction($seizoen, Renner $renner)
     {
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        
+
         $transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->getLatestWithInversion(
-            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 999);
+            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 999, null, $renner);
         //$transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->findByRenner($renner, $seizoen[0]);
         $transferrepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
 
@@ -131,7 +131,11 @@ class RennerController extends Controller
         $pagination = $paginator->paginate(
             $uitslagen, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
-
-        return array('seizoen' => $seizoen[0], 'renner' => $renner, 'transfers' => $transfers, 'uitslagen' => $pagination, 'transferrepo' => $transferrepo);
+        
+        $ploeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen[0]);
+        
+        return array('seizoen' => $seizoen[0],
+            'renner' => $renner,
+            'transfers' => $transfers, 'uitslagen' => $pagination, 'transferrepo' => $transferrepo, 'ploeg' => $ploeg);
     }
 }

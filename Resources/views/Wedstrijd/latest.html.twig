@@ -1,0 +1,20 @@
+{% block content %}
+<table class="records_list table table-condensed ">
+    <thead>
+        <tr>
+            <th/>
+            <th>Datum</th>
+            <th>Wedstrijd</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for wedstrijd in wedstrijden %}
+        <tr>
+            <td/>
+            <td>{{ wedstrijd.datum|date('d-m-Y') }}</td>
+            <td><a href="{{ path('wedstrijd_show', {'seizoen':seizoen.slug,'wedstrijd':wedstrijd.id} ) }}">{{ wedstrijd.naam }}</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -2,18 +2,19 @@
 
 namespace Cyclear\GameBundle\EntityManager;
 
+use Cyclear\GameBundle\Calculator\PuntenCalculator;
+use Cyclear\GameBundle\Entity\Renner;
+use Cyclear\GameBundle\Entity\Uitslag;
+use Cyclear\GameBundle\Form\UitslagConfirmType;
+use Cyclear\GameBundle\Form\UitslagNewType;
+use Cyclear\GameBundle\Form\UitslagType;
+use Cyclear\GameBundle\Parser\CQParser;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\DoctrineBundle\Registry;
-use Symfony\Component\CssSelector\CssSelector;
-use Symfony\Component\Form\Form;
 use Symfony\Bundle\SecurityBundle\Tests\Functional\WebTestCase;
+use Symfony\Component\CssSelector\CssSelector;
 use Symfony\Component\DomCrawler\Crawler;
-use Cyclear\GameBundle\Form\UitslagNewType,
-    Cyclear\GameBundle\Parser\CQParser,
-    Cyclear\GameBundle\Form\UitslagType,
-    Cyclear\GameBundle\Form\UitslagConfirmType,
-    Cyclear\GameBundle\Entity\Uitslag,
-    Cyclear\GameBundle\Calculator\PuntenCalculator;
+use Symfony\Component\Form\Form;
 
 class UitslagManager {
 
@@ -24,11 +25,14 @@ class UitslagManager {
     private $entityManager;
     private $puntenCalculator;
     private $cqParser;
+    
+    private $cqRankingWedstrijdUrl;
 
-    public function __construct(EntityManager $em, $parser, \Cyclear\GameBundle\Calculator\PuntenCalculator $puntenCalculator) {
+    public function __construct(EntityManager $em, $parser, PuntenCalculator $puntenCalculator, $cqRankingWedstrijdUrl = '') {
         $this->entityManager = $em;
         $this->puntenCalculator = $puntenCalculator;
         $this->cqParser = $parser;
+        $this->cqRankingWedstrijdUrl = $cqRankingWedstrijdUrl;
     }
 
     /**
@@ -40,7 +44,10 @@ class UitslagManager {
     public function prepareUitslagen(Form $form) {
 
         $url = $form->get('url')->getData();
-
+        if(!$url){
+            $wedstrijdId = $form->get('cq_wedstrijd-id')->getData();
+            $url = $this->cqRankingWedstrijdUrl.$wedstrijdId;
+        }
         $uitslagType = $form->get('uitslagtype')->getData();
         $parseStrategy = $uitslagType->getCqParsingStrategy();
         //$parseStrategy = new $parseStrategyClassname;
@@ -82,7 +89,7 @@ class UitslagManager {
 //                }
             } else {
                 $uitslag->setPloeg(null);
-                $renner = new \Cyclear\GameBundle\Entity\Renner();
+                $renner = new Renner();
                 $renner->setNaam($uitslagregel['name']);
                 $renner->setCqRanking_id($uitslagregel['cqranking_id']);
                 $uitslag->setRenner($renner);

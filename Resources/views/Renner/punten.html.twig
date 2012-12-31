@@ -27,6 +27,7 @@
             <td><a href="{{ path('renner_show', { 'renner': entity.id, 'seizoen':seizoen.slug  }) }}">{{ entity.naam }}</a></td>
             <td>{% if rennerploegIndex %}{{ rennerploegIndex.afkorting }}{% else %}-{% endif %}</td>
             <td>
+                {# TODO macro ofzo van maken?? #}
                 {% if is_granted("ROLE_USER") %}
                     {% if ingelogdPloeg and rennerploegIndex == null %}
                         <a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner_id:entity.id} ) }}">

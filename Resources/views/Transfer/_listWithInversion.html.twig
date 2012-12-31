@@ -4,6 +4,7 @@
             <th/>
             <th><img src="/bundles/cycleargame/icons/famfamfam/coins_add.png"></th>
             <th><img src="/bundles/cycleargame/icons/famfamfam/coins_delete.png"></th>
+            <th/>
         </tr>
     </thead>
     <tbody>
@@ -12,6 +13,7 @@
             <td>{{ transfer[0].ploegNaar.afkorting }}</td>
             <td>{{ transfer[0].renner.naam }}</td>
             <td>{{ transfer['inverse'] }}</td>
+            <td>{{ transfer[0].datum|date('d-m-Y') }}</td>
         </tr>
     {% endfor %}
     </tbody>
