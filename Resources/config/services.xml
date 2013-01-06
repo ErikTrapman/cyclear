@@ -60,6 +60,11 @@
             <tag name="form.type" alias="renner_selector" />
         </service>
         
+        <service id="cyclear_game.type.seizoen_selector" class="Cyclear\GameBundle\Form\SeizoenSelectorType">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <tag name="form.type" alias="seizoen_selector" />
+        </service>
+        
         <service id="cyclear_game.type.renner_autocomplete" class="Cyclear\GameBundle\Form\RennerAutocompleteType">
             <tag name="form.type" alias="renner_autocomplete" />
         </service>
@@ -108,6 +113,10 @@
         <service id="cyclear_game.validator.usertransfer" class="Cyclear\GameBundle\Validator\Constraints\UserTransferValidator">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <tag name="validator.constraint_validator" alias="user_transfer" />
+        </service>
+        
+         <service id="cyclear_game.validator.uitslagnew" class="Cyclear\GameBundle\Validator\Constraints\UitslagNewValidator">
+            <tag name="validator.constraint_validator" alias="uitslag_new" />
         </service>
         
         <service class="Cyclear\GameBundle\EventListener\UserCreateListener" >

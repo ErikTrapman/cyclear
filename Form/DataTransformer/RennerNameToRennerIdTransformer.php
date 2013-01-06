@@ -59,12 +59,6 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface {
             throw new TransformationFailedException("Renner " . $value . " niet gevonden");
         }
         return $renner;
-
-        if (strcasecmp($name, $renner->getNaam()) !== 0) {
-            throw new TransformationFailedException("Opgegeven CqId leidt tot " . $renner->getNaam() . " maar dat is niet hetzelfde als " . $name);
-        }
-
-        return $renner;
     }
 
 }

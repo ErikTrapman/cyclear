@@ -26,7 +26,14 @@
             <td>{{ entity.rennerPunten }}</td>
             <td>{% if entity.ploeg %}{{ entity.ploeg.afkorting }}{% endif %}</td>
             <td>{{ entity.ploegPunten }}</td>
-            <td>{{ entity.datum|date('d-m-Y') }}</td>
+            <td>{{ entity.wedstrijd.datum|date('d-m-Y') }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('admin_uitslag_edit', { 'uitslag': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
         </tr>
     {% endfor %}
     </tbody>

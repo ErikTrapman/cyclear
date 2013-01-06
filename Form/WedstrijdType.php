@@ -15,11 +15,7 @@ class WedstrijdType extends AbstractType
             ->add('datum', 'date', array('format' => 'dd-MM-y'))
             ->add('naam')
             ->add('uitslagtype', 'entity', array('class' => 'CyclearGameBundle:UitslagType'))
-            ->add('seizoen', 'entity', array(
-                'class' => 'CyclearGameBundle:Seizoen',
-                'query_builder' => function(\Doctrine\ORM\EntityRepository $e) {
-                    return $e->createQueryBuilder('s'); //->where('s.current = 1');
-                }))
+            ->add('seizoen', 'seizoen_selector')
 
         ;
     }

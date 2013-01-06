@@ -2,7 +2,16 @@
 
 {% block title %}Transfer edit{% endblock %}
 
+{% form_theme edit_form _self %}
+
+{% block _cyclear_gamebundle_transfertype_renner_widget %}
+<label class=" control-label required">Renner</label>
+<div class="controls">{{ form_widget(form) }}</div>
+{% endblock %}
+
 {% block content %}
+
+
 <h1>Transfer edit</h1>
 
 <form action="{{ path('admin_transfer_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
@@ -17,12 +26,6 @@
         <a href="{{ path('admin_transfer') }}">
             Back to the list
         </a>
-    </li>
-    <li>
-        <form action="{{ path('admin_transfer_delete', { 'id': entity.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
     </li>
 </ul>
 {% endblock %}

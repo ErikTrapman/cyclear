@@ -2,14 +2,22 @@
 
 namespace Cyclear\GameBundle\Controller\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Cyclear\GameBundle\Entity\Uitslag;
+use Cyclear\GameBundle\Entity\Wedstrijd;
+use Cyclear\GameBundle\EntityManager\RennerManager;
+use Cyclear\GameBundle\EntityManager\UitslagManager;
+use Cyclear\GameBundle\Form\UitslagConfirmType;
+use Cyclear\GameBundle\Form\UitslagNewType;
+use Cyclear\GameBundle\Form\UitslagType;
+use Cyclear\GameBundle\Form\WedstrijdType;
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Cyclear\GameBundle\Form\UitslagNewType,
-    Cyclear\GameBundle\Form\UitslagConfirmType,
-    Cyclear\GameBundle\EntityManager\UitslagManager;
+use stdClass;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  *
@@ -41,11 +49,11 @@ class UitslagController extends Controller
      * @Route("/{uitslag}/edit", name="admin_uitslag_edit")
      * @Template("CyclearGameBundle:Uitslag/Admin:edit.html.twig")
      */
-    public function editAction(\Symfony\Component\HttpFoundation\Request $request, \Cyclear\GameBundle\Entity\Uitslag $uitslag)
+    public function editAction(Request $request, Uitslag $uitslag)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $seizoen = $uitslag->getSeizoen();
-        $form = $this->createForm(new \Cyclear\GameBundle\Form\UitslagType(), $uitslag, array('seizoen'=>$seizoen));
+        $form = $this->createForm(new UitslagType(), $uitslag, array('seizoen'=>$seizoen));
         if ('POST' === $request->getMethod()) {
             $form->bind($request);
             if ($form->isValid()) {
@@ -65,8 +73,8 @@ class UitslagController extends Controller
      */
     public function newAction()
     {
-        $stdClass = new \stdClass();
-        $stdClass->datum = new \DateTime('now');
+        $stdClass = new stdClass();
+        $stdClass->datum = new DateTime('now');
         $form = $this->createForm(new UitslagNewType(), $stdClass);
 
         return array(
@@ -81,12 +89,14 @@ class UitslagController extends Controller
      */
     public function prepareAction()
     {
-
         $entities = null;
         $request = $this->getRequest();
-        $form = $this->createForm(new UitslagNewType(), null);
+        $form = $this->createForm(new UitslagNewType());
         $form->bindRequest($request);
-
+        if(!$form->get('url')->getData() && !$form->get('cq_wedstrijdid')->getData()){
+            $this->get('session')->getFlashBag()->add('error', 'Er is iets fout gegaan. Vul de url of de CQ-id in');
+            return $this->forward("CyclearGameBundle:Admin/Uitslag:new");
+        }
         if ($form->isValid()) {
 
             $url = $form->get('url')->getData();
@@ -95,14 +105,20 @@ class UitslagController extends Controller
             $wedstrijdManager = $this->get('cyclear_game.manager.wedstrijd');
 
             $datum = $form->get('datum')->getData();
-            $datum->add(new \DateInterval("PT11H"));
-            $uitslagen = $uitslagManager->prepareUitslagen($form);
+            $datum->setTime(11,0,0);
             // TODO fixme data-transformer ofzo? Ook in prepare-uitslagen gebeurt onderstaande...
             if (!$url) {
-                $url = $this->container->getParameter('cq_ranking-wedstrijdurl').$form->get('cq_wedstrijd-id')->getData();
+                $url = $this->container->getParameter('cq_ranking-wedstrijdurl').$form->get('cq_wedstrijdid')->getData();
             }
             $wedstrijd = $wedstrijdManager->createWedstrijdFromUrl($url, $datum);
             $wedstrijd->setSeizoen($form->get('seizoen')->getData());
+            $wedstrijd->setUitslagType($form->get('uitslagtype')->getData());
+            $refWedstrijd = $form->get('refentiewedstrijd')->getData();
+            $puntenRefDatum = clone $datum;
+            if(null !== $refWedstrijd){
+                $puntenRefDatum = clone $refWedstrijd->getDatum();
+            }
+            $uitslagen = $uitslagManager->prepareUitslagen($form, $wedstrijd, $puntenRefDatum);
             $confirmForm = $this->createForm(new UitslagConfirmType(), array('wedstrijd' => $wedstrijd, 'uitslag' => $uitslagen, 'registry' => $this->get('doctrine')));
 
             return( array('form' => $confirmForm->createView()) );
@@ -119,39 +135,27 @@ class UitslagController extends Controller
      */
     public function confirmAction()
     {
-        //$request = $this->getRequest()->get();
-        $request = $this->getRequest()->get('cyclear_gamebundle_uitslagconfirmtype');
+        $rawData = $this->getRequest()->get('cyclear_gamebundle_uitslagconfirmtype');
         $em = $this->getDoctrine()->getEntityManager();
-
-        $wedstrijd = new \Cyclear\GameBundle\Entity\Wedstrijd();
-        $wedstrijdForm = $this->createForm(new \Cyclear\GameBundle\Form\WedstrijdType(), $wedstrijd);
-        $wedstrijdForm->bind($request['wedstrijd']);
-
-        //$wedstrijd->setNaam( $request['wedstrijd']['naam'] );
-        //$wedstrijd->setDatum( new \DateTime($request['wedstrijd']['datum']) );
+        
+        $confirmForm = $this->createForm(new UitslagConfirmType(), array('registry'=>$this->getDoctrine()));
+        $confirmForm->bind($this->getRequest());
+        $wedstrijd = $confirmForm->get('wedstrijd')->getData();
         $em->persist($wedstrijd);
-
-        $uitslagen = $request['uitslag'];
-        $seizoen = $wedstrijd->getSeizoen(); // $em->getRepository("CyclearGameBundle:Seizoen")->find($request['seizoen']);
-        foreach ($uitslagen as $uitslag) {
-            $currentUitslag = new \Cyclear\GameBundle\Entity\Uitslag();
-            $uitslagForm = $this->createForm(new \Cyclear\GameBundle\Form\UitslagType(), $currentUitslag);
-            $renner = $em->getRepository('CyclearGameBundle:Renner')->findOneBySelectorString($uitslag['renner']);
-            if ($renner === null) {
-                $manager = new \Cyclear\GameBundle\EntityManager\RennerManager($em);
-                $renner = $manager->createRennerFromRennerSelectorTypeString($uitslag['renner']);
+        $rawUitslagen = $rawData['uitslag'];
+        foreach($confirmForm->get('uitslag')->getData() as $key => $uitslag){
+            // de wedstrijd en seizoen staan niet in het formulier
+            $uitslag->setWedstrijd($wedstrijd);
+            // TODO wedstrijd heeft al een seizoen, uitslag zou er geen hoeven hebben
+            $uitslag->setSeizoen($wedstrijd->getSeizoen());
+            // we geven alsnog de mogelijkheid om een renner aan te passen. mss staat die nog niet in de db.
+            if(null === $uitslag->getRenner()){
+                $manager = new RennerManager($em);
+                $renner = $manager->createRennerFromRennerSelectorTypeString($rawUitslagen[$key]['renner']);
                 $em->persist($renner);
+                $uitslag->setRenner($renner);
             }
-            //$uitslag['renner'] = $uitslag['renner'];
-            $uitslagForm->bind($uitslag);
-
-            $currentUitslag->setRenner($renner);
-            $currentUitslag->setPloeg($uitslagForm->get('ploeg')->getData());
-            $currentUitslag->setSeizoen($seizoen);
-            $currentUitslag->setDatum($wedstrijd->getDatum());
-            $currentUitslag->setWedstrijd($wedstrijd);
-            $currentUitslag->setRennerPunten($uitslag['rennerPunten']); // FIXME rennerPunten mogelijk maken
-            $em->persist($currentUitslag);
+            $em->persist($uitslag);
         }
         $em->flush();
         return $this->redirect($this->generateUrl('admin_uitslag'));

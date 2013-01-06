@@ -1,0 +1,36 @@
+<?php
+
+namespace Cyclear\GameBundle\Controller;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * @Route("/game/{seizoen}/spelregels")
+ */
+class SpelregelsController extends Controller
+{
+
+    /**
+     * @Route("/", name="spelregels_index")
+     * @Template()
+     */
+    public function indexAction(Request $request)
+    {
+        $seizoen = $request->attributes->get('seizoen-object');
+        $spelregels = $this->getDoctrine()->getRepository("CyclearGameBundle:Spelregels")->createQueryBuilder("s")
+            ->where('s.seizoen = :seizoen')->orderBy('s.id','DESC')->setMaxResults(1)
+            ->setParameter('seizoen', $seizoen )
+            ->getQuery()->getResult();
+        if(array_key_exists(0,$spelregels)){
+            $spelregels = $spelregels[0];
+        } else {
+            $spelregels = null;
+        }
+        return array('spelregels' => $spelregels, 'seizoen' => $seizoen);
+    }
+
+}

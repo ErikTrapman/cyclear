@@ -36,7 +36,8 @@ class UitslagRepository extends EntityRepository
         $sql = "SELECT *,
                     ( SELECT IFNULL(SUM(u.ploegPunten),0)
                     FROM uitslag u 
-                    WHERE u.datum BETWEEN :start AND :end AND u.ploeg_id = p.id
+                    INNER JOIN wedstrijd w ON w.id = u.wedstrijd_id
+                    WHERE w.datum BETWEEN :start AND :end AND u.ploeg_id = p.id
                      ) AS punten
                 FROM ploeg p WHERE p.seizoen_id = :seizoen_id
                 GROUP BY p.id
@@ -78,7 +79,7 @@ class UitslagRepository extends EntityRepository
             ->where("u.seizoen = :seizoen")
             ->andWhere("u.renner = :renner")
             ->setParameters(array(":seizoen" => $seizoen, ":renner" => $renner))
-            ->orderBy("u.datum", "DESC")
+            ->orderBy("u.id", "DESC")
         ;
         return $qb->getQuery()->getResult();
     }

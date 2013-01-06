@@ -11,7 +11,7 @@ class NieuwsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('seizoen','entity',array('class'=>'CyclearGameBundle:Seizoen'))
+            ->add('seizoen','seizoen_selector')
             ->add('titel')
             ->add('content', 'textarea', array('attr' => array('rows' => 32, 'cols' => 32)))
         ;

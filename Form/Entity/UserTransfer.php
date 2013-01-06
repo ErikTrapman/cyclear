@@ -11,6 +11,8 @@ class UserTransfer
 {
     private $renner_in;
     
+    private $renner_uit;
+    
     private $seizoen;
 
     public function getRennerIn()
@@ -42,6 +44,18 @@ class UserTransfer
     {
         $this->seizoen = $seizoen;
     }
+
+    
+    public function getRennerUit()
+    {
+        return $this->renner_uit;
+    }
+
+    public function setRennerUit($renner_uit)
+    {
+        $this->renner_uit = $renner_uit;
+    }
+
 
 
     

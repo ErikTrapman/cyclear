@@ -5,20 +5,19 @@ namespace Cyclear\GameBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class PloegType extends AbstractType
+class SpelregelsType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('naam')
-            ->add('afkorting')
             ->add('seizoen','seizoen_selector')
-            //->add('user', 'entity', array('class'=>'Cyclear\GameBundle\Entity\User'));
+            ->add('content', 'textarea', array('attr' => array('rows' => 32, 'cols' => 32)))
         ;
     }
 
     public function getName()
     {
-        return 'cyclear_gamebundle_ploegtype';
+        return 'cyclear_gamebundle_spelregelstype';
     }
 }

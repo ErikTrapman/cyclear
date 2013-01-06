@@ -2,6 +2,16 @@
 
 {% form_theme form _self %}
 
+{% block _cyclear_gamebundle_uitslagnewtype_url_widget %}
+ {{ form_widget(form, {'attr': {'class':'input-xxlarge'} } ) }}
+    <span class="help-block"><img src="/bundles/cycleargame/icons/famfamfam/help.png"> 
+        Vul hier de volledige URL in of hieronder de CQ-id van de wedstrijd</span>
+{% endblock %}
+
+{% block _cyclear_gamebundle_uitslagnewtype_cq_wedstrijdid_widget %}
+ {{ form_widget(form, {'attr': {'class':'input-small'} } ) }}
+{% endblock %}
+
 {% block content %}
 <h1>Uitslag creation</h1>
 

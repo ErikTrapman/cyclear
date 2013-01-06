@@ -23,7 +23,7 @@
                 <td>{{ loop.index }}</td>
                 <td><a href="{{ path('renner_show',{ seizoen:seizoen.slug, renner:renner.id }) }}">{{ renner.naam }}</a></td>
                 <td>{{ renner.ploegPunten }}</td>
-                {% if is_granted("ROLE_USER") and is_granted('OWNER', entity) %}
+                {% if is_granted("ROLE_USER") and is_granted('OWNER', entity) and ( is_full_view() or is_not_mobile_view() ) %}
                 <td><a href="{{ path('user_transfer', {'id':entity.id,'renner_id':renner.id,'seizoen':seizoen.slug} ) }}">
                         <img src="/bundles/cycleargame/icons/famfamfam/coins_delete.png"/></a>
                 </td>

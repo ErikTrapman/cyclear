@@ -3,14 +3,14 @@
 
 {% form_theme form _self %}
 
-{% block _cyclear_gamebundle_nieuwstype_content_widget %}
+{% block _cyclear_gamebundle_spelregelstype_content_widget %}
  {{ form_widget(form, { 'attr': {'class': 'field span5'} } ) }}
 {% endblock %}
 
 {% block content %}
-<h1>Nieuws creation</h1>
+<h1>Spelregels creation</h1>
 
-<form action="{{ path('admin_nieuws_create') }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('admin_spelregels_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
         <button type="submit">Create</button>
@@ -19,7 +19,7 @@
 
 <ul class="record_actions">
     <li>
-        <a href="{{ path('admin_nieuws') }}">
+        <a href="{{ path('admin_spelregels') }}">
             Back to the list
         </a>
     </li>

@@ -2,6 +2,10 @@
 
 {% form_theme form _self %}
 
+{% block _cyclear_gamebundle_uitslagconfirmtype_wedstrijd_naam_widget %}
+    {{ form_widget(form, {'attr': {'class':'input-xxlarge'} } ) }}
+{% endblock %}
+
 {% block _cyclear_gamebundle_uitslagconfirmtype_uitslag_widget %}
     <div class="control-group">
         <label class="control-label">Punten</label>
@@ -41,6 +45,12 @@
     <fieldset>
         {{ form_widget(form.wedstrijd) }}
         {{ form_widget(form.uitslag) }}
+            <div class="well">
+                <p><img src="/bundles/cycleargame/icons/famfamfam/help.png"> 
+                    Om een renner aan te passen vul je de CQ-id van de renner in _of_ de naam in dit format [CONTADOR VELASCO Alberto]</p>
+                <p><img src="/bundles/cycleargame/icons/famfamfam/help.png"> 
+                Als je hier een renner wilt aanpassen die nog niet in de database staat gebruik dan het volledige format "ID [Naam naam]"</p>
+            </div>
      </fieldset>
     <p>
         <button type="submit">Create</button>

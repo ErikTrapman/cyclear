@@ -2,9 +2,11 @@
 
 namespace Cyclear\GameBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Cyclear\GameBundle\Entity\Transfer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  *
@@ -17,25 +19,44 @@ class DefaultController extends Controller
      * @Route("/", name="game")
      * @Template()
      */
-    public function indexAction($seizoen = null)
+    public function indexAction(Request $request)
     {
-        if (null === $seizoen) {
-            $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
-            return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl("game", array("seizoen" => $seizoen->getSlug())));
-        }
-
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        if (null === $seizoen) {
-            throw new \Doctrine\ORM\EntityNotFoundException("Seizoen niet gevonden");
-        }
+        $seizoen = $request->attributes->get('seizoen-object');
         $periode = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode();
 
-        $nieuws = $this->getDoctrine()->getRepository("CyclearGameBundle:Nieuws")->findBy(array('seizoen' => $seizoen[0]), array('id' => 'DESC'), 1);
+        $nieuws = $this->getDoctrine()->getRepository("CyclearGameBundle:Nieuws")->findBy(array('seizoen' => $seizoen), array('id' => 'DESC'), 1);
         if (!array_key_exists(0, $nieuws)) {
             $nieuws = null;
         } else {
             $nieuws = $nieuws[0];
         }
-        return array('periode' => $periode, 'seizoen' => $seizoen[0], 'nieuws' => $nieuws);
+        $doctrine = $this->getDoctrine();
+        $stand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen);
+        // TODO: dit naar repository-class
+        $wedstrijden = $doctrine->getRepository("CyclearGameBundle:Wedstrijd")->createQueryBuilder('w')
+            ->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
+            ->orderBy('w.datum', 'DESC')
+            ->setMaxResults(20)->getQuery()->getResult();
+        ;
+        $periodestand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen);
+        $zeges = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getCountForPosition($seizoen, 1);
+        $draft = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen);
+        $transferstand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen);
+        $transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")
+            ->getLatestWithInversion($seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 20);
+        $transferRepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
+        return array(
+            'periode' => $periode, 
+            'seizoen' => $seizoen, 
+            'nieuws' => $nieuws,
+            'stand' => $stand,
+            'wedstrijden' => $wedstrijden,
+            'periodestand' => $periodestand,
+            'zegestand' => $zeges,
+            'drafts' => $draft,
+            'transferstand' => $transferstand,
+            'transfers' => $transfers,
+            'transferRepo' => $transferRepo
+            );
     }
 }

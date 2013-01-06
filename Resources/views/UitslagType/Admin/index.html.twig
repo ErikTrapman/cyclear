@@ -1,7 +1,7 @@
 {% extends '::admin.base.html.twig' %}
 
 {% block content %}
-<h1>UitslagType list</h1>
+<h1>Uitslagtypen</h1>
 
 <table class="records_list table ">
     <thead>
@@ -10,6 +10,7 @@
             <th>Naam</th>
             <th>Max. resultaten</th>
             <th>Alg. klassement</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -21,9 +22,6 @@
             <td>{{ entity.isGeneralClassification }}</td>
             <td>
                 <ul>
-                    <li>
-                        <a href="{{ path('admin_uitslagtype_show', { 'id': entity.id }) }}">show</a>
-                    </li>
                     <li>
                         <a href="{{ path('admin_uitslagtype_edit', { 'id': entity.id }) }}">edit</a>
                     </li>

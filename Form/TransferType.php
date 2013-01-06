@@ -17,15 +17,11 @@ class TransferType extends AbstractType
         $choicelist = new ChoiceList($choices, array('draft transfer', 'admin transfer', 'user transfer'));
         $builder
             //->add('renner', 'renner_selector')
-            ->add('renner', 'renner_autocomplete')
+            ->add('renner', 'renner_autocomplete',array('label'=>'Renner'))
             ->add('ploegNaar', null, array('required' => true))
             ->add('datum', 'date', array('format' => 'dd-MM-y'))
             ->add('transferType', 'choice', array('choice_list' => $choicelist))
-            ->add('seizoen', 'entity', array(
-                'class' => 'CyclearGameBundle:Seizoen',
-                'query_builder' => function(\Doctrine\ORM\EntityRepository $e) {
-                    return $e->createQueryBuilder('s');//->where('s.current = 1');
-                }))
+            ->add('seizoen', 'seizoen_selector')
         ;
     }
 

@@ -13,7 +13,7 @@
     <tbody>
     {% for uitslag in uitslagen %}
         <tr>
-            <td>{{ uitslag.datum|date('d-m-Y') }}</td>
+            <td>{{ uitslag.wedstrijd.datum|date('d-m-Y') }}</td>
             <td>{{ uitslag.wedstrijd.naam }}</td>
             <td>{{ uitslag.renner.naam }}</td>
             <td>{{ uitslag.ploeg }}</td>

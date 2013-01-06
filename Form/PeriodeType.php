@@ -13,7 +13,7 @@ class PeriodeType extends AbstractType
             ->add('start','date')
             ->add('eind','date')
             ->add('transfers',null, array('label'=>'Aantal transfers'))
-            ->add('seizoen','entity', array('class'=>'CyclearGameBundle:Seizoen'))
+            ->add('seizoen','seizoen_selector')
         ;
     }
 

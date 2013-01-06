@@ -71,8 +71,8 @@ class RennerController extends Controller {
     public function editAction($id) {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('CyclearGameBundle:Renner')->find($id);
-
+        $entity = $em->getRepository('CyclearGameBundle:Renner')->findOneBy(array('cqranking_id'=>$id));
+        
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Renner entity.');
         }

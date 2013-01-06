@@ -1,5 +1,13 @@
 {% extends '::admin.base.html.twig' %}
 
+{% form_theme form _self %}
+
+{% block _cyclear_gamebundle_uitslagtype_renner_widget %}
+    {{ form_widget(form) }}<span class="help-block">
+        <img src="/bundles/cycleargame/icons/famfamfam/help.png"> 
+        Vul de CQ-id van de renner in _of_ de volledige naam in dit format [CONTADOR VELASCO Alberto] om te wijzigen. Je kunt hier geen nieuwe renner toevoegen.</span>
+{% endblock %}
+
 {% block content %}
 <h1>Uitslag bewerken</h1>
 

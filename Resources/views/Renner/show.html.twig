@@ -1,12 +1,12 @@
 {% extends '::base.html.twig' %}
 
-{% block title "Renner" %}
+{% block title %}{{ renner.naam }}{% endblock %}
 
 {% block content %}
 
 {% set ingelogdPloeg = app.request.attributes.get('seizoen-ploeg') %}
-
 <h1>{{ renner.naam }}{% if ploeg is not null %} - {{ ploeg.naam }}{% else %} - vrij {% spaceless %}{% if is_granted("ROLE_USER") %}
+
     <a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner_id:renner.id} ) }}">
         <img src="/bundles/cycleargame/icons/famfamfam/coins_add.png">
     </a>{% endif %}{% endspaceless %}{% endif %}
@@ -16,5 +16,4 @@
 {% include "CyclearGameBundle:Uitslag:_listRenner.html.twig" with {'uitslagen':uitslagen} %}
 <h2>Transfers</h2>
 {% include "CyclearGameBundle:Transfer:_listWithInversion.html.twig" with {'listWithInversion':transfers} %}
-
 {% endblock %}

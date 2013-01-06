@@ -37,7 +37,8 @@ class CyclearLogHandlerMail extends AbstractHandler {
 		$message = \Swift_Message::newInstance()
 		->setSubject('[Cyclear] Error from '. $_SERVER['REQUEST_URI'])
 		->setFrom('error@cyclear.nl')
-		->setTo('veggatron+cyclear+log@gmail.com')
+            // TODO FIXME emailadres uit config halen
+		->setTo('veggatron+cyclearlog@gmail.com')
 		->setBody( 'Holy crap, een foutmelding:'."\n". $record['message']  );
 		$this->mailer->send($message);
 	}

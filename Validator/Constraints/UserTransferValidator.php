@@ -17,8 +17,8 @@ class UserTransferValidator extends ConstraintValidator
 
     public function isValid($value, Constraint $constraint)
     {
-        if (null === $value->getRennerIn()) {
-            $this->setMessage( "Onbekende renner opgegeven" );
+        if (null === $value->getRennerIn() && null === $value->getRennerUit()) {
+            $this->setMessage("Onbekende renner opgegeven");
             return false;
         }
         $periode = $this->em->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode();
@@ -28,12 +28,14 @@ class UserTransferValidator extends ConstraintValidator
             $this->setMessage($constraint->message, array("%max%" => $periode->getTransfers()));
             return false;
         }
-        $rennerPloeg = $this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($value->getRennerIn(), $value->getSeizoen());
-        if (null !== $rennerPloeg) {
-            $this->setMessage($value->getRennerIn()->getNaam()." heeft al een ploeg");
-            return false;
+        if (null !== $value->getRennerIn()) {
+            $rennerPloeg = $this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($value->getRennerIn(), $value->getSeizoen());
+            if (null !== $rennerPloeg) {
+                $this->setMessage($value->getRennerIn()->getNaam()." heeft al een ploeg");
+                return false;
+            }
         }
-        if($value->getSeizoen()->getClosed()){
+        if ($value->getSeizoen()->getClosed()) {
             $this->setMessage("Het seizoen ".$value->getSeizoen()." is gesloten");
             return false;
         }

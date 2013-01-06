@@ -41,11 +41,10 @@ class UitslagManager {
      * @param Form $form
      * @return array Uitslag
      */
-    public function prepareUitslagen(Form $form) {
-
+    public function prepareUitslagen(Form $form, $wedstrijd, $puntenReferentieDatum = null) {
         $url = $form->get('url')->getData();
         if(!$url){
-            $wedstrijdId = $form->get('cq_wedstrijd-id')->getData();
+            $wedstrijdId = $form->get('cq_wedstrijdid')->getData();
             $url = $this->cqRankingWedstrijdUrl.$wedstrijdId;
         }
         $uitslagType = $form->get('uitslagtype')->getData();
@@ -54,9 +53,9 @@ class UitslagManager {
         $uitslagregels = $this->cqParser->getResultRows($url, $parseStrategy);
         $rows = 0;
         $maxResults = $uitslagType->getMaxResults();
-
-        $puntenReferentieDatum = $form->get('datum')->getData();
-
+        if( null === $puntenReferentieDatum){
+            $puntenReferentieDatum = $wedstrijd->getDatum();
+        }
         $uitslagen = array();
         $rennerRepo = $this->entityManager->getRepository('CyclearGameBundle:Renner');
         $transferRepo = $this->entityManager->getRepository('CyclearGameBundle:Transfer');
@@ -67,26 +66,16 @@ class UitslagManager {
             }
 
             $uitslag = new Uitslag();
-
             $renner = $rennerRepo->findOneByCQId($uitslagregel['cqranking_id']);
             if ($renner !== null) {
                 $uitslag->setRenner($renner);
 
-                $transfer = $transferRepo->findLastTransferForDate($renner, $puntenReferentieDatum);
+                $transfer = $transferRepo->findLastTransferForDate($renner, $wedstrijd->getDatum());
                 if ($transfer === null) {
                     $uitslag->setPloeg(null);
                 } else {
                     $uitslag->setPloeg($transfer->getPloegNaar());
                 }
-//                $rennerLookup = $rennerRepo->findOneJoinedByPloegOnDate($renner, $puntenReferentieDatum);
-//                if ($rennerLookup !== null && count($rennerLookup) == 1 ) {
-//                    
-//                    echo $rennerLookup[0]->getPloeg()->getId();die(__METHOD__);
-//                    
-//                    $uitslag->setPloeg($rennerLookup[0]->getPloeg());
-//                } else {
-//                    $uitslag->setPloeg(null);
-//                }
             } else {
                 $uitslag->setPloeg(null);
                 $renner = new Renner();
@@ -102,7 +91,7 @@ class UitslagManager {
                 $uitslag->setPloegPunten(0);
             }
 
-            $uitslag->setDatum($form->get('datum')->getData());
+            //$uitslag->setDatum($form->get('datum')->getData());
             $uitslagen[] = $uitslag;
             $rows++;
             if ($rows == $maxResults) {

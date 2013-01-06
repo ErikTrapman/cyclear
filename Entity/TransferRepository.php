@@ -89,10 +89,17 @@ class TransferRepository extends EntityRepository
         if (!is_array($type)) {
             $type = array($type);
         }
+        if(is_numeric($ploeg)){
+            $ploeg = $this->_em->getRepository("CyclearGameBundle:Ploeg")->find($ploeg);   
+        }
+        $cloneEnd = clone $end;
+        //$cloneEnd->setTime(23,59,59);
+        $cloneStart = clone $start;
+        //$cloneStart->setTime(0,0,0);
         $query = $this->getEntityManager()
             ->createQuery("SELECT COUNT(t.id) AS freq FROM CyclearGameBundle:Transfer t 
                 WHERE t.ploegNaar = :ploeg AND t.datum BETWEEN :start AND :end AND t.transferType IN( :type )")
-            ->setParameters(array("type" => $type, "ploeg" => $ploeg, "start" => $start, "end" => $end));
+            ->setParameters(array("type" => $type, "ploeg" => $ploeg, "start" => $cloneStart, "end" => $cloneEnd));
         $res = $query->getSingleResult();
         return (int) $res['freq'];
     }
@@ -108,32 +115,6 @@ class TransferRepository extends EntityRepository
             return null;
         }
         return $res[0];
-
-        $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
-        $rsm->addEntityResult('Cyclear\GameBundle\Entity\Transfer', 't');
-        $rsm->addFieldResult('t', 'transferid', 'id');
-        $rsm->addFieldResult('t', 'transferdatum', 'datum');
-        //$rsm->addFieldResult('t', 'renner', 'renner');
-        //$rsm->addFieldResult('t', 'ploegvan', 'ploegVan');
-        //$rsm->addFieldResult('t', 'ploegnaar', 'ploegNaar');
-        $cloneDate = clone $date;
-        $cloneDate->setTime("23", "59", "59");
-        $query = $this->getEntityManager()->createNativeQuery("SELECT 
-                    t.id AS transferid, 
-                    t.datum AS transferdatum,
-                    t.renner_id AS renner,
-                    t.ploegvan_id AS ploegvan,
-                    t.ploegnaar_id AS ploegnaar
-                    FROM transfer t
-                LEFT JOIN renner r ON t.renner_id = r.id 
-                LEFT JOIN ploeg p ON ploegnaar_id = p.id
-                WHERE t.renner_id = :rennerid AND t.datum < :datum
-                ORDER BY t.datum DESC LIMIT 1", $rsm)->setParameters(array('rennerid' => $renner->getId(), 'datum' => $cloneDate));
-        $result = $query->getResult();
-        if (count($result) == 0) {
-            return null;
-        }
-        return $this->find($result[0]->getId());
     }
 }
 ?>

@@ -3,30 +3,25 @@
 {% block title %}Renner index{% endblock %}
 
 {% block content %}
-<h1>Renner list</h1>
+<h1>Renners</h1>
 
 <table class="records_list table ">
     <thead>
         <tr>
-            <th>Id</th>
+            <th>CQ-id</th>
             <th>Naam</th>
-            <th>Ploeg</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     {% for entity in pagination %}
         <tr>
-            <td><a href="{{ path('admin_renner_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td><a href="{{ path('admin_renner_edit', { 'id': entity.cqrankingid }) }}">{{ entity.cqrankingid }}</a></td>
             <td>{{ entity.naam }}</td>
-            <td>{% if entity.ploeg %}{{ entity.ploeg.naam }}{% else %}-{% endif %}</td>
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('admin_renner_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('admin_renner_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('admin_renner_edit', { 'id': entity.cqrankingid }) }}">edit</a>
                     </li>
                 </ul>
             </td>

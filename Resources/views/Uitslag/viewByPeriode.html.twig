@@ -1,7 +1,4 @@
 {% block content %}
-        {% if periode is defined %}
-            <div style="text-align: center;"><a href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode_id':periode.id} ) }}">Alle periodes</a></div>
-        {% endif %}
 <table class="records_list table table-condensed ">
     <thead>
         <tr>
@@ -9,6 +6,9 @@
             <th>Ploeg</th>
             <th/>
             <th>Punten</th>
+            {% if transferRepo is defined %}
+            <th>Transfers</th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -18,6 +18,9 @@
             <td>{{ ploeg.naam }}</td>
             <td>{{ ploeg.afkorting }}</td>
             <td>{{ ploeg.punten }}</td>
+            {% if transferRepo is defined %}
+            <td>{{ transferRepo.getTransferCountForUserTransfer(ploeg.id, periode.start, periode.eind) }}</td>
+            {% endif %}
         </tr>
     {% endfor %}
     </tbody>

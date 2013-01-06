@@ -2,11 +2,11 @@
 {% block content %}
 
 <div class="row">
-    <div class="span5">
-        <div class="hero-unit">
+    <div class="span5 nieuws">
+        <div style="padding:4px;">
             {% if nieuws is not null %}
                 <h2>{{ nieuws.titel }}</h2>
-                <p style="font-size:70%">{{ nieuws.content|nl2br }}</p>
+                <p>{{ nieuws.content|nl2br }}</p>
             {% endif %}
         </div>
     </div>
@@ -24,25 +24,27 @@
 
         <div class="tab-content">
             <div class="tab-pane active frontpage-stand" id="stand">
-                {% render "CyclearGameBundle:Uitslag:viewByPloegen" with {"seizoen": seizoen.slug } %}
+                {% include "CyclearGameBundle:Uitslag:viewByPloegen.html.twig" with {"list": stand } %}
             </div>
             <div class="tab-pane frontpage-stand" id="periode">
-                <img src="/bundles/cycleargame/img/ajax-loader.gif">
+                <div style="text-align: center;"><a href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode_id':periode.id} ) }}">Alle periodes</a></div>
+                {% include "CyclearGameBundle:Uitslag:viewByPeriode.html.twig" with {"list": periodestand,'transferRepo':transferRepo } %}
             </div>
             <div class="tab-pane frontpage-stand" id="uitslagen">
-                <img src="/bundles/cycleargame/img/ajax-loader.gif">
+                {% include "CyclearGameBundle:Wedstrijd:latest.html.twig" with {"wedstrijden": wedstrijden } %}
             </div>
             <div class="tab-pane frontpage-stand" id="transfers">
-                <img src="/bundles/cycleargame/img/ajax-loader.gif">
+                {% include 'CyclearGameBundle:Transfer:_listWithInversion.html.twig' with {"listWithInversion":transfers } %}
             </div>
             <div class="tab-pane frontpage-stand" id="zeges">
-                <img src="/bundles/cycleargame/img/ajax-loader.gif">
+                <div style="text-align: center;"><a href="{{ path('uitslag_posities', {'seizoen':seizoen.slug,'positie':1} ) }}">Alle posities</a></div>
+                {% include "CyclearGameBundle:Uitslag:viewByPosition.html.twig" with {"list": zegestand } %}
             </div>
             <div class="tab-pane frontpage-stand" id="draft-klass">
-                <img src="/bundles/cycleargame/img/ajax-loader.gif">
+                {% include "CyclearGameBundle:Uitslag:viewByDraftTransfer.html.twig" with {"list": drafts } %}
             </div>
             <div class="tab-pane frontpage-stand" id="transfer-klass">
-                <img src="/bundles/cycleargame/img/ajax-loader.gif">
+                {% include "CyclearGameBundle:Uitslag:viewByUserTransfer.html.twig" with {"list": transferstand } %}
             </div>
         </div>
         
@@ -53,82 +55,12 @@
 div.frontpage-stand{ min-height: 630px; }
 </style>
 <script type="text/javascript">
-    
-    $('#tabs a[href="#stand"]').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-    })
-    $('#tabs a[href="#periode"]').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-        $.ajax({ // TODO JS-route gebruiken
-            url: "/game/{{seizoen.slug}}/uitslag/periode/{{periode.id}}"
-        }).done(function(data){
-            $("#periode").html(data);
-        }).fail(function(){
-            $("#periode").html('<p>Er ging iets fout...</p>');
-        });
-    })
-    $('#tabs a[href="#transfers"]').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-        $.ajax({ // TODO JS-route gebruiken
-            url: "/game/{{seizoen.slug}}/transfer/latest"
-        }).done(function(data){
-            $("#transfers").html(data);
-        }).fail(function(){
-            $("#transfers").html('<p>Er ging iets fout...</p>');
-        });
-    })
-    
-    $('#tabs a[href="#zeges"]').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-        $.ajax({ // TODO JS-route gebruiken
-            url: "/game/{{seizoen.slug}}/uitslag/zeges"
-        }).done(function(data){
-            $("#zeges").html(data);
-        }).fail(function(){
-            $("#zeges").html('<p>Er ging iets fout...</p>');
-        });
-    })
-    
-    $('#tabs a[href="#draft-klass"]').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-        $.ajax({ // TODO JS-route gebruiken
-            url: "/game/{{seizoen.slug}}/uitslag/draft-klassement"
-        }).done(function(data){
-            $("#draft-klass").html(data);
-        }).fail(function(){
-            $("#draft-klass").html('<p>Er ging iets fout...</p>');
-        });
-    });
-    $('#tabs a[href="#transfer-klass"]').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-        $.ajax({ // TODO JS-route gebruiken
-            url: "/game/{{seizoen.slug}}/uitslag/transfer-klassement"
-        }).done(function(data){
-            $("#transfer-klass").html(data);
-        }).fail(function(){
-            $("#transfer-klass").html('<p>Er ging iets fout...</p>');
-        });
-    });
-    
-    $('#tabs a[href="#uitslagen"]').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-        $.ajax({ // TODO JS-route gebruiken
-            url: "/game/{{seizoen.slug}}/wedstrijd/latest"
-        }).done(function(data){
-            $("#uitslagen").html(data);
-        }).fail(function(){
-            $("#uitslagen").html('<p>Er ging iets fout...</p>');
-        });
-    });
-    
-
-    
+    $('#tabs a[href="#stand"]').click(function (e) {e.preventDefault();$(this).tab('show');})
+    $('#tabs a[href="#periode"]').click(function (e) {e.preventDefault(); $(this).tab('show'); })
+    $('#tabs a[href="#transfers"]').click(function (e) { e.preventDefault(); $(this).tab('show'); })
+    $('#tabs a[href="#zeges"]').click(function (e) {e.preventDefault();$(this).tab('show');})
+    $('#tabs a[href="#draft-klass"]').click(function (e) {e.preventDefault();$(this).tab('show');});
+    $('#tabs a[href="#transfer-klass"]').click(function (e) {e.preventDefault();$(this).tab('show');});
+    $('#tabs a[href="#uitslagen"]').click(function (e) {e.preventDefault();$(this).tab('show');});
 </script>
 {% endblock %}

@@ -2,15 +2,15 @@
 
 {% form_theme edit_form _self %}
 
-{% block _cyclear_gamebundle_nieuwstype_content_widget %}
+{% block _cyclear_gamebundle_spelregelstype_content_widget %}
  {{ form_widget(form, { 'attr': {'class': 'field span5'} } ) }}
 {% endblock %}
 
 {% block content %}
 
-<h1>Nieuws edit</h1>
+<h1>Spelregels edit</h1>
 
-<form action="{{ path('admin_nieuws_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+<form action="{{ path('admin_spelregels_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
     <p>
         <button type="submit">Edit</button>
@@ -19,12 +19,12 @@
 
 <ul class="record_actions">
     <li>
-        <a href="{{ path('admin_nieuws') }}">
+        <a href="{{ path('admin_spelregels') }}">
             Back to the list
         </a>
     </li>
     <li>
-        <form action="{{ path('admin_nieuws_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('admin_spelregels_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
             <button type="submit">Delete</button>
         </form>

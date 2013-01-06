@@ -24,7 +24,7 @@ class PloegFilterType extends AbstractType
         $builder
             ->add('naam', 'text', array('required' => false))
             ->add('user', 'entity', array('class' => 'Cyclear\GameBundle\Entity\User', 'required' => false))
-            ->add('seizoen', 'entity', array('class' => 'CyclearGameBundle:Seizoen', 'required' => false))
+            ->add('seizoen', 'seizoen_selector', array('required' => false))
         ;
     }
 

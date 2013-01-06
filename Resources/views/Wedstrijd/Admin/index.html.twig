@@ -3,7 +3,7 @@
 {% block title %}Wedstrijd index{% endblock %}
 
 {% block content %}
-<h1>Wedstrijd list</h1>
+<h1>Wedstrijden</h1>
 
 <table class="records_list table ">
     <thead>
@@ -11,14 +11,22 @@
             <th>Id</th>
             <th>Naam</th>
             <th>{{ pagination.sortable('Datum', 'w.datum')|raw }}</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     {% for entity in pagination %}
         <tr>
-            <td><a href="{{ path('admin_wedstrijd_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td><a href="{{ path('admin_wedstrijd_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td>{{ entity.naam }}</td>
             <td>{{ entity.datum|date('d-m-Y') }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('admin_wedstrijd_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
         </tr>
     {% endfor %}
     </tbody>

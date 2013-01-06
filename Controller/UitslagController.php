@@ -14,25 +14,6 @@ class UitslagController extends Controller
 {
 
     /**
-     * @Route("/", name="uitslag_latest")
-     * @Template()
-     */
-    public function latestAction(\Symfony\Component\HttpFoundation\Request $request)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-        
-        $uitslagenQb = $em->getRepository("CyclearGameBundle:Wedstrijd")->createQueryBuilder('u')->orderBy('u.datum','DESC');
-        $paginator = $this->get('knp_paginator');
-        $uitslagen = $paginator->paginate(
-            $uitslagenQb, $this->get('request')->query->get('page', 1)/* page number */, 20/* limit per page */
-        );
-        return array('uitslagen' => $uitslagen, 'seizoen' => $request->get('seizoen'));
-    }
-    
-    
-    
-
-    /**
      * @Route("/zeges", name="uitslag_zeges")
      * @Template()
      */
@@ -84,7 +65,18 @@ class UitslagController extends Controller
         $periode = $em->find("CyclearGameBundle:Periode", $periode_id);
         $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen[0]);
         $periodes = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->findBy(array("seizoen" => $seizoen[0]));
-        return array('list' => $list, 'seizoen' => $seizoen[0], 'periodes' => $periodes, 'current_periode' => $periode);
+        return array('list' => $list, 'seizoen' => $seizoen[0], 'periodes' => $periodes, 'periode' => $periode, 'transferRepo' => $em->getRepository("CyclearGameBundle:Transfer"));
+    }
+
+    /**
+     * @Route("/posities/{positie}", name="uitslag_posities")
+     * @Template()
+     */
+    public function positiesAction(\Symfony\Component\HttpFoundation\Request $request, $positie = 1)
+    {
+        $seizoen = $request->attributes->get('seizoen-object');
+        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getCountForPosition($seizoen, $positie);
+        return array('list' => $list, 'seizoen' => $seizoen, 'positie' => $positie);
     }
 
     /**
