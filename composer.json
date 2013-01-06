@@ -8,7 +8,7 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.1.*",
+        "symfony/symfony": "2.1.6",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-bundle": "1.0.*",
         "twig/extensions": "1.0.*@dev",
@@ -30,8 +30,9 @@
         "samson/autocomplete-bundle": "dev-master",
         "eriktrapman/webcommand-bundle": "dev-master",
         "beberlei/DoctrineExtensions": "dev-master",
-        "mopa/bootstrap-bundle": "dev-master"
-
+        "mopa/bootstrap-bundle": "dev-master",
+        "mobiledetect/mobiledetectlib": "dev-master",
+        "suncat/mobile-detect-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

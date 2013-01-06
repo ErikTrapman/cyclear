@@ -34,6 +34,7 @@ class AppKernel extends Kernel
             new \Samson\Bundle\UnexpectedResponseBundle\SamsonUnexpectedResponseBundle(),
             new ErikTrapman\Bundle\WebCommandBundle\ErikTrapmanWebCommandBundle(),
             new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
+            new SunCat\MobileDetectBundle\MobileDetectBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

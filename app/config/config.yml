@@ -87,3 +87,9 @@ stof_doctrine_extensions:
 mopa_bootstrap:
     form:
         show_legend: false
+        
+mobile_detect:
+    redirect:
+        mobile: ~
+        tablet: ~
+    switch_device_view: ~
