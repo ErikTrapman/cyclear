@@ -91,9 +91,9 @@ class RennerRepository extends EntityRepository
         //$rsm->addFieldResult('r', 'r_id', 'id');
         $cloneDate = clone $date;
         $cloneDate->setTime("23", "59", "59");
-        $query = $this->getEntityManager()->createNativeQuery("SELECT * FROM transfer t
-                LEFT JOIN renner r ON t.renner_id = r.id 
-                LEFT JOIN ploeg p ON ploegnaar_id = p.id
+        $query = $this->getEntityManager()->createNativeQuery("SELECT * FROM Transfer t
+                LEFT JOIN Renner r ON t.renner_id = r.id 
+                LEFT JOIN Ploeg p ON ploegnaar_id = p.id
                 WHERE t.renner_id = :rennerid AND t.datum < :parsedatum 
                 ORDER BY t.datum DESC LIMIT 1", $rsm)->setParameters(array('rennerid' => $id, 'parsedatum' => $cloneDate));
         $result = $query->getResult();
@@ -119,9 +119,9 @@ class RennerRepository extends EntityRepository
         $rsm->addFieldResult('r', 'r.id', 'id');
         $cloneDate = clone $date;
         $cloneDate->setTime("23", "59", "59");
-        $query = $this->getEntityManager()->createNativeQuery("SELECT * FROM transfer t
-                LEFT JOIN renner r ON t.renner_id = r.id 
-                LEFT JOIN ploeg p ON ploegnaar_id = p.id
+        $query = $this->getEntityManager()->createNativeQuery("SELECT * FROM Transfer t
+                LEFT JOIN Renner r ON t.renner_id = r.id 
+                LEFT JOIN Ploeg p ON ploegnaar_id = p.id
                 WHERE t.renner_id = :rennerid AND t.datum < '2011-10-15'
                 ORDER BY t.datum DESC LIMIT 1", $rsm)->setParameters(array('rennerid' => $renner->getId())); // , 'parsedatum' => $cloneDate));
         return $query->getResult();
@@ -138,9 +138,9 @@ class RennerRepository extends EntityRepository
         //$rsm->addFieldResult('p', 'p_naam', 'naam');
 
         $query = $this->getEntityManager()->createNativeQuery("
-                SELECT r.id AS r_id FROM renner r
-                    LEFT JOIN transfer AS t ON t.renner_id = :renner AND t.datum < ':datum'
-                    LEFT JOIN ploeg p ON t.ploegnaar_id = p.id
+                SELECT r.id AS r_id FROM Renner r
+                    LEFT JOIN Transfer AS t ON t.renner_id = :renner AND t.datum < ':datum'
+                    LEFT JOIN Ploeg p ON t.ploegnaar_id = p.id
                     WHERE r.id = :renner2
                     ORDER BY t.id DESC LIMIT 1", $rsm)
             ->setParameter('datum', $date->format('Y-m-d 00:00:00'))

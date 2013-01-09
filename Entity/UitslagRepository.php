@@ -13,8 +13,8 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         $sql = "SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 
-                ( SELECT IFNULL(SUM(u.ploegPunten),0) FROM uitslag u WHERE u.seizoen_id = :seizoen_id AND u.ploeg_id = p.id ) AS punten 
-                FROM ploeg p WHERE p.seizoen_id = :seizoen_id 
+                ( SELECT IFNULL(SUM(u.ploegPunten),0) FROM Uitslag u WHERE u.seizoen_id = :seizoen_id AND u.ploeg_id = p.id ) AS punten 
+                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id 
                 ORDER BY punten DESC, p.afkorting ASC
                 ";
         $conn = $this->getEntityManager()->getConnection();
@@ -35,11 +35,11 @@ class UitslagRepository extends EntityRepository
 
         $sql = "SELECT *,
                     ( SELECT IFNULL(SUM(u.ploegPunten),0)
-                    FROM uitslag u 
-                    INNER JOIN wedstrijd w ON w.id = u.wedstrijd_id
+                    FROM Uitslag u 
+                    INNER JOIN Wedstrijd w ON w.id = u.wedstrijd_id
                     WHERE w.datum BETWEEN :start AND :end AND u.ploeg_id = p.id
                      ) AS punten
-                FROM ploeg p WHERE p.seizoen_id = :seizoen_id
+                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
                 GROUP BY p.id
                 ORDER BY punten DESC, p.afkorting ASC
                 ";
@@ -58,10 +58,10 @@ class UitslagRepository extends EntityRepository
 
         $sql = "SELECT *,
                     IFNULL(( SELECT SUM(IF(u.positie = :pos,1,0)) AS freqByPos
-                    FROM uitslag u 
+                    FROM Uitslag u 
                     WHERE u.ploeg_id = p.id AND u.seizoen_id = :seizoen_id
                      ),0) AS freqByPos
-                FROM ploeg p WHERE p.seizoen_id = :seizoen_id
+                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
                 GROUP BY p.id
                 ORDER BY freqByPos DESC, p.afkorting ASC";
         $conn = $this->getEntityManager()->getConnection();
@@ -134,11 +134,11 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
-        $transferSql = "SELECT t.renner_id FROM transfer t WHERE t.transferType = ".Transfer::DRAFTTRANSFER." AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id";
+        $transferSql = "SELECT t.renner_id FROM Transfer t WHERE t.transferType = ".Transfer::DRAFTTRANSFER." AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id";
 
         $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting,
-                ( SELECT IFNULL(SUM(u.rennerPunten),0) FROM uitslag u WHERE u.seizoen_id = :seizoen_id AND u.renner_id IN ( %s ) ) AS punten 
-                FROM ploeg p WHERE p.seizoen_id = :seizoen_id 
+                ( SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u WHERE u.seizoen_id = :seizoen_id AND u.renner_id IN ( %s ) ) AS punten 
+                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id 
                 ORDER BY punten DESC, p.afkorting ASC
                 ", $transferSql);
         $conn = $this->getEntityManager()->getConnection();
@@ -152,13 +152,13 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
-        $transfers = "SELECT DISTINCT t.renner_id FROM transfer t 
+        $transfers = "SELECT DISTINCT t.renner_id FROM Transfer t 
             WHERE t.transferType != ".Transfer::DRAFTTRANSFER." AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
-                AND t.renner_id NOT IN ( SELECT t.renner_id FROM transfer t WHERE t.transferType = ".Transfer::DRAFTTRANSFER." AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id )
+                AND t.renner_id NOT IN ( SELECT t.renner_id FROM Transfer t WHERE t.transferType = ".Transfer::DRAFTTRANSFER." AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id )
                 ";
         $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting,
-                (SELECT IFNULL(SUM(u.ploegPunten),0) FROM uitslag u WHERE u.seizoen_id = :seizoen_id AND u.renner_id IN (%s)) AS punten
-                FROM ploeg p WHERE p.seizoen_id = :seizoen_id
+                (SELECT IFNULL(SUM(u.ploegPunten),0) FROM Uitslag u WHERE u.seizoen_id = :seizoen_id AND u.renner_id IN (%s)) AS punten
+                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
                 ", $transfers);
         $conn = $this->getEntityManager()->getConnection();
