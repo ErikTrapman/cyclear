@@ -14,7 +14,7 @@ CyclearGameBundle:
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
-    prefix:   /game/{seizoen}/
+    prefix: /
 
 fos_user_profile:
     resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
@@ -33,7 +33,7 @@ fos_user_change_password:
     prefix: /game/{seizoen}/
 
 fos_user_security_check:
-    prefix: /game/{seizoen}/
+    prefix: /
     pattern: /login_check
     
 fos_user_security_logout:
