@@ -7,6 +7,7 @@
         {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/jquery-ui-1.8.16.custom.css') }}" media="all" />
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/select2.css') }}" media="all" />
+        <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/sticky-footer.css') }}" media="all" />
         <link rel="stylesheet" href="{{ asset('bundles/samsonautocomplete/css/autocomplete.css') }}" media="all" />
         {% stylesheets filter='cssrewrite' output='css/twitter.css'
             '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/css/bootstrap.css'
@@ -37,9 +38,12 @@
             <script type="text/javascript">
                 $(document).ready( function(){
                     $('.dropdown-toggle').dropdown();
-                    
                     var $thisform = $(this).find('form')
                     $thisform.addClass('form-horizontal');
+                });
+            </script>
+            {% block buttonjs %}
+            <script type="text/javascript">
                     var $button = $(this).find('button')
                     $button.addClass('btn');
                     var $lastgroup = $(this).find('fieldset').last('div.controls');
@@ -47,49 +51,10 @@
                     $newlastgroup.addClass('controls');
                     $button.clone().appendTo($newlastgroup);
                     $button.remove();
-                });
             </script>
             {% endblock %}
+            {% endblock %}
         {% endif %}
-        <style type="text/css">
-                /* http://twitter.github.com/bootstrap/examples/sticky-footer.html */
-                html,
-                body {
-                  height: 100%;
-                  /* The html and body elements cannot have any padding or margin. */
-                }
-
-                /* Wrapper for page content to push down footer */
-                #wrap {
-                  min-height: 100%;
-                  height: auto !important;
-                  height: 100%;
-                  /* Negative indent footer by it's height */
-                  margin: 0 auto -60px;
-                }
-
-                /* Set the fixed height of the footer here */
-                #push,
-                #footer {
-                  height: 60px;
-                }
-                #footer {
-                  background-color: #f5f5f5;
-                }
-
-                /* Lastly, apply responsive CSS fixes as necessary */
-                @media (max-width: 767px) {
-                  #footer {
-                    margin-left: -20px;
-                    margin-right: -20px;
-                    padding-left: 20px;
-                    padding-right: 20px;
-                  }
-                }
-                .container .credit {
-                   margin: 20px 0;
-                }
-        </style>
         <!-- <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" /> -->
     </head>
     <body>
