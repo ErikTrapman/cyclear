@@ -63,28 +63,6 @@ class PloegController extends Controller {
         return array('entities' => $entities, 'filter' => $filter->createView());
     }
 
-    /**
-     * Finds and displays a Ploeg entity.
-     *
-     * @Route("/{id}/show", name="admin_ploeg_show")
-     * @Template("CyclearGameBundle:Ploeg/Admin:show.html.twig")
-     */
-    public function showAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CyclearGameBundle:Ploeg')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Ploeg entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $renners = $em->getRepository('CyclearGameBundle:Ploeg')->getRenners($entity);
-        return array(
-            'entity' => $entity,
-            'renners' => $renners,
-            'delete_form' => $deleteForm->createView(),);
-    }
 
     /**
      * Displays a form to create a new Ploeg entity.
@@ -119,7 +97,7 @@ class PloegController extends Controller {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_ploeg_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_ploeg'));
         }
 
         return array(

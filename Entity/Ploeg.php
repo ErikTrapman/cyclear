@@ -131,6 +131,6 @@ class Ploeg
 
     public function getNaamWithSeizoen()
     {
-        return $this->getSeizoen()->getIdentifier().' '.$this->getNaam();
+        return $this->getNaam().' ['.$this->getSeizoen()->getIdentifier().']';
     }
 }

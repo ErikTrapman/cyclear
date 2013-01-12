@@ -2,45 +2,53 @@
 
 namespace Cyclear\GameBundle\Calculator;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of PuntenCalculator
  *
  * @author Erik
  */
-class PuntenCalculator {
-
+class PuntenCalculator
+{
     private $em;
 
-    public function __construct($em) {
+    public function __construct($em)
+    {
         $this->em = $em;
     }
 
-    public function canGetPoints($renner, $referentieDatum) {
-        $lastTransfer = $this->em->getRepository('CyclearGameBundle:Transfer')->findLastTransferForDate($renner, $referentieDatum);
-        if (!$lastTransfer) {
-            return false;
+    public function canGetPoints($renner, $wedstrijdDatum, $referentieDatum = null)
+    {
+        $transferRepo = $this->em->getRepository('CyclearGameBundle:Transfer');
+        if (null !== $referentieDatum) {
+            $transferFromRefDatum = $transferRepo->findLastTransferForDate($renner, $referentieDatum);
+            if (!$transferFromRefDatum) {
+                return false;
+            }
+            $transferFromWedstrijd = $transferRepo->findLastTransferForDate($renner, $wedstrijdDatum);
+            // als de transfer vanaf de wedstrijd-datum niet dezelfde is als vanaf de ref-datum, dan is er sprake van 
+            //  een of meerdere transfers gedurende deze periode. dan geen punten
+            if ($transferFromWedstrijd !== $transferFromRefDatum) {
+                return false;
+            }
+            return $this->validateTransfer($transferFromRefDatum, $wedstrijdDatum);
+        } else {
+            $lastTransfer = $transferRepo->findLastTransferForDate($renner, $wedstrijdDatum);
+            if (!$lastTransfer) {
+                return false;
+            }
+            return $this->validateTransfer($lastTransfer, $wedstrijdDatum);
         }
-        $transferDatum = clone $lastTransfer->getDatum();
-        $transferDatum->setTime("00","00","00");
-        if ($transferDatum >= $referentieDatum) {
+    }
+
+    private function validateTransfer($transfer, $validationDatum)
+    {
+        $transferDatum = clone $transfer->getDatum();
+        $transferDatum->setTime(0, 0, 0);
+        $clonedDatum = clone $validationDatum;
+        $clonedDatum->setTime(0, 0, 0);
+        if ($transferDatum >= $clonedDatum) {
             return false;
         }
         return true;
     }
-
-    public function getTotalPointsForPloeg($ploeg) {
-        // optelling alleen voor huidige jaar.
-    }
-
-    public function getTotalPointsForRenner($renner) {
-        // optelling alleen voor huidige jaar
-    }
-
 }
-
-?>

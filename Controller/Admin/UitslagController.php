@@ -114,7 +114,7 @@ class UitslagController extends Controller
             $wedstrijd->setSeizoen($form->get('seizoen')->getData());
             $wedstrijd->setUitslagType($form->get('uitslagtype')->getData());
             $refWedstrijd = $form->get('refentiewedstrijd')->getData();
-            $puntenRefDatum = clone $datum;
+            $puntenRefDatum = null;
             if(null !== $refWedstrijd){
                 $puntenRefDatum = clone $refWedstrijd->getDatum();
             }

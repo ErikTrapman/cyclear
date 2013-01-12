@@ -53,9 +53,6 @@ class UitslagManager {
         $uitslagregels = $this->cqParser->getResultRows($url, $parseStrategy);
         $rows = 0;
         $maxResults = $uitslagType->getMaxResults();
-        if( null === $puntenReferentieDatum){
-            $puntenReferentieDatum = $wedstrijd->getDatum();
-        }
         $uitslagen = array();
         $rennerRepo = $this->entityManager->getRepository('CyclearGameBundle:Renner');
         $transferRepo = $this->entityManager->getRepository('CyclearGameBundle:Transfer');
@@ -69,7 +66,6 @@ class UitslagManager {
             $renner = $rennerRepo->findOneByCQId($uitslagregel['cqranking_id']);
             if ($renner !== null) {
                 $uitslag->setRenner($renner);
-
                 $transfer = $transferRepo->findLastTransferForDate($renner, $wedstrijd->getDatum());
                 if ($transfer === null) {
                     $uitslag->setPloeg(null);
@@ -85,13 +81,12 @@ class UitslagManager {
             }
             $uitslag->setPositie($uitslagregel['pos']);
             $uitslag->setRennerPunten($uitslagregel['points']);
-            if ($this->puntenCalculator->canGetPoints($renner, $puntenReferentieDatum)) {
+            $canGetPoints = $this->puntenCalculator->canGetPoints($renner, $wedstrijd->getDatum(), $puntenReferentieDatum);
+            if ( null !== $uitslag->getPloeg() && $canGetPoints ) {
                 $uitslag->setPloegPunten($uitslagregel['points']);
             } else {
                 $uitslag->setPloegPunten(0);
             }
-
-            //$uitslag->setDatum($form->get('datum')->getData());
             $uitslagen[] = $uitslag;
             $rows++;
             if ($rows == $maxResults) {

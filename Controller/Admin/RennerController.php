@@ -40,28 +40,6 @@ class RennerController extends Controller {
         return array('pagination'=>$pagination);
     }
 
-    /**
-     * Finds and displays a Renner entity.
-     *
-     * @Route("/{id}/show", name="admin_renner_show")
-     * @Template("CyclearGameBundle:Renner/Admin:show.html.twig")
-     */
-    public function showAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CyclearGameBundle:Renner')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Renner entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        
-        //$transferRepo = $this->get('cyclear_game.transfer_repository');
-        $lastTransfer = $em->getRepository('CyclearGameBundle:Renner')->getLastTransferBeforeDate(  $entity->getId(), new \DateTime("now") );
-        
-        return array('entity' => $entity, 'delete_form' => $deleteForm->createView(), 'lastTransfers' => $lastTransfer);
-    }
 
     /**
      *
@@ -124,9 +102,7 @@ class RennerController extends Controller {
             $em->persist($entity);
             $em->flush();
 
-            $transfer = new Transfer();
-
-            return $this->redirect($this->generateUrl('admin_renner_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_renner'));
         }
 
         return array('entity' => $entity, 'form' => $form->createView());

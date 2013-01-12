@@ -33,28 +33,6 @@ class UitslagTypeController extends Controller
         return array('entities' => $entities);
     }
 
-    /**
-     * Finds and displays a UitslagType entity.
-     *
-     * @Route("/{id}/show", name="admin_uitslagtype_show")
-     * @Template("CyclearGameBundle:UitslagType/Admin:show.html.twig")
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CyclearGameBundle:UitslagType')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find UitslagType entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        );
-    }
 
     /**
      * Displays a form to create a new UitslagType entity.
@@ -91,7 +69,7 @@ class UitslagTypeController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_uitslagtype_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_uitslagtype'));
             
         }
 

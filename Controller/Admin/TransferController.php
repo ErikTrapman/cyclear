@@ -35,27 +35,6 @@ class TransferController extends Controller {
         return array('entities' => $pagination);
     }
 
-    /**
-     * Finds and displays a Transfer entity.
-     *
-     * @Route("/{id}/show", name="admin_transfer_show")
-     * @Template("CyclearGameBundle:Transfer/Admin:show.html.twig")
-     */
-    public function showAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CyclearGameBundle:Transfer')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Transfer entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity' => $entity,
-            'delete_form' => $deleteForm->createView(),);
-    }
 
     /**
      * Displays a form to create a new Transfer entity.

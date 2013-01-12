@@ -32,28 +32,6 @@ class SeizoenController extends Controller
         return array('entities' => $entities);
     }
 
-    /**
-     * Finds and displays a Seizoen entity.
-     *
-     * @Route("/{id}/show", name="admin_seizoen_show")
-     * @Template("CyclearGameBundle:Seizoen/Admin:show.html.twig")
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CyclearGameBundle:Seizoen')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        );
-    }
 
     /**
      * Displays a form to create a new Seizoen entity.
@@ -90,7 +68,7 @@ class SeizoenController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_seizoen_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_seizoen'));
             
         }
 

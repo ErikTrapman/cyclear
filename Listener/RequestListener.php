@@ -32,7 +32,9 @@ class RequestListener
             $seizoen = $seizoen[0];
         } else {
             $seizoen = $this->em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
-            $request->attributes->set('seizoen', $seizoen->getSlug());
+            if(null !== $seizoen){
+                $request->attributes->set('seizoen', $seizoen->getSlug());
+            }
         }
         $request->attributes->set('seizoen-object', $seizoen);
         if (null !== $token = $this->security->getToken()) {

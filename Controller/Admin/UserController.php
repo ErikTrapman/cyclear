@@ -33,27 +33,6 @@ class UserController extends Controller
     }
 
     /**
-     * Finds and displays a User entity.
-     *
-     * @Route("/{id}/show", name="admin_user_show")
-     * @Template("CyclearGameBundle:User/Admin:show.html.twig")
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CyclearGameBundle:User')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
-        }
-
-        return array(
-            'entity' => $entity,
-        );
-    }
-
-    /**
      * Displays a form to create a new Ploeg entity.
      *
      * @Route("/new", name="admin_user_new")

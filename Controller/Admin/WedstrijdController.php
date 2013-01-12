@@ -43,27 +43,6 @@ class WedstrijdController extends Controller {
         return array('paginator' => $paginator);
     }
 
-    /**
-     * Finds and displays a Periode entity.
-     *
-     * @Route("/{id}/show", name="admin_wedstrijd_show")
-     * @Template("CyclearGameBundle:Wedstrijd/Admin:show.html.twig")
-     */
-    public function showAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('CyclearGameBundle:Wedstrijd')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Periode entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity' => $entity,
-            'delete_form' => $deleteForm->createView(),);
-    }
 
     /**
      * Displays a form to create a new Periode entity.
@@ -98,7 +77,7 @@ class WedstrijdController extends Controller {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_wedstrijd_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_wedstrijd'));
         }
 
         return array(
