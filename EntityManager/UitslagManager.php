@@ -16,19 +16,22 @@ use Symfony\Component\CssSelector\CssSelector;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Form\Form;
 
-class UitslagManager {
-
+class UitslagManager
+{
     /**
      * 
      * @var EntityManager
      */
     private $entityManager;
+
     private $puntenCalculator;
+
     private $cqParser;
-    
+
     private $cqRankingWedstrijdUrl;
 
-    public function __construct(EntityManager $em, $parser, PuntenCalculator $puntenCalculator, $cqRankingWedstrijdUrl = '') {
+    public function __construct(EntityManager $em, $parser, PuntenCalculator $puntenCalculator, $cqRankingWedstrijdUrl = '')
+    {
         $this->entityManager = $em;
         $this->puntenCalculator = $puntenCalculator;
         $this->cqParser = $parser;
@@ -41,9 +44,10 @@ class UitslagManager {
      * @param Form $form
      * @return array Uitslag
      */
-    public function prepareUitslagen(Form $form, $crawler, $wedstrijd, $puntenReferentieDatum = null) {
+    public function prepareUitslagen(Form $form, $crawler, $wedstrijd, $puntenReferentieDatum = null)
+    {
         $url = $form->get('url')->getData();
-        if(!$url){
+        if (!$url) {
             $wedstrijdId = $form->get('cq_wedstrijdid')->getData();
             $url = $this->cqRankingWedstrijdUrl.$wedstrijdId;
         }
@@ -55,13 +59,15 @@ class UitslagManager {
         $uitslagen = array();
         $rennerRepo = $this->entityManager->getRepository('CyclearGameBundle:Renner');
         $transferRepo = $this->entityManager->getRepository('CyclearGameBundle:Transfer');
+        $rennerManager = new RennerManager();
         foreach ($uitslagregels as $uitslagregel) {
-
             if (strcmp(strtolower($uitslagregel['pos']), 'leader') === 0) {
                 continue;
             }
-
             $uitslag = new Uitslag();
+            $uitslag->setPloegPunten(0);
+            $uitslag->setPositie($uitslagregel['pos']);
+            $uitslag->setRennerPunten($uitslagregel['points']);
             $renner = $rennerRepo->findOneByCQId($uitslagregel['cqranking_id']);
             if ($renner !== null) {
                 $uitslag->setRenner($renner);
@@ -71,21 +77,18 @@ class UitslagManager {
                 } else {
                     $uitslag->setPloeg($transfer->getPloegNaar());
                 }
+                $canGetPoints = $this->puntenCalculator->canGetPoints($renner, $wedstrijd->getDatum(), $puntenReferentieDatum);
+                if (null !== $uitslag->getPloeg() && $canGetPoints) {
+                    $uitslag->setPloegPunten($uitslagregel['points']);
+                }
             } else {
                 $uitslag->setPloeg(null);
-                $renner = new Renner();
-                $renner->setNaam($uitslagregel['name']);
-                $renner->setCqRanking_id($uitslagregel['cqranking_id']);
+                $renner = $rennerManager->createRennerFromRennerSelectorTypeString(
+                    $rennerManager->getRennerSelectorTypeString($uitslagregel['cqranking_id'], $uitslagregel['name']));
                 $uitslag->setRenner($renner);
             }
-            $uitslag->setPositie($uitslagregel['pos']);
-            $uitslag->setRennerPunten($uitslagregel['points']);
-            $canGetPoints = $this->puntenCalculator->canGetPoints($renner, $wedstrijd->getDatum(), $puntenReferentieDatum);
-            if ( null !== $uitslag->getPloeg() && $canGetPoints ) {
-                $uitslag->setPloegPunten($uitslagregel['points']);
-            } else {
-                $uitslag->setPloegPunten(0);
-            }
+            
+
             $uitslagen[] = $uitslag;
             $rows++;
             if ($rows == $maxResults) {
@@ -94,5 +97,4 @@ class UitslagManager {
         }
         return $uitslagen;
     }
-
 }

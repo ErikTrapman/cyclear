@@ -29,7 +29,8 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface {
             return '';
         }
         if ($value instanceof \Cyclear\GameBundle\Entity\Renner) {
-            return $value->getCqRanking_id() . ' [' . $value->getNaam() . ']';
+            $rennerManager = new \Cyclear\GameBundle\EntityManager\RennerManager();
+            return $rennerManager->getRennerSelectorTypeString($value->getCqRanking_id(), $value->getNaam());
         }
         return 'unrecognised value';
     }
@@ -46,15 +47,11 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface {
         if (is_numeric($value)) {
             $cqId = $value;
         } else {
-            $rennerString = $value;
-            $firstBracket = strpos($rennerString, '[');
-            $lastBracket = strpos($rennerString, ']');
-            $cqId = trim(substr($rennerString, 0, $firstBracket));
-            $name = substr($rennerString, $firstBracket + 1, $lastBracket - $firstBracket - 1);
+            $rM = new \Cyclear\GameBundle\EntityManager\RennerManager();
+            $cqId = $rM->getCqIdFromRennerSelectorTypeString($value);
         }
         $em = $this->em;
         $renner = $em->getRepository('Cyclear\GameBundle\Entity\Renner')->findOneByCQId($cqId);
-
         if ($renner === null) {
             throw new TransformationFailedException("Renner " . $value . " niet gevonden");
         }
