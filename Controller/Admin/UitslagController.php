@@ -110,7 +110,9 @@ class UitslagController extends Controller
             if (!$url) {
                 $url = $this->container->getParameter('cq_ranking-wedstrijdurl').$form->get('cq_wedstrijdid')->getData();
             }
-            $wedstrijd = $wedstrijdManager->createWedstrijdFromUrl($url, $datum);
+            $crawlerMaker = $this->get('cyclear_cqparser.crawler_manager');
+            $crawler = $crawlerMaker->getCrawler($url);
+            $wedstrijd = $wedstrijdManager->createWedstrijdFromCrawler($crawler, $datum);
             $wedstrijd->setSeizoen($form->get('seizoen')->getData());
             $wedstrijd->setUitslagType($form->get('uitslagtype')->getData());
             $refWedstrijd = $form->get('refentiewedstrijd')->getData();
@@ -118,7 +120,7 @@ class UitslagController extends Controller
             if(null !== $refWedstrijd){
                 $puntenRefDatum = clone $refWedstrijd->getDatum();
             }
-            $uitslagen = $uitslagManager->prepareUitslagen($form, $wedstrijd, $puntenRefDatum);
+            $uitslagen = $uitslagManager->prepareUitslagen($form, $crawler, $wedstrijd, $puntenRefDatum);
             $confirmForm = $this->createForm(new UitslagConfirmType(), array('wedstrijd' => $wedstrijd, 'uitslag' => $uitslagen, 'registry' => $this->get('doctrine')));
 
             return( array('form' => $confirmForm->createView()) );

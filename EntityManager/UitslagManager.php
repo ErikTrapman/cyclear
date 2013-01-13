@@ -41,7 +41,7 @@ class UitslagManager {
      * @param Form $form
      * @return array Uitslag
      */
-    public function prepareUitslagen(Form $form, $wedstrijd, $puntenReferentieDatum = null) {
+    public function prepareUitslagen(Form $form, $crawler, $wedstrijd, $puntenReferentieDatum = null) {
         $url = $form->get('url')->getData();
         if(!$url){
             $wedstrijdId = $form->get('cq_wedstrijdid')->getData();
@@ -49,8 +49,7 @@ class UitslagManager {
         }
         $uitslagType = $form->get('uitslagtype')->getData();
         $parseStrategy = $uitslagType->getCqParsingStrategy();
-        //$parseStrategy = new $parseStrategyClassname;
-        $uitslagregels = $this->cqParser->getResultRows($url, $parseStrategy);
+        $uitslagregels = $this->cqParser->getResultRows($crawler, $parseStrategy);
         $rows = 0;
         $maxResults = $uitslagType->getMaxResults();
         $uitslagen = array();

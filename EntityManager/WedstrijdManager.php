@@ -17,8 +17,8 @@ class WedstrijdManager {
      * @param \DateTime $dateTime
      * @return Cyclear\GameBundle\Entity\Wedstrijd
      */
-    public function createWedstrijdFromUrl( $url, \DateTime $dateTime){
-        return $this->createWedstrijd( $this->cqParser->getName($url), $dateTime );
+    public function createWedstrijdFromCrawler( $crawler, \DateTime $dateTime){
+        return $this->createWedstrijd( $this->cqParser->getName($crawler), $dateTime );
     }
     
     
