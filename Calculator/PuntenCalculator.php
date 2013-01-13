@@ -2,6 +2,8 @@
 
 namespace Cyclear\GameBundle\Calculator;
 
+use Cyclear\GameBundle\Entity\Renner;
+
 /**
  * Description of PuntenCalculator
  *
@@ -16,7 +18,7 @@ class PuntenCalculator
         $this->em = $em;
     }
 
-    public function canGetPoints($renner, $wedstrijdDatum, $referentieDatum = null)
+    public function canGetPoints(Renner $renner, $wedstrijdDatum, $referentieDatum = null)
     {
         $transferRepo = $this->em->getRepository('CyclearGameBundle:Transfer');
         if (null !== $referentieDatum) {
