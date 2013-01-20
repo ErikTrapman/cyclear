@@ -93,10 +93,6 @@ class UitslagController extends Controller
         $request = $this->getRequest();
         $form = $this->createForm(new UitslagNewType());
         $form->bindRequest($request);
-        if(!$form->get('url')->getData() && !$form->get('cq_wedstrijdid')->getData()){
-            $this->get('session')->getFlashBag()->add('error', 'Er is iets fout gegaan. Vul de url of de CQ-id in');
-            return $this->forward("CyclearGameBundle:Admin/Uitslag:new");
-        }
         if ($form->isValid()) {
 
             $url = $form->get('url')->getData();
@@ -106,10 +102,6 @@ class UitslagController extends Controller
 
             $datum = $form->get('datum')->getData();
             $datum->setTime(11,0,0);
-            // TODO fixme data-transformer ofzo? Ook in prepare-uitslagen gebeurt onderstaande...
-            if (!$url) {
-                $url = $this->container->getParameter('cq_ranking-wedstrijdurl').$form->get('cq_wedstrijdid')->getData();
-            }
             $crawlerMaker = $this->get('eriktrapman_cqparser.crawler_manager');
             $crawler = $crawlerMaker->getCrawler($url);
             $wedstrijd = $wedstrijdManager->createWedstrijdFromCrawler($crawler, $datum);

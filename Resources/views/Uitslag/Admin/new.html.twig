@@ -3,13 +3,15 @@
 {% form_theme form _self %}
 
 {% block _cyclear_gamebundle_uitslagnewtype_url_widget %}
- {{ form_widget(form, {'attr': {'class':'input-xxlarge'} } ) }}
-    <span class="help-block"><img src="/bundles/cycleargame/icons/famfamfam/help.png"> 
-        Vul hier de volledige URL in of hieronder de CQ-id van de wedstrijd</span>
+ {{ form_widget(form, {'attr': {'class':'span6'} } ) }}
 {% endblock %}
 
-{% block _cyclear_gamebundle_uitslagnewtype_cq_wedstrijdid_widget %}
- {{ form_widget(form, {'attr': {'class':'input-small'} } ) }}
+{% block _cyclear_gamebundle_uitslagnewtype_uitslagtype_widget %}
+ {{ form_widget(form, {'attr': {'class':'span4'} } ) }}
+{% endblock %}
+
+{% block _cyclear_gamebundle_uitslagnewtype_refentiewedstrijd_widget %}
+ {{ form_widget(form, {'attr': {'class':'span6'} } ) }}
 {% endblock %}
 
 {% block content %}

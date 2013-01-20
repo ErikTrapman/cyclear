@@ -12,8 +12,10 @@ class UitslagNewType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('url', 'text', array('attr' => array('size' => 100), 'mapped' => false, 'required' => false))
-            ->add('cq_wedstrijdid', 'text', array('mapped' => false, 'required' => false,'label'=>'CQ-id'))
+            //->add('url', 'text', array('attr' => array('size' => 100), 'mapped' => false, 'required' => false))
+            //->add('cq_wedstrijdid', 'text', array('mapped' => false, 'required' => false,'label'=>'CQ-id'))
+            ->add('url', 'eriktrapman_cqrankingmatchselector_type', 
+                array('mapped' => false, 'required' => true,'label'=>'CQ-wedstrijd'))
             ->add('datum', 'date', array('format' => 'dd-MM-y'))
             ->add('uitslagtype', 'entity', array('mapped' => false, 'class' => 'CyclearGameBundle:UitslagType'))
             ->add('seizoen', 'seizoen_selector', array('mapped' => false))
