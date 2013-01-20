@@ -111,15 +111,15 @@
             <div class="container">
                 <p class="muted credit">
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-                <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
+                <a class="btn" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
                {% else %}
-                    <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
-                    | 
-                    <a href="{{ path('fos_user_resetting_request') }}">Wachtwoord vergeten?</a>
+                    <a class="btn" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+                     
+                    <a class="btn" href="{{ path('fos_user_resetting_request') }}">Wachtwoord vergeten?</a>
                {% endif %}
-                    | <a href="{{ path('spelregels_index',{'seizoen':app.request.attributes.get('seizoen')}) }}">Spelregels</a>
-                    | <a href="https://github.com/ErikTrapman" target="_blank">github.com/Cyclear</a> 
+                    <a class="btn" href="{{ path('spelregels_index',{'seizoen':app.request.attributes.get('seizoen')}) }}">Spelregels</a>
+                    <a class="btn" href="https://github.com/ErikTrapman" target="_blank">github.com/Cyclear</a> 
                </p>
             </div>
         </div>
