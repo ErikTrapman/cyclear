@@ -2,10 +2,12 @@
 
 namespace Cyclear\GameBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/game/{seizoen}/uitslag")
@@ -43,7 +45,7 @@ class UitslagController extends Controller
     {
         if ($periode_id === null) {
             $periode = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode();
-            return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl("uitslag_periode", array("seizoen" => $seizoen, "periode_id" => $periode->getId())));
+            return new RedirectResponse($this->generateUrl("uitslag_periode", array("seizoen" => $seizoen, "periode_id" => $periode->getId())));
         }
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
 
@@ -72,7 +74,7 @@ class UitslagController extends Controller
      * @Route("/posities/{positie}", name="uitslag_posities")
      * @Template()
      */
-    public function positiesAction(\Symfony\Component\HttpFoundation\Request $request, $positie = 1)
+    public function positiesAction(Request $request, $positie = 1)
     {
         $seizoen = $request->attributes->get('seizoen-object');
         $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getCountForPosition($seizoen, $positie);
@@ -99,5 +101,18 @@ class UitslagController extends Controller
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
         $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen[0]);
         return array('list' => $list, 'seizoen' => $seizoen[0]);
+    }
+
+    /**
+     * @Route("/overzicht", name="uitslag_overview")
+     * @Template()
+     */
+    public function overviewAction(Request $request)
+    {
+        $seizoen = $request->attributes->get('seizoen-object');
+        $transfer = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen);
+        $stand = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen);
+        $draft = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen);
+        return array('seizoen' => $seizoen, 'transfer' => $transfer, 'stand' => $stand, 'draft' => $draft);
     }
 }

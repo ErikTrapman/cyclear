@@ -11,7 +11,7 @@ class UitslagTypeType extends \Symfony\Component\Form\AbstractType
             ->add('naam')
             ->add('maxResults','integer')
             ->add('isGeneralClassification',null,array('required'=>false))
-            ->add('cqParsingStrategy', 'cyclear_cqparser_strategy', array('property_path'=>'cqParsingStrategy'))
+            ->add('cqParsingStrategy', 'eriktrapman_cqparser_strategy', array('property_path'=>'cqParsingStrategy'))
         ;
     }
 

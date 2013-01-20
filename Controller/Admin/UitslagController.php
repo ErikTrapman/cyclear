@@ -110,7 +110,7 @@ class UitslagController extends Controller
             if (!$url) {
                 $url = $this->container->getParameter('cq_ranking-wedstrijdurl').$form->get('cq_wedstrijdid')->getData();
             }
-            $crawlerMaker = $this->get('cyclear_cqparser.crawler_manager');
+            $crawlerMaker = $this->get('eriktrapman_cqparser.crawler_manager');
             $crawler = $crawlerMaker->getCrawler($url);
             $wedstrijd = $wedstrijdManager->createWedstrijdFromCrawler($crawler, $datum);
             $wedstrijd->setSeizoen($form->get('seizoen')->getData());

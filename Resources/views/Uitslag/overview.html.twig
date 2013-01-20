@@ -1,0 +1,19 @@
+{% extends '::base.html.twig' %}
+
+{% block title "Overzicht" %}
+
+{% block content %}
+
+<div class="span4">
+    <h2>Stand</h2>
+    {% include "CyclearGameBundle:Uitslag:viewByPloegen.html.twig" with {"list": stand,"seizoen":seizoen } %}
+</div>
+<div class="span3">
+    <h2>Draftklassement</h2>
+    {% include "CyclearGameBundle:Uitslag:viewByDraftTransfer.html.twig" with {"list": draft } %}
+</div>
+<div class="span3">
+    <h2>Transferklassement</h2>
+    {% include "CyclearGameBundle:Uitslag:viewByUserTransfer.html.twig" with {"list": transfer } %}
+</div>
+{% endblock %}

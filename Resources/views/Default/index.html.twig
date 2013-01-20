@@ -18,12 +18,13 @@
             <li><a href="#periode">Periode</a></li>
             <li><a href="#zeges">Zeges</a></li>
             <li><a href="#transfers">Transfers</a></li>
-            <li><a data-toggle="tab" href="#draft-klass">Draftklassement</a></li>
-            <li><a data-toggle="tab" href="#transfer-klass">Transferklassement</a></li>
+            <!--<li><a data-toggle="tab" href="#draft-klass">Draftklassement</a></li>
+            <li><a data-toggle="tab" href="#transfer-klass">Transferklassement</a></li>-->
         </ul>
 
         <div class="tab-content">
             <div class="tab-pane active frontpage-stand" id="stand">
+                <div style="text-align: center;"><a href="{{ path('uitslag_overview', {'seizoen':seizoen.slug} ) }}">Meer standen</a></div>
                 {% include "CyclearGameBundle:Uitslag:viewByPloegen.html.twig" with {"list": stand } %}
             </div>
             <div class="tab-pane frontpage-stand" id="periode">
@@ -40,12 +41,6 @@
                 <div style="text-align: center;"><a href="{{ path('uitslag_posities', {'seizoen':seizoen.slug,'positie':1} ) }}">Alle posities</a></div>
                 {% include "CyclearGameBundle:Uitslag:viewByPosition.html.twig" with {"list": zegestand } %}
             </div>
-            <div class="tab-pane frontpage-stand" id="draft-klass">
-                {% include "CyclearGameBundle:Uitslag:viewByDraftTransfer.html.twig" with {"list": drafts } %}
-            </div>
-            <div class="tab-pane frontpage-stand" id="transfer-klass">
-                {% include "CyclearGameBundle:Uitslag:viewByUserTransfer.html.twig" with {"list": transferstand } %}
-            </div>
         </div>
         
     </div>    
@@ -59,8 +54,8 @@ div.frontpage-stand{ min-height: 630px; }
     $('#tabs a[href="#periode"]').click(function (e) {e.preventDefault(); $(this).tab('show'); })
     $('#tabs a[href="#transfers"]').click(function (e) { e.preventDefault(); $(this).tab('show'); })
     $('#tabs a[href="#zeges"]').click(function (e) {e.preventDefault();$(this).tab('show');})
-    $('#tabs a[href="#draft-klass"]').click(function (e) {e.preventDefault();$(this).tab('show');});
-    $('#tabs a[href="#transfer-klass"]').click(function (e) {e.preventDefault();$(this).tab('show');});
+    //$('#tabs a[href="#draft-klass"]').click(function (e) {e.preventDefault();$(this).tab('show');});
+    //$('#tabs a[href="#transfer-klass"]').click(function (e) {e.preventDefault();$(this).tab('show');});
     $('#tabs a[href="#uitslagen"]').click(function (e) {e.preventDefault();$(this).tab('show');});
 </script>
 {% endblock %}
