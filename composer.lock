@@ -1,5 +1,5 @@
 {
-    "hash": "3f123c2730ac164463fadbcf86f95a3a",
+    "hash": "e5a6d5e45cca6118755a7008d02ebcb7",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -301,6 +301,54 @@
             "keywords": [
                 "database",
                 "orm"
+            ]
+        },
+        {
+            "name": "eriktrapman/cqrankingparser-bundle",
+            "version": "dev-master",
+            "target-dir": "ErikTrapman/Bundle/CQRankingParserBundle",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:ErikTrapman/CQRankingParserBundle.git",
+                "reference": "715d0429a9d4aa1c968e06af61d0be74183defa8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/ErikTrapman/CQRankingParserBundle/archive/715d0429a9d4aa1c968e06af61d0be74183defa8.zip",
+                "reference": "715d0429a9d4aa1c968e06af61d0be74183defa8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/symfony": ">=2.1.0"
+            },
+            "require-dev": {
+                "symfony/symfony": ">=2.1.0"
+            },
+            "time": "2013-01-20 09:45:09",
+            "type": "symfony-bundle",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "ErikTrapman\\Bundle\\CQRankingParserBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Erik Trapman"
+                }
+            ],
+            "description": "Parse results from CQRanking.com",
+            "homepage": "https://github.com/ErikTrapman/CQRankingParserBundle",
+            "keywords": [
+                "symfony",
+                "cycling",
+                "results",
+                "cqranking"
             ]
         },
         {
@@ -1057,7 +1105,7 @@
                     "dev-master": "1.3.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Monolog": "src/"
@@ -1576,7 +1624,7 @@
                     "dev-master": "4.2-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "files": [
                     "lib/swift_required.php"
@@ -1844,7 +1892,7 @@
             },
             "time": "2012-12-21 10:24:53",
             "type": "library",
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony": "src/",
@@ -1983,9 +2031,9 @@
                 "reference": null,
                 "shasum": null
             },
+            "time": "2012-12-22 02:54:36",
             "type": "library",
-            "installation-source": "source",
-            "time": "2012-10-31 04:59:56"
+            "installation-source": "source"
         }
     ],
     "packages-dev": null,
@@ -2001,6 +2049,7 @@
         "stof/doctrine-extensions-bundle": 20,
         "samson/autocomplete-bundle": 20,
         "eriktrapman/webcommand-bundle": 20,
+        "eriktrapman/cqrankingparser-bundle": 20,
         "beberlei/doctrineextensions": 20,
         "mopa/bootstrap-bundle": 20,
         "mobiledetect/mobiledetectlib": 20,
