@@ -14,3 +14,8 @@ parameters:
     locale: nl_NL
 
     secret: Make_a_new_one
+    
+    twitter_consumer_key: ~
+    twitter_consumer_secret: ~
+    twitter_oauth_token: ~
+    twitter_oauth_secret: ~
