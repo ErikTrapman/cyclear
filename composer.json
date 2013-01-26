@@ -33,7 +33,8 @@
         "beberlei/DoctrineExtensions": "dev-master",
         "mopa/bootstrap-bundle": "dev-master",
         "mobiledetect/mobiledetectlib": "dev-master",
-        "suncat/mobile-detect-bundle": "dev-master"
+        "suncat/mobile-detect-bundle": "dev-master",
+        "tijsverkoyen/twitteroauth": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

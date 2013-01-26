@@ -1,5 +1,5 @@
 {
-    "hash": "e5a6d5e45cca6118755a7008d02ebcb7",
+    "hash": "62f60787f96a82764f8052aed5280ae1",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -305,12 +305,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:ErikTrapman/CQRankingParserBundle.git",
-                "reference": "1b598ff543faed187099315996f53ac78c52722e"
+                "reference": "e160f9c8cda56658c176489bc203aa107bbb318e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ErikTrapman/CQRankingParserBundle/archive/1b598ff543faed187099315996f53ac78c52722e.zip",
-                "reference": "1b598ff543faed187099315996f53ac78c52722e",
+                "url": "https://github.com/ErikTrapman/CQRankingParserBundle/archive/e160f9c8cda56658c176489bc203aa107bbb318e.zip",
+                "reference": "e160f9c8cda56658c176489bc203aa107bbb318e",
                 "shasum": ""
             },
             "require": {
@@ -320,7 +320,7 @@
             "require-dev": {
                 "symfony/symfony": ">=2.1.0"
             },
-            "time": "2013-01-20 16:48:23",
+            "time": "2013-01-22 20:48:24",
             "type": "symfony-bundle",
             "autoload": {
                 "psr-0": {
@@ -1886,6 +1886,46 @@
             ]
         },
         {
+            "name": "tijsverkoyen/twitteroauth",
+            "version": "dev-master",
+            "target-dir": "TijsVerkoyen/TwitterOAuth",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tijsverkoyen/TwitterOAuth",
+                "reference": "8db9d1736e290ac16600b0af315f6af6a9837692"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/tijsverkoyen/TwitterOAuth/archive/8db9d1736e290ac16600b0af315f6af6a9837692.zip",
+                "reference": "8db9d1736e290ac16600b0af315f6af6a9837692",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0",
+                "ext-curl": "*"
+            },
+            "time": "2012-12-26 21:24:45",
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "TijsVerkoyen\\TwitterOAuth": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Tijs Verkoyen",
+                    "email": "php-twitter@verkoyen.eu",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Twitter is a (wrapper)class to communicate with Twitter.",
+            "homepage": "https://github.com/tijsverkoyen/TwitterOAuth"
+        },
+        {
             "name": "twig/extensions",
             "version": "dev-master",
             "source": {
@@ -2016,6 +2056,7 @@
         "beberlei/doctrineextensions": 20,
         "mopa/bootstrap-bundle": 20,
         "mobiledetect/mobiledetectlib": 20,
-        "suncat/mobile-detect-bundle": 20
+        "suncat/mobile-detect-bundle": 20,
+        "tijsverkoyen/twitteroauth": 20
     }
 }
