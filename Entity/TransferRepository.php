@@ -43,6 +43,15 @@ class TransferRepository extends EntityRepository
         return $qb;
     }
     
+    public function getInversion($transfer){
+        $qb = $this->createQueryBuilder('t')
+            ->where('t.identifier = :identifier')
+            ->andWhere('t != :transfer')
+            ->setParameters( array('identifier' => $transfer->getIdentifier(),'transfer' => $transfer) );
+        $res = $qb->getQuery()->getResult();
+        return ( array_key_exists(0, $res) ) ? $res[0] : null;
+    }
+    
     // TODO: teveel argumenten. maak losse methoden!
     public function getLatestWithInversion($seizoen = null, $types = array(), $limit = 20, $ploegNaar = null, $renner = null)
     {

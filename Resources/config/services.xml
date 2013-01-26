@@ -24,6 +24,11 @@
                  method="onKernelException" />
             <argument type="service" id="maillog" />
         </service>
+        
+        <service id="cyclear_game.doctrine.listener.transfer" class="Cyclear\GameBundle\Listener\Doctrine\TransferListener">
+            <tag name="doctrine.event_listener" event="postPersist" />
+            <argument type="service" id="cyclear_game.twitter.tweeter" />
+        </service>
 
         <service id="pdo" class="PDO">
             <argument key="dsn">mysql:dbname=%database_name%;host=%database_host%</argument>
@@ -127,7 +132,20 @@
             <tag name="kernel.event_subscriber"/>
         </service>
         
-        
+        <service id="cyclear_game.twitter.helper" class="TijsVerkoyen\Twitter\Twitter">
+            <argument>%twitter_consumer_key%</argument>
+            <argument>%twitter_consumer_secret%</argument>
+            <call method="setOAuthToken">
+                <argument>%twitter_oauth_token%</argument>
+            </call>
+            <call method="setOAuthTokenSecret">
+                <argument>%twitter_oauth_secret%</argument>
+            </call>
+        </service>    
+            
+        <service id="cyclear_game.twitter.tweeter" class="Cyclear\GameBundle\Twitter\Tweeter">
+            <argument type="service" id="cyclear_game.twitter.helper"/>
+        </service>    
     </services>
 
     <!-- <parameters> <parameter key="cyclear_game.example.class">Cyclear\GameBundle\Example</parameter> 
