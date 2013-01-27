@@ -19,6 +19,11 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('cyclear_game');
+        
+        $rootNode->children()
+            ->booleanNode('enable_twitter')->defaultFalse()->end()
+            ->end();
+        
 		/*
         $rootNode->children()
         	->arrayNode('cyclear_logger')

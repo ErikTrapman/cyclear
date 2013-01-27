@@ -145,6 +145,7 @@
             
         <service id="cyclear_game.twitter.tweeter" class="Cyclear\GameBundle\Twitter\Tweeter">
             <argument type="service" id="cyclear_game.twitter.helper"/>
+            <argument type="service" id="service_container" /> 
         </service>    
     </services>
 
