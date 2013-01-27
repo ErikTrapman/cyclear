@@ -70,6 +70,7 @@
                             {% else %}
                                 <li><a href="{{ path('renner_punten', {'seizoen':null} ) }}">Renners</a></li>
                             {% endif %}
+                                <li><a href="{{ path('archief_index') }}">Archief</a></li>    
                         {% if is_granted("ROLE_USER") %}
                             {% include 'CyclearGameBundle:Default/User:inc_menu.html.twig' %}
                         {% endif %}
