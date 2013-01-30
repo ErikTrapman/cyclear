@@ -17,7 +17,7 @@ class WedstrijdManager {
      * @param \DateTime $dateTime
      * @return Cyclear\GameBundle\Entity\Wedstrijd
      */
-    public function createWedstrijdFromCrawler( $crawler, \DateTime $dateTime){
+    public function createWedstrijdFromCrawler( $crawler, \DateTime $dateTime = null){
         return $this->createWedstrijd( $this->cqParser->getName($crawler), $dateTime );
     }
     
@@ -28,7 +28,7 @@ class WedstrijdManager {
      * @param \DateTime $datum
      * @return Cyclear\GameBundle\Entity\Wedstrijd
      */
-    public function createWedstrijd($name, \DateTime $datum) {
+    public function createWedstrijd($name, \DateTime $datum = null) {
         $wedstrijd = new \Cyclear\GameBundle\Entity\Wedstrijd();
         $wedstrijd->setNaam($name);
         $wedstrijd->setDatum($datum);

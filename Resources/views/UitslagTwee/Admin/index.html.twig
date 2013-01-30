@@ -1,0 +1,37 @@
+{% extends '::base.html.twig' %}
+
+{% block title "Overzicht" %}
+
+{% block content %}
+
+{% form_theme form _self %}
+<form id="uitslag" action="{{ path('admin_uitslagtwee') }}" method="POST">
+    <span id="uitslag_twee_ajax">
+    {% include "CyclearGameBundle:UitslagTwee/Admin:_ajaxTemplate.html.twig" with {"form":form} %}
+    </span>
+    <a class="btn btn-primary" id="refresh">Gegevens ophalen</a>
+    <input class="btn btn-success" type="submit" value="Opslaan">
+</form>
+
+<script type="text/javascript">
+$(document).ready(function(){
+   
+   var form = $("#uitslag");
+   
+   $("#refresh").on('click', function(event){
+       event.preventDefault();
+       var url = "{{ path('admin_uitslagtwee') }}";
+       $.ajax({
+           url: url,
+           type: "POST",
+           data: form.serialize()
+        }).done(function(res){
+            $("#uitslag_twee_ajax").html(res);
+        });
+   });
+});
+
+</script>
+        
+
+{% endblock %}

@@ -12,7 +12,7 @@ class UitslagConfirmType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-        $builder->add('wedstrijd', new WedstrijdType())
+        $builder->add('wedstrijd', new WedstrijdType()) 
             ->add('uitslag', 'collection', array('type' => new UitslagPrepareType(),
                 'allow_add' => true,
                 'by_reference' => false,

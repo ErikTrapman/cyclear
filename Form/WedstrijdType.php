@@ -12,8 +12,8 @@ class WedstrijdType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('datum', 'date', array('format' => 'dd-MM-y'))
-            ->add('naam')
+            ->add('datum', 'date', array('format' => 'dd-MM-y','data'=>new \DateTime()))
+            ->add('naam',null, array('required'=>false))
             ->add('uitslagtype', 'entity', array('class' => 'CyclearGameBundle:UitslagType'))
             ->add('seizoen', 'seizoen_selector')
 

@@ -1,0 +1,32 @@
+
+{{ form_row(form.cq_wedstrijdid) }}
+{{ form_row(form.url) }}
+{{ form_widget(form.wedstrijd) }}
+{% if form.uitslag is defined %}
+    <div class="control-group">
+        <label class="control-label">Punten</label>
+        <div class="controls">
+            <table class="punten-confirm">
+                <tr>
+                    <thead>
+                        <th>Positie</th>
+                        <th>Renner</th>
+                        <th>Ploeg</th>
+                        <th>Punten</th>
+                        <th>Punten-renner</th>
+                    </thead>
+                </tr>
+                {% for rows in form.uitslag %}
+                <tr>
+                    <td>{{ form_widget(rows.positie, { 'attr': {'class': 'positie'} }) }}</td>
+                    <td>{{ form_widget(rows.renner) }}</td>
+                    <td>{{ form_widget(rows.ploeg) }}</td>
+                    <td>{{ form_widget(rows.ploegPunten, { 'attr': {'class': 'punten'} }) }}</td>
+                    <td>{{ form_widget(rows.rennerPunten, { 'attr': {'class': 'punten'} }) }}</td>
+               </tr>   
+                {% endfor %}
+            </table>
+        </div>
+        </div>
+{% endif %}
+{{ form_rest(form) }}
