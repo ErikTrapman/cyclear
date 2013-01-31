@@ -3,23 +3,28 @@
 {% block title "Overzicht" %}
 
 {% block content %}
-
-{% form_theme form _self %}
 <form id="uitslag" action="{{ path('admin_uitslagtwee') }}" method="POST">
+    <div class="control-group"><label/>
+        <div class="controls">
+            <a class="btn btn-primary" id="refresh">Gegevens ophalen</a>
+            <input id="uitslag_submit" style="display: none;" class="btn btn-success" type="submit" value="Opslaan">
+        </div>
+    </div>
+    
     <span id="uitslag_twee_ajax">
     {% include "CyclearGameBundle:UitslagTwee/Admin:_ajaxTemplate.html.twig" with {"form":form} %}
     </span>
-    <a class="btn btn-primary" id="refresh">Gegevens ophalen</a>
-    <input class="btn btn-success" type="submit" value="Opslaan">
+    
 </form>
 
 <script type="text/javascript">
 $(document).ready(function(){
    
    var form = $("#uitslag");
-   
    $("#refresh").on('click', function(event){
+       $("#uitslag_submit").show();
        event.preventDefault();
+       $(".uitslagen").html('<div class="control-group"><label class="control-label"></label><img src="/bundles/cycleargame/img/ajax-loader.gif"></div>');
        var url = "{{ path('admin_uitslagtwee') }}";
        $.ajax({
            url: url,
@@ -27,6 +32,8 @@ $(document).ready(function(){
            data: form.serialize()
         }).done(function(res){
             $("#uitslag_twee_ajax").html(res);
+        }).fail(function(){
+            $("#uitslag_twee_ajax").html("De uitslagen konden niet worden opgehaald.");
         });
    });
 });

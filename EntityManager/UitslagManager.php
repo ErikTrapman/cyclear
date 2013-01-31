@@ -38,6 +38,54 @@ class UitslagManager
         $this->cqRankingWedstrijdUrl = $cqRankingWedstrijdUrl;
     }
 
+    public function prepareUitslagenTwee($uitslagType, $crawler, $wedstrijd, $puntenReferentieDatum = null)
+    {
+        $parseStrategy = $uitslagType->getCqParsingStrategy();
+        $uitslagregels = $this->cqParser->getResultRows($crawler, $parseStrategy);
+        $rows = 0;
+        $maxResults = $uitslagType->getMaxResults();
+        $uitslagen = array();
+        $rennerRepo = $this->entityManager->getRepository('CyclearGameBundle:Renner');
+        $transferRepo = $this->entityManager->getRepository('CyclearGameBundle:Transfer');
+        $rennerManager = new RennerManager();
+        foreach ($uitslagregels as $uitslagregel) {
+            if (strcmp(strtolower($uitslagregel['pos']), 'leader') === 0) {
+                continue;
+            }
+            $uitslag = new Uitslag();
+            $uitslag->setPloegPunten(0);
+            $uitslag->setPositie($uitslagregel['pos']);
+            $uitslag->setRennerPunten($uitslagregel['points']);
+            $renner = $rennerRepo->findOneByCQId($uitslagregel['cqranking_id']);
+            if ($renner !== null) {
+                $uitslag->setRenner($renner);
+                $transfer = $transferRepo->findLastTransferForDate($renner, $wedstrijd->getDatum());
+                if ($transfer === null) {
+                    $uitslag->setPloeg(null);
+                } else {
+                    $uitslag->setPloeg($transfer->getPloegNaar());
+                }
+                $canGetPoints = $this->puntenCalculator->canGetPoints($renner, $wedstrijd->getDatum(), $puntenReferentieDatum);
+                if (null !== $uitslag->getPloeg() && $canGetPoints) {
+                    $uitslag->setPloegPunten($uitslagregel['points']);
+                }
+            } else {
+                $uitslag->setPloeg(null);
+                $renner = $rennerManager->createRennerFromRennerSelectorTypeString(
+                    $rennerManager->getRennerSelectorTypeString($uitslagregel['cqranking_id'], $uitslagregel['name']));
+                $uitslag->setRenner($renner);
+            }
+
+
+            $uitslagen[] = $uitslag;
+            $rows++;
+            if ($rows == $maxResults) {
+                break;
+            }
+        }
+        return $uitslagen;
+    }
+
     /**
      *
      * Enter description here ...
@@ -87,7 +135,7 @@ class UitslagManager
                     $rennerManager->getRennerSelectorTypeString($uitslagregel['cqranking_id'], $uitslagregel['name']));
                 $uitslag->setRenner($renner);
             }
-            
+
 
             $uitslagen[] = $uitslag;
             $rows++;

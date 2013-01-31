@@ -1,9 +1,18 @@
 
 {{ form_row(form.cq_wedstrijdid) }}
-{{ form_row(form.url) }}
-{{ form_widget(form.wedstrijd) }}
-{% if form.uitslag is defined %}
+{{ form_row(form.url,{'attr': {'class':'span6'} }) }}
+{{ form_row(form.wedstrijd.datum)}}
+{{ form_row(form.wedstrijd.uitslagtype,{'attr': {'class':'span4'} })}}
+{{ form_row(form.wedstrijd.seizoen)}}
+{{ form_row(form.referentiewedstrijd,{'attr':{'class':'span6'}}) }}
+{% if form.uitslag is not defined %}
+<span style="display:none;">{{ form_widget(form.wedstrijd.naam) }}</span>
+{% else %}
+{{ form_row(form.wedstrijd.naam,{ 'attr':{'class':'span6'} }) }}
+{% endif %}
 
+<div class="uitslagen">
+{% if form.uitslag is defined %}
     <div class="control-group">
         <label class="control-label">Punten</label>
         <div class="controls">
@@ -30,4 +39,7 @@
         </div>
         </div>
 {% endif %}
-{{ form_rest(form) }}
+</div>
+<style type="text/css">
+        table.punten-confirm input.positie, table.punten-confirm input.punten { width: 40px; }
+</style>
