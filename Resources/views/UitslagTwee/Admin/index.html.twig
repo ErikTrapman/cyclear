@@ -10,8 +10,13 @@
             <input id="uitslag_submit" style="display: none;" class="btn btn-success" type="submit" value="Opslaan">
         </div>
     </div>
-    
+    {{ form_row(form.url,{'attr': {'class':'span6'} }) }}
+    {{ form_row(form.wedstrijd.datum)}}
+    {{ form_row(form.wedstrijd.uitslagtype,{'attr': {'class':'span4'} })}}
+    {{ form_row(form.wedstrijd.seizoen)}}
+    {{ form_row(form.referentiewedstrijd,{'attr':{'class':'span6'}}) }}
     <span id="uitslag_twee_ajax">
+    <span style="display:none;">{{ form_widget(form.wedstrijd.naam) }}</span>
     {% include "CyclearGameBundle:UitslagTwee/Admin:_ajaxTemplate.html.twig" with {"form":form} %}
     </span>
     
@@ -22,23 +27,22 @@ $(document).ready(function(){
    
    var form = $("#uitslag");
    $("#refresh").on('click', function(event){
-       $("#uitslag_submit").show();
        event.preventDefault();
-       $(".uitslagen").html('<div class="control-group"><label class="control-label"></label><img src="/bundles/cycleargame/img/ajax-loader.gif"></div>');
+       $("#uitslag_submit").hide();
+       $("#uitslag_twee_ajax").html('<div class="control-group"><label class="control-label"></label><div class="controls"><img src="/bundles/cycleargame/img/ajax-loader.gif"></div></div>');
        var url = "{{ path('admin_uitslagtwee') }}";
        $.ajax({
            url: url,
            type: "POST",
            data: form.serialize()
         }).done(function(res){
+            $("#uitslag_submit").show();
             $("#uitslag_twee_ajax").html(res);
         }).fail(function(){
-            $("#uitslag_twee_ajax").html("De uitslagen konden niet worden opgehaald.");
+            $("#uitslag_twee_ajax").html('<div class="control-group"><label class="control-label"></label><div class="controls">De uitslagen konden niet worden opgehaald. Probeer het evt. opnieuw.</div></div>');
         });
    });
 });
 
 </script>
-        
-
 {% endblock %}

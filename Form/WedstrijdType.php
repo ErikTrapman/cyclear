@@ -13,7 +13,7 @@ class WedstrijdType extends AbstractType
     {
         $builder
             ->add('datum', 'date', array('format' => 'dd-MM-y','data'=> new \DateTime()))
-            ->add('naam',null, array('required'=>false))
+            ->add('naam')
             ->add('uitslagtype', 'entity', array('class' => 'CyclearGameBundle:UitslagType'))
             ->add('seizoen', 'seizoen_selector')
 

@@ -6,6 +6,7 @@ use Cyclear\GameBundle\Entity\Renner;
 
 class RennerManager
 {
+    private $pattern = '[%d] %s';
 
     public function __construct()
     {
@@ -21,9 +22,14 @@ class RennerManager
     {
         $cqId = $this->getCqIdFromRennerSelectorTypeString($rennerString);
         $renner = new Renner();
-        $renner->setNaam( $this->getNameFromRennerSelectorTypeString($rennerString, $cqId) );
+        $renner->setNaam($this->getNameFromRennerSelectorTypeString($rennerString, $cqId));
         $renner->setCqRanking_id($cqId);
         return $renner;
+    }
+
+    public function getRennerSelectorTypeStringFromRenner(Renner $renner)
+    {
+        return sprintf($this->pattern, $renner->getCqRankingId(), $renner->getNaam());
     }
 
     public function getCqIdFromRennerSelectorTypeString($string)
@@ -34,7 +40,7 @@ class RennerManager
 
     public function getNameFromRennerSelectorTypeString($string, $cqId = null)
     {
-        if(null === $cqId){
+        if (null === $cqId) {
             $cqId = $this->getCqIdFromRennerSelectorTypeString($string);
         }
         return trim(str_replace(sprintf('[%d]', $cqId), '', $string));
@@ -42,6 +48,6 @@ class RennerManager
 
     public function getRennerSelectorTypeString($cqRankingId, $name)
     {
-        return sprintf("[%d] %s", $cqRankingId, $name);
+        return sprintf($this->pattern, $cqRankingId, $name);
     }
 }

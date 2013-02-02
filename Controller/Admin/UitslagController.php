@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -53,12 +54,12 @@ class UitslagController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $seizoen = $uitslag->getSeizoen();
-        $form = $this->createForm(new UitslagType(), $uitslag, array('seizoen'=>$seizoen));
+        $form = $this->createForm(new UitslagType(), $uitslag, array('seizoen' => $seizoen));
         if ('POST' === $request->getMethod()) {
             $form->bind($request);
             if ($form->isValid()) {
                 $em->flush();
-                return $this->redirect($this->generateUrl('admin_uitslag_edit', array('uitslag'=>$uitslag->getId())));
+                return $this->redirect($this->generateUrl('admin_uitslag_edit', array('uitslag' => $uitslag->getId())));
             }
         }
 
@@ -68,18 +69,57 @@ class UitslagController extends Controller
     /**
      * Displays a form to create a new Periode entity.
      *
+     * @Route("/create", name="admin_uitslag_create")
+     * @Template("CyclearGameBundle:Uitslag/Admin:create.html.twig")
+     */
+    public function createAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $uitslagManager = $this->get('cyclear_game.manager.uitslag');
+        $wedstrijdManager = $this->get('cyclear_game.manager.wedstrijd');
+        $crawlerManager = $this->get('eriktrapman_cqparser.crawler_manager');
+        $options = array();
+        $options['crawler_manager'] = $crawlerManager;
+        $options['wedstrijd_manager'] = $wedstrijdManager;
+        $options['uitslag_manager'] = $uitslagManager;
+        $options['request'] = $request;
+        $options['seizoen'] = $request->attributes->get('seizoen-object');
+        $form = $this->createForm(new \Cyclear\GameBundle\Form\UitslagCreateType(), null, $options);
+        if ($request->isXmlHttpRequest()) {
+            $form->bind($request);
+
+            $twig = $this->get('twig');
+            $templateFile = "CyclearGameBundle:Uitslag/Admin:_ajaxTemplate.html.twig";
+            $templateContent = $twig->loadTemplate($templateFile);
+
+            // Render the whole template including any layouts etc
+            $body = $templateContent->render(array("form" => $form->createView()));
+            return new Response($body);
+        }
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            $wedstrijd = $form->get('wedstrijd')->getData();
+            $uitslagen = $form->get('uitslag')->getData();
+            $em->persist($wedstrijd);
+            foreach ($uitslagen as $uitslag) {
+                if(null === $uitslag->getRenner()->getId()){
+                    $em->persist($uitslag->getRenner());
+                }
+                $em->persist($uitslag);
+            }
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('notice', 'Wedstrijd `'.$wedstrijd->getNaam().'` succesvol verwerkt');
+            return $this->redirect($this->generateUrl('admin_uitslag_create'));
+        }
+        return array('form' => $form->createView());
+    }
+
+    /**
      * @Route("/new", name="admin_uitslag_new")
-     * @Template("CyclearGameBundle:Uitslag/Admin:new.html.twig")
      */
     public function newAction()
     {
-        $stdClass = new stdClass();
-        $stdClass->datum = new DateTime('now');
-        $form = $this->createForm(new UitslagNewType(), $stdClass);
-
-        return array(
-            'form' => $form->createView()
-        );
+        die("Not implemented");
     }
 
     /**
@@ -101,7 +141,7 @@ class UitslagController extends Controller
             $wedstrijdManager = $this->get('cyclear_game.manager.wedstrijd');
 
             $datum = $form->get('datum')->getData();
-            $datum->setTime(11,0,0);
+            $datum->setTime(11, 0, 0);
             $crawlerMaker = $this->get('eriktrapman_cqparser.crawler_manager');
             $crawler = $crawlerMaker->getCrawler($url);
             $wedstrijd = $wedstrijdManager->createWedstrijdFromCrawler($crawler, $datum);
@@ -109,7 +149,7 @@ class UitslagController extends Controller
             $wedstrijd->setUitslagType($form->get('uitslagtype')->getData());
             $refWedstrijd = $form->get('refentiewedstrijd')->getData();
             $puntenRefDatum = null;
-            if(null !== $refWedstrijd){
+            if (null !== $refWedstrijd) {
                 $puntenRefDatum = clone $refWedstrijd->getDatum();
             }
             $uitslagen = $uitslagManager->prepareUitslagen($form, $crawler, $wedstrijd, $puntenRefDatum);
@@ -131,19 +171,19 @@ class UitslagController extends Controller
     {
         $rawData = $this->getRequest()->get('cyclear_gamebundle_uitslagconfirmtype');
         $em = $this->getDoctrine()->getEntityManager();
-        
-        $confirmForm = $this->createForm(new UitslagConfirmType(), array('registry'=>$this->getDoctrine()));
+
+        $confirmForm = $this->createForm(new UitslagConfirmType(), array('registry' => $this->getDoctrine()));
         $confirmForm->bind($this->getRequest());
         $wedstrijd = $confirmForm->get('wedstrijd')->getData();
         $em->persist($wedstrijd);
         $rawUitslagen = $rawData['uitslag'];
-        foreach($confirmForm->get('uitslag')->getData() as $key => $uitslag){
+        foreach ($confirmForm->get('uitslag')->getData() as $key => $uitslag) {
             // de wedstrijd en seizoen staan niet in het formulier
             $uitslag->setWedstrijd($wedstrijd);
             // TODO wedstrijd heeft al een seizoen, uitslag zou er geen hoeven hebben
             $uitslag->setSeizoen($wedstrijd->getSeizoen());
             // we geven alsnog de mogelijkheid om een renner aan te passen. mss staat die nog niet in de db.
-            if(null === $uitslag->getRenner()){
+            if (null === $uitslag->getRenner()) {
                 $manager = new RennerManager($em);
                 $renner = $manager->createRennerFromRennerSelectorTypeString($rawUitslagen[$key]['renner']);
                 $em->persist($renner);

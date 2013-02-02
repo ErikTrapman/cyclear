@@ -32,6 +32,7 @@ class UitslagTweeController extends Controller
         $options['wedstrijd_manager'] = $wedstrijdManager;
         $options['uitslag_manager'] = $uitslagManager;
         $options['request'] = $request;
+        $options['seizoen'] = $request->attributes->get('seizoen-object');
         $form = $this->createForm(new \Cyclear\GameBundle\Form\Type\UitslagTweeType(), null, $options);
         if ($request->isXmlHttpRequest()) {
             $form->bind($request);
@@ -47,22 +48,14 @@ class UitslagTweeController extends Controller
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             $wedstrijd = $form->get('wedstrijd')->getData();
-            var_dump($wedstrijd);
-            die;
+            
+            $uitslagen = $form->get('uitslag')->getData();
+            foreach($uitslagen as $uitslag){
+                $uitslag->setWedstrijd($wedstrijd);
+            }
+            return $this->redirect('');
         }
         return array('form' => $form->createView());
     }
 
-    /**
-     * @Route("/", name="admin_uitslagtwee_ajax")
-     * @Method({"POST"})
-     */
-    public function ajaxAction(Request $request)
-    {
-        if ($request->getMethod() == 'POST') {
-            echo 'POST';
-        } else {
-            echo 'GET';
-        }
-    }
 }
