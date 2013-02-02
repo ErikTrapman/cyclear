@@ -6,7 +6,8 @@
 <form id="uitslag" action="{{ path('admin_uitslag_create') }}" method="POST">
     <div class="control-group"><label/>
         <div class="controls">
-            <a class="btn btn-primary" id="refresh">Gegevens ophalen</a>
+            <input value="Gegevens ophalen" class="btn btn-primary" id="refresh">
+            <span id="results_loading" style="display:none;"><img width="24px" height="24px" src="/bundles/cycleargame/img/ajax-loader.gif"></span>
             <input id="uitslag_submit" style="display: none;" class="btn btn-success" type="submit" value="Opslaan">
         </div>
     </div>
@@ -36,15 +37,19 @@ $(document).ready(function(){
    $("#refresh").on('click', function(event){
        event.preventDefault();
        $("#uitslag_submit").hide();
-       $("#results_ajax").html('<div class="control-group"><label class="control-label"></label><div class="controls"><img src="/bundles/cycleargame/img/ajax-loader.gif"></div></div>');
+       $("#results_loading").show();
+       var loadhtml = '<div class="control-group"><label class="control-label"></label><div class="controls"><img src="/bundles/cycleargame/img/ajax-loader.gif"></div></div>';
+       $("#results_ajax").html(loadhtml);
        $.ajax({
            url: url,
            type: "POST",
            data: $form.serialize()
         }).done(function(res){
+            $("#results_loading").hide();
             $("#uitslag_submit").show();
             $("#results_ajax").html(res);
         }).fail(function(){
+            $("#results_loading").hide();
             $("#results_ajax").html('<div class="control-group"><label class="control-label"></label><div class="controls"><span class="label label-warning">Warning</span> De uitslagen konden niet worden opgehaald. Probeer het evt. opnieuw.</div></div>');
         });
    });
