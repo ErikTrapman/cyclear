@@ -60,15 +60,7 @@ class UitslagCreateType extends AbstractType
                     $wedstrijd = $wedstrijdManager->createWedstrijdFromCrawler($crawler, $datum);
                     $data['wedstrijd']['naam'] = $wedstrijd->getNaam();
                     $refDatum = ( null !== $referentieWedstrijd ) ? $referentieWedstrijd->getDatum() : null;
-                    $uitslagen = $uitslagManager->prepareUitslagenTwee($uitslagType, $crawler, $wedstrijd, $refDatum);
-                    $rennerManager = new RennerManager();
-                    foreach ($uitslagen as $key => $uitslag) {
-                        $data['uitslag'][$key]['positie'] = $uitslag->getPositie();
-                        $data['uitslag'][$key]['renner'] = ( null !== $uitslag->getRenner() ) ? $rennerManager->getRennerSelectorTypeStringFromRenner($uitslag->getRenner()) : null;
-                        $data['uitslag'][$key]['ploeg'] = ( null !== $uitslag->getPloeg() ) ? $uitslag->getPloeg()->getId() : null;
-                        $data['uitslag'][$key]['ploegPunten'] = $uitslag->getPloegPunten();
-                        $data['uitslag'][$key]['rennerPunten'] = $uitslag->getRennerPunten();
-                    }
+                    $data['uitslag'] = $uitslagManager->prepareUitslagen($uitslagType, $crawler, $wedstrijd, $refDatum);
                     $e->setData($data);
                 }
             });
@@ -99,7 +91,7 @@ class UitslagCreateType extends AbstractType
 
     public function getName()
     {
-        return 'cyclear_gamebundle_uitslagtweetype';
+        return 'cyclear_gamebundle_uitslagcreatetype';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

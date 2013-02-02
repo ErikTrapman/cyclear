@@ -108,8 +108,7 @@ class Renner
 
     public function __toString()
     {
-        $info = $this->getCqRanking_id();
-        $info .= (string) ' ['.$this->getNaam().']';
-        return $info;
+        $m = new \Cyclear\GameBundle\EntityManager\RennerManager();
+        return $m->getRennerSelectorTypeStringFromRenner($this);
     }
 }
