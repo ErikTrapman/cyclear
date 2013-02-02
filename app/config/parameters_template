@@ -1,0 +1,21 @@
+parameters:
+    database_driver:
+    database_host: 
+    database_port: 
+    database_name: 
+    database_user: 
+    database_password:
+
+    mailer_transport: 
+    mailer_host: 
+    mailer_user :
+    mailer_password :
+
+    locale: nl_NL
+
+    secret: ~
+    
+    twitter_consumer_key: ~
+    twitter_consumer_secret: ~
+    twitter_oauth_token: ~
+    twitter_oauth_secret: ~
