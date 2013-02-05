@@ -84,6 +84,8 @@ class UitslagCreateType extends AbstractType
                         }
                         // we gebruiken het uitslagen-form hierboven zonder 'Wedstrijd'
                         $uitslag->setWedstrijd($wedstrijd);
+                        // TODO seizoen uit uitslag halen!!
+                        $uitslag->setSeizoen($wedstrijd->getSeizoen());
                     }
                 }
             });
