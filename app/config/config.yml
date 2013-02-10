@@ -12,7 +12,7 @@ framework:
     csrf_protection: true
     validation:      { enable_annotations: true }
     templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
-    translator: ~
+    translator:      { fallback: en_GB }
     default_locale: %locale%
     session: ~
 
@@ -51,6 +51,13 @@ doctrine:
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
+        mappings:
+          gedmo_translatable:
+            type: annotation
+            prefix: Gedmo\Translatable\Entity
+            dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity"
+            alias: GedmoTranslatable # this one is optional and will default to the name set for the mapping
+            is_bundle: false
         dql:
           string_functions:
             ifnull: DoctrineExtensions\Query\Mysql\IfNull
@@ -85,6 +92,7 @@ stof_doctrine_extensions:
     orm:
         default: 
           sluggable: true
+          translatable: true
 
 mopa_bootstrap:
     form:
