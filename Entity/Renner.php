@@ -41,6 +41,12 @@ class Renner
      */
     private $transfers;
 
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Country")
+     */
+    private $country;
+
     public function __construct()
     {
         $this->transfers = new \Doctrine\Common\Collections\ArrayCollection();
@@ -105,7 +111,18 @@ class Renner
     {
         $this->transfers = $transfers;
     }
+    
+    public function getCountry()
+    {
+        return $this->country;
+    }
 
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    
     public function __toString()
     {
         $m = new \Cyclear\GameBundle\EntityManager\RennerManager();

@@ -5,7 +5,7 @@
 {% block content %}
 
 {% set ingelogdPloeg = app.request.attributes.get('seizoen-ploeg') %}
-<h1>{{ renner.naam }}{% if ploeg is not null %} - {{ ploeg.naam }}{% else %} - vrij {% spaceless %}
+<h1><img width="32" height="32" src="/bundles/cycleargame/icons/flags/32/{{ renner.country.iso2|lower }}.png"> {{ renner.naam }}{% if ploeg is not null %} - {{ ploeg.naam }}{% else %} - vrij {% spaceless %}
 {% if is_granted("ROLE_USER") and ingelogdPloeg is not null %}
 
     <a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner_id:renner.id} ) }}">

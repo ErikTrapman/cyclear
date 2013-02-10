@@ -102,7 +102,6 @@ class RennerController extends Controller
             $entities, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
 
-
         return array(
             'pagination' => $pagination, 'filter' => $filter->createView(),
             'listWithPunten' => $listWithPunten,

@@ -13,7 +13,7 @@
             {% set rennerploeg = rennerRepo.getPloeg(renner[0], seizoen) %}
         <tr>
             <td>{{ loop.index }}</td>
-            <td>{{ renner[0].naam }}</td>
+            <td><img width="16" height="16" src="/bundles/cycleargame/icons/flags/16/{{ renner[0].country.iso2|lower }}.png"> {{ renner[0].naam }}</td>
             <td>{% if rennerploeg %}{{ rennerploeg.afkorting }}{% else %}-{% endif %}</td>
             <td>{{ renner.punten }}</td>
         </tr>
