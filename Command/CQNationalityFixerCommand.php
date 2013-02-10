@@ -2,6 +2,9 @@
 
 namespace Cyclear\GameBundle\Command;
 
+use Ddeboer\DataImport\Reader\CsvReader;
+use ErikTrapman\Bundle\CQRankingParserBundle\Nationality\NationalityResolver;
+use SplFileObject;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,9 +22,9 @@ class CQNationalityFixerCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $kernel = $this->getContainer()->get('kernel');
-        $file = new \SplFileObject( $kernel->getRootDir().DIRECTORY_SEPARATOR.'/Resources/files/cq/CQRiders.csv');
+        $file = new SplFileObject( $kernel->getRootDir().DIRECTORY_SEPARATOR.'/Resources/files/cq/CQRiders.csv');
 
-        $r = new \Ddeboer\DataImport\Reader\CsvReader($file, ",");
+        $r = new CsvReader($file, ",");
         $r->setHeaderRowNumber(0);
 
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
@@ -29,7 +32,7 @@ class CQNationalityFixerCommand extends ContainerAwareCommand
         $riderRepo = $em->getRepository("CyclearGameBundle:Renner");
         $countryRepo = $em->getRepository("CyclearGameBundle:Country");
 
-        $resolver = new \ErikTrapman\Bundle\CQRankingParserBundle\Nationality\NationalityResolver();
+        $resolver = new NationalityResolver();
         $transRepo = $em->getRepository('Gedmo\\Translatable\\Entity\\Translation');
         
         foreach ($r as $i => $row) {
