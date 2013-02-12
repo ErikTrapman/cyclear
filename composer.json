@@ -27,7 +27,7 @@
         "knplabs/knp-components": "1.1.2",
         "stof/doctrine-extensions-bundle":"dev-master",
         
-        "twitter/bootstrap": "master",
+        "twitter/bootstrap": "v2.3.0",
         "samson/autocomplete-bundle": "dev-master",
         "eriktrapman/webcommand-bundle": "dev-master",
         "eriktrapman/cqrankingparser-bundle": "dev-master",
