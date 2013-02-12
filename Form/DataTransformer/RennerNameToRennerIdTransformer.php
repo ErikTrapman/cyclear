@@ -13,9 +13,12 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface {
      * @var Symfony\Bundle\DoctrineBundle\Registry
      */
     private $em;
+    
+    private $rennerManager;
 
-    public function __construct(EntityManager $em) {
+    public function __construct(EntityManager $em, $rennerManager) {
         $this->em = $em;
+        $this->rennerManager = $rennerManager;
     }
 
     /* (non-PHPdoc)
@@ -29,8 +32,7 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface {
             return '';
         }
         if ($value instanceof \Cyclear\GameBundle\Entity\Renner) {
-            $rennerManager = new \Cyclear\GameBundle\EntityManager\RennerManager();
-            return $rennerManager->getRennerSelectorTypeString($value->getCqRanking_id(), $value->getNaam());
+            return $this->rennerManager->getRennerSelectorTypeString($value->getCqRanking_id(), $value->getNaam());
         }
         return 'unrecognised value';
     }
@@ -47,8 +49,7 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface {
         if (is_numeric($value)) {
             $cqId = $value;
         } else {
-            $rM = new \Cyclear\GameBundle\EntityManager\RennerManager();
-            $cqId = $rM->getCqIdFromRennerSelectorTypeString($value);
+            $cqId = $this->rennerManager->getCqIdFromRennerSelectorTypeString($value);
         }
         $em = $this->em;
         $renner = $em->getRepository('Cyclear\GameBundle\Entity\Renner')->findOneByCQId($cqId);

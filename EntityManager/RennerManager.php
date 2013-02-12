@@ -3,14 +3,24 @@
 namespace Cyclear\GameBundle\EntityManager;
 
 use Cyclear\GameBundle\Entity\Renner;
+use ErikTrapman\Bundle\CQRankingParserBundle\Nationality\NationalityResolver;
 
 class RennerManager
 {
     private $pattern = '[%d] %s';
 
-    public function __construct()
+    private $countrySuffix = '~ %s';
+
+    private $countryLookupPattern = '%s ~ %s';
+
+    private $em;
+    
+    private $nationalityResolver;
+
+    public function __construct($em, NationalityResolver $nationalityResolver)
     {
-        
+        $this->em = $em;
+        $this->nationalityResolver = $nationalityResolver;
     }
 
     /**
@@ -25,6 +35,24 @@ class RennerManager
         $renner->setNaam($this->getNameFromRennerSelectorTypeString($rennerString, $cqId));
         $renner->setCqRanking_id($cqId);
         return $renner;
+    }
+    
+    /**
+     * 
+     * @param type $rennerString
+     * @return null
+     */
+    public function getCountryFromRennerSelectorTypeString($rennerString)
+    {
+        $rennerString = str_replace(' ', '', $rennerString);
+        $rennerString = str_replace('~', ' ~ ', $rennerString);
+        sscanf($rennerString, $this->countryLookupPattern,$renner,$countryAbbreviation);
+        if (!strlen($countryAbbreviation)) {
+            return null;
+        }
+        $fullName = $this->nationalityResolver->getFullNameFromCode($countryAbbreviation);
+        $country = $this->em->getRepository("CyclearGameBundle:Country")->findOneByTranslation($fullName);
+        return $country;
     }
 
     public function getRennerSelectorTypeStringFromRenner(Renner $renner)

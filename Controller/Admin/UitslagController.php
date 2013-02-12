@@ -78,12 +78,14 @@ class UitslagController extends Controller
         $uitslagManager = $this->get('cyclear_game.manager.uitslag');
         $wedstrijdManager = $this->get('cyclear_game.manager.wedstrijd');
         $crawlerManager = $this->get('eriktrapman_cqparser.crawler_manager');
+        $rennerManager = $this->get('cyclear_game.manager.renner');
         $options = array();
         $options['crawler_manager'] = $crawlerManager;
         $options['wedstrijd_manager'] = $wedstrijdManager;
         $options['uitslag_manager'] = $uitslagManager;
         $options['request'] = $request;
         $options['seizoen'] = $request->attributes->get('seizoen-object');
+        $options['renner_manager'] = $rennerManager;
         $form = $this->createForm(new \Cyclear\GameBundle\Form\UitslagCreateType(), null, $options);
         if ($request->isXmlHttpRequest()) {
             $form->bind($request);

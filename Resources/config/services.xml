@@ -50,6 +50,12 @@
             <argument type="service" id="eriktrapman_cqparser.parser"/>
             <argument type="service" id="cyclear_game.calculator.punten"/>
             <argument>%cq_ranking-wedstrijdurl%</argument>
+            <argument type="service" id="cyclear_game.manager.renner" />
+        </service>
+        
+        <service id="cyclear_game.manager.renner" class="Cyclear\GameBundle\EntityManager\RennerManager">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="eriktrapman_cqparser.nationality_resolver"/>
         </service>
         
         <service id="cyclear_game.manager.user" class="Cyclear\GameBundle\EntityManager\UserManager">
@@ -62,6 +68,7 @@
         
         <service id="cyclear_game.type.renner_selector" class="Cyclear\GameBundle\Form\RennerSelectorType">
             <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="cyclear_game.manager.renner" />
             <tag name="form.type" alias="renner_selector" />
         </service>
         

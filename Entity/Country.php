@@ -8,7 +8,7 @@ use Gedmo\Translatable\Translatable;
 
 /**
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\CountryRepository")
  */
 class Country implements Translatable
 {

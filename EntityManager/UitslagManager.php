@@ -21,13 +21,16 @@ class UitslagManager
     private $cqParser;
 
     private $cqRankingWedstrijdUrl;
+    
+    private $rennerManager;
 
-    public function __construct(EntityManager $em, $parser, PuntenCalculator $puntenCalculator, $cqRankingWedstrijdUrl = '')
+    public function __construct(EntityManager $em, $parser, PuntenCalculator $puntenCalculator, $cqRankingWedstrijdUrl, $rennerManager)
     {
         $this->entityManager = $em;
         $this->puntenCalculator = $puntenCalculator;
         $this->cqParser = $parser;
         $this->cqRankingWedstrijdUrl = $cqRankingWedstrijdUrl;
+        $this->rennerManager = $rennerManager;
     }
 
     /**
@@ -47,7 +50,7 @@ class UitslagManager
         $uitslagen = array();
         $rennerRepo = $this->entityManager->getRepository('CyclearGameBundle:Renner');
         $transferRepo = $this->entityManager->getRepository('CyclearGameBundle:Transfer');
-        $rennerManager = new RennerManager();
+        $rennerManager = $this->rennerManager;
         foreach ($uitslagregels as $uitslagregel) {
             if (strcmp(strtolower($uitslagregel['pos']), 'leader') === 0) {
                 continue;

@@ -12,15 +12,18 @@ class RennerSelectorType extends AbstractType
      * @var \Doctrine\ORM\EntityManager
      */
     private $em;
+    
+    private $rennerManager;
 
-    public function __construct(\Doctrine\ORM\EntityManager $em)
+    public function __construct(\Doctrine\ORM\EntityManager $em, $rennerManager)
     {
         $this->em = $em;
+        $this->rennerManager = $rennerManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new DataTransformer\RennerNameToRennerIdTransformer($this->em);
+        $transformer = new DataTransformer\RennerNameToRennerIdTransformer($this->em, $this->rennerManager);
         //$builder->add('renner','text');
         $builder->appendClientTransformer($transformer);
     }

@@ -23,6 +23,7 @@ class UitslagCreateType extends AbstractType
         $crawlerManager = $options['crawler_manager'];
         $request = $options['request'];
         $seizoen = $options['seizoen'];
+        $rennerManager = $options['renner_manager'];
         $builder
             ->add('url', 'eriktrapman_cqrankingmatchselector_type', array('mapped' => false, 'required' => true, 'label' => 'CQ-wedstrijd'))
             ->add('referentiewedstrijd', 'entity', array('required' => false, 'mapped' => false, 'class' => 'CyclearGameBundle:Wedstrijd',
@@ -66,7 +67,7 @@ class UitslagCreateType extends AbstractType
             });
 
 
-        $builder->addEventListener(FormEvents::POST_BIND, function(DataEvent $e) use($request) {
+        $builder->addEventListener(FormEvents::POST_BIND, function(DataEvent $e) use($request, $rennerManager) {
                 $form = $e->getForm();
                 $data = $e->getData();
                 if (null === $data) {
@@ -74,12 +75,15 @@ class UitslagCreateType extends AbstractType
                 }
                 $postData = $request->request->get($form->getName());
                 if (array_key_exists('uitslag', $postData)) {
-                    $rennerManager = new RennerManager();
                     $wedstrijd = $data['wedstrijd'];
                     $uitslagen = $postData['uitslag'];
                     foreach ($data['uitslag'] as $index => $uitslag) {
                         if (null == $uitslag->getRenner()) {
                             $renner = $rennerManager->createRennerFromRennerSelectorTypeString($uitslagen[$index]['renner']);
+                            $country = $rennerManager->getCountryFromRennerSelectorTypeString($uitslagen[$index]['renner']);
+                            if(null !== $country){
+                                $renner->setCountry($country);
+                            }
                             $uitslag->setRenner($renner);
                         }
                         // we gebruiken het uitslagen-form hierboven zonder 'Wedstrijd'
@@ -102,6 +106,7 @@ class UitslagCreateType extends AbstractType
             'wedstrijd_manager' => null,
             'uitslag_manager' => null,
             'crawler_manager' => null,
+            'renner_manager' => null,
             'request' => null,
             'seizoen' => null,
         ));
