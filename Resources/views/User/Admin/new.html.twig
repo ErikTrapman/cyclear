@@ -3,7 +3,7 @@
 {% block title %}User new{% endblock %}
 
 {% block content %}
-<h1>User creation</h1>
+<h2>User creation</h2>
 
 <form action="{{ path('admin_user_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}

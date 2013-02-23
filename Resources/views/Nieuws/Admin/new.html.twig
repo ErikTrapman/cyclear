@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Nieuws creation</h1>
+<h2>Nieuws creation</h2>
 
 <form action="{{ path('admin_nieuws_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}

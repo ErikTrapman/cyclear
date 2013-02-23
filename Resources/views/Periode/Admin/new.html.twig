@@ -1,7 +1,7 @@
 {% extends '::admin.base.html.twig' %}
 
 {% block content %}
-<h1>Periode creation</h1>
+<h2>Periode creation</h2>
 
 <form action="{{ path('admin_periode_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}

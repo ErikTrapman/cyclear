@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="span4">
-    <h1>Archieven</h1>
+    <h2>Archieven</h2>
     {% for seizoen in seizoenen %}
     <p>
         <a class="btn btn-large btn-primary btn-block" href="{{ path('game' , {'seizoen':seizoen.slug}) }}">{{ seizoen.identifier }}</a>

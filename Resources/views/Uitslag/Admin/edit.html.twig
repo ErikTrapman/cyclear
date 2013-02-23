@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Uitslag bewerken</h1>
+<h2>Uitslag bewerken</h2>
 
 <form action="{{ path('admin_uitslag_edit', {uitslag:entity.id} ) }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}

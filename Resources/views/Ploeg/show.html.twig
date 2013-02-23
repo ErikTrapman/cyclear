@@ -24,7 +24,7 @@
                 <td>{{ loop.index }}</td>
                 <td>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":rennerObject,"seizoen":seizoen } %}</td>
                 <td>{{ renner.ploegPunten }}</td>
-                {% if is_granted("ROLE_USER") and is_granted('OWNER', entity) and ( is_full_view() or is_not_mobile_view() ) %}
+                {% if is_granted("ROLE_USER") and is_granted('OWNER', entity) %}
                 <td><a href="{{ path('user_transfer', {'id':entity.id,'renner_id':renner.id,'seizoen':seizoen.slug} ) }}">
                         <img src="/bundles/cycleargame/icons/famfamfam/coins_delete.png"/></a>
                 </td>

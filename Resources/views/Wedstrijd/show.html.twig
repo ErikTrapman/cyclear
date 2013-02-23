@@ -4,6 +4,6 @@
 
 
 {% block content %}
-<h2>{{ wedstrijd.datum|date('d-m-Y') }} -  {{ wedstrijd.naam }}</h2>
+<h2>{{ wedstrijd.datum|date('d-m-Y') }}<br>{{ wedstrijd.naam }}</h2>
 {% include "CyclearGameBundle:Uitslag:_listWedstrijd.html.twig" with {uitslagen:wedstrijd.uitslagen} %}
 {% endblock %}

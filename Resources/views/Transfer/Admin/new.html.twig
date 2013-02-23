@@ -3,7 +3,7 @@
 {% block title %}Transfer new{% endblock %}
 
 {% block content %}
-<h1>Transfer creation</h1>
+<h2>Transfer creation</h2>
 
 <form action="{{ path('admin_transfer_new') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}

@@ -3,7 +3,7 @@
 {% block title %}Ploeg new{% endblock %}
 
 {% block content %}
-<h1>Ploeg creation</h1>
+<h2>Ploeg creation</h2>
 
 <form action="{{ path('admin_ploeg_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
