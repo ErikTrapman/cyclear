@@ -13,7 +13,7 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         $sql = "SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 
-                ( SELECT IFNULL(SUM(u.ploegPunten),0) FROM Uitslag u WHERE u.seizoen_id = :seizoen_id AND u.ploeg_id = p.id ) AS punten 
+                ( SELECT IFNULL(SUM(u.ploegPunten),0) FROM Uitslag u INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE w.seizoen_id = :seizoen_id AND u.ploeg_id = p.id ) AS punten 
                 FROM Ploeg p WHERE p.seizoen_id = :seizoen_id 
                 ORDER BY punten DESC, p.afkorting ASC
                 ";
@@ -58,7 +58,8 @@ class UitslagRepository extends EntityRepository
 
         $sql = "SELECT *,
                     IFNULL(( SELECT SUM(IF(u.positie = :pos,1,0)) AS freqByPos
-                    FROM Uitslag u 
+                    FROM Uitslag u
+                    INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id
                     WHERE u.ploeg_id = p.id AND u.seizoen_id = :seizoen_id
                      ),0) AS freqByPos
                 FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
@@ -76,7 +77,8 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         $qb = $this->createQueryBuilder("u")
-            ->where("u.seizoen = :seizoen")
+            ->join('u.wedstrijd', 'w')
+            ->where("w.seizoen = :seizoen")
             ->andWhere("u.renner = :renner")
             ->setParameters(array(":seizoen" => $seizoen, ":renner" => $renner))
             ->orderBy("u.id", "DESC")
@@ -90,7 +92,8 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         $qb = $this->createQueryBuilder('u')
-            ->where('u.seizoen =:seizoen')
+            ->join('u.wedstrijd', 'w')
+            ->where('w.seizoen =:seizoen')
             ->leftJoin('u.renner', 'r')
             ->groupBy('u.renner')->add('select', 'IFNULL(SUM(u.rennerPunten),0) AS punten', true)
             ->setMaxResults($limit)
@@ -114,7 +117,8 @@ class UitslagRepository extends EntityRepository
             $rennersWithPloeg [] = $renner->getId();
         }
         $qb = $this->createQueryBuilder('u')
-            ->where('u.seizoen =:seizoen')
+            ->join('u.wedstrijd', 'w')
+            ->where('w.seizoen =:seizoen')
             ->leftJoin('u.renner', 'r')
             ->groupBy('u.renner')->add('select', 'IFNULL(SUM(u.rennerPunten),0) AS punten', true)
             ->setMaxResults($limit)
@@ -139,7 +143,7 @@ class UitslagRepository extends EntityRepository
         $transferSql = "SELECT t.renner_id FROM Transfer t WHERE t.transferType = ".Transfer::DRAFTTRANSFER." AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id";
 
         $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting,
-                ( SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u WHERE u.seizoen_id = :seizoen_id AND u.renner_id IN ( %s ) ) AS punten 
+                ( SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE w.seizoen_id = :seizoen_id AND u.renner_id IN ( %s ) ) AS punten 
                 FROM Ploeg p WHERE p.seizoen_id = :seizoen_id 
                 ORDER BY punten DESC, p.afkorting ASC
                 ", $transferSql);
@@ -159,7 +163,7 @@ class UitslagRepository extends EntityRepository
                 AND t.renner_id NOT IN ( SELECT t.renner_id FROM Transfer t WHERE t.transferType = ".Transfer::DRAFTTRANSFER." AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id )
                 ";
         $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting,
-                (SELECT IFNULL(SUM(u.ploegPunten),0) FROM Uitslag u WHERE u.seizoen_id = :seizoen_id AND u.renner_id IN (%s)) AS punten
+                (SELECT IFNULL(SUM(u.ploegPunten),0) FROM Uitslag u INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE w.seizoen_id = :seizoen_id AND u.renner_id IN (%s)) AS punten
                 FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
                 ", $transfers);

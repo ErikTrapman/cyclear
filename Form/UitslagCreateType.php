@@ -80,8 +80,6 @@ class UitslagCreateType extends AbstractType
                     foreach ($data['uitslag'] as $index => $uitslag) {
                         // we gebruiken het uitslagen-form hierboven zonder 'Wedstrijd'
                         $uitslag->setWedstrijd($wedstrijd);
-                        // TODO seizoen uit uitslag halen!!
-                        $uitslag->setSeizoen($wedstrijd->getSeizoen());
                     }
                 }
             });

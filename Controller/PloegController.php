@@ -35,16 +35,17 @@ class PloegController extends Controller
         // TODO repository function maken
         $uitslagenQb = $em->getRepository('CyclearGameBundle:Uitslag')
                 ->createQueryBuilder("u")
-                ->where('u.seizoen = :seizoen')->andWhere('u.ploeg = :ploeg')->andWhere('u.ploegPunten > 0')
+                ->join('u.wedstrijd', 'w')
+                ->where('w.seizoen = :seizoen')->andWhere('u.ploeg = :ploeg')->andWhere('u.ploegPunten > 0')
                 ->setParameters(array("seizoen" => $seizoen[0], "ploeg" => $entity))
                 ->orderBy("u.renner")->orderBy('u.id', 'DESC')
         ;
         $paginator = $this->get('knp_paginator');
         $uitslagen = $paginator->paginate(
-            $uitslagenQb->getQuery(), $this->get('request')->query->get('page', 1)/* page number */, 20/* limit per page */
+            $uitslagenQb->getQuery(), $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
         $transfers = $em->getRepository("CyclearGameBundle:Transfer")->getLatestWithInversion(
-            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 20, $entity);
+            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 10, $entity);
         $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");
         return array(
             'entity' => $entity,

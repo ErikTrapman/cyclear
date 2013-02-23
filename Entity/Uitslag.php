@@ -64,12 +64,6 @@ class Uitslag
     private $rennerPunten;
 
     /**
-     * 
-     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
-     */
-    private $seizoen;
-
-    /**
      * Get id
      *
      * @return integer 
@@ -192,15 +186,5 @@ class Uitslag
     public function __toString()
     {
         return 'uitslag nr '.$this->getId();
-    }
-
-    public function getSeizoen()
-    {
-        return $this->seizoen;
-    }
-
-    public function setSeizoen($seizoen)
-    {
-        $this->seizoen = $seizoen;
     }
 }
