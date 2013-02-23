@@ -13,11 +13,15 @@ $(document).ready(function(){
                     json: 'application/json; request=twitter.typeahead'
                 },
                 success: function(json) {
-                    return typeof json.options == 'undefined' ? false : process(json.options);
+                    typeof json.options == 'undefined' ? false : process(json.options);
+                    $('.selector-ttl').show();
+                    $('.selector-found').html(json.ttl+' resultaten');
+                    return;
                 }
             });
         },
-        minLength: 3
+        minLength: 3,
+        items: 10 /* TODO how to get this from config.yml? */
     });
     
 });

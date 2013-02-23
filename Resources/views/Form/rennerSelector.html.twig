@@ -1,7 +1,9 @@
 {% block renner_selector_widget %}
 {{ form_widget(form, { 'attr':{'class':'span4 ajax-typeahead'} } ) }}&nbsp;
-<a class="selector-tooltip" title="" data-toggle="tooltip" href="#" data-original-title="Er worden maximaal {{ typeahead_max_results }} resultaten getoond">
-    <img src="/bundles/cycleargame/icons/famfamfam/information.png" width="16" height="16"></a>
+<span class="selector-ttl" style="display:none;">
+    <img src="/bundles/cycleargame/icons/famfamfam/information.png" width="16" height="16">&nbsp;
+    <span class="selector-found"></span>, maximaal {{ typeahead_max_results }} getoond.
+</span>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".selector-tooltip").tooltip();

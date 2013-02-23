@@ -38,9 +38,11 @@ class RennerController extends Controller
             $ret = array();
             $ret['options'] = array();
             $rennerManager = new RennerManager();
-            foreach($qb->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY) as $renner){
+            $renners = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
+            foreach($renners as $renner){
                 $ret['options'][] = $rennerManager->getRennerSelectorTypeString( $renner['cqranking_id'], $renner['naam']);
             }
+            $ret['ttl'] = count($renners);
             $response = new JsonResponse($ret);
             return $response;
         }
