@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route("/game/{seizoen}/spelregels")
+ * @Route("/{seizoen}/spelregels")
  */
 class SpelregelsController extends Controller
 {

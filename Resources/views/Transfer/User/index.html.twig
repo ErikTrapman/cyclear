@@ -9,13 +9,6 @@
     </div>
 {% endblock %}
 
- {% block _cyclear_gamebundle_transferusertype_renner_in_widget %}
-    <label class="control-label">Renner in</label> 
-    <div class="controls">    
-        {{ form_widget(form) }}
-        </div>
- {% endblock %}
-
 {% block content %}
 
         <form action="{{ path('user_transfer', { seizoen:seizoen.slug, id:ploeg.id, renner_id:renner.id }) }}" method="post" {{ form_enctype(form) }}>

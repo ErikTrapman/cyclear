@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  *
- * @Route("/game/{seizoen}/user")
+ * @Route("/{seizoen}/user")
  */
 class DefaultController extends Controller
 {

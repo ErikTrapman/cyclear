@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 /**
  * Ploeg controller.
  *
- * @Route("/game/{seizoen}/ploeg")
+ * @Route("/{seizoen}/ploeg")
  */
 class PloegController extends Controller
 {

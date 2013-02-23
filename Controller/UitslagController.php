@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route("/game/{seizoen}/uitslag")
+ * @Route("/{seizoen}/uitslag")
  */
 class UitslagController extends Controller
 {

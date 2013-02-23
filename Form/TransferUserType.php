@@ -17,7 +17,7 @@ class TransferUserType extends AbstractType
     {
         if (null !== $options['renner_uit']) {
             $builder
-                ->add('renner_in', 'renner_autocomplete', array('property_path' => false, 'label' => 'Renner in', 'mapped' => 'rennerIn'))
+                ->add('renner_in', 'renner_selector', array('property_path' => false, 'label' => 'Renner in', 'mapped' => 'rennerIn'))
             ;
         }
         if (null !== $options['renner_in']) {

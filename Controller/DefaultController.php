@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  *
- * @Route("/game/{seizoen}")
+ * @Route("/{seizoen}")
  */
 class DefaultController extends Controller
 {

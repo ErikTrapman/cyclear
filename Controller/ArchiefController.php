@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  *
- * @Route("/game/archief")
+ * @Route("/archief")
  */
 class ArchiefController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 {

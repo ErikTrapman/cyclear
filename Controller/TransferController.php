@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Ploeg controller.
  *
- * @Route("/game/{seizoen}/transfer")
+ * @Route("/{seizoen}/transfer")
  */
 class TransferController extends Controller
 {

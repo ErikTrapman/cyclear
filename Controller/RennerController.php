@@ -5,26 +5,49 @@ namespace Cyclear\GameBundle\Controller;
 use Cyclear\GameBundle\Entity\Ploeg;
 use Cyclear\GameBundle\Entity\Renner;
 use Cyclear\GameBundle\Entity\Transfer;
+use Cyclear\GameBundle\EntityManager\RennerManager;
 use Cyclear\GameBundle\Form\PloegType;
+use Doctrine\ORM\AbstractQuery;
 use PDO;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Ploeg controller.
  *
- * @Route("/game/{seizoen}/renner")
  */
 class RennerController extends Controller
 {
 
     /**
-     * @Route("/", name="renner_index")
+     * @Route("/renner/search", name="renner_search", defaults={"_format"="json"})
+     */
+    public function searchAction(Request $request)
+    {
+        if (false !== strpos($request->headers->get('Accept'), 'twitter.typeahead')) {
+            $query = $request->query->get('query');
+            $em = $this->getDoctrine()->getEntityManager();
+            $qb = $em->getRepository("CyclearGameBundle:Renner")->createQueryBuilder('r');
+            $qb->where('r.naam LIKE :naam')->setParameter('naam', "%".$query."%")->orderBy('r.naam');
+            $ret = array();
+            $ret['options'] = array();
+            $rennerManager = new RennerManager();
+            foreach($qb->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY) as $renner){
+                $ret['options'][] = $rennerManager->getRennerSelectorTypeString( $renner['cqranking_id'], $renner['naam']);
+            }
+            $response = new JsonResponse($ret);
+            return $response;
+        }
+    }
+
+    /**
+     * @Route("/{seizoen}/renner", name="renner_index")
      * @Template("CyclearGameBundle:Renner:index.html.twig")
      */
     public function indexAction($seizoen)
@@ -63,7 +86,7 @@ class RennerController extends Controller
     }
 
     /**
-     * @Route("/punten", name="renner_punten")
+     * @Route("/{seizoen}/renner/punten", name="renner_punten")
      * 
      * @Template()
      */
@@ -112,7 +135,7 @@ class RennerController extends Controller
     }
 
     /**
-     * @Route("/{renner}", name="renner_show")
+     * @Route("/{seizoen}/renner/{renner}", name="renner_show")
      * @Template("CyclearGameBundle:Renner:show.html.twig")
      */
     public function showAction($seizoen, Renner $renner)
@@ -130,9 +153,9 @@ class RennerController extends Controller
         $pagination = $paginator->paginate(
             $uitslagen, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
-        
+
         $ploeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen[0]);
-        
+
         return array('seizoen' => $seizoen[0],
             'renner' => $renner,
             'transfers' => $transfers, 'uitslagen' => $pagination, 'transferrepo' => $transferrepo, 'ploeg' => $ploeg);

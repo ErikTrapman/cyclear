@@ -15,7 +15,7 @@ use JMS\SecurityExtraBundle\Annotation\SecureParam;
 /**
  * Ploeg controller.
  *
- * @Route("/game/{seizoen}/user/ploeg")
+ * @Route("/{seizoen}/user/ploeg")
  */
 class PloegController extends Controller
 {

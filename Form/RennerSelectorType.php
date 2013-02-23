@@ -12,13 +12,16 @@ class RennerSelectorType extends AbstractType
      * @var \Doctrine\ORM\EntityManager
      */
     private $em;
-    
-    private $rennerManager;
 
-    public function __construct(\Doctrine\ORM\EntityManager $em, $rennerManager)
+    private $rennerManager;
+    
+    private $router;
+
+    public function __construct(\Doctrine\ORM\EntityManager $em, $rennerManager, $router)
     {
         $this->em = $em;
         $this->rennerManager = $rennerManager;
+        $this->router = $router;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -30,7 +33,13 @@ class RennerSelectorType extends AbstractType
 
     public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array('invalid_message' => 'De ingevulde renner is niet teruggevonden'));
+        $url = $this->router->generate('renner_search');
+        $resolver->setDefaults(
+            array('invalid_message' => 'De ingevulde renner is niet teruggevonden',
+                'attr' => array(
+                    'autocomplete' => 'off',
+                    'data-link' => $url))
+        );
     }
 
     public function getParent()

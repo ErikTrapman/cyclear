@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 /**
  * Transfer controller.
  *
- * @Route("/game/{seizoen}/user/transfer")
+ * @Route("/{seizoen}/user/transfer")
  */
 class TransferController extends Controller
 {

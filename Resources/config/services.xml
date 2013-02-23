@@ -66,16 +66,13 @@
         <service id="cyclear_game.type.renner_selector" class="Cyclear\GameBundle\Form\RennerSelectorType">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="cyclear_game.manager.renner" />
+            <argument type="service" id="router" />
             <tag name="form.type" alias="renner_selector" />
         </service>
         
         <service id="cyclear_game.type.seizoen_selector" class="Cyclear\GameBundle\Form\SeizoenSelectorType">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <tag name="form.type" alias="seizoen_selector" />
-        </service>
-        
-        <service id="cyclear_game.type.renner_autocomplete" class="Cyclear\GameBundle\Form\RennerAutocompleteType">
-            <tag name="form.type" alias="renner_autocomplete" />
         </service>
         
         <service id="cyclear_game.type.filter.ploeg" class="Cyclear\GameBundle\Form\Filter\PloegFilterType">

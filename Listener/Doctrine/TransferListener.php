@@ -23,7 +23,11 @@ class TransferListener
             if (null !== $entity->getPloegNaar() && $entity->getTransferType() != Transfer::DRAFTTRANSFER) {
                 $inversion = $entityManager->getRepository("CyclearGameBundle:Transfer")->getInversion($entity);
                 $ploegNaar = $entity->getPloegNaar()->getAfkorting();
-                $rennerUit = $inversion->getRenner()->getNaam();
+                if(null !== $inversion){
+                    $rennerUit = $inversion->getRenner()->getNaam();
+                } else {
+                    $rennerUit = '-';
+                }
                 $rennerIn = $entity->getRenner()->getNaam();
                 $msg = sprintf('Transfer voor %s ~ [IN] %s, [UIT] %s', $ploegNaar, $rennerIn, $rennerUit);
                 try { 

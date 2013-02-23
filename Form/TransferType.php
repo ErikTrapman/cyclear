@@ -16,8 +16,7 @@ class TransferType extends AbstractType
         $choices = array(Transfer::DRAFTTRANSFER, Transfer::ADMINTRANSFER, Transfer::USERTRANSFER);
         $choicelist = new ChoiceList($choices, array('draft transfer', 'admin transfer', 'user transfer'));
         $builder
-            //->add('renner', 'renner_selector')
-            ->add('renner', 'renner_autocomplete',array('label'=>'Renner'))
+            ->add('renner', 'renner_selector')
             ->add('ploegNaar', null, array('required' => true))
             ->add('datum', 'date', array('format' => 'dd-MM-y'))
             ->add('transferType', 'choice', array('choice_list' => $choicelist))
