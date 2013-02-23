@@ -24,7 +24,7 @@ class CQNationalityFixerCommand extends ContainerAwareCommand
         $kernel = $this->getContainer()->get('kernel');
         $file = new SplFileObject( $kernel->getRootDir().DIRECTORY_SEPARATOR.'/Resources/files/cq/CQRiders.csv');
 
-        $r = new CsvReader($file, ",");
+        $r = new CsvReader($file, ";");
         $r->setHeaderRowNumber(0);
 
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
@@ -36,11 +36,18 @@ class CQNationalityFixerCommand extends ContainerAwareCommand
         $transRepo = $em->getRepository('Gedmo\\Translatable\\Entity\\Translation');
         
         foreach ($r as $i => $row) {
+            $cqId = $row['RiderID'];
+            $rider = $riderRepo->findOneByCQId($cqId);
+            if(null === $rider){
+                continue;
+            }
+            if(null !== $rider->getCountry()){
+                continue;
+            }
             $country = null;
             if (!is_array($row)) {
                 continue;
             }
-            $cqId = $row['RiderID'];
             $countryName = $resolver->getFullNameFromCode($row['Nationality']);
             if (!strlen($countryName)) {
                 $output->writeln("Skipped row ".$cqId);
@@ -50,10 +57,7 @@ class CQNationalityFixerCommand extends ContainerAwareCommand
                 $output->writeln($row['Nationality']." not found in NationalityResolver");
                 break;
             }
-            $rider = $riderRepo->findOneByCQId($cqId);
-            if(null === $rider){
-                continue;
-            } 
+             
             $rider->setNaam($row["Name"]);
             $trans = $transRepo->findOneBy(array('content' => $countryName, 'locale' => 'en_GB'));
             if (null === $trans) {

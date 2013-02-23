@@ -45,12 +45,14 @@ class PloegController extends Controller
         );
         $transfers = $em->getRepository("CyclearGameBundle:Transfer")->getLatestWithInversion(
             $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 20, $entity);
+        $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");
         return array(
             'entity' => $entity,
             'renners' => $renners,
             'uitslagen' => $uitslagen,
             'seizoen' => $seizoen[0],
-            'transfers' => $transfers
+            'transfers' => $transfers,
+            'rennerRepo' => $rennerRepo
             );
     }
 }

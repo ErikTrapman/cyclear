@@ -53,10 +53,7 @@
             <argument type="service" id="cyclear_game.manager.renner" />
         </service>
         
-        <service id="cyclear_game.manager.renner" class="Cyclear\GameBundle\EntityManager\RennerManager">
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="eriktrapman_cqparser.nationality_resolver"/>
-        </service>
+        <service id="cyclear_game.manager.renner" class="Cyclear\GameBundle\EntityManager\RennerManager"/>
         
         <service id="cyclear_game.manager.user" class="Cyclear\GameBundle\EntityManager\UserManager">
             <argument type="service" id="security.acl.provider"/>

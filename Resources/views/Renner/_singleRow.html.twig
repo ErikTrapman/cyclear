@@ -1,2 +1,4 @@
-<img width="16" height="16" src="/bundles/cycleargame/icons/flags/16/{{ renner.country.iso2|lower }}.png">
+{% if renner.country %}
+<img width="16" height="16" src="/bundles/cycleargame/icons/flags/16/{{ renner.country.iso2|lower }}.png" alt="{{ renner.country.name }}">
+{% endif %}
 <a href="{{ path('renner_show', { 'renner': renner.id, 'seizoen':seizoen.slug  }) }}">{{ renner.naam }}</a>

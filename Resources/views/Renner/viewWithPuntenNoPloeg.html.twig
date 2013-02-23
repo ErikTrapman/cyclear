@@ -12,7 +12,7 @@
     {% for renner in listWithPuntenNoPloeg %}
         <tr>
             <td>{{ loop.index }}</td>
-            <td>
+            <td nowrap>
                 {% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":renner[0],"seizoen":seizoen } %}
             </td>
             <td>{{ renner.punten }}</td>

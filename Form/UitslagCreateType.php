@@ -78,14 +78,6 @@ class UitslagCreateType extends AbstractType
                     $wedstrijd = $data['wedstrijd'];
                     $uitslagen = $postData['uitslag'];
                     foreach ($data['uitslag'] as $index => $uitslag) {
-                        if (null == $uitslag->getRenner()) {
-                            $renner = $rennerManager->createRennerFromRennerSelectorTypeString($uitslagen[$index]['renner']);
-                            $country = $rennerManager->getCountryFromRennerSelectorTypeString($uitslagen[$index]['renner']);
-                            if(null !== $country){
-                                $renner->setCountry($country);
-                            }
-                            $uitslag->setRenner($renner);
-                        }
                         // we gebruiken het uitslagen-form hierboven zonder 'Wedstrijd'
                         $uitslag->setWedstrijd($wedstrijd);
                         // TODO seizoen uit uitslag halen!!

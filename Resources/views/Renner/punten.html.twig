@@ -3,7 +3,7 @@
 {% block title "Renners" %}
 
 {% block content %}
-<div class="span6">
+<div class="span5">
    <form action="{{ path('renner_punten', {"seizoen":seizoen.slug}) }}" method="post" {{ form_enctype(filter) }}>
     {{ form_widget(filter) }}
     <p>
@@ -24,10 +24,7 @@
         {% set rennerploegIndex = rennerRepo.getPloeg(entity.id, seizoen) %}
         {% set ingelogdPloeg = app.request.attributes.get('seizoen-ploeg') %}
         <tr>
-            <td>
-                {#{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {'renner':entity.id,'seizoen':seizoen.slug } %}#}
-                <a href="{{ path('renner_show', { 'renner': entity.id, 'seizoen':seizoen.slug  }) }}">{{ entity.naam }}</a>
-            </td>
+            <td nowrap>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {'renner':rennerRepo.find(entity.id),'seizoen':seizoen } %}</td>
             <td>{% if rennerploegIndex %}{{ rennerploegIndex.afkorting }}{% else %}-{% endif %}</td>
             <td>
                 {# TODO macro ofzo van maken?? #}
@@ -54,7 +51,7 @@
 </div>
 </div>
 
-<div class="span4">
+<div class="span5">
     
     
         <ul class="nav nav-tabs" id="tabs">

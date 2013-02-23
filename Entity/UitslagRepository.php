@@ -121,7 +121,9 @@ class UitslagRepository extends EntityRepository
             ->setParameters(array('seizoen' => $seizoen))
             ->orderBy('punten DESC, r.naam', 'ASC')
         ;
-        $qb->andWhere($qb->expr()->notIn('u.renner', $rennersWithPloeg));
+        if(!empty($rennersWithPloeg)){
+            $qb->andWhere($qb->expr()->notIn('u.renner', $rennersWithPloeg));
+        }
         $ret = array();
         foreach ($qb->getQuery()->getResult() as $result) {
             $ret[] = array(0 => $result[0]->getRenner(), 'punten' => $result['punten']);
