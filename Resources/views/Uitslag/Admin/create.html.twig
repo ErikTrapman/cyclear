@@ -32,7 +32,7 @@ $(document).ready(function(){
    
    var $form = $("#uitslag");
    var url = $form.attr('action');
-   $("#refresh").on('click', function(event){
+   $("#refresh").live('click', function(event){
        event.preventDefault();
        $("#uitslag_submit").hide();
        $("#results_loading").show();
