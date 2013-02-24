@@ -36,7 +36,6 @@
         "mobiledetect/mobiledetectlib": "dev-master",
         "suncat/mobile-detect-bundle": "dev-master",
         "tijsverkoyen/twitteroauth": "dev-master",
-        "umpirsky/country-list": "dev-master",
         "ddeboer/data-import-bundle": "dev-master"
     },
     "scripts": {
