@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Doctrine\DBAL\Types\Type;
 use Cyclear\GameBundle\Entity\Renner,
     Cyclear\GameBundle\Form\RennerType,
     Cyclear\GameBundle\Entity\Transfer;
@@ -18,7 +19,8 @@ use Cyclear\GameBundle\Entity\Renner,
  *
  * @Route("/admin/renner")
  */
-class RennerController extends Controller {
+class RennerController extends Controller
+{
 
     /**
      * Lists all Renner entities.
@@ -26,31 +28,42 @@ class RennerController extends Controller {
      * @Route("/", name="admin_renner")
      * @Template("CyclearGameBundle:Renner/Admin:index.html.twig")
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $em = $this->getDoctrine()->getEntityManager();
-        
-        //$entities = $em->getRepository('CyclearGameBundle:Renner')->findAll();
-        
+
         $query = $em->createQuery('SELECT r FROM CyclearGameBundle:Renner r ORDER BY r.id DESC');
-        
+        $filter = $this->createForm('renner_filter');
+        $config = $em->getConfiguration();
+        $config->addFilter("naam", "Cyclear\GameBundle\Filter\RennerNaamFilter");
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $filter->bindRequest($this->getRequest());
+            if ($filter->isValid()) {
+                if ($filter->get('naam')->getData()) {
+                    $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData(), Type::getType(Type::STRING)->getBindingType());
+                }
+            }
+        }
+
+
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-                $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
+            $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
-        return array('pagination'=>$pagination);
+        return array('pagination' => $pagination, 'filter' => $filter->createView());
     }
-
 
     /**
      *
      * @Route("/{id}/edit", name="admin_renner_edit")
      * @Template("CyclearGameBundle:Renner/Admin:edit.html.twig")
      */
-    public function editAction($id) {
+    public function editAction($id)
+    {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('CyclearGameBundle:Renner')->findOneBy(array('cqranking_id'=>$id));
-        
+        $entity = $em->getRepository('CyclearGameBundle:Renner')->findOneBy(array('cqranking_id' => $id));
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Renner entity.');
         }
@@ -69,7 +82,8 @@ class RennerController extends Controller {
         return array('entity' => $entity, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView());
     }
 
-    public function createDeleteForm($id) {
+    public function createDeleteForm($id)
+    {
         return $this->createFormBuilder(array('id' => $id))->add('id', 'hidden')->getForm();
     }
 
@@ -78,7 +92,8 @@ class RennerController extends Controller {
      * @Route("/new", name="admin_renner_new")
      * @Template("CyclearGameBundle:Renner/Admin:new.html.twig")
      */
-    public function newAction() {
+    public function newAction()
+    {
         $entity = new Renner ();
         $form = $this->createForm(new RennerType(), $entity);
 
@@ -91,7 +106,8 @@ class RennerController extends Controller {
      * @Method("post")
      * @Template("CyclearGameBundle:Renner/Admin:new.html.twig")
      */
-    public function createAction() {
+    public function createAction()
+    {
         $entity = new Renner ();
         $request = $this->getRequest();
         $form = $this->createForm(new RennerType(), $entity);
@@ -112,7 +128,8 @@ class RennerController extends Controller {
      * @Route("/{id}/delete", name="admin_renner_delete")
      * @Method("post")
      */
-    public function deleteAction($id) {
+    public function deleteAction($id)
+    {
         $request = $this->getRequest();
         $form = $this->createDeleteForm($id);
         $form->bindRequest($request);
@@ -126,5 +143,4 @@ class RennerController extends Controller {
         }
         throw new ValidatorException("Invalid delete form");
     }
-
 }
