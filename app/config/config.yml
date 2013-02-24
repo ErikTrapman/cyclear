@@ -18,11 +18,15 @@ framework:
 
 # Twig Configuration
 twig:
+    globals:
+      typeahead_max_results: %typeahead_max_results%
+      logging_address: %logging_address%
+      corresponding_address: %corresponding_address%
     debug:            %kernel.debug%
     strict_variables: true
     form:
       resources:
-        - 'SamsonAutocompleteBundle:Form:autocomplete.html.twig'
+        - 'CyclearGameBundle:Form:rennerSelector.html.twig'
         #- 'MopaBootstrapBundle:Form:fields.html.twig'
 
 # Assetic Configuration

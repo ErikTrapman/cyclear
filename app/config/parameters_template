@@ -10,6 +10,8 @@ parameters:
     mailer_host: 
     mailer_user :
     mailer_password :
+    logging_address : 
+    corresponding_address:
 
     locale: nl_NL
 
@@ -19,3 +21,5 @@ parameters:
     twitter_consumer_secret: ~
     twitter_oauth_token: ~
     twitter_oauth_secret: ~
+
+    typeahead_max_results: 10
