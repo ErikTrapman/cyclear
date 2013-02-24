@@ -11,10 +11,12 @@ class CyclearLogHandlerMail extends AbstractHandler {
 	 */
 	private $mailer;
 
+    private $mailTo;
 
-	public function __construct($level = Logger::DEBUG, $bubble = true, \Swift_Mailer $mailer){
+	public function __construct($level = Logger::DEBUG, $bubble = true, \Swift_Mailer $mailer, $mailTo){
 		parent::__construct($level, $bubble);
 		$this->mailer = $mailer;
+        $this->mailTo = $mailTo;
 	}
 
 	/**
@@ -38,7 +40,7 @@ class CyclearLogHandlerMail extends AbstractHandler {
 		->setSubject('[Cyclear] Error from '. $_SERVER['REQUEST_URI'])
 		->setFrom('error@cyclear.nl')
             // TODO FIXME emailadres uit config halen
-		->setTo('veggatron+cyclearlog@gmail.com')
+		->setTo($this->mailTo)
 		->setBody( 'Holy crap, een foutmelding:'."\n". $record['message']  );
 		$this->mailer->send($message);
 	}
