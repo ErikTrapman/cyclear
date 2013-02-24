@@ -2,21 +2,18 @@
 
 namespace Cyclear\GameBundle\Controller;
 
-use Cyclear\GameBundle\Entity\Ploeg;
 use Cyclear\GameBundle\Entity\Renner;
 use Cyclear\GameBundle\Entity\Transfer;
 use Cyclear\GameBundle\EntityManager\RennerManager;
-use Cyclear\GameBundle\Form\PloegType;
 use Doctrine\ORM\AbstractQuery;
 use PDO;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Ploeg controller.
@@ -49,47 +46,7 @@ class RennerController extends Controller
     }
 
     /**
-     * @Route("/{seizoen}/renner", name="renner_index")
-     * @Template("CyclearGameBundle:Renner:index.html.twig")
-     */
-    public function indexAction($seizoen)
-    {
-//        $filter = $this->createForm('renner_filter');
-//        $em = $this->getDoctrine();//->getEntityManager();
-//
-//        $config = $em->getConfiguration();
-//        $config->addFilter("naam", "Cyclear\GameBundle\Filter\RennerNaamFilter");
-//
-//        if ($this->getRequest()->getMethod() == 'POST') {
-//            $filter->bindRequest($this->getRequest());
-//            if ($filter->isValid()) {
-//                if ($filter->get('naam')->getData()) {
-//                    $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData());
-//                }
-//            }
-//        }
-//        $q='SELECT r FROM CyclearGameBundle:Rennerr r ORDER BY r.naam ASC';
-//        $query = $this->getEntityManager()->createQuery($q);
-//        /*
-//        $query = $em->getRepository("CyclearGameBundle:Renner")
-//            ->createQueryBuilder('r')
-//            ->orderBy('RAND()')
-//            ->getQuery();
-//        $entities = $query->getResult();
-//        */
-//        $paginator = $this->get('knp_paginator');
-//        $pagination = $paginator->paginate(
-//            $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
-//        );
-//
-//
-//        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-//        return array('pagination' => $pagination, 'filter' => $filter->createView(), 'seizoen' => $seizoen[0]);
-    }
-
-    /**
      * @Route("/{seizoen}/renner/punten", name="renner_punten")
-     * 
      * @Template()
      */
     public function puntenAction(Request $request)
@@ -139,8 +96,9 @@ class RennerController extends Controller
     /**
      * @Route("/{seizoen}/renner/{renner}", name="renner_show")
      * @Template("CyclearGameBundle:Renner:show.html.twig")
+     * @ParamConverter("renner", class="CyclearGameBundle:Renner", options={"mapping": {"renner": "slug"}});
      */
-    public function showAction($seizoen, Renner $renner)
+    public function showAction($seizoen, $renner)
     {
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
 

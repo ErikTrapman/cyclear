@@ -17,6 +17,7 @@ class RennerNaamFilter extends \Doctrine\ORM\Query\Filter\SQLFilter {
         $value = $this->getParameter('naam');
         $value = trim($value,"'");
         $sql = sprintf("%s.naam LIKE '%%%s%%'", $targetTableAlias, $value);
+        $sql .= sprintf(' OR %s.cqranking_id = %d', $targetTableAlias, $value);
         return $sql;
     }
 

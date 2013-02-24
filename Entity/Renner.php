@@ -4,6 +4,7 @@ namespace Cyclear\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Cyclear\GameBundle\Entity\Renner
@@ -46,6 +47,12 @@ class Renner
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Country")
      */
     private $country;
+    
+    /**
+     * @Gedmo\Slug(fields={"naam"}, updatable=true)
+     * @ORM\Column(length=128, unique=true, nullable=true)
+     */
+    private $slug;
 
     public function __construct()
     {
@@ -128,4 +135,16 @@ class Renner
         $m = new \Cyclear\GameBundle\EntityManager\RennerManager();
         return $m->getRennerSelectorTypeStringFromRenner($this);
     }
+    
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+
 }
