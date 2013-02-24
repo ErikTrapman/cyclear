@@ -86,6 +86,7 @@ class UitslagController extends Controller
         $options['request'] = $request;
         $options['seizoen'] = $request->attributes->get('seizoen-object');
         $options['renner_manager'] = $rennerManager;
+        $options['default_date'] = new DateTime();
         $form = $this->createForm(new \Cyclear\GameBundle\Form\UitslagCreateType(), null, $options);
         if ($request->isXmlHttpRequest()) {
             $form->bind($request);

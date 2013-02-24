@@ -11,8 +11,13 @@ class WedstrijdType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        
+        $dateOptions = array('format' => 'dd-MM-y');
+        if($options['default_date']){
+            $dateOptions['data'] = $options['default_date'];
+        }
         $builder
-            ->add('datum', 'date', array('format' => 'dd-MM-y'))
+            ->add('datum', 'date', $dateOptions)
             ->add('naam')
             ->add('uitslagtype', 'entity', array('class' => 'CyclearGameBundle:UitslagType'))
             ->add('seizoen', 'seizoen_selector')
@@ -23,7 +28,8 @@ class WedstrijdType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Cyclear\GameBundle\Entity\Wedstrijd'
+            'data_class' => 'Cyclear\GameBundle\Entity\Wedstrijd',
+            'default_date' => null
         ));
     }
 

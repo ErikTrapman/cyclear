@@ -34,7 +34,7 @@ class UitslagCreateType extends AbstractType
                         ->add('orderBy', 'w.id DESC')
                         ->setMaxResults(30);
                 }))
-            ->add('wedstrijd', new WedstrijdType())
+            ->add('wedstrijd', new WedstrijdType(), array('default_date' => $options['default_date']))
         ;
 
 
@@ -101,6 +101,7 @@ class UitslagCreateType extends AbstractType
             'renner_manager' => null,
             'request' => null,
             'seizoen' => null,
+            'default_date' => null
         ));
     }
 }
