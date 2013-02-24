@@ -29,6 +29,8 @@ class UitslagCreateType extends AbstractType
             ->add('referentiewedstrijd', 'entity', array('required' => false, 'mapped' => false, 'class' => 'CyclearGameBundle:Wedstrijd',
                 'query_builder' => function( EntityRepository $r ) {
                     return $r->createQueryBuilder('w')
+                        ->join('w.uitslagtype', 'ut')
+                        ->where('ut.isGeneralClassification = 0')
                         ->add('orderBy', 'w.id DESC')
                         ->setMaxResults(30);
                 }))
