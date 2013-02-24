@@ -3,12 +3,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="wielrennen, wielersite, wielerspel, spel, wielerploegen, punten scoren, punten, scoren, wielrenners, 20 renners per ploeg, verschillende ploegen, cyclear, Cyclear, CYCLEAR, cyclea, yclear, wielerseizoen, koersen, coureurs" />
+    	<meta name="description" content="Cyclear is een leuk spel voor mensen die van wielrennen houden, waarbij deelnemers een unieke ploeg samenstellen van twintig wielrenners die in alle wielerwedstrijden gedurende een heel seizoen punten scoren." />
         <title>{% block title %}Cyclear{% endblock %}{% if is_granted("ROLE_ADMIN") %} - Adminstrator{% else %}{% if is_granted("ROLE_USER") %} - User {% endif %}{% endif %}</title>
         {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/jquery-ui-1.8.16.custom.css') }}" media="all" />
-        <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/select2.css') }}" media="all" />
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/sticky-footer.css') }}" media="all" />
-        <link rel="stylesheet" href="{{ asset('bundles/samsonautocomplete/css/autocomplete.css') }}" media="all" />
         {% stylesheets filter='cssrewrite' output='css/twitter.css'
             '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/css/bootstrap.css'
             '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/css/bootstrap-responsive.css'
@@ -28,13 +28,13 @@
                 '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap.min.js'
                 '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap-dropdown.js'
                 '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap-tab.js'
+                '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap-tooltip.js'
 
             %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
 
-            <script type="text/javascript" src="{{ asset('bundles/cycleargame/js/select2.min.js') }}"></script>
-            <script type="text/javascript" src="{{ asset('bundles/samsonautocomplete/js/autocomplete.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/cycleargame/js/typeahead.js') }}"></script>
             <script type="text/javascript">
                 $(document).ready( function(){
                     $('.dropdown-toggle').dropdown();
@@ -56,6 +56,20 @@
             {% endblock %}
         {% endif %}
         <!-- <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" /> -->
+            <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-38459440-1']);
+            _gaq.push(['_setDomainName', 'cyclear.nl']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+              var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+              ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+          </script>
     </head>
     <body>
        <div id="wrap">
@@ -121,7 +135,7 @@
                {% endif %}
                     <a class="btn" href="{{ path('spelregels_index',{'seizoen':app.request.attributes.get('seizoen')}) }}">Spelregels</a>
                     <a class="btn" href="https://github.com/ErikTrapman" target="_blank">github.com/Cyclear</a>
-                    <span class="badge">versie 0.2.0</span>
+                    <span class="badge">0.3.0 [24-02-2013]</span>
                </p>
             </div>
         </div>
