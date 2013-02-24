@@ -8,7 +8,7 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.1.6",
+        "symfony/symfony": "2.1.7",
         "doctrine/orm": "2.3.2",
         "doctrine/doctrine-bundle": "1.0.*",
         "twig/extensions": "1.0.*@dev",
@@ -28,7 +28,7 @@
         "stof/doctrine-extensions-bundle":"dev-master",
         
         "twitter/bootstrap": "v2.3.0",
-        "samson/autocomplete-bundle": "dev-master",
+        "samson/filter-bundle": "dev-master",
         "eriktrapman/webcommand-bundle": "dev-master",
         "eriktrapman/cqrankingparser-bundle": "dev-master",
         "beberlei/DoctrineExtensions": "dev-master",
