@@ -66,7 +66,7 @@ class UitslagManager
                 $transfer = $transferRepo->findLastTransferForDate($renner, $wedstrijd->getDatum());
                 if (null !== $transfer) {
                     $row['ploeg'] = ( null !== $transfer->getPloegNaar() ) ? $transfer->getPloegNaar()->getId() : null;
-                    if ($this->puntenCalculator->canGetPoints($renner, $wedstrijd->getDatum(), $puntenReferentieDatum)) {
+                    if ( null !== $row['ploeg'] && $this->puntenCalculator->canGetPoints($renner, $wedstrijd->getDatum(), $puntenReferentieDatum)) {
                         $row['ploegPunten'] = $uitslagregel['points'];
                     }
                 }
