@@ -60,7 +60,7 @@ class UitslagRepository extends EntityRepository
                     IFNULL(( SELECT SUM(IF(u.positie = :pos,1,0)) AS freqByPos
                     FROM Uitslag u
                     INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id
-                    WHERE u.ploeg_id = p.id AND u.seizoen_id = :seizoen_id
+                    WHERE u.ploeg_id = p.id AND w.seizoen_id = :seizoen_id
                      ),0) AS freqByPos
                 FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
                 GROUP BY p.id

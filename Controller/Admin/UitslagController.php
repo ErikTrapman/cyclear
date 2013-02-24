@@ -53,7 +53,7 @@ class UitslagController extends Controller
     public function editAction(Request $request, Uitslag $uitslag)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $seizoen = $uitslag->getSeizoen();
+        $seizoen = $uitslag->getWedstrijd()->getSeizoen();
         $form = $this->createForm(new UitslagType(), $uitslag, array('seizoen' => $seizoen));
         if ('POST' === $request->getMethod()) {
             $form->bind($request);
