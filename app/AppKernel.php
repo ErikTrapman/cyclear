@@ -22,16 +22,12 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             
             new Cyclear\GameBundle\CyclearGameBundle(),
-            #new Cyclear\CQParserBundle\CyclearCQParserBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
-
             new Cyclear\UserBundle\CyclearUserBundle(),
-            
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             
-            new Samson\Bundle\AutocompleteBundle\SamsonAutocompleteBundle(),
-            new Samson\Bundle\UnexpectedResponseBundle\SamsonUnexpectedResponseBundle(),
+            #new Samson\Bundle\FilterBundle\SamsonFilterBundle(),
             new ErikTrapman\Bundle\WebCommandBundle\ErikTrapmanWebCommandBundle(),
             new ErikTrapman\Bundle\CQRankingParserBundle\ErikTrapmanCQRankingParserBundle(),
             new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
