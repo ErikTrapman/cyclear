@@ -105,9 +105,6 @@ class UitslagController extends Controller
             $uitslagen = $form->get('uitslag')->getData();
             $em->persist($wedstrijd);
             foreach ($uitslagen as $uitslag) {
-                if(null === $uitslag->getRenner()->getId()){
-                    $em->persist($uitslag->getRenner());
-                }
                 $em->persist($uitslag);
             }
             $em->flush();

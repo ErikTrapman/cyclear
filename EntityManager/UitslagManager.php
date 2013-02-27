@@ -71,7 +71,12 @@ class UitslagManager
                     }
                 }
             } else {
-                $row['renner'] = $rennerManager->getRennerSelectorTypeString($uitslagregel['cqranking_id'], $uitslagregel['name']);
+                $rennerString = $rennerManager->getRennerSelectorTypeString($uitslagregel['cqranking_id'], $uitslagregel['name']);
+                $renner = $rennerManager->createRennerFromRennerSelectorTypeString($rennerString);
+                // save renner immediately to database.
+                $this->entityManager->persist($renner);
+                $this->entityManager->flush($renner);
+                $row['renner'] = $rennerString;
             }
             $uitslagen[] = $row;
             $rows++;
