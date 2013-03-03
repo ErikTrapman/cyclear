@@ -22,5 +22,5 @@
     "autoload": {
         "psr-0": { "Cyclear\\Bundle\\GameBundle": "" }
     },
-    "target-dir": "Cyclear/Bundle/CyclearGameBundle"
+    "target-dir": "Cyclear/Bundle/GameBundle"
 }
