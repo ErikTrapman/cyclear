@@ -32,22 +32,5 @@ class PloegController extends Controller
     public function indexAction($seizoen, Ploeg $ploeg)
     {
         return $this->forward("CyclearGameBundle:Ploeg:show", array('seizoen'=>$seizoen,'id'=>$ploeg->getId()));
-        
-        /*
-        $em = $this->getDoctrine()->getEntityManager();
-        if (null === $ploeg) {
-            throw new \RuntimeException("Unknown ploeg");
-        }
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        $ploeglist = $this->getDoctrine()->getRepository("CyclearGameBundle:Ploeg")->getRennersWithPunten($ploeg);
-        // TODO make this a service
-        foreach($ploeglist as $index => $listentry){ 
-            $renner = $em->getRepository("CyclearGameBundle:Renner")->find($listentry['id']);
-            $ploeglist[$index]['renner'] = $renner;
-            $transfer = $em->getRepository("CyclearGameBundle:Transfer")->findLastByRenner($renner);
-            $ploeglist[$index]['transferred'] = $transfer;
-        }
-        return array('ploeg' => $ploeg, 'ploeglist' => $ploeglist, 'seizoen' => $seizoen[0]);
-        */
     }
 }

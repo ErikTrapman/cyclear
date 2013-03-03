@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+ini_set('memory_limit', '1G');
+
 class SlugRidersCommand extends ContainerAwareCommand
 {
     
@@ -26,6 +28,7 @@ class SlugRidersCommand extends ContainerAwareCommand
             $renner->setSlug(\Gedmo\Sluggable\Util\Urlizer::urlize($renner->getNaam()));
             $em->persist($renner);
             if($i % 250 == 0 && $i != 0){
+                $output->writeln(memory_get_usage(1));
                 $output->writeln("$i; have to flush");
                 $em->flush();
                 $em->clear();
