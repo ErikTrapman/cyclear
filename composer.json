@@ -1,5 +1,5 @@
 {
-    "name": "eriktrapman/cycleargame-bundle",
+    "name": "cyclear/game-bundle",
     "description": "A cyclinggame in the Cyclear-tradition",
     "keywords": ["symfony", "cycling", "game", "cyclinggame","cqranking"],
     "homepage": "https://github.com/ErikTrapman/CyclearGameBundle",
@@ -20,7 +20,7 @@
         "symfony/symfony": ">=2.1.0"
     },
     "autoload": {
-        "psr-0": { "Cyclear\\GameBundle": "" }
+        "psr-0": { "Cyclear\\Bundle\\GameBundle": "" }
     },
-    "target-dir": "ErikTrapman/Bundle/CyclearGameBundle"
+    "target-dir": "Cyclear/Bundle/CyclearGameBundle"
 }
