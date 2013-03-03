@@ -25,28 +25,25 @@ class PloegRepository extends EntityRepository
         }
         return $renners;
     }
-    
-    public function getRennersWithPunten($ploeg)
-    {
-        $renners = $this->getRenners($ploeg);
-        $rennerIds = array();
-        foreach ($renners as $renner) {
-            $rennerIds[] = $renner->getId();
-        }
-        $sql = sprintf("SELECT r.id AS id, r.naam, 
-                    IFNULL(SUM(ploegPunten),0) AS ploegPunten, 
-                    IFNULL(SUM(rennerPunten),0) AS rennerPunten
-                FROM Uitslag u 
-                RIGHT JOIN Renner r ON u.renner_id = r.id
-                WHERE r.id IN ( %s )
-                GROUP BY r.id
-                ORDER BY ploegPunten DESC, r.naam ASC
-                ", (!empty($renners)) ? implode(',', $rennerIds) : 0 );
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->prepare($sql);
-        $stmt->execute(array(":ploeg" => $ploeg->getId(), ":seizoen" => $ploeg->getSeizoen()->getId()));
-        return $stmt->fetchAll(\PDO::FETCH_NAMED);
-    }
 
-    
+    public function getRennersWithPunten($ploeg, $seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $renners = $this->getRenners($ploeg);
+        $ret = array();
+        $uitslagRepo = $this->_em->getRepository("CyclearGameBundle:Uitslag");
+        foreach ($renners as $renner) {
+            $punten = $uitslagRepo->getPuntenForRennerWithPloeg($renner, $ploeg, $seizoen);
+            $ret[] = array(0 => $renner, 'punten' => (int) $punten);
+        }
+        uasort($ret, function($a, $b) {
+                if ($a['punten'] == $b['punten']) {
+                    return 0;
+                }
+                return ($a['punten'] < $b['punten']) ? 1 : -1;
+            });
+        return $ret;
+    }
 }

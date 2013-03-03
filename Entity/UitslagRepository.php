@@ -76,14 +76,32 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
+        $qb = $this->getPuntenForRennerQb($renner);
+        $qb->andWhere("w.seizoen = :seizoen");
+        $qb->setParameters(array('seizoen' => $seizoen, 'renner' => $renner));
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getPuntenForRennerWithPloeg($renner, $ploeg, $seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $qb = $this->getPuntenForRennerQb($renner);
+        $qb->andWhere("w.seizoen = :seizoen")->andWhere('u.ploeg = :ploeg');
+        $qb->setParameters(array('seizoen' => $seizoen, 'ploeg' => $ploeg,'renner' => $renner));
+        $qb->add('select', 'SUM(u.ploegPunten)');
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    private function getPuntenForRennerQb()
+    {
         $qb = $this->createQueryBuilder("u")
             ->join('u.wedstrijd', 'w')
-            ->where("w.seizoen = :seizoen")
-            ->andWhere("u.renner = :renner")
-            ->setParameters(array(":seizoen" => $seizoen, ":renner" => $renner))
+            ->where("u.renner = :renner")
             ->orderBy("u.id", "DESC")
         ;
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
 
     public function getPuntenWithRenners($seizoen = null, $limit = 20)
@@ -113,7 +131,7 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         $rennersWithPloeg = array();
-        foreach ($this->_em->getRepository("CyclearGameBundle:Renner")->getRennersWithPloeg() as $renner){
+        foreach ($this->_em->getRepository("CyclearGameBundle:Renner")->getRennersWithPloeg() as $renner) {
             $rennersWithPloeg [] = $renner->getId();
         }
         $qb = $this->createQueryBuilder('u')
@@ -125,7 +143,7 @@ class UitslagRepository extends EntityRepository
             ->setParameters(array('seizoen' => $seizoen))
             ->orderBy('punten DESC, r.naam', 'ASC')
         ;
-        if(!empty($rennersWithPloeg)){
+        if (!empty($rennersWithPloeg)) {
             $qb->andWhere($qb->expr()->notIn('u.renner', $rennersWithPloeg));
         }
         $ret = array();
