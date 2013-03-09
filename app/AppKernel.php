@@ -22,9 +22,9 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             
             new Cyclear\GameBundle\CyclearGameBundle(),
+            
             new FOS\UserBundle\FOSUserBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
-            new Cyclear\UserBundle\CyclearUserBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             
             #new Samson\Bundle\FilterBundle\SamsonFilterBundle(),
