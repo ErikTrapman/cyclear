@@ -3,7 +3,8 @@
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
         "psr-0": {
-            "": "src/"
+            "": "src/",
+            "TijsVerkoyen\\Twitter":"vendor/tijsverkoyen/twitteroauth"
         }
     },
     "require": {
@@ -21,17 +22,16 @@
         "jms/security-extra-bundle": "1.2.*",
         "jms/di-extra-bundle": "1.1.*",
         "kriswallsmith/assetic": "1.1.*@dev",
+        "cyclear/game-bundle":"dev-master",
         
         "friendsofsymfony/user-bundle": "dev-master",
         "knplabs/knp-paginator-bundle": "2.2.*",
         "knplabs/knp-components": "1.1.2",
         "stof/doctrine-extensions-bundle":"dev-master",
         
-        "twitter/bootstrap": "v2.3.0",
-        "samson/filter-bundle": "dev-master",
+        "twitter/bootstrap": "v2.3.1",
         "eriktrapman/webcommand-bundle": "dev-master",
         "eriktrapman/cqrankingparser-bundle": "dev-master",
-        "cyclear/game-bundle": "dev-master",
         "beberlei/DoctrineExtensions": "dev-master",
         "mopa/bootstrap-bundle": "dev-master",
         "mobiledetect/mobiledetectlib": "dev-master",

@@ -13,7 +13,4 @@ if (!function_exists('intl_get_error_code')) {
 
 AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
 
-require_once __DIR__.'/../vendor/tijsverkoyen/twitteroauth/TijsVerkoyen/TwitterOAuth/Twitter.php';
-require_once __DIR__.'/../vendor/tijsverkoyen/twitteroauth/TijsVerkoyen/TwitterOAuth/Exception.php';
-
 return $loader;
