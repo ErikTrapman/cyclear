@@ -32,6 +32,7 @@
         "twitter/bootstrap": "v2.3.1",
         "eriktrapman/webcommand-bundle": "dev-master",
         "eriktrapman/cqrankingparser-bundle": "dev-master",
+        "eriktrapman/release-commmand-bundle": "dev-master",
         "beberlei/DoctrineExtensions": "dev-master",
         "mopa/bootstrap-bundle": "dev-master",
         "mobiledetect/mobiledetectlib": "dev-master",
