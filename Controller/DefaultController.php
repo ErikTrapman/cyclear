@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
 /**
  *
@@ -18,6 +19,7 @@ class DefaultController extends Controller
     /**
      * @Route("/", name="game")
      * @Template()
+     * @Cache(maxage="86400")
      */
     public function indexAction(Request $request)
     {
