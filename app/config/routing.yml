@@ -10,7 +10,6 @@ CyclearGameBundle:
     resource: "@CyclearGameBundle/Controller/"
     type:     annotation
     prefix:   /
-    pattern:  /
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
