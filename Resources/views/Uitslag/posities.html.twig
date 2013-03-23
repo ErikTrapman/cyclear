@@ -4,7 +4,7 @@
 
 {% block content %}
     <ul class="nav nav-pills">
-    {% for i in 1..21 %}
+    {% for i in 1..20 %}
         <li {% if i == positie %} class="active" {% endif %}><a href="{{ path('uitslag_posities', {'seizoen':seizoen.slug,'positie':i}) }}">{{ i }}</a></li>
     {% endfor %}
     </ul>
