@@ -35,7 +35,7 @@ class UitslagController extends Controller
     public function indexAction()
     {
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQuery('SELECT w FROM CyclearGameBundle:Uitslag w ORDER BY w.id DESC');
 
@@ -43,7 +43,7 @@ class UitslagController extends Controller
         $pagination = $paginator->paginate(
             $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
-        return compact('pagination');
+        return array('pagination' => $pagination,'seizoen' => $this->getRequest()->attributes->get('seizoen-object'));
     }
 
     /**
@@ -52,7 +52,7 @@ class UitslagController extends Controller
      */
     public function editAction(Request $request, Uitslag $uitslag)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $seizoen = $uitslag->getWedstrijd()->getSeizoen();
         $form = $this->createForm(new UitslagType(), $uitslag, array('seizoen' => $seizoen));
         if ('POST' === $request->getMethod()) {
@@ -74,7 +74,7 @@ class UitslagController extends Controller
      */
     public function createAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $uitslagManager = $this->get('cyclear_game.manager.uitslag');
         $wedstrijdManager = $this->get('cyclear_game.manager.wedstrijd');
         $crawlerManager = $this->get('eriktrapman_cqparser.crawler_manager');

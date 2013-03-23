@@ -30,7 +30,7 @@ class RennerController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQuery('SELECT r FROM CyclearGameBundle:Renner r ORDER BY r.id DESC');
         $filter = $this->createForm('renner_filter');
@@ -60,7 +60,7 @@ class RennerController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Renner')->findOneBy(array('cqranking_id' => $id));
 
@@ -114,7 +114,7 @@ class RennerController extends Controller
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -134,7 +134,7 @@ class RennerController extends Controller
         $form = $this->createDeleteForm($id);
         $form->bindRequest($request);
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $renner = $em->getRepository("CyclearGameBundle:Renner")->find($id);
             $em->remove($renner);
             $em->flush();

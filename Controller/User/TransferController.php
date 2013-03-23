@@ -35,7 +35,7 @@ class TransferController extends Controller
     public function indexAction($seizoen, $id, $renner_id)
     {
         $usermanager = $this->get('cyclear_game.manager.user');
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
         $ploeg = $em->find("CyclearGameBundle:Ploeg", $id);
         if (null === $ploeg) {

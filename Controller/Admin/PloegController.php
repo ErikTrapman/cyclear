@@ -29,7 +29,7 @@ class PloegController extends Controller {
         
         $filter = $this->createForm('ploeg_filter');
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $query = $em->createQuery("SELECT p FROM Cyclear\GameBundle\Entity\Ploeg p ORDER BY p.id DESC");
 
         $config = $em->getConfiguration();
@@ -93,7 +93,7 @@ class PloegController extends Controller {
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -113,7 +113,7 @@ class PloegController extends Controller {
      * @Template("CyclearGameBundle:Ploeg/Admin:edit.html.twig")
      */
     public function editAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Ploeg')->find($id);
 
@@ -138,7 +138,7 @@ class PloegController extends Controller {
      * @Method("post")
      */
     public function updateAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Ploeg')->find($id);
 
@@ -180,7 +180,7 @@ class PloegController extends Controller {
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('CyclearGameBundle:Ploeg')->find($id);
 
             if (!$entity) {

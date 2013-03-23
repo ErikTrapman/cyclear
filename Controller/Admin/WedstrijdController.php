@@ -20,7 +20,7 @@ class WedstrijdController extends Controller {
      * @Template("CyclearGameBundle:Wedstrijd/Admin:index.html.twig")
      */
     public function indexAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQuery('SELECT w FROM CyclearGameBundle:Wedstrijd w ORDER BY w.id DESC');
         
@@ -73,7 +73,7 @@ class WedstrijdController extends Controller {
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -93,7 +93,7 @@ class WedstrijdController extends Controller {
      * @Template("CyclearGameBundle:Wedstrijd/Admin:edit.html.twig")
      */
     public function editAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Wedstrijd')->find($id);
 
@@ -118,7 +118,7 @@ class WedstrijdController extends Controller {
      * @Method("post")
      */
     public function updateAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Wedstrijd')->find($id);
 
@@ -160,7 +160,7 @@ class WedstrijdController extends Controller {
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('CyclearGameBundle:Wedstrijd')->find($id);
 
             if (!$entity) {

@@ -24,7 +24,7 @@ class KickStartApplicationCommand extends ContainerAwareCommand
     {
         $naam = $input->getArgument('naam');
 
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
 
         $s = new Seizoen();
         $s->setIdentifier($naam);

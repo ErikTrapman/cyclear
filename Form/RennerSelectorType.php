@@ -28,7 +28,7 @@ class RennerSelectorType extends AbstractType
     {
         $transformer = new DataTransformer\RennerNameToRennerIdTransformer($this->em, $this->rennerManager);
         //$builder->add('renner','text');
-        $builder->appendClientTransformer($transformer);
+        $builder->addViewTransformer($transformer);
     }
 
     public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver)

@@ -49,7 +49,7 @@ class UitslagController extends Controller
         }
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $periode = $em->find("CyclearGameBundle:Periode", $periode_id);
         $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen[0]);
         return array('list' => $list, 'seizoen' => $seizoen[0], 'periode' => $periode);
@@ -63,7 +63,7 @@ class UitslagController extends Controller
     {
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $periode = $em->find("CyclearGameBundle:Periode", $periode_id);
         $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen[0]);
         $periodes = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->findBy(array("seizoen" => $seizoen[0]));

@@ -6,8 +6,8 @@
             <th>Wedstrijd</th>
             <th>Renner</th>
             <th>Ploeg</th>
-            <th>Punten</th>
-            <th>Renner punten</th>
+            <th>Punten ploeg</th>
+            <th>Punten renner</th>
         </tr>
     </thead>
     <tbody>
@@ -24,6 +24,6 @@
     </tbody>
 </table>
 <div id="navigation">
-    {{ uitslagen.render()|raw }}
+    {{ knp_pagination_render(uitslagen) }}
 </div>
 {% endblock %}

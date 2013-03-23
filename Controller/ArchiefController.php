@@ -18,7 +18,7 @@ class ArchiefController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $current = $em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         if (null !== $current) {

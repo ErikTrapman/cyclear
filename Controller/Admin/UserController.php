@@ -25,7 +25,7 @@ class UserController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('CyclearGameBundle:User')->findAll();
 
@@ -87,7 +87,7 @@ class UserController extends Controller
     public function editAction($id)
     {
         // TODO: rollen in formulier.
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:User')->find($id);
 
@@ -112,7 +112,7 @@ class UserController extends Controller
      */
     public function updateAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:User')->find($id);
 

@@ -26,7 +26,7 @@ class NieuwsController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('CyclearGameBundle:Nieuws')->findAll();
         
@@ -64,7 +64,7 @@ class NieuwsController extends Controller
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -86,7 +86,7 @@ class NieuwsController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Nieuws')->find($id);
 
@@ -112,7 +112,7 @@ class NieuwsController extends Controller
      */
     public function updateAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Nieuws')->find($id);
 
@@ -155,7 +155,7 @@ class NieuwsController extends Controller
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('CyclearGameBundle:Nieuws')->find($id);
 
             if (!$entity) {

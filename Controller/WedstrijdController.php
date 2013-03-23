@@ -21,7 +21,7 @@ class WedstrijdController extends Controller
      */
     public function latestAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $seizoen = $request->attributes->get('seizoen-object');
         $uitslagenQb = $em->getRepository("CyclearGameBundle:Wedstrijd")->createQueryBuilder('w')
             ->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)

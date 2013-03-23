@@ -24,7 +24,7 @@ class PloegController extends Controller
      */
     public function showAction($seizoen, $id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Ploeg')->find($id);
         if (null === $entity) {

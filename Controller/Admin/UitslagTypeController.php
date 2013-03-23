@@ -26,7 +26,7 @@ class UitslagTypeController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('CyclearGameBundle:UitslagType')->findAll();
         
@@ -65,7 +65,7 @@ class UitslagTypeController extends Controller
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -87,7 +87,7 @@ class UitslagTypeController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:UitslagType')->find($id);
 
@@ -113,7 +113,7 @@ class UitslagTypeController extends Controller
      */
     public function updateAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:UitslagType')->find($id);
 
@@ -156,7 +156,7 @@ class UitslagTypeController extends Controller
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('CyclearGameBundle:UitslagType')->find($id);
 
             if (!$entity) {

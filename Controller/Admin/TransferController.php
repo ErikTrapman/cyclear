@@ -23,7 +23,7 @@ class TransferController extends Controller {
      * @Template("CyclearGameBundle:Transfer/Admin:index.html.twig")
      */
     public function indexAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQuery('SELECT t FROM Cyclear\GameBundle\Entity\Transfer t ORDER BY t.id DESC');
         $paginator = $this->get('knp_paginator');
@@ -52,7 +52,7 @@ class TransferController extends Controller {
         $formtype = new TransferType();
         $form = $this->createForm($formtype, $entity );
         $request = $this->getRequest();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         if($request->getMethod() == 'POST'){
             $form->bindRequest( $request );
             if($form->isValid()){
@@ -82,7 +82,7 @@ class TransferController extends Controller {
      * @Template("CyclearGameBundle:Transfer/Admin:edit.html.twig")
      */
     public function editAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Transfer')->find($id);
 
@@ -106,7 +106,7 @@ class TransferController extends Controller {
      * @Method("post")
      */
     public function updateAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Transfer')->find($id);
 
@@ -148,7 +148,7 @@ class TransferController extends Controller {
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('CyclearGameBundle:Transfer')->find($id);
 
             if (!$entity) {

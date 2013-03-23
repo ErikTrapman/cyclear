@@ -29,7 +29,7 @@ class RennerController extends Controller
     {
         if (false !== strpos($request->headers->get('Accept'), 'twitter.typeahead')) {
             $query = $request->query->get('query');
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $qb = $em->getRepository("CyclearGameBundle:Renner")->createQueryBuilder('r');
             $qb->where('r.naam LIKE :naam')->setParameter('naam', "%".$query."%")->orderBy('r.naam');
             $ret = array();
@@ -54,7 +54,7 @@ class RennerController extends Controller
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($request->get('seizoen'));
 
         $filter = $this->createForm('renner_filter');
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $sql = "SELECT * FROM Renner r ORDER BY r.naam";
         $conn = $em->getConnection();
         $params = array();
