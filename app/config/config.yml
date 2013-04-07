@@ -67,11 +67,7 @@ doctrine:
             ifnull: DoctrineExtensions\Query\Mysql\IfNull
     
 cyclear_game:
-  enable_twitter: true
-erik_trapman_web_command:
-  base_url: %base_url%
-
-  
+  enable_twitter: true  
 
 # Swiftmailer Configuration
 swiftmailer:
