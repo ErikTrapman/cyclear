@@ -28,9 +28,7 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             
             #new Samson\Bundle\FilterBundle\SamsonFilterBundle(),
-            new ErikTrapman\Bundle\WebCommandBundle\ErikTrapmanWebCommandBundle(),
             new ErikTrapman\Bundle\CQRankingParserBundle\ErikTrapmanCQRankingParserBundle(),
-            new ErikTrapman\Bundle\ReleaseCommandBundle\ErikTrapmanReleaseCommandBundle(),
             new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
             new SunCat\MobileDetectBundle\MobileDetectBundle(),
         );
