@@ -68,6 +68,10 @@ doctrine:
     
 cyclear_game:
   enable_twitter: true
+erik_trapman_web_command:
+  base_url: %base_url%
+
+  
 
 # Swiftmailer Configuration
 swiftmailer:
