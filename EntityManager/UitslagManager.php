@@ -21,16 +21,19 @@ class UitslagManager
     private $cqParser;
 
     private $cqRankingWedstrijdUrl;
-    
+
     private $rennerManager;
 
-    public function __construct(EntityManager $em, $parser, PuntenCalculator $puntenCalculator, $cqRankingWedstrijdUrl, $rennerManager)
+    private $nationalityResolver;
+
+    public function __construct(EntityManager $em, $parser, PuntenCalculator $puntenCalculator, $cqRankingWedstrijdUrl, $rennerManager, $cqNationalityResolver)
     {
         $this->entityManager = $em;
         $this->puntenCalculator = $puntenCalculator;
         $this->cqParser = $parser;
         $this->cqRankingWedstrijdUrl = $cqRankingWedstrijdUrl;
         $this->rennerManager = $rennerManager;
+        $this->nationalityResolver = $cqNationalityResolver;
     }
 
     /**
@@ -66,16 +69,13 @@ class UitslagManager
                 $transfer = $transferRepo->findLastTransferForDate($renner, $wedstrijd->getDatum());
                 if (null !== $transfer) {
                     $row['ploeg'] = ( null !== $transfer->getPloegNaar() ) ? $transfer->getPloegNaar()->getId() : null;
-                    if ( null !== $row['ploeg'] && $this->puntenCalculator->canGetPoints($renner, $wedstrijd->getDatum(), $puntenReferentieDatum)) {
+                    if (null !== $row['ploeg'] && $this->puntenCalculator->canGetPoints($renner, $wedstrijd->getDatum(), $puntenReferentieDatum)) {
                         $row['ploegPunten'] = $uitslagregel['points'];
                     }
                 }
             } else {
                 $rennerString = $rennerManager->getRennerSelectorTypeString($uitslagregel['cqranking_id'], $uitslagregel['name']);
-                $renner = $rennerManager->createRennerFromRennerSelectorTypeString($rennerString);
-                // save renner immediately to database.
-                $this->entityManager->persist($renner);
-                $this->entityManager->flush($renner);
+                $this->handleUnknownRenner($rennerString, $uitslagregel['nat']);
                 $row['renner'] = $rennerString;
             }
             $uitslagen[] = $row;
@@ -85,5 +85,23 @@ class UitslagManager
             }
         }
         return $uitslagen;
+    }
+
+    private function handleUnknownRenner($rennerString, $nat)
+    {
+        $renner = $this->rennerManager->createRennerFromRennerSelectorTypeString($rennerString);
+        $countryFullName = $this->nationalityResolver->getFullNameFromCode($nat);
+        $transRepo = $this->entityManager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
+        $trans = $transRepo->findOneBy(array('content' => $countryFullName, 'locale' => 'en_GB'));
+        $countryRepo = $this->entityManager->getRepository("CyclearGameBundle:Country");
+        if (null === $trans) {
+            $country = $countryRepo->findOneByName($countryFullName);
+        } else {
+            $country = $countryRepo->find($trans->getForeignKey());
+        }
+        $renner->setCountry($country);
+        // save renner immediately to database.
+        $this->entityManager->persist($renner);
+        $this->entityManager->flush($renner);
     }
 }

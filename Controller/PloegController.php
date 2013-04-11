@@ -42,8 +42,9 @@ class PloegController extends Controller
         ;
         $paginator = $this->get('knp_paginator');
         $uitslagen = $paginator->paginate(
-            $uitslagenQb->getQuery(), $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
+            $uitslagenQb->getQuery()->getResult(), $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
+        //var_dump($uitslagen);
         $transfers = $em->getRepository("CyclearGameBundle:Transfer")->getLatestWithInversion(
             $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 10, $entity);
         $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");

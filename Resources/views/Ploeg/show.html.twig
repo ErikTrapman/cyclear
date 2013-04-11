@@ -42,7 +42,7 @@
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="punten">
-            {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'pagination':uitslagen} %}
+            {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':uitslagen} %}
         </div>
         <div class="tab-pane" id="transfers">
             {% include "CyclearGameBundle:Transfer:_listWithInversion.html.twig" with {'listWithInversion':transfers} %}

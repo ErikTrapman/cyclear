@@ -51,6 +51,7 @@
             <argument type="service" id="cyclear_game.calculator.punten"/>
             <argument>%cq_ranking-wedstrijdurl%</argument>
             <argument type="service" id="cyclear_game.manager.renner" />
+            <argument type="service" id="eriktrapman_cqparser.nationality_resolver"/>
         </service>
         
         <service id="cyclear_game.manager.renner" class="Cyclear\GameBundle\EntityManager\RennerManager"/>
