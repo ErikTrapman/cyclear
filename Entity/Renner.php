@@ -6,11 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+use JMS\Serializer\Annotation as Serializer;
+
 /**
  * Cyclear\GameBundle\Entity\Renner
  *
  * @ORM\Table(name="Renner")
  * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\RennerRepository")
+ * @Serializer\ExclusionPolicy("all")
  */
 class Renner
 {
@@ -20,6 +23,8 @@ class Renner
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * 
+     * @Serializer\Expose
      */
     private $id;
 
@@ -27,6 +32,8 @@ class Renner
      * @var string $naam
      *
      * @ORM\Column(name="naam", type="string", length=255)
+     * @Serializer\Expose
+     * @Serializer\Accessor(getter="__toString")
      */
     private $naam;
 
@@ -45,12 +52,14 @@ class Renner
     /**
      *
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Country")
+     * @Serializer\Expose
      */
     private $country;
     
     /**
      * @Gedmo\Slug(fields={"naam"}, updatable=true)
      * @ORM\Column(length=128, unique=true, nullable=true)
+     * @Serializer\Expose
      */
     private $slug;
 

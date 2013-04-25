@@ -5,11 +5,14 @@ namespace Cyclear\GameBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+use JMS\Serializer\Annotation as Serializer;
+
 /**
  * Cyclear\GameBundle\Entity\Ploeg
  *
  * @ORM\Table(name="Ploeg")
  * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\PloegRepository")
+ * @Serializer\ExclusionPolicy("all")
  */
 class Ploeg
 {
@@ -19,6 +22,8 @@ class Ploeg
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * 
+     * @Serializer\Expose
      */
     private $id;
 
@@ -32,6 +37,8 @@ class Ploeg
      * @var string $naam
      *
      * @ORM\Column(name="naam", type="string", length=255)
+     * 
+     * @Serializer\Expose
      */
     private $naam;
 
@@ -39,6 +46,8 @@ class Ploeg
      * @var string $afkorting
      *
      * @ORM\Column(name="afkorting", type="string", length=6)
+     * 
+     * @Serializer\Expose
      */
     private $afkorting;
 
@@ -47,6 +56,12 @@ class Ploeg
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
      */
     private $seizoen;
+    
+    /**
+     *
+     * @Serializer\Expose
+     */
+    private $punten;
 
     public function __construct()
     {
@@ -133,4 +148,16 @@ class Ploeg
     {
         return $this->getNaam().' ['.$this->getSeizoen()->getIdentifier().']';
     }
+    
+    public function getPunten()
+    {
+        return $this->punten;
+    }
+
+    public function setPunten($punten)
+    {
+        $this->punten = $punten;
+    }
+
+
 }
