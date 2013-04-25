@@ -107,3 +107,11 @@ mobile_detect:
         mobile: ~
         tablet: ~
     switch_device_view: ~
+
+fos_rest:
+    param_fetcher_listener: true
+    body_listener: true
+    format_listener: true
+    view:
+      formats:
+        json: true

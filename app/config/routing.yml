@@ -38,3 +38,9 @@ fos_user_security_check:
 fos_user_security_logout:
     prefix: /
     pattern: /logout
+
+# app/config/routing.yml
+cyclear_api_renner:
+    type:     rest
+    resource: Cyclear\GameBundle\Controller\API\RennerController
+    prefix: /api
