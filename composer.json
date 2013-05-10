@@ -35,7 +35,7 @@
         "twitter/bootstrap": "v2.3.1",
         "eriktrapman/cqrankingparser-bundle": "dev-master",
         "beberlei/DoctrineExtensions": "dev-master",
-        "mopa/bootstrap-bundle": "dev-master",
+        "mopa/bootstrap-bundle": "2.1.*",
         "mobiledetect/mobiledetectlib": "dev-master",
         "suncat/mobile-detect-bundle": "dev-master",
         "tijsverkoyen/twitteroauth": "dev-master",
