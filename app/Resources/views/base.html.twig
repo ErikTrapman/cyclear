@@ -80,9 +80,9 @@
                         <ul class="nav" role="navigation">
                             <li><a href="http://www.cyclear.nl/forum" target="_blank">Forum</a></li>
                             {% if app.request.attributes.get('seizoen') %}
-                                <li><a href="{{ path('renner_punten', {'seizoen':app.request.attributes.get('seizoen')} ) }}">Renners</a></li>
+                                <li><a href="{{ path('get_season_riders', {'slug':app.request.attributes.get('seizoen')} ) }}">Renners</a></li>
                             {% else %}
-                                <li><a href="{{ path('renner_punten', {'seizoen':null} ) }}">Renners</a></li>
+                                <li><a href="{{ path('get_riders') }}">Renners</a></li>
                             {% endif %}
                                 <li><a href="{{ path('archief_index') }}">Archief</a></li>    
                         {% if is_granted("ROLE_USER") %}

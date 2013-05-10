@@ -111,7 +111,15 @@ mobile_detect:
 fos_rest:
     param_fetcher_listener: true
     body_listener: true
-    format_listener: true
+    format_listener:
+      default_priorities:
+        - json
+        - html
+      fallback_format: json
     view:
       formats:
         json: true
+        jsonp: true
+      mime_types: {'jsonp': ['application/javascript', 'application/javascript+jsonp']}
+      templating_formats:
+        html: true
