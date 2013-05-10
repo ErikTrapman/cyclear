@@ -13,9 +13,13 @@ $(document).ready(function(){
                     json: 'application/json; request=twitter.typeahead'
                 },
                 success: function(json) {
-                    typeof json.options == 'undefined' ? false : process(json.options);
+                    var options = [];
+                    for(i in json){
+                        options.push(json[i].naam);
+                    }
+                    typeof json == 'undefined' ? false : process(options);
                     $('.selector-ttl').show();
-                    $('.selector-found').html(json.ttl+' resultaten');
+                    $('.selector-found').html(options.length+' resultaten');
                     return;
                 }
             });

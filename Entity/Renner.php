@@ -25,6 +25,7 @@ class Renner
      * @ORM\GeneratedValue(strategy="AUTO")
      * 
      * @Serializer\Expose
+     * @Serializer\Groups({"small","medium"})
      */
     private $id;
 
@@ -34,6 +35,7 @@ class Renner
      * @ORM\Column(name="naam", type="string", length=255)
      * @Serializer\Expose
      * @Serializer\Accessor(getter="__toString")
+     * @Serializer\Groups({"small","medium"})
      */
     private $naam;
 
@@ -53,6 +55,7 @@ class Renner
      *
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Country")
      * @Serializer\Expose
+     * @Serializer\Groups({"small","medium"})
      */
     private $country;
     
@@ -60,6 +63,7 @@ class Renner
      * @Gedmo\Slug(fields={"naam"}, updatable=true)
      * @ORM\Column(length=128, unique=true, nullable=true)
      * @Serializer\Expose
+     * @Serializer\Groups({"small","medium"})
      */
     private $slug;
 

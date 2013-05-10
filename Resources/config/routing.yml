@@ -10,3 +10,7 @@ cyclear_api_ploeg:
     type:     rest
     parent: cyclear_api_seizoen
     resource: Cyclear\GameBundle\Controller\API\TeamController
+cyclear_api_seizoen_renner:
+    type: rest
+    parent: cyclear_api_seizoen
+    resource: Cyclear\GameBundle\Controller\API\SeasonRiderController

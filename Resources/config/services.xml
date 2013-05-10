@@ -151,6 +151,10 @@
             <tag name="twig.extension" />
         </service>
         
+        <service id="cyclear_game.serializer.team" class="Cyclear\GameBundle\Listener\Serializer\TeamListener">
+            <tag name="jms_serializer.handler" type="Cyclear\GameBundle\Entity\Ploeg" direction="serialization" format="json" method="mediumSerialization"/>
+        </service>
+        
     </services>
 
     <!-- <parameters> <parameter key="cyclear_game.example.class">Cyclear\GameBundle\Example</parameter> 

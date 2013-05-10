@@ -24,6 +24,7 @@ class Ploeg
      * @ORM\GeneratedValue(strategy="AUTO")
      * 
      * @Serializer\Expose
+     * @Serializer\Groups({"small","medium"})
      */
     private $id;
 
@@ -39,6 +40,7 @@ class Ploeg
      * @ORM\Column(name="naam", type="string", length=255)
      * 
      * @Serializer\Expose
+     * @Serializer\Groups({"small","medium"})
      */
     private $naam;
 
@@ -48,6 +50,7 @@ class Ploeg
      * @ORM\Column(name="afkorting", type="string", length=6)
      * 
      * @Serializer\Expose
+     * @Serializer\Groups({"small","medium"})
      */
     private $afkorting;
 
@@ -57,16 +60,6 @@ class Ploeg
      */
     private $seizoen;
     
-    /**
-     *
-     * @Serializer\Expose
-     */
-    private $punten;
-
-    public function __construct()
-    {
-    }
-
     /**
      * @return the $user
      */

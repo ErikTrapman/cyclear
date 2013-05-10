@@ -4,6 +4,7 @@ namespace Cyclear\GameBundle\Controller\API;
 
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
+use JMS\Serializer\SerializationContext;
 
 /**
  * @RouteResource("Team")
@@ -29,7 +30,7 @@ class TeamController extends \FOS\RestBundle\Controller\FOSRestController
         foreach($ploegen as $ploeg){
             $ploeg->setPunten($map[$ploeg->getId()]);
         }
-        $view = $this->view($ploegen, 200);
+        $view = $this->view($ploegen, 200)->setSerializationContext(SerializationContext::create()->setGroups(array('medium')));
         return $this->handleView($view);
     }
 

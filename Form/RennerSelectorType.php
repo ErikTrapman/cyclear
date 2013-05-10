@@ -33,7 +33,8 @@ class RennerSelectorType extends AbstractType
 
     public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver)
     {
-        $url = $this->router->generate('renner_search');
+        $url = $this->router->generate('get_riders');
+        //$url = $this->router->generate('renner_search');
         $resolver->setDefaults(
             array('invalid_message' => 'De ingevulde renner is niet teruggevonden',
                 'attr' => array(
