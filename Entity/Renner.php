@@ -5,7 +5,6 @@ namespace Cyclear\GameBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
-
 use JMS\Serializer\Annotation as Serializer;
 
 /**
@@ -56,9 +55,11 @@ class Renner
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Country")
      * @Serializer\Expose
      * @Serializer\Groups({"small","medium"})
+     * @Serializer\Accessor(getter="getCountryIso")
+     * @Serializer\Type("string")
      */
     private $country;
-    
+
     /**
      * @Gedmo\Slug(fields={"naam"}, updatable=true)
      * @ORM\Column(length=128, unique=true, nullable=true)
@@ -131,7 +132,7 @@ class Renner
     {
         $this->transfers = $transfers;
     }
-    
+
     public function getCountry()
     {
         return $this->country;
@@ -142,13 +143,12 @@ class Renner
         $this->country = $country;
     }
 
-    
     public function __toString()
     {
         $m = new \Cyclear\GameBundle\EntityManager\RennerManager();
         return $m->getRennerSelectorTypeStringFromRenner($this);
     }
-    
+
     public function getSlug()
     {
         return $this->slug;
@@ -159,5 +159,8 @@ class Renner
         $this->slug = $slug;
     }
 
-
+    public function getCountryIso()
+    {
+        return $this->getCountry()->getIso2();
+    }
 }
