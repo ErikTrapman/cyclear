@@ -1,10 +1,13 @@
 {% block content %}
+{% set show_rider = show_rider is defined ? show_rider : true %}
 <table class="records_list table table-condensed ">
     <thead>
         <tr>
             <th>Datum</th>
             <th>Wedstrijd</th>
+            {% if show_rider %}
             <th>Renner</th>
+            {% endif %}
             <th>Ploeg</th>
             <th>Punten ploeg</th>
             <th>Punten renner</th>
@@ -15,7 +18,9 @@
         <tr>
             <td>{{ uitslag.wedstrijd.datum|date('d-m-Y') }}</td>
             <td>{{ uitslag.wedstrijd.naam }}</td>
+            {% if show_rider %}
             <td>{{ uitslag.renner.naam }}</td>
+            {% endif %}
             <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
             <td>{{ uitslag.ploegPunten }}</td>
             <td>{{ uitslag.rennerPunten }}</td>
