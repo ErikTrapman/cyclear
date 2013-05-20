@@ -1,7 +1,5 @@
-{% block buttonjs %}
-<!-- disabled -->
-{% endblock %}
-<form class="form form-inline" action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
+<form class="form form-inline fos_user_resetting_request" action="{{ path('fos_user_resetting_send_email') }}" 
+      method="POST" 
             {% if invalid_username is defined %}
                 <p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}</p>
             {% endif %}

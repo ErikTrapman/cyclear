@@ -11,7 +11,6 @@
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/sticky-footer.css') }}" media="all" />
         {% stylesheets filter='cssrewrite' output='css/twitter.css'
             '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/css/bootstrap.css'
-            '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/css/bootstrap-responsive.css'
         %}
         <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/bootstrap-custom.css') }}" media="all" />
@@ -35,6 +34,8 @@
             {% endjavascripts %}
 
             <script type="text/javascript" src="{{ asset('bundles/cycleargame/js/typeahead.js') }}"></script>
+            {% endblock %}
+            {% block horizontaljs %}
             <script type="text/javascript">
                 $(document).ready( function(){
                     $('.dropdown-toggle').dropdown();
@@ -42,6 +43,7 @@
                     $thisform.addClass('form-horizontal');
                 });
             </script>
+            {% endblock %}
             {% block buttonjs %}
             <script type="text/javascript">
                     var $button = $(this).find('button')
@@ -52,7 +54,6 @@
                     $button.clone().appendTo($newlastgroup);
                     $button.remove();
             </script>
-            {% endblock %}
             {% endblock %}
         {% endif %}
             <link rel="shortcut icon" href="{{ asset('favicon.png') }}?v=dfj3gg" />

@@ -1,11 +1,7 @@
 {% extends '::base.html.twig' %}
 
-{% block buttonjs %}
-<!-- disabled -->
-{% endblock %}
-
 {% block content %}
-    {% if error %}
+{% if error %}
 <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
 {% endif %}
 
