@@ -30,6 +30,7 @@ class WedstrijdManager {
      */
     public function createWedstrijd($name, \DateTime $datum ) {
         $wedstrijd = new \Cyclear\GameBundle\Entity\Wedstrijd();
+        $name = str_replace( array('(provisional)','(prov)'), '', $name);
         $wedstrijd->setNaam($name);
         $wedstrijd->setDatum($datum);
         return $wedstrijd;
