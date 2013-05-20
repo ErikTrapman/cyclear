@@ -22,3 +22,6 @@ monolog:
 
 assetic:
     use_controller: true
+    
+cyclear_game:
+  enable_twitter: false
