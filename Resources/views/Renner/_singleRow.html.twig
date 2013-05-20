@@ -1,4 +1,4 @@
 {% if renner.country %}
-<img width="16" height="16" src="/bundles/cycleargame/icons/flags/16/{{ renner.country.iso2|lower }}.png" alt="{{ renner.country.name }}">
+{% include "CyclearGameBundle:Country:_image.html.twig" with {"country":renner.country, "size":16 } %}
 {% endif %}
 <a href="{{ path('renner_show', { 'renner': renner.slug, 'seizoen':seizoen.slug  }) }}">{{ renner.naam }}</a>

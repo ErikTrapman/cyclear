@@ -11,7 +11,7 @@
 
 {% block content %}
 
-        <form action="{{ path('user_transfer', { seizoen:seizoen.slug, id:ploeg.id, renner_id:renner.id }) }}" method="post" {{ form_enctype(form) }}>
+        <form action="{{ path('user_transfer', { seizoen:seizoen.slug, id:ploeg.id, renner:renner.slug }) }}" method="post" {{ form_enctype(form) }}>
             <div class="control-group">
                 <div class="controls"><h2>{{ renner.naam }}</h2></div>
                 <div class="controls">

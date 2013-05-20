@@ -17,11 +17,7 @@
             </td>
             <td>{{ renner.punten }}</td>
             <td>
-                {% if is_granted("ROLE_USER") and app.request.attributes.get('seizoen-ploeg') %}
-                    <a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner_id:renner[0].id} ) }}">
-                        <img src="/bundles/cycleargame/icons/famfamfam/coins_add.png">
-                    </a>
-                {% endif %}
+            {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with {"seizoen":seizoen,"renner":renner[0]} %}
             </td>
         </tr>
     {% endfor %}

@@ -85,6 +85,18 @@ class UitslagRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getTotalPuntenForRenner($renner, $seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $qb = $this->getPuntenForRennerQb($renner);
+        $qb->andWhere("w.seizoen = :seizoen");
+        $qb->setParameters(array('seizoen' => $seizoen, 'renner' => $renner));
+        $qb->add('select','SUM(u.rennerPunten)');
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function getPuntenForRennerWithPloeg($renner, $ploeg, $seizoen = null)
     {
         if (null === $seizoen) {
@@ -92,7 +104,7 @@ class UitslagRepository extends EntityRepository
         }
         $qb = $this->getPuntenForRennerQb($renner);
         $qb->andWhere("w.seizoen = :seizoen")->andWhere('u.ploeg = :ploeg');
-        $qb->setParameters(array('seizoen' => $seizoen, 'ploeg' => $ploeg,'renner' => $renner));
+        $qb->setParameters(array('seizoen' => $seizoen, 'ploeg' => $ploeg, 'renner' => $renner));
         $qb->add('select', 'SUM(u.ploegPunten)');
         return $qb->getQuery()->getSingleScalarResult();
     }

@@ -36,8 +36,8 @@ class RennerController extends Controller
             $ret['options'] = array();
             $rennerManager = new RennerManager();
             $renners = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
-            foreach($renners as $renner){
-                $ret['options'][] = $rennerManager->getRennerSelectorTypeString( $renner['cqranking_id'], $renner['naam']);
+            foreach ($renners as $renner) {
+                $ret['options'][] = $rennerManager->getRennerSelectorTypeString($renner['cqranking_id'], $renner['naam']);
             }
             $ret['ttl'] = count($renners);
             $response = new JsonResponse($ret);
@@ -104,7 +104,6 @@ class RennerController extends Controller
 
         $transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->getLatestWithInversion(
             $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 999, null, $renner);
-        //$transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->findByRenner($renner, $seizoen[0]);
         $transferrepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
 
         $uitslagen = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenForRenner($renner, $seizoen[0]);
@@ -115,9 +114,16 @@ class RennerController extends Controller
         );
 
         $ploeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen[0]);
-
-        return array('seizoen' => $seizoen[0],
+        
+        $punten = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getTotalPuntenForRenner($renner, $seizoen[0]);
+                
+        return array(
+            'seizoen' => $seizoen[0],
             'renner' => $renner,
-            'transfers' => $transfers, 'uitslagen' => $pagination, 'transferrepo' => $transferrepo, 'ploeg' => $ploeg);
+            'transfers' => $transfers,
+            'uitslagen' => $pagination,
+            'transferrepo' => $transferrepo,
+            'ploeg' => $ploeg,
+            'rennerPunten' => $punten);
     }
 }

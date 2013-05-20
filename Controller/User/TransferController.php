@@ -28,11 +28,11 @@ class TransferController extends Controller
     /**
      * My team.
      *
-     * @Route("/ploeg/{id}/renner/{renner_id}", name="user_transfer")
+     * @Route("/ploeg/{id}/renner/{renner}", name="user_transfer")
      * @Template("CyclearGameBundle:Transfer/User:index.html.twig")
      * @SecureParam(name="id", permissions="OWNER")
      */
-    public function indexAction($seizoen, $id, $renner_id)
+    public function indexAction($seizoen, $id, $renner)
     {
         $usermanager = $this->get('cyclear_game.manager.user');
         $em = $this->getDoctrine()->getManager();
@@ -44,7 +44,7 @@ class TransferController extends Controller
         if(!$usermanager->isOwner($this->getUser(), $ploeg)){
             throw new AccessDeniedHttpException("Dit is niet jouw ploeg");
         }
-        $renner = $em->find("CyclearGameBundle:Renner", $renner_id);
+        $renner = $this->getDoctrine()->getRepository("CyclearGameBundle:Renner")->findOneBySlug($renner);
         if (null === $renner) {
             throw new RuntimeException("Unknown renner");
         }

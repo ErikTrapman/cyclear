@@ -26,20 +26,7 @@
             <td nowrap>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {'renner':rennerRepo.find(entity.id),'seizoen':seizoen } %}</td>
             <td>{% if rennerploegIndex %}{{ rennerploegIndex.afkorting }}{% else %}-{% endif %}</td>
             <td>
-                {# TODO macro ofzo van maken?? #}
-                {% if is_granted("ROLE_USER") %}
-                    {% if ingelogdPloeg and rennerploegIndex == null %}
-                        <a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner_id:entity.id} ) }}">
-                            <img src="/bundles/cycleargame/icons/famfamfam/coins_add.png">
-                        </a>
-                    {% elseif ingelogdPloeg and ingelogdPloeg.id == rennerploegIndex.id %}
-                        <a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner_id:entity.id} ) }}">
-                            <img src="/bundles/cycleargame/icons/famfamfam/coins_delete.png">
-                        </a>
-                    {% elseif ingelogdPloeg and ingelogdPloeg.id != rennerploegIndex.id %}
-                        &nbsp;
-                    {% endif %}
-                {% endif %}
+                {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with {"ploeg":app.request.attributes.get('seizoen-ploeg'), "renner":entity,"seizoen":seizoen } %}
             </td>
         </tr>
     {% endfor %}      
