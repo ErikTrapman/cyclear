@@ -4,6 +4,7 @@
     <thead>
         <tr>
             <th>Datum</th>
+            <th>Pos</th>
             <th>Wedstrijd</th>
             {% if show_rider %}
             <th>Renner</th>
@@ -17,6 +18,7 @@
     {% for uitslag in uitslagen %}
         <tr>
             <td>{{ uitslag.wedstrijd.datum|date('d-m-Y') }}</td>
+            <td>{{ uitslag.positie }}</td>
             <td>{{ uitslag.wedstrijd.naam }}</td>
             {% if show_rider %}
             <td>{{ uitslag.renner.naam }}</td>

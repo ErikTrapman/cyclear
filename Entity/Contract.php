@@ -27,7 +27,7 @@ class Contract
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Renner")
+     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Renner", inversedBy="contracts")
      */
     private $renner;
 

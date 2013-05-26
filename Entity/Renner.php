@@ -68,6 +68,12 @@ class Renner
      */
     private $slug;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Contract", mappedBy="renner")
+     * @ORM\OrderBy({"id" = "DESC"}))
+     */
+    private $contracts;
+
     public function __construct()
     {
         $this->transfers = new \Doctrine\Common\Collections\ArrayCollection();
@@ -162,5 +168,24 @@ class Renner
     public function getCountryIso()
     {
         return $this->getCountry()->getIso2();
+    }
+
+    public function getContracts()
+    {
+        return $this->contracts;
+    }
+
+    public function setContracts($contracts)
+    {
+        $this->contracts = $contracts;
+    }
+
+    public function getLatestContract()
+    {
+        $c = $this->getContracts();
+        if ($c->first()) {
+            return $c->first();
+        }
+        return null;
     }
 }
