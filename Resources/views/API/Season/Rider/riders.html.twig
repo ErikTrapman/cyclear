@@ -33,7 +33,7 @@
         </tbody>
     </table>
     <div id="navigation">
-        {{ knp_pagination_render(entities) }}
+        {{ knp_pagination_render(entities, null, {}, {'firstPageRoute': 'get_season_riders'}) }}
     </div>
 </div>
 
@@ -42,8 +42,8 @@
     
     
         <ul class="nav nav-tabs" id="tabs">
-            <li class="active"><a href="#leaderboard">Leaderboard</a></li>
-            <li><a href="#available">Vrij</a></li>
+            <li class="active"><a data-toggle="tab" href="#leaderboard">Leaderboard</a></li>
+            <li><a data-toggle="tab" href="#available">Vrij</a></li>
         </ul>
 
         <div class="tab-content">
@@ -56,16 +56,5 @@
         </div>
 </div>
 
-<script type="text/javascript">
-    
-    $('#tabs a[href="#leaderboard"]').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-    })
-    $('#tabs a[href="#available"]').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-    })
-</script>
 
 {% endblock %}

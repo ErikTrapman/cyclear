@@ -10,12 +10,12 @@
 <div class="span12">
 
     <ul class="nav nav-tabs" id="tabs">
-        <li class="active"><a href="#ploeg">Ploeg</a></li>
-        <li><a href="#punten">Gescoorde punten</a></li>
-        <li><a href="#transfers">Transfers</a></li>
+        <li class="active"><a href="#ploeg" data-toggle="tab">Ploeg</a></li>
+        <li><a href="#punten" data-toggle="tab">Gescoorde punten</a></li>
+        <li><a href="#transfers" data-toggle="tab">Transfers</a></li>
     </ul>
     <div class="tab-content">
-        
+
         <div class="tab-pane active" id="ploeg">
             <table class="records_list table ">
                 <thead>
@@ -24,19 +24,19 @@
                         <th>Naam</th>
                         <th>Punten</th>
                         <th/>
-                        </tr>
-                    </thead>
+                    </tr>
+                </thead>
         {% for renner in renners %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":renner[0],"seizoen":seizoen } %}</td>
-                        <td>{{ renner.punten }}</td>
-                        <td>
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":renner[0],"seizoen":seizoen } %}</td>
+                    <td>{{ renner.punten }}</td>
+                    <td>
                             {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with 
                                 {"ploeg":entity, "renner":renner[0],"seizoen":seizoen,"rennerPloeg":entity } 
                             %}
                         </td>
-                
+
                     </tr>
         {% endfor %}
                     </tbody>
@@ -50,23 +50,6 @@
             {% include "CyclearGameBundle:Transfer:_listWithInversion.html.twig" with {'listWithInversion':transfers} %}
                     </div>
                 </div>
-    
+
             </div>
-
-            <script type="text/javascript">
-
-                $('#tabs a[href="#punten"]').click(function(e) {
-                    e.preventDefault();
-                    $(this).tab('show');
-                });
-                $('#tabs a[href="#transfers"]').click(function(e) {
-                    e.preventDefault();
-                    $(this).tab('show');
-                });
-                $('#tabs a[href="#ploeg"]').click(function(e) {
-                    e.preventDefault();
-                    $(this).tab('show');
-                });
-                </script>
-
 {% endblock %}

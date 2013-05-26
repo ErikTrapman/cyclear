@@ -13,11 +13,11 @@
     <div class="span7">
         
         <ul class="nav nav-tabs" id="tabs">
-            <li class="active"><a href="#stand">Stand</a></li>
-            <li><a href="#uitslagen">Uitslagen</a></li>
-            <li><a href="#periode">Periode</a></li>
-            <li><a href="#zeges">Zeges</a></li>
-            <li><a href="#transfers">Transfers</a></li>
+            <li class="active"><a data-toggle="tab" href="#stand">Stand</a></li>
+            <li><a data-toggle="tab" href="#uitslagen">Uitslagen</a></li>
+            <li><a data-toggle="tab" href="#periode">Periode</a></li>
+            <li><a data-toggle="tab" href="#zeges">Zeges</a></li>
+            <li><a data-toggle="tab" href="#transfers">Transfers</a></li>
             <!--<li><a data-toggle="tab" href="#draft-klass">Draftklassement</a></li>
             <li><a data-toggle="tab" href="#transfer-klass">Transferklassement</a></li>-->
         </ul>
@@ -49,13 +49,4 @@
 <style type="text/css">
 div.frontpage-stand{ min-height: 630px; }
 </style>
-<script type="text/javascript">
-    $('#tabs a[href="#stand"]').click(function (e) {e.preventDefault();$(this).tab('show');})
-    $('#tabs a[href="#periode"]').click(function (e) {e.preventDefault(); $(this).tab('show'); })
-    $('#tabs a[href="#transfers"]').click(function (e) { e.preventDefault(); $(this).tab('show'); })
-    $('#tabs a[href="#zeges"]').click(function (e) {e.preventDefault();$(this).tab('show');})
-    //$('#tabs a[href="#draft-klass"]').click(function (e) {e.preventDefault();$(this).tab('show');});
-    //$('#tabs a[href="#transfer-klass"]').click(function (e) {e.preventDefault();$(this).tab('show');});
-    $('#tabs a[href="#uitslagen"]').click(function (e) {e.preventDefault();$(this).tab('show');});
-</script>
 {% endblock %}

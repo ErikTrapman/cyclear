@@ -25,6 +25,6 @@
     </tbody>
 </table>
 <div id="navigation">
-    {{ knp_pagination_render(uitslagen) }}
+    {{ knp_pagination_render(uitslagen, null, {}, {'firstPageRoute': 'ploeg_show'}) }}
 </div>
 {% endblock %}

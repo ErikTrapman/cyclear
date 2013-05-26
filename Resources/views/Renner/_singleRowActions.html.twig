@@ -2,7 +2,7 @@
 
 {% set rennerPloeg = ( rennerPloeg is defined ) ? rennerPloeg : null %}
 
-{% if is_granted("ROLE_USER") and is_granted('OWNER', ploeg) and rennerPloeg == ingelogdPloeg %}
+{% if rennerPloeg and is_granted("ROLE_USER") and is_granted('OWNER', ploeg) and rennerPloeg == ingelogdPloeg %}
 <a href="{{ path('user_transfer', {'id':rennerPloeg.id,'renner':renner.slug,'seizoen':seizoen.slug} ) }}"><img src="/bundles/cycleargame/icons/famfamfam/coins_delete.png"/></a>
 {% endif %}
 
