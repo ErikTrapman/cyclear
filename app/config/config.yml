@@ -123,3 +123,7 @@ fos_rest:
       mime_types: {'jsonp': ['application/javascript', 'application/javascript+jsonp']}
       templating_formats:
         html: true
+
+knp_paginator:
+    template:
+        pagination: CyclearGameBundle:Pagination:bootstrap.html.twig

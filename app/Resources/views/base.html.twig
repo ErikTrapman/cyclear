@@ -6,6 +6,7 @@
         <meta name="keywords" content="wielrennen, wielersite, wielerspel, spel, wielerploegen, punten scoren, punten, scoren, wielrenners, 20 renners per ploeg, verschillende ploegen, cyclear, Cyclear, CYCLEAR, cyclea, yclear, wielerseizoen, koersen, coureurs" />
     	<meta name="description" content="Cyclear is een leuk spel voor mensen die van wielrennen houden, waarbij deelnemers een unieke ploeg samenstellen van twintig wielrenners die in alle wielerwedstrijden gedurende een heel seizoen punten scoren." />
         <title>{% block title %}Cyclear{% endblock %}{% if is_granted("ROLE_ADMIN") %} - Adminstrator{% else %}{% if is_granted("ROLE_USER") %} - User {% endif %}{% endif %}</title>
+        
         {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/jquery-ui-1.8.16.custom.css') }}" media="all" />
         <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/sticky-footer.css') }}" media="all" />
@@ -21,20 +22,19 @@
         {% endif %}
         {% endblock %}
         {% if app.request.isXmlHttpRequest == false %}
-            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+            <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
             {% block javascripts %}
-            {# <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script> #}
-            {% javascripts output='js/bootstrap-collection.js' 
+            {% javascripts output='js/cyclear.js' 
                 '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap.min.js'
                 '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap-dropdown.js'
                 '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap-tab.js'
                 '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap-tooltip.js'
-
+                '%kernel.root_dir%/../vendor/cyclear/game-bundle/Cyclear/GameBundle/Resources/public/js/typeahead.js'
+                '%kernel.root_dir%/../vendor/cyclear/game-bundle/Cyclear/GameBundle/Resources/public/js/cyclear.js'
             %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
 
-            <script type="text/javascript" src="{{ asset('bundles/cycleargame/js/typeahead.js') }}"></script>
             {% endblock %}
             {% block horizontaljs %}
             <script type="text/javascript">
