@@ -7,23 +7,38 @@ use Doctrine\ORM\EntityRepository;
 class UitslagRepository extends EntityRepository
 {
 
-    public function getPuntenByPloeg($seizoen = null)
+    public function getPuntenByPloeg($seizoen = null, $ploeg = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
-        $sql = "SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 
+        $options = array(":seizoen_id" => $seizoen->getId());
+        $ploegWhere = null;
+        if(null !== $ploeg){
+            $ploegWhere = ' AND p.id = :ploeg_id';
+            $options['ploeg_id'] = $ploeg->getId();
+        }
+        $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 
                 ( SELECT IFNULL(SUM(u.ploegPunten),0) 
                 FROM Uitslag u 
                 INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id 
                 WHERE w.seizoen_id = :seizoen_id AND u.ploeg_id = p.id ) AS punten 
-                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id 
+                FROM Ploeg p 
+                WHERE p.seizoen_id = :seizoen_id %s
                 ORDER BY punten DESC, p.afkorting ASC
-                ";
+                ",$ploegWhere);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
-        $stmt->execute(array(":seizoen_id" => $seizoen->getId()));
+        $stmt->execute($options);
         return $stmt->fetchAll(\PDO::FETCH_NAMED);
+    }
+
+    public function getPuntenForPloeg($seizoen = null, $ploeg)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        
     }
 
     public function getPuntenByPloegForPeriode(Periode $periode, $seizoen = null)
@@ -93,7 +108,7 @@ class UitslagRepository extends EntityRepository
         $qb = $this->getPuntenForRennerQb($renner);
         $qb->andWhere("w.seizoen = :seizoen");
         $qb->setParameters(array('seizoen' => $seizoen, 'renner' => $renner));
-        $qb->add('select','SUM(u.rennerPunten)');
+        $qb->add('select', 'SUM(u.rennerPunten)');
         return $qb->getQuery()->getSingleScalarResult();
     }
 

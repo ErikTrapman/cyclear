@@ -4,7 +4,6 @@ namespace Cyclear\GameBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-
 use JMS\Serializer\Annotation as Serializer;
 
 /**
@@ -60,6 +59,8 @@ class Ploeg
      */
     private $seizoen;
     
+    private $punten;
+
     /**
      * @return the $user
      */
@@ -141,7 +142,12 @@ class Ploeg
     {
         return $this->getNaam().' ['.$this->getSeizoen()->getIdentifier().']';
     }
-    
+
+    /**
+     * @Serializer\Groups({"small","medium"})
+     * @Serializer\VirtualProperty()
+     * 
+     */
     public function getPunten()
     {
         return $this->punten;
@@ -151,6 +157,4 @@ class Ploeg
     {
         $this->punten = $punten;
     }
-
-
 }

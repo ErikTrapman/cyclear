@@ -24,10 +24,10 @@ class TeamController extends \FOS\RestBundle\Controller\FOSRestController
                 ->setParameter('seizoen', $seizoen)
                 ->getQuery()->getResult();
         $map = array();
-        foreach($em->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen) as $result){
+        foreach ($em->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen) as $result) {
             $map[$result['id']] = $result['punten'];
         }
-        foreach($ploegen as $ploeg){
+        foreach ($ploegen as $ploeg) {
             $ploeg->setPunten($map[$ploeg->getId()]);
         }
         $view = $this->view($ploegen, 200)->setSerializationContext(SerializationContext::create()->setGroups(array('medium')));
@@ -36,6 +36,12 @@ class TeamController extends \FOS\RestBundle\Controller\FOSRestController
 
     public function getAction($slug, $teamslug)
     {
-        
+        $em = $this->getDoctrine()->getManager();
+        $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->findOneBySlug($slug);
+        $ploeg = $em->getRepository("CyclearGameBundle:Ploeg")->findOneByAfkorting($teamslug);
+        $punten = $em->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen, $ploeg);
+        $ploeg->setPunten($punten[0]['punten']);
+        $view = $this->view($ploeg, 200)->setSerializationContext(SerializationContext::create()->setGroups(array('medium')));
+        return $this->handleView($view);
     }
 }

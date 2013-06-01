@@ -29,8 +29,13 @@ class RiderController extends FOSRestController
         $view = View::create();
         $urlQuery = $paramFetcher->get('query');
         if (strlen($urlQuery) > 0) {
-            $qb->where($qb->expr()->orx($qb->expr()->like('r.naam', ":naam")));
-            $qb->setParameter('naam', "%".$urlQuery."%");
+            if (is_numeric($urlQuery)) {
+                $qb->where('r.cqranking_id = :identifier');
+                $qb->setParameter('identifier', (int) $urlQuery);
+            } else {
+                $qb->where($qb->expr()->orx($qb->expr()->like('r.naam', ":naam")));
+                $qb->setParameter('naam', "%".$urlQuery."%");
+            }
         }
         $entities = $paginator->paginate(
             $qb, $paramFetcher->get('page') !== null ? $paramFetcher->get('page') : 1, 999
