@@ -14,7 +14,8 @@ use Cyclear\GameBundle\Form\TransferType;
  *
  * @Route("/admin/transfer")
  */
-class TransferController extends Controller {
+class TransferController extends Controller
+{
 
     /**
      * Lists all Transfer entities.
@@ -22,19 +23,19 @@ class TransferController extends Controller {
      * @Route("/", name="admin_transfer")
      * @Template("CyclearGameBundle:Transfer/Admin:index.html.twig")
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQuery('SELECT t FROM Cyclear\GameBundle\Entity\Transfer t ORDER BY t.id DESC');
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-                $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
+            $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
         //$entities = $query->getResult();
 
         return array('entities' => $pagination);
     }
-
 
     /**
      * Displays a form to create a new Transfer entity.
@@ -42,33 +43,34 @@ class TransferController extends Controller {
      * @Route("/new", name="admin_transfer_new")
      * @Template("CyclearGameBundle:Transfer/Admin:new.html.twig")
      */
-    public function newAction() {
+    public function newAction()
+    {
         $entity = new Transfer();
         $entity->setDatum(new \DateTime());
-        
+
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
-        
-        $entity->setSeizoen( $seizoen );
+
+        $entity->setSeizoen($seizoen);
         $formtype = new TransferType();
-        $form = $this->createForm($formtype, $entity );
+        $form = $this->createForm($formtype, $entity, array('seizoen' => $seizoen));
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        if($request->getMethod() == 'POST'){
-            $form->bindRequest( $request );
-            if($form->isValid()){
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+            if ($form->isValid()) {
                 $renner = $form->get('renner')->getData();
                 $ploegNaar = $form->get('ploegNaar')->getData();
                 $datum = $form->get('datum')->getData();
                 $type = $form->get('transferType')->getData();
-                $datum->add( new \DateInterval("PT".date("H")."H".date("i")."M".date('s')."S") );
+                $datum->add(new \DateInterval("PT".date("H")."H".date("i")."M".date('s')."S"));
                 $transferManager = $this->get('cyclear_game.manager.transfer');
                 $seizoen = $form->get('seizoen')->getData();
-                $transferManager->doAdminTransfer($renner, $ploegNaar, $datum, $type, $seizoen );
+                $transferManager->doAdminTransfer($renner, $ploegNaar, $datum, $type, $seizoen);
                 $em->flush();
-                return $this->redirect( $this->generateUrl('admin_transfer') );
+                return $this->redirect($this->generateUrl('admin_transfer'));
             }
         }
-        
+
         return array(
             'entity' => $entity,
             'form' => $form->createView()
@@ -81,7 +83,8 @@ class TransferController extends Controller {
      * @Route("/{id}/edit", name="admin_transfer_edit")
      * @Template("CyclearGameBundle:Transfer/Admin:edit.html.twig")
      */
-    public function editAction($id) {
+    public function editAction($id)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Transfer')->find($id);
@@ -105,7 +108,8 @@ class TransferController extends Controller {
      * @Route("/{id}/update", name="admin_transfer_update")
      * @Method("post")
      */
-    public function updateAction($id) {
+    public function updateAction($id)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Transfer')->find($id);
@@ -141,7 +145,8 @@ class TransferController extends Controller {
      * @Route("/{id}/delete", name="admin_transfer_delete")
      * @Method("post")
      */
-    public function deleteAction($id) {
+    public function deleteAction($id)
+    {
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
@@ -162,11 +167,11 @@ class TransferController extends Controller {
         return $this->redirect($this->generateUrl('admin_transfer'));
     }
 
-    private function createDeleteForm($id) {
+    private function createDeleteForm($id)
+    {
         return $this->createFormBuilder(array('id' => $id))
-                        ->add('id', 'hidden')
-                        ->getForm()
+                ->add('id', 'hidden')
+                ->getForm()
         ;
     }
-
 }
