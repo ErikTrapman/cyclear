@@ -2,28 +2,23 @@
     {{ form_row(form.wedstrijd.naam,{ 'attr':{'class':'span6'} }) }}
 
     {% if form.uitslag is defined %}
-        <div class="control-group">
-
-            <table class="punten-confirm form-horizontal">
-                <tr>
-                    <thead>
-                    <th>Positie</th>
-                    <th>Renner</th>
-                    <th>Ploeg</th>
-                    <th>Punten ploeg</th>
-                    <th>Punten renner</th>
-                    </thead>
-                </tr>
-                    {% for rows in form.uitslag %}
-                <tr>
-                    <td>{{ form_widget(rows.positie, { 'attr': {'class': 'span1'} }) }}</td>
-                    <td>{{ form_widget(rows.renner) }}</td>
-                    <td>{{ form_widget(rows.ploeg) }}</td>
-                    <td>{{ form_widget(rows.ploegPunten, { 'attr': {'class': 'span1'} }) }}</td>
-                    <td>{{ form_widget(rows.rennerPunten, { 'attr': {'class': 'span1'} }) }}</td>
-                </tr>   
-                    {% endfor %}
-            </table>
-        </div>
+<div class="control-group">
+    <div class="controls">
+        <input type="text" class='span1 input-as-header' readonly="true" value="Positie">
+        <input type="text" disabled="true" class='span4 input-as-header' readonly="true" value="Renner">
+        <input type="text" disabled="true" class='input-as-header' readonly="true" value="Ploeg">
+        <input type="text" disabled="true" class='span1 input-as-header' readonly="true" value="Pt ploeg">
+        <input type="text" disabled="true" class='span2 input-as-header' readonly="true" value="Pt renner">
+    </div>
+    {% for rows in form.uitslag %}
+    <div class="controls">
+                    {{ form_widget(rows.positie, { 'attr': {'class': 'span1'} }) }}
+                    {{ form_widget(rows.renner) }}
+                    {{ form_widget(rows.ploeg) }}
+                    {{ form_widget(rows.ploegPunten, { 'attr': {'class': 'span1'} }) }}
+                    {{ form_widget(rows.rennerPunten, { 'attr': {'class': 'span1'} }) }}
+        </div>   
+    {% endfor %}
+    </div>
     {% endif %}
 {% endif %}

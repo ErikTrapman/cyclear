@@ -1,1 +1,7 @@
 .ajax-typeahead { min-width: 250px !important }
+
+.input-as-header {
+    background-color: white !important;
+    border:0 !important;
+    box-shadow: none !important;
+}
