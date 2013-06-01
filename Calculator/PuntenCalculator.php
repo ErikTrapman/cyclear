@@ -18,7 +18,7 @@ class PuntenCalculator
         $this->em = $em;
     }
 
-    public function canGetPoints(Renner $renner, $wedstrijdDatum, $referentieDatum = null)
+    public function canGetTeamPoints(Renner $renner, $wedstrijdDatum, $referentieDatum = null)
     {
         $transferRepo = $this->em->getRepository('CyclearGameBundle:Transfer');
         if (null !== $referentieDatum) {
