@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "908eb70c3d818a1e8ade539d818ad84a",
+    "hash": "4fcecce896f5113ccf38928e78aa6563",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -38,12 +38,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ErikTrapman/CyclearGameBundle.git",
-                "reference": "6ec795eb396e21c618e247ed53f407f86d18e00c"
+                "reference": "a91c077f8e680dd15fb8383c149e1425b9667579"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/6ec795eb396e21c618e247ed53f407f86d18e00c",
-                "reference": "6ec795eb396e21c618e247ed53f407f86d18e00c",
+                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/a91c077f8e680dd15fb8383c149e1425b9667579",
+                "reference": "a91c077f8e680dd15fb8383c149e1425b9667579",
                 "shasum": ""
             },
             "require": {
@@ -78,7 +78,7 @@
                 "game",
                 "symfony"
             ],
-            "time": "2013-06-01 14:11:00"
+            "time": "2013-06-23 18:43:33"
         },
         {
             "name": "ddeboer/data-import",
@@ -2325,12 +2325,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/stof/StofDoctrineExtensionsBundle.git",
-                "reference": "7618302c798edbe5f13cd7d7f6aab4b21110a135"
+                "reference": "v1.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/7618302c798edbe5f13cd7d7f6aab4b21110a135",
-                "reference": "7618302c798edbe5f13cd7d7f6aab4b21110a135",
+                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/v1.1.0",
+                "reference": "v1.1.0",
                 "shasum": ""
             },
             "require": {
@@ -2378,7 +2378,7 @@
                 "translatable",
                 "tree"
             ],
-            "time": "2013-06-20 00:09:53"
+            "time": "2013-06-23 16:53:41"
         },
         {
             "name": "suncat/mobile-detect-bundle",
@@ -2479,17 +2479,17 @@
         },
         {
             "name": "symfony/assetic-bundle",
-            "version": "2.1.x-dev",
+            "version": "2.3.x-dev",
             "target-dir": "Symfony/Bundle/AsseticBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/AsseticBundle.git",
-                "reference": "49ed2a7aa9942e5564c7211a3ed5ea974f61b687"
+                "reference": "65bd076341ac54ebfcd845d8471044fc4afa73d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/AsseticBundle/zipball/49ed2a7aa9942e5564c7211a3ed5ea974f61b687",
-                "reference": "49ed2a7aa9942e5564c7211a3ed5ea974f61b687",
+                "url": "https://api.github.com/repos/symfony/AsseticBundle/zipball/65bd076341ac54ebfcd845d8471044fc4afa73d2",
+                "reference": "65bd076341ac54ebfcd845d8471044fc4afa73d2",
                 "shasum": ""
             },
             "require": {
@@ -2512,7 +2512,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1.x-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
             "autoload": {
@@ -2538,7 +2538,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2013-06-07 16:26:30"
+            "time": "2013-06-04 14:18:43"
         },
         {
             "name": "symfony/monolog-bundle",
