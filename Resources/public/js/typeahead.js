@@ -18,8 +18,9 @@ $(document).ready(function(){
                         options.push(json[i].naam);
                     }
                     typeof json == 'undefined' ? false : process(options);
-                    $('.selector-ttl').show();
-                    $('.selector-found').html(options.length+' resultaten');
+                    //$(':focus').closest('.selector-ttl').show();// $('.selector-ttl').show();
+                    //$('.selector-found').html(options.length+' resultaten');
+                    //$(':focus').find('.selector-found').html(options.length+' resultaten');
                     return;
                 }
             });

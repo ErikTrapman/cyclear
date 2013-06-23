@@ -3,14 +3,23 @@
 {% block title %}Transfer new{% endblock %}
 
 {% block content %}
-<h2>Transfer creation</h2>
+<h2>Transfer</h2>
 
-<form action="{{ path('admin_transfer_new') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <p>
-        <button type="submit">Create</button>
-    </p>
-</form>
+<div class="span12">
+
+    <ul class="nav nav-tabs" id="tabs">
+        <li class="active"><a href="#draft" data-toggle="tab">Draft</a></li>
+        <li><a href="#exchange" data-toggle="tab">Ruil</a></li>
+    </ul>
+    
+    <div class="tab-content">
+        <div class="tab-pane active" id="draft">{{ render(controller('CyclearGameBundle:Admin/Transfer:newDraft')) }}</div>
+        <div class="tab-pane" id="exchange">{{ render(controller('CyclearGameBundle:Admin/Transfer:newExchange')) }}</div>
+    
+    </div>
+    
+</div>
+
 
 <ul class="record_actions">
     <li>

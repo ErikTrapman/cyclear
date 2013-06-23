@@ -45,7 +45,7 @@ class PloegController extends Controller
             $uitslagenQb->getQuery()->getResult(), $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
         //var_dump($uitslagen);
-        $transfers = $em->getRepository("CyclearGameBundle:Transfer")->getLatestWithInversion(
+        $transfers = $em->getRepository("CyclearGameBundle:Transfer")->getLatest(
             $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 10, $entity);
         $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");
         return array(

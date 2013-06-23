@@ -43,7 +43,7 @@ class DefaultController extends Controller
         $draft = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen);
         $transferstand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen);
         $transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")
-            ->getLatestWithInversion($seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 20);
+            ->getLatest($seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 20);
         $transferRepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
         return array(
             'periode' => $periode, 

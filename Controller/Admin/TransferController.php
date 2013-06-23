@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\Transfer;
-use Cyclear\GameBundle\Form\TransferType;
+use Cyclear\GameBundle\Form\Admin\Transfer\TransferType;
 
 /**
  * Transfer controller.
@@ -45,36 +45,67 @@ class TransferController extends Controller
      */
     public function newAction()
     {
+        return array();
+    }
+
+    /**
+     * Displays a form to create a new Transfer entity.
+     *
+     * @Route("/new-draft", name="admin_transfer_new_draft")
+     * @Template("CyclearGameBundle:Transfer/Admin:newDraft.html.twig")
+     */
+    public function newDraftAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
         $entity = new Transfer();
+        $entity->setTransferType(Transfer::DRAFTTRANSFER);
         $entity->setDatum(new \DateTime());
-
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
-
-        $entity->setSeizoen($seizoen);
-        $formtype = new TransferType();
-        $form = $this->createForm($formtype, $entity, array('seizoen' => $seizoen));
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+        $form = $this->getTransferForm($entity);
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
             if ($form->isValid()) {
-                $renner = $form->get('renner')->getData();
-                $ploegNaar = $form->get('ploegNaar')->getData();
-                $datum = $form->get('datum')->getData();
-                $type = $form->get('transferType')->getData();
-                $datum->add(new \DateInterval("PT".date("H")."H".date("i")."M".date('s')."S"));
+                $form->get('datum')->getData()->setTime(date('H'), date('i'), date('s'));
                 $transferManager = $this->get('cyclear_game.manager.transfer');
-                $seizoen = $form->get('seizoen')->getData();
-                $transferManager->doAdminTransfer($renner, $ploegNaar, $datum, $type, $seizoen);
-                $em->flush();
+                $transferManager->doDraftTransfer($entity);
+                $this->getDoctrine()->getManager()->flush();
                 return $this->redirect($this->generateUrl('admin_transfer'));
             }
         }
+        return array('form' => $form->createView());
+    }
 
-        return array(
-            'entity' => $entity,
-            'form' => $form->createView()
-        );
+    /**
+     * Displays a form to create a new Transfer entity.
+     *
+     * @Route("/new-exchange", name="admin_transfer_new_exchange")
+     * @Template("CyclearGameBundle:Transfer/Admin:newExchange.html.twig")
+     */
+    public function newExchangeAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $entity = new Transfer();
+        $entity->setTransferType(Transfer::ADMINTRANSFER);
+        $entity->setDatum(new \DateTime());
+        //$entity->setSeizoen($seizoen);
+        $form = $this->getTransferForm($entity);
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $form->get('datum')->getData()->setTime(date('H'), date('i'), date('s'));
+                $transferManager = $this->get('cyclear_game.manager.transfer');
+                $transferManager->doExchangeTransfer(
+                    $form->get('renner')->getData(), $form->get('renner2')->getData(), $form->get('datum')->getData(), $form->get('seizoen')->getData());
+                $this->getDoctrine()->getManager()->flush();
+                return $this->redirect($this->generateUrl('admin_transfer'));
+            }
+        }
+        return array('form' => $form->createView());
+    }
+
+    private function getTransferForm($entity)
+    {
+        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        $formtype = new TransferType();
+        $form = $this->createForm($formtype, $entity, array('transfertype' => $entity->getTransferType(), 'seizoen' => $seizoen));
+        return $form;
     }
 
     /**
@@ -93,7 +124,7 @@ class TransferController extends Controller
             throw $this->createNotFoundException('Unable to find Transfer entity.');
         }
 
-        $editForm = $this->createForm(new TransferType(), $entity);
+        $editForm = $this->createForm(new \Cyclear\GameBundle\Form\Admin\Transfer\TransferEditType(), $entity);
         //$deleteForm = $this->createDeleteForm($id);
         // 'delete_form' => $deleteForm->createView(),
         return array(
@@ -118,7 +149,7 @@ class TransferController extends Controller
             throw $this->createNotFoundException('Unable to find Transfer entity.');
         }
 
-        $editForm = $this->createForm(new TransferType(), $entity);
+        $editForm = $this->createForm(new \Cyclear\GameBundle\Form\Admin\Transfer\TransferEditType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();

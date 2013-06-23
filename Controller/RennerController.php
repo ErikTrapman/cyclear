@@ -102,7 +102,7 @@ class RennerController extends Controller
     {
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
 
-        $transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->getLatestWithInversion(
+        $transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->getLatest(
             $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 999, null, $renner);
         $transferrepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
 

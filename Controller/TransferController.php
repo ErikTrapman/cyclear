@@ -27,7 +27,7 @@ class TransferController extends Controller
     {
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($request->get('seizoen'));
         $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")
-            ->getLatestWithInversion($seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 20);
+            ->getLatest($seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 20);
         return array('list' => $list);
     }
 }

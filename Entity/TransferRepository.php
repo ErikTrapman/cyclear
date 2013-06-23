@@ -43,25 +43,14 @@ class TransferRepository extends EntityRepository
         return $qb;
     }
     
-    public function getInversion($transfer){
-        $qb = $this->createQueryBuilder('t')
-            ->where('t.identifier = :identifier')
-            ->andWhere('t != :transfer')
-            ->setParameters( array('identifier' => $transfer->getIdentifier(),'transfer' => $transfer) );
-        $res = $qb->getQuery()->getResult();
-        return ( array_key_exists(0, $res) ) ? $res[0] : null;
-    }
-    
     // TODO: teveel argumenten. maak losse methoden!
-    public function getLatestWithInversion($seizoen = null, $types = array(), $limit = 20, $ploegNaar = null, $renner = null)
+    public function getLatest($seizoen = null, $types = array(), $limit = 20, $ploegNaar = null, $renner = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         $qb = $this
             ->createQueryBuilder('t')
-            ->add('select', '( SELECT r.naam FROM Cyclear\GameBundle\Entity\Transfer tr INNER JOIN CyclearGameBundle:Renner r WITH tr.renner = r 
-                WHERE tr.identifier = t.identifier AND tr.id <> t.id ) AS inverse', true)
             ->where('t.ploegNaar IS NOT NULL')
             ->andWhere('t.seizoen = :seizoen')
             ->setParameters(array('seizoen' => $seizoen))
@@ -78,14 +67,6 @@ class TransferRepository extends EntityRepository
             $qb->andWhere('t.transferType IN ( :types )')->setParameter('types', $types);
         }
         return $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-    }
-
-    public function findInversionRenner($transfer)
-    {
-        $qb = $this->createQueryBuilder("t")->where("t != :transfer")->andWhere("t.identifier = :identifier");
-        $qb->setParameters(array(":transfer" => $transfer, ":identifier" => $transfer->getIdentifier()));
-        $res = $qb->getQuery()->getResult();
-        return ( array_key_exists(0, $res) ) ? $res[0]->getRenner() : null;
     }
 
     public function getTransferCountForUserTransfer($ploeg, $start, $end)

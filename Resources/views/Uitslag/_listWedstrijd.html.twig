@@ -14,7 +14,7 @@
         <tr>
             <td>{{ loop.index }}</td>
             <td nowrap>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {renner:uitslag.renner,seizoen:uitslag.wedstrijd.seizoen } %}</td>
-            <td>{{ uitslag.ploeg }}</td>
+            <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
             <td>{{ uitslag.ploegPunten }}</td>
             <td>{{ uitslag.rennerPunten }}</td>
         </tr>

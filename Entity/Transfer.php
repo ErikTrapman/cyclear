@@ -72,9 +72,10 @@ class Transfer
 
     /**
      *
-     * @ORM\Column()
+     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToOne(targetEntity="Cyclear\GameBundle\Entity\Transfer")
      */
-    private $identifier;
+    private $inversionTransfer;
 
     /**
      * Get id
@@ -198,13 +199,16 @@ class Transfer
         $this->seizoen = $seizoen;
     }
 
-    public function getIdentifier()
+    public function getInversionTransfer()
     {
-        return $this->identifier;
+        return $this->inversionTransfer;
     }
 
-    public function setIdentifier($identifier)
+    public function setInversionTransfer($inversionTransfer)
     {
-        $this->identifier = $identifier;
+        $this->inversionTransfer = $inversionTransfer;
     }
+
+
+
 }

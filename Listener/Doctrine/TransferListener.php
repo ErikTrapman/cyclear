@@ -21,7 +21,7 @@ class TransferListener
 
         if ($entity instanceof Transfer) {
             if (null !== $entity->getPloegNaar() && $entity->getTransferType() != Transfer::DRAFTTRANSFER) {
-                $inversion = $entityManager->getRepository("CyclearGameBundle:Transfer")->getInversion($entity);
+                $inversion = $entity->getInversionTransfer();
                 $ploegNaar = $entity->getPloegNaar()->getAfkorting();
                 if(null !== $inversion){
                     $rennerUit = $inversion->getRenner()->getNaam();
