@@ -35,7 +35,7 @@
                 {% include "CyclearGameBundle:Wedstrijd:latest.html.twig" with {"wedstrijden": wedstrijden } %}
             </div>
             <div class="tab-pane frontpage-stand" id="transfers">
-                {% include 'CyclearGameBundle:Transfer:_listWithInversion.html.twig' with {"listWithInversion":transfers } %}
+                {% include 'CyclearGameBundle:Transfer:_listWithInversion.html.twig' with {"listWithInversion":transfers, 'firstPageRoute':'homepage', 'includePagination': false } %}
             </div>
             <div class="tab-pane frontpage-stand" id="zeges">
                 <div style="text-align: center;"><a href="{{ path('uitslag_posities', {'seizoen':seizoen.slug,'positie':1} ) }}">Alle posities</a></div>

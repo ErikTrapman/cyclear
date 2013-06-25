@@ -45,8 +45,11 @@ class PloegController extends Controller
             $uitslagenQb->getQuery()->getResult(), $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
         //var_dump($uitslagen);
+        $transferPaginator = $this->get('knp_paginator');
         $transfers = $em->getRepository("CyclearGameBundle:Transfer")->getLatest(
-            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 10, $entity);
+            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 9999, $entity);
+        $transfers = $transferPaginator->paginate($transfers,
+            $this->get('request')->query->get('transferPage', 1), 10, array('pageParameterName' => 'transferPage'));
         $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");
         return array(
             'entity' => $entity,

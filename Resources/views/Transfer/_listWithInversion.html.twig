@@ -1,3 +1,4 @@
+{% set includePagination = includePagination is defined ? includePagination : false %}
 {% block content %}
 <table class="records_list table table-condensed ">
     <thead>
@@ -19,4 +20,9 @@
     {% endfor %}
     </tbody>
 </table>
+{% if includePagination %}
+<div id="navigation">
+    {{ knp_pagination_render(listWithInversion, null, {}, {'firstPageRoute': firstPageRoute}) }}
+</div>
+{% endif %}
 {% endblock %}
