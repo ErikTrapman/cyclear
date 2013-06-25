@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "4fcecce896f5113ccf38928e78aa6563",
+    "hash": "81afddee196da3bb58c079608285b4c0",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -474,12 +474,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "4804a9a096f1a3f048da11b192b9df5caafc1a5d"
+                "reference": "3253f7a1c13a2177d925bd0f6ee8387c5dd9c57a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/4804a9a096f1a3f048da11b192b9df5caafc1a5d",
-                "reference": "4804a9a096f1a3f048da11b192b9df5caafc1a5d",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/3253f7a1c13a2177d925bd0f6ee8387c5dd9c57a",
+                "reference": "3253f7a1c13a2177d925bd0f6ee8387c5dd9c57a",
                 "shasum": ""
             },
             "require": {
@@ -536,7 +536,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2013-06-21 19:00:38"
+            "time": "2013-06-25 17:49:29"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -739,12 +739,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "eaf8fd3c343b8d93d52b28da8da8947658733003"
+                "reference": "4d93a4950b3095116fe7c0b058990f4978331a70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/eaf8fd3c343b8d93d52b28da8da8947658733003",
-                "reference": "eaf8fd3c343b8d93d52b28da8da8947658733003",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/4d93a4950b3095116fe7c0b058990f4978331a70",
+                "reference": "4d93a4950b3095116fe7c0b058990f4978331a70",
                 "shasum": ""
             },
             "require": {
@@ -805,7 +805,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2013-06-20 12:26:52"
+            "time": "2013-06-25 17:34:22"
         },
         {
             "name": "eriktrapman/cqrankingparser-bundle",
@@ -912,12 +912,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSRestBundle.git",
-                "reference": "78d9719c1d210cf2258b1fde371a7f47be1a0090"
+                "reference": "bd658db544bf4f9683e5933046835bb4d05af154"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/78d9719c1d210cf2258b1fde371a7f47be1a0090",
-                "reference": "78d9719c1d210cf2258b1fde371a7f47be1a0090",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/bd658db544bf4f9683e5933046835bb4d05af154",
+                "reference": "bd658db544bf4f9683e5933046835bb4d05af154",
                 "shasum": ""
             },
             "require": {
@@ -977,7 +977,7 @@
             "keywords": [
                 "rest"
             ],
-            "time": "2013-06-20 18:01:21"
+            "time": "2013-06-25 15:08:22"
         },
         {
             "name": "friendsofsymfony/user-bundle",
@@ -986,12 +986,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "5214fbdfbe46bf4833aa6675382b113cbd4ff557"
+                "reference": "a3c5cc22aa08ca449ffcfc0cf130ee61ae3026b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/5214fbdfbe46bf4833aa6675382b113cbd4ff557",
-                "reference": "5214fbdfbe46bf4833aa6675382b113cbd4ff557",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/a3c5cc22aa08ca449ffcfc0cf130ee61ae3026b3",
+                "reference": "a3c5cc22aa08ca449ffcfc0cf130ee61ae3026b3",
                 "shasum": ""
             },
             "require": {
@@ -1046,7 +1046,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2013-06-19 15:23:01"
+            "time": "2013-06-24 13:30:51"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -1054,12 +1054,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "cd3a95d2019b8581c684ccbe4d069d1d8255812c"
+                "reference": "10f5f83a3e20fb94566e9a103b45a40a817e6134"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/cd3a95d2019b8581c684ccbe4d069d1d8255812c",
-                "reference": "cd3a95d2019b8581c684ccbe4d069d1d8255812c",
+                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/10f5f83a3e20fb94566e9a103b45a40a817e6134",
+                "reference": "10f5f83a3e20fb94566e9a103b45a40a817e6134",
                 "shasum": ""
             },
             "require": {
@@ -1067,12 +1067,12 @@
                 "php": ">=5.3.2"
             },
             "require-dev": {
-                "doctrine/common": ">=2.4.0-BETA2",
-                "doctrine/dbal": ">=2.4.0-BETA2",
-                "doctrine/mongodb": ">=1.0.2",
-                "doctrine/mongodb-odm": ">=1.0.0-BETA8",
-                "doctrine/orm": ">=2.4.0-BETA2",
-                "symfony/yaml": "2.*"
+                "doctrine/common": ">=2.4.0-RC3",
+                "doctrine/dbal": ">=2.4.0-RC1",
+                "doctrine/mongodb": ">=1.0.3",
+                "doctrine/mongodb-odm": ">=1.0.0-BETA9",
+                "doctrine/orm": ">=2.4.0-RC1",
+                "symfony/yaml": "2.3.1"
             },
             "suggest": {
                 "doctrine/dbal": ">=2.3.2",
@@ -1126,7 +1126,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2013-06-21 13:48:54"
+            "time": "2013-06-24 12:42:19"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1134,12 +1134,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jdorn/sql-formatter.git",
-                "reference": "3c7983d6d638233ea8e0e7705a3a8f3e4921ca75"
+                "reference": "d7f10fbb2f871155cdd91b077acebb378e10a95c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jdorn/sql-formatter/zipball/3c7983d6d638233ea8e0e7705a3a8f3e4921ca75",
-                "reference": "3c7983d6d638233ea8e0e7705a3a8f3e4921ca75",
+                "url": "https://api.github.com/repos/jdorn/sql-formatter/zipball/d7f10fbb2f871155cdd91b077acebb378e10a95c",
+                "reference": "d7f10fbb2f871155cdd91b077acebb378e10a95c",
                 "shasum": ""
             },
             "require": {
@@ -1176,7 +1176,7 @@
                 "highlight",
                 "sql"
             ],
-            "time": "2013-06-13 03:56:09"
+            "time": "2013-06-24 10:01:06"
         },
         {
             "name": "jms/aop-bundle",
@@ -1830,12 +1830,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "f78e84ca97d1e1cbc8d46179944b532f0383c454"
+                "reference": "93f26d16043bfdc8fc45b227a51e71a889ab6cce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/f78e84ca97d1e1cbc8d46179944b532f0383c454",
-                "reference": "f78e84ca97d1e1cbc8d46179944b532f0383c454",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/93f26d16043bfdc8fc45b227a51e71a889ab6cce",
+                "reference": "93f26d16043bfdc8fc45b227a51e71a889ab6cce",
                 "shasum": ""
             },
             "require": {
@@ -1868,7 +1868,7 @@
                 "mobile detector",
                 "php mobile detect"
             ],
-            "time": "2013-06-18 14:41:54"
+            "time": "2013-06-25 08:36:39"
         },
         {
             "name": "monolog/monolog",
@@ -2183,13 +2183,13 @@
             "target-dir": "Sensio/Bundle/DistributionBundle",
             "source": {
                 "type": "git",
-                "url": "https://github.com/sensio/SensioDistributionBundle.git",
-                "reference": "v2.3.0-BETA1"
+                "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
+                "reference": "2d08b14923e56645229551c12da788a824b1e998"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensio/SensioDistributionBundle/zipball/v2.3.0-BETA1",
-                "reference": "v2.3.0-BETA1",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/2d08b14923e56645229551c12da788a824b1e998",
+                "reference": "2d08b14923e56645229551c12da788a824b1e998",
                 "shasum": ""
             },
             "require": {
@@ -2221,7 +2221,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2013-04-16 15:18:14"
+            "time": "2013-06-24 20:15:30"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -2325,12 +2325,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/stof/StofDoctrineExtensionsBundle.git",
-                "reference": "v1.1.0"
+                "reference": "6577f2388abeac4896aa0aef37fc1b6f2c6923e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/v1.1.0",
-                "reference": "v1.1.0",
+                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/6577f2388abeac4896aa0aef37fc1b6f2c6923e9",
+                "reference": "6577f2388abeac4896aa0aef37fc1b6f2c6923e9",
                 "shasum": ""
             },
             "require": {
@@ -2378,7 +2378,7 @@
                 "translatable",
                 "tree"
             ],
-            "time": "2013-06-23 16:53:41"
+            "time": "2013-06-25 08:05:01"
         },
         {
             "name": "suncat/mobile-detect-bundle",
@@ -2655,16 +2655,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.2.0",
+            "version": "2.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "v2.2.0"
+                "reference": "1a0b38a48a9b7b3a0e1a7ad9b613b64a3b9db8ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/v2.2.0",
-                "reference": "v2.2.0",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/1a0b38a48a9b7b3a0e1a7ad9b613b64a3b9db8ae",
+                "reference": "1a0b38a48a9b7b3a0e1a7ad9b613b64a3b9db8ae",
                 "shasum": ""
             },
             "require": {
@@ -2750,7 +2750,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2013-03-01 06:52:29"
+            "time": "2013-06-24 07:44:23"
         },
         {
             "name": "tijsverkoyen/twitteroauth",
@@ -2845,12 +2845,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "6f753205834b511269a97fe35108bbd5c8d245f5"
+                "reference": "49d31bbfee5872f6d612be5265e53fe2813f59a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/6f753205834b511269a97fe35108bbd5c8d245f5",
-                "reference": "6f753205834b511269a97fe35108bbd5c8d245f5",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/49d31bbfee5872f6d612be5265e53fe2813f59a1",
+                "reference": "49d31bbfee5872f6d612be5265e53fe2813f59a1",
                 "shasum": ""
             },
             "require": {
@@ -2869,7 +2869,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -2886,7 +2886,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-06-09 06:03:21"
+            "time": "2013-06-25 16:45:01"
         },
         {
             "name": "twitter/bootstrap",
