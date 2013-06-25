@@ -105,7 +105,6 @@ class TransferManager
                 $this->em->persist($t1);
                 $this->em->persist($t2);
 
-
                 $this->em->commit();
             } catch (Exception $e) {
                 $this->em->rollback();
@@ -147,10 +146,10 @@ class TransferManager
             $this->contractManager->createContract($rennerIn, $ploeg, $seizoen, $datum);
             //$transferUit->setInversionTransfer($transferIn);
             $transferIn->setInversionTransfer($transferUit);
+            $this->em->commit();
         } catch (\Exception $e) {
             $this->em->rollback();
         }
-        $this->em->commit();
         return true;
     }
 }
