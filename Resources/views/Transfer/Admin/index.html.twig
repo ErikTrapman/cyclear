@@ -11,6 +11,7 @@
             <th>Renner</th>
             <th>Van</th>
             <th>Naar</th>
+            <th>Type</th>
             <th>Datum</th>
             <th>Actions</th>
         </tr>
@@ -22,6 +23,7 @@
             <td>{{ entity.renner.naam }}</td>
             <td>{% if entity.ploegVan is not null %}{{ entity.ploegVan.afkorting }}{% endif %}</td>
             <td>{% if entity.ploegNaar is not null %}{{ entity.ploegNaar.afkorting }}{% endif %}</td>
+            <td>{{ entity.getTransferTypeFormatted }}</td>
             <td>{{ entity.datum|date('Y-m-d H:i:s') }}</td>
             <td>
                 <ul>

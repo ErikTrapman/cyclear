@@ -64,42 +64,58 @@ class TransferManager
         return $transferNew;
     }
 
-    public function doExchangeTransfer($renner1, $renner2, $datum, $seizoen)
+    public function doExchangeTransfer($renner1, $renner2, $datum, $seizoen, $type = Transfer::ADMINTRANSFER)
     {
-        try {
-            $this->em->beginTransaction();
-            $t1 = new Transfer();
-            $t1->setRenner($renner1);
-            $t1->setPloegNaar($this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner2, $seizoen));
-            $t1->setDatum(clone $datum);
-            $t1->setSeizoen($seizoen);
-            $t1->setTransferType(Transfer::ADMINTRANSFER);
-            $releaseTransfer1 = $this->createReleaseTransfer($t1, $this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner1, $seizoen));
-            $this->contractManager->releaseRenner($renner1, $seizoen, $datum);
+        $ploeg1 = $this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner1, $seizoen);
+        $ploeg2 = $this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner2, $seizoen);
+        if ($ploeg1 instanceof Ploeg && $ploeg2 instanceof Ploeg) {
+            try {
 
-            $t2 = new Transfer();
-            $t2->setRenner($renner2);
-            $t2->setPloegNaar($this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner1, $seizoen));
-            $t2->setDatum(clone $datum);
-            $t2->setSeizoen($seizoen);
-            $t2->setTransferType(Transfer::ADMINTRANSFER);
-            $releaseTransfer2 = $this->createReleaseTransfer($t2, $this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner2, $seizoen));
-            $this->contractManager->releaseRenner($renner2, $seizoen, $datum);
+                $this->em->beginTransaction();
+                
+                $t2 = new Transfer();
+                $t2->setRenner($renner2);
+                $t2->setPloegNaar($this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner1, $seizoen));
+                $t2->setDatum(clone $datum);
+                $t2->setSeizoen($seizoen);
+                $t2->setTransferType($type);
 
-            $t1->setInversionTransfer($t2);
-            $t2->setInversionTransfer($t1);
+                $t1 = new Transfer();
+                $t1->setRenner($renner1);
+                $t1->setPloegNaar($this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner2, $seizoen));
+                $t1->setDatum(clone $datum);
+                $t1->setSeizoen($seizoen);
+                $t1->setTransferType($type);
+                
+                $releaseTransfer1 = $this->createReleaseTransfer($t1, $ploeg1);
+                $this->em->persist($releaseTransfer1);
+                $this->contractManager->releaseRenner($renner1, $seizoen, $datum);
 
-            $this->contractManager->createContract($renner1, $t1->getPloegNaar(), $seizoen, $datum);
-            $this->contractManager->createContract($renner2, $t2->getPloegNaar(), $seizoen, $datum);
-            
-            $this->em->persist($t1);
-            $this->em->persist($releaseTransfer1);
-            $this->em->persist($t2);
-            $this->em->persist($releaseTransfer2);
-            
-            $this->em->commit();
-        } catch (Exception $e) {
-            $this->em->rollback();
+                $releaseTransfer2 = $this->createReleaseTransfer($t2, $ploeg2);
+                $this->contractManager->releaseRenner($renner2, $seizoen, $datum);
+                $this->em->persist($releaseTransfer2);
+
+
+                $t1->setInversionTransfer($t2);
+                $t2->setInversionTransfer($t1);
+
+                $this->contractManager->createContract($renner1, $t1->getPloegNaar(), $seizoen, $datum);
+                $this->contractManager->createContract($renner2, $t2->getPloegNaar(), $seizoen, $datum);
+
+                $this->em->persist($t1);
+                $this->em->persist($t2);
+
+
+                $this->em->commit();
+            } catch (Exception $e) {
+                $this->em->rollback();
+            }
+        } else {
+            if ($ploeg1 instanceof Ploeg) {
+                $this->doUserTransfer($ploeg1, $renner1, $renner2, $seizoen);
+            } elseif ($ploeg2 instanceof Ploeg) {
+                $this->doUserTransfer($ploeg1, $renner2, $renner1, $seizoen);
+            }
         }
         return true;
     }
