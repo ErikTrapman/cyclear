@@ -72,7 +72,7 @@ class TransferManager
             try {
 
                 $this->em->beginTransaction();
-                
+
                 $t2 = new Transfer();
                 $t2->setRenner($renner2);
                 $t2->setPloegNaar($this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner1, $seizoen));
@@ -86,7 +86,7 @@ class TransferManager
                 $t1->setDatum(clone $datum);
                 $t1->setSeizoen($seizoen);
                 $t1->setTransferType($type);
-                
+
                 $releaseTransfer1 = $this->createReleaseTransfer($t1, $ploeg1);
                 $this->em->persist($releaseTransfer1);
                 $this->contractManager->releaseRenner($renner1, $seizoen, $datum);
@@ -151,5 +151,12 @@ class TransferManager
             $this->em->rollback();
         }
         return true;
+    }
+
+    public function revertTransfer(Transfer $transfer)
+    {
+        
+        
+        
     }
 }
