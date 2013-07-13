@@ -66,7 +66,7 @@ class UitslagManager
             $renner = $rennerRepo->findOneByCQId($uitslagregel['cqranking_id']);
             if (null !== $renner) {
                 $row['renner'] = $rennerManager->getRennerSelectorTypeStringFromRenner($renner);
-                $transfer = $transferRepo->findLastTransferForDate($renner, $wedstrijd->getDatum());
+                $transfer = $transferRepo->findLastTransferForDate($renner, $wedstrijd->getDatum(), $wedstrijd->getSeizoen());
                 if (null !== $transfer) {
                     $row['ploeg'] = ( null !== $transfer->getPloegNaar() ) ? $transfer->getPloegNaar()->getId() : null;
                     if (null !== $row['ploeg'] && $this->puntenCalculator->canGetTeamPoints($renner, $wedstrijd->getDatum(), $puntenReferentieDatum)) {
