@@ -12,10 +12,10 @@ use JMS\Serializer\SerializationContext;
 class TeamController extends \FOS\RestBundle\Controller\FOSRestController
 {
 
-    public function cgetAction($slug)
+    public function cgetAction($seizoen)
     {
         $em = $this->getDoctrine()->getManager();
-        $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->findOneBySlug($slug);
+        $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->findOneBySlug($seizoen);
 
         $ploegen = $em->getRepository("CyclearGameBundle:Ploeg")
                 ->createQueryBuilder('p')
@@ -34,10 +34,10 @@ class TeamController extends \FOS\RestBundle\Controller\FOSRestController
         return $this->handleView($view);
     }
 
-    public function getAction($slug, $teamslug)
+    public function getAction($seizoen, $teamslug)
     {
         $em = $this->getDoctrine()->getManager();
-        $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->findOneBySlug($slug);
+        $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->findOneBySlug($seizoen);
         $ploeg = $em->getRepository("CyclearGameBundle:Ploeg")->findOneByAfkorting($teamslug);
         $punten = $em->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen, $ploeg);
         $ploeg->setPunten($punten[0]['punten']);

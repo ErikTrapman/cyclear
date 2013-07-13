@@ -21,7 +21,7 @@ class SeasonRiderController extends FOSRestController
      * @QueryParam(name="query", strict=true, nullable=true, description="Query")
      * 
      */
-    public function cgetAction($slug, ParamFetcher $paramFetcher)
+    public function cgetAction($seizoen, ParamFetcher $paramFetcher)
     {
         $em = $this->getDoctrine()->getManager();
         $paginator = $this->get('knp_paginator');
@@ -37,7 +37,7 @@ class SeasonRiderController extends FOSRestController
             $qb, $paramFetcher->get('page') !== null ? $paramFetcher->get('page') : 1, 10
         );
         if ('html' === $request->getRequestFormat()) {
-            $seizoen = $request->attributes->get('seizoen-object');
+            $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->findOneBySlug($seizoen);
             $listWithPunten = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenWithRenners($seizoen, 20);
             $listWithPuntenNoPloeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenWithRennersNoPloeg($seizoen, 20);
             $view->setTemplate("CyclearGameBundle:API/Season/Rider:riders.html.twig");
@@ -58,7 +58,7 @@ class SeasonRiderController extends FOSRestController
 
     
     
-    public function getAction($slug, $riderslug)
+    public function getAction($seizoen, $riderslug)
     {
         
     }
