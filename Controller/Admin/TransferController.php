@@ -125,11 +125,11 @@ class TransferController extends Controller
         }
 
         $editForm = $this->createForm(new \Cyclear\GameBundle\Form\Admin\Transfer\TransferEditType(), $entity);
-        //$deleteForm = $this->createDeleteForm($id);
-        // 'delete_form' => $deleteForm->createView(),
+        $deleteForm = $this->createDeleteForm($id);
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
+            'delete_form' => $deleteForm->createView()
         );
     }
 
@@ -190,8 +190,10 @@ class TransferController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Transfer entity.');
             }
-
-            $em->remove($entity);
+            
+            $transferManager = $this->get('cyclear_game.manager.transfer');
+            $transferManager->revertTransfer($entity);
+            
             $em->flush();
         }
 

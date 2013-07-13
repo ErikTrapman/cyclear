@@ -72,8 +72,8 @@ class Transfer
 
     /**
      *
-     * @ORM\JoinColumn(nullable=true)
-     * @ORM\OneToOne(targetEntity="Cyclear\GameBundle\Entity\Transfer")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     * @ORM\OneToOne(targetEntity="Cyclear\GameBundle\Entity\Transfer", cascade={"all"})
      */
     private $inversionTransfer;
 

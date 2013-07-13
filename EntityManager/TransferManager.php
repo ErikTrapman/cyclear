@@ -155,8 +155,30 @@ class TransferManager
 
     public function revertTransfer(Transfer $transfer)
     {
-        
-        
-        
+        $renner = $transfer->getRenner();
+        $seizoen = $transfer->getSeizoen();
+        $contracts = $this->em->getRepository("CyclearGameBundle:Contract")->getContracts($renner, $seizoen);
+        $this->em->remove($contracts[0]);
+        if(array_key_exists(1, $contracts)){
+            $nowCurrentContract = $contracts[1];
+            $nowCurrentContract->setEind(null);
+            $this->em->remove($nowCurrentContract);
+        }
+        // inversion ook ongedaan maken
+        $inversion = $transfer->getInversionTransfer();
+        $renner2 = $inversion->getRenner();
+        $contracts = $this->em->getRepository("CyclearGameBundle:Contract")->getContracts($renner2, $seizoen);
+        $this->em->remove($contracts[0]);
+        if(array_key_exists(1, $contracts)){
+            $nowCurrentContract = $contracts[1];
+            $nowCurrentContract->setEind(null);
+            $this->em->remove($nowCurrentContract);
+        }
+        //$transfer->setInversionTransfer(null);
+        //$this->em->persist($transfer);
+        //$inversion->setInversionTransfer(null);
+        //$this->em->persist($inversion);
+        $this->em->remove($transfer);
+        $this->em->remove($inversion);
     }
 }

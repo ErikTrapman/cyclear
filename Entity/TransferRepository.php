@@ -94,12 +94,15 @@ class TransferRepository extends EntityRepository
         return (int) $res['freq'];
     }
 
-    public function findLastTransferForDate($renner, \DateTime $date)
+    public function findLastTransferForDate($renner, \DateTime $date, $seizoen)
     {
         $cloneDate = clone $date;
         $cloneDate->setTime("23", "59", "59");
-        $qb = $this->createQueryBuilder("t")->where("t.renner = :renner")->andWhere("t.datum <= :datum")->
-                setParameters(array("renner" => $renner, "datum" => $cloneDate))->orderBy("t.datum", "DESC")->setMaxResults(1);
+        $params = array("renner" => $renner, "datum" => $cloneDate, 'seizoen' => $seizoen);
+        $qb = $this->createQueryBuilder("t")
+            ->where("t.renner = :renner")
+            ->andWhere("t.datum <= :datum")->andWhere('t.seizoen = :seizoen')->
+                setParameters($params)->orderBy("t.datum", "DESC")->setMaxResults(1);
         $res = $qb->getQuery()->getResult();
         if (count($res) == 0) {
             return null;
