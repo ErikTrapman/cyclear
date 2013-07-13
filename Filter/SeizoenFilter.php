@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping\ClassMetaData;
 class SeizoenFilter extends SQLFilter
 {
 
+    // TODO verplaatsen naar Ploeg map
     public function addFilterConstraint(ClassMetaData $targetEntity, $targetTableAlias)
     {
         if ($targetEntity->name == 'Cyclear\GameBundle\Entity\Ploeg') {
