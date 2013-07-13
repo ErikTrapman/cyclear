@@ -82,7 +82,7 @@
                         <ul class="nav" role="navigation">
                             <li><a href="http://www.cyclear.nl/forum" target="_blank">Forum</a></li>
                             {% if app.request.attributes.get('seizoen') %}
-                                <li><a href="{{ path('get_season_riders', {'slug':app.request.attributes.get('seizoen')} ) }}">Renners</a></li>
+                                <li><a href="{{ path('get_season_riders', {'seizoen':app.request.attributes.get('seizoen')} ) }}">Renners</a></li>
                             {% else %}
                                 <li><a href="{{ path('get_riders') }}">Renners</a></li>
                             {% endif %}
