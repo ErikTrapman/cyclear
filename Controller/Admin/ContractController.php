@@ -44,7 +44,7 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $entities, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
+            $entities, $this->get('request')->query->get('page', 1), 20
         );
 
         return array('entities' => $pagination, 'filter' => $filter->createView());
