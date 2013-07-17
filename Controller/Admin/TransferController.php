@@ -192,7 +192,10 @@ class TransferController extends Controller
             }
             
             $transferManager = $this->get('cyclear_game.manager.transfer');
-            $transferManager->revertTransfer($entity);
+            $res = $transferManager->revertTransfer($entity);
+            if(!$res){
+                $this->get('session')->getFlashBag()->add('error', 'Transfer kon niet verwijderd worden');
+            }
             
             $em->flush();
         }

@@ -155,30 +155,47 @@ class TransferManager
 
     public function revertTransfer(Transfer $transfer)
     {
+        if (null !== $transfer->getInversionTransfer()) {
+            try {
+                $this->em->beginTransaction();
+                $this->revertBaseTransfer($transfer);
+                $this->revertInversionTransfer($transfer->getInversionTransfer());
+                $this->em->remove($transfer->getInversionTransfer());
+                $this->em->remove($transfer);
+                $this->em->commit();
+                return true;
+            } catch (\Exception $e) {
+                $this->em->rollback();
+                return false;
+            }
+        }
+        $baseTransfer = $this->em->getRepository("CyclearGameBundle:Transfer")->findOneBy(array('inversionTransfer' => $transfer));
+        return $this->revertTransfer($baseTransfer);
+    }
+
+    private function revertInversionTransfer($transfer)
+    {
+        $renner2 = $transfer->getRenner();
+        $contracts = $this->em->getRepository("CyclearGameBundle:Contract")->getContracts($renner2, $transfer->getSeizoen());
+        if (array_key_exists(0, $contracts)) {
+            $nowCurrentContract = $contracts[0];
+            $nowCurrentContract->setEind(null);
+            $this->em->persist($nowCurrentContract);
+        }
+    }
+
+    private function revertBaseTransfer($transfer)
+    {
         $renner = $transfer->getRenner();
-        $seizoen = $transfer->getSeizoen();
-        $contracts = $this->em->getRepository("CyclearGameBundle:Contract")->getContracts($renner, $seizoen);
-        $this->em->remove($contracts[0]);
-        if(array_key_exists(1, $contracts)){
+        // baseTransfer, renner has a current contract
+        $contracts = $this->em->getRepository("CyclearGameBundle:Contract")->getContracts($renner, $transfer->getSeizoen());
+        if (array_key_exists(0, $contracts)) {
+            $this->em->remove($contracts[0]);
+        }
+        if (array_key_exists(1, $contracts)) {
             $nowCurrentContract = $contracts[1];
             $nowCurrentContract->setEind(null);
-            $this->em->remove($nowCurrentContract);
+            $this->em->persist($nowCurrentContract);
         }
-        // inversion ook ongedaan maken
-        $inversion = $transfer->getInversionTransfer();
-        $renner2 = $inversion->getRenner();
-        $contracts = $this->em->getRepository("CyclearGameBundle:Contract")->getContracts($renner2, $seizoen);
-        $this->em->remove($contracts[0]);
-        if(array_key_exists(1, $contracts)){
-            $nowCurrentContract = $contracts[1];
-            $nowCurrentContract->setEind(null);
-            $this->em->remove($nowCurrentContract);
-        }
-        //$transfer->setInversionTransfer(null);
-        //$this->em->persist($transfer);
-        //$inversion->setInversionTransfer(null);
-        //$this->em->persist($inversion);
-        $this->em->remove($transfer);
-        $this->em->remove($inversion);
     }
 }

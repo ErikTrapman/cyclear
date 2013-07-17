@@ -21,7 +21,24 @@ class ContractRepository extends \Doctrine\ORM\EntityRepository
 
     public function getContracts($renner, $seizoen)
     {
-        return $this->getContractsQb($renner, $seizoen)->getQuery()->getResult();
+        $qb = $this->createQueryBuilder('c')
+            ->where('c.renner = :renner')
+            ->andWhere('c.seizoen = :seizoen');
+        $qb->setParameters(array('renner' => $renner, 'seizoen' => $seizoen));
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getLastContract($renner, $seizoen)
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->where('c.renner = :renner')
+            ->andWhere('c.seizoen = :seizoen');
+        $qb->setParameters(array('renner' => $renner, 'seizoen' => $seizoen));
+        $res = $qb->getQuery()->getResult();
+        if (empty($res)) {
+            return null;
+        }
+        return $res[0];
     }
 
     private function getContractsQb($renner, $seizoen)

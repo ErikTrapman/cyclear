@@ -91,7 +91,7 @@ class Contract
         return $this->eind;
     }
 
-    public function setEind(\DateTime $eind)
+    public function setEind($eind)
     {
         $this->eind = $eind;
     }
