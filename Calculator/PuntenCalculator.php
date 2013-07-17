@@ -18,15 +18,15 @@ class PuntenCalculator
         $this->em = $em;
     }
 
-    public function canGetTeamPoints(Renner $renner, $wedstrijdDatum, $referentieDatum = null)
+    public function canGetTeamPoints(Renner $renner, $wedstrijdDatum, $seizoen, $referentieDatum = null)
     {
         $transferRepo = $this->em->getRepository('CyclearGameBundle:Transfer');
         if (null !== $referentieDatum) {
-            $transferFromRefDatum = $transferRepo->findLastTransferForDate($renner, $referentieDatum);
+            $transferFromRefDatum = $transferRepo->findLastTransferForDate($renner, $referentieDatum, $seizoen);
             if (!$transferFromRefDatum) {
                 return false;
             }
-            $transferFromWedstrijd = $transferRepo->findLastTransferForDate($renner, $wedstrijdDatum);
+            $transferFromWedstrijd = $transferRepo->findLastTransferForDate($renner, $wedstrijdDatum, $seizoen);
             // als de transfer vanaf de wedstrijd-datum niet dezelfde is als vanaf de ref-datum, dan is er sprake van 
             //  een of meerdere transfers gedurende deze periode. dan geen punten
             if ($transferFromWedstrijd !== $transferFromRefDatum) {
@@ -34,7 +34,7 @@ class PuntenCalculator
             }
             return $this->validateTransfer($transferFromRefDatum, $wedstrijdDatum);
         } else {
-            $lastTransfer = $transferRepo->findLastTransferForDate($renner, $wedstrijdDatum);
+            $lastTransfer = $transferRepo->findLastTransferForDate($renner, $wedstrijdDatum, $seizoen);
             if (!$lastTransfer) {
                 return false;
             }

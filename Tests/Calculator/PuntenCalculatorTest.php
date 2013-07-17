@@ -26,7 +26,7 @@ class PuntenCalculatorTest extends WebTestCase
         $repo->expects($this->any())->method('findLastTransferForDate')->will($this->returnValue(null));
 
         $c = new PuntenCalculator($em);
-        $res = $c->canGetTeamPoints(new Renner(), new DateTime());
+        $res = $c->canGetTeamPoints(new Renner(), new DateTime(), null);
         $this->assertEquals(false, $res);
     }
 
@@ -38,7 +38,7 @@ class PuntenCalculatorTest extends WebTestCase
         $repo->expects($this->any())->method('findLastTransferForDate')->will($this->returnValue($t));
 
         $c = new PuntenCalculator($em);
-        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'));
+        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'), null);
         $this->assertEquals(true, $res);
     }
 
@@ -50,11 +50,11 @@ class PuntenCalculatorTest extends WebTestCase
         $repo->expects($this->any())->method('findLastTransferForDate')->will($this->returnValue($t));
 
         $c = new PuntenCalculator($em);
-        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'));
+        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'),null);
         $this->assertEquals(false, $res);
 
         $t->setDatum(clone $t->getDatum()->modify("+12 hours"));
-        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'));
+        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'),null);
         $this->assertEquals(false, $res);
     }
 
@@ -67,7 +67,7 @@ class PuntenCalculatorTest extends WebTestCase
         $repo->expects($this->at(1))->method('findLastTransferForDate')->will($this->returnValue($t));
 
         $c = new PuntenCalculator($em);
-        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-21 11:00:00'), new DateTime('2013-05-01 11:00:00'));
+        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-21 11:00:00'), null, new DateTime('2013-05-01 11:00:00'));
         $this->assertEquals(true, $res);
     }
 
@@ -83,7 +83,7 @@ class PuntenCalculatorTest extends WebTestCase
         $repo->expects($this->at(1))->method('findLastTransferForDate')->will($this->returnValue($t2));
 
         $c = new PuntenCalculator($em);
-        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-21 11:00:00'), new DateTime('2013-05-01 11:00:00'));
+        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-21 11:00:00'), null, new DateTime('2013-05-01 11:00:00'));
         $this->assertEquals(false, $res);
     }
 }

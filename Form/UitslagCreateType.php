@@ -63,7 +63,7 @@ class UitslagCreateType extends AbstractType
                     $wedstrijd = $wedstrijdManager->createWedstrijdFromCrawler($crawler, $datum);
                     $data['wedstrijd']['naam'] = $wedstrijd->getNaam();
                     $refDatum = ( null !== $referentieWedstrijd ) ? $referentieWedstrijd->getDatum() : null;
-                    $data['uitslag'] = $uitslagManager->prepareUitslagen($uitslagType, $crawler, $wedstrijd, $refDatum);
+                    $data['uitslag'] = $uitslagManager->prepareUitslagen($uitslagType, $crawler, $wedstrijd, $seizoen, $refDatum);
                     $e->setData($data);
                 }
             });

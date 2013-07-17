@@ -44,7 +44,7 @@ class UitslagManager
      * @param type $puntenReferentieDatum
      * @return array of Cyclear\GameBundle\Entity\Uitslag
      */
-    public function prepareUitslagen(UitslagType $uitslagType, $crawler, Wedstrijd $wedstrijd, $puntenReferentieDatum = null)
+    public function prepareUitslagen(UitslagType $uitslagType, $crawler, Wedstrijd $wedstrijd, $seizoen, $puntenReferentieDatum = null)
     {
         $parseStrategy = $uitslagType->getCqParsingStrategy();
         $uitslagregels = $this->cqParser->getResultRows($crawler, $parseStrategy);
@@ -66,10 +66,10 @@ class UitslagManager
             $renner = $rennerRepo->findOneByCQId($uitslagregel['cqranking_id']);
             if (null !== $renner) {
                 $row['renner'] = $rennerManager->getRennerSelectorTypeStringFromRenner($renner);
-                $transfer = $transferRepo->findLastTransferForDate($renner, $wedstrijd->getDatum(), $wedstrijd->getSeizoen());
+                $transfer = $transferRepo->findLastTransferForDate($renner, $wedstrijd->getDatum(), $seizoen);
                 if (null !== $transfer) {
                     $row['ploeg'] = ( null !== $transfer->getPloegNaar() ) ? $transfer->getPloegNaar()->getId() : null;
-                    if (null !== $row['ploeg'] && $this->puntenCalculator->canGetTeamPoints($renner, $wedstrijd->getDatum(), $puntenReferentieDatum)) {
+                    if (null !== $row['ploeg'] && $this->puntenCalculator->canGetTeamPoints($renner, $wedstrijd->getDatum(), $seizoen, $puntenReferentieDatum)) {
                         $row['ploegPunten'] = $uitslagregel['points'];
                     }
                 }
