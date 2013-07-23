@@ -20,5 +20,5 @@
 <h3>Uitslagen</h3>
 {% include "CyclearGameBundle:Uitslag:_listRenner.html.twig" with {'uitslagen':uitslagen,'show_rider':false,'rennerPunten':rennerPunten} %}
 <h3>Transfers</h3>
-{% include "CyclearGameBundle:Transfer:_listWithInversion.html.twig" with {'listWithInversion':transfers} %}
+{% include "CyclearGameBundle:Transfer:_riderListWithInversion.html.twig" with {'listWithInversion':transfers} %}
 {% endblock %}

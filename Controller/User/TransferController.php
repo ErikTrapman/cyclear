@@ -76,7 +76,7 @@ class TransferController extends Controller
                     $transferManager->doUserTransfer($ploeg, $renner, $form->get('renner_in')->getData(), $seizoen[0]);
                 }
                 $em->flush();
-                return new RedirectResponse($this->generateUrl("user_ploeg", array("seizoen" => $seizoen[0]->getSlug(), "id" => $ploeg->getId())));
+                return new RedirectResponse($this->generateUrl("ploeg_show", array("seizoen" => $seizoen[0]->getSlug(), "id" => $ploeg->getId())));
             }
         }
         

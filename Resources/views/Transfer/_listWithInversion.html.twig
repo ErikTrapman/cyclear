@@ -12,7 +12,7 @@
     <tbody>
     {% for transfer in listWithInversion %}
         <tr>
-            <td>{{ transfer.ploegNaar.afkorting }}</td>
+            <td>{% if transfer.ploegNaar %}{{ transfer.ploegNaar.afkorting }}{% endif %}</td>
             <td>{{ transfer.renner.naam }}</td>
             <td>{% if transfer.inversionTransfer %}{{ transfer.inversionTransfer.renner.naam }}{% endif %}</td>
             <td>{{ transfer.datum|date('d-m-Y H:i') }}</td>

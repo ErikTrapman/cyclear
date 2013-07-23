@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class TransferRepository extends EntityRepository
 {
 
-    public function findByRenner(Renner $renner, $seizoen = null)
+    public function findByRenner(Renner $renner, $seizoen = null, $types = array())
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
@@ -22,7 +22,10 @@ class TransferRepository extends EntityRepository
         $qb = $this->getQueryBuilderForRenner($renner, $seizoen);
         $qb->andWhere('t.seizoen = ?2');
         $qb->setParameter("2", $seizoen);
-        $qb->orderBy('t.id', 'DESC');
+        $qb->orderBy('t.datum DESC, t.id', 'DESC');
+        if (!empty($types)) {
+            $qb->andWhere('t.transferType IN ( :types )')->setParameter('types', $types);
+        }
         return $qb->getQuery()->getResult();
     }
 

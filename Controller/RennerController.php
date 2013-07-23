@@ -101,10 +101,12 @@ class RennerController extends Controller
     public function showAction($seizoen, $renner)
     {
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-
-        $transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->getLatest(
-            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 999, null, $renner);
         $transferrepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
+
+        //$transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->getLatest(
+        //    $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 999, null, $renner);
+        
+        $transfers = $transferrepo->findByRenner( $renner, $seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER) );
 
         $uitslagen = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenForRenner($renner, $seizoen[0]);
 

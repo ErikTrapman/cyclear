@@ -73,19 +73,19 @@ class TransferManager
 
                 $this->em->beginTransaction();
 
-                $t2 = new Transfer();
-                $t2->setRenner($renner2);
-                $t2->setPloegNaar($this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner1, $seizoen));
-                $t2->setDatum(clone $datum);
-                $t2->setSeizoen($seizoen);
-                $t2->setTransferType($type);
-
                 $t1 = new Transfer();
                 $t1->setRenner($renner1);
                 $t1->setPloegNaar($this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner2, $seizoen));
                 $t1->setDatum(clone $datum);
                 $t1->setSeizoen($seizoen);
                 $t1->setTransferType($type);
+                
+                $t2 = new Transfer();
+                $t2->setRenner($renner2);
+                $t2->setPloegNaar($this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner1, $seizoen));
+                $t2->setDatum(clone $datum);
+                $t2->setSeizoen($seizoen);
+                $t2->setTransferType($type);
 
                 $releaseTransfer1 = $this->createReleaseTransfer($t1, $ploeg1);
                 $this->em->persist($releaseTransfer1);
@@ -95,9 +95,12 @@ class TransferManager
                 $this->contractManager->releaseRenner($renner2, $seizoen, $datum);
                 $this->em->persist($releaseTransfer2);
 
-
-                $t1->setInversionTransfer($t2);
-                $t2->setInversionTransfer($t1);
+                    
+                $releaseTransfer1->setInversionTransfer($t2);
+                $t2->setInversionTransfer($releaseTransfer1);
+                
+                $releaseTransfer2->setInversionTransfer($t1);
+                $t1->setInversionTransfer($releaseTransfer2);
 
                 $this->contractManager->createContract($renner1, $t1->getPloegNaar(), $seizoen, $datum);
                 $this->contractManager->createContract($renner2, $t2->getPloegNaar(), $seizoen, $datum);
@@ -146,6 +149,7 @@ class TransferManager
             $this->contractManager->createContract($rennerIn, $ploeg, $seizoen, $datum);
             //$transferUit->setInversionTransfer($transferIn);
             $transferIn->setInversionTransfer($transferUit);
+            $transferUit->setInversionTransfer($transferIn);
             $this->em->commit();
         } catch (\Exception $e) {
             $this->em->rollback();
