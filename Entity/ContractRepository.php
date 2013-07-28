@@ -12,7 +12,14 @@ class ContractRepository extends \Doctrine\ORM\EntityRepository
 
     public function getCurrentContract($renner, $seizoen)
     {
-        $res = $this->getContractsQb($renner, $seizoen)->getQuery()->getResult();
+        $qb = $this->createQueryBuilder('c')
+            ->where('c.renner = :renner')
+            ->andWhere('c.seizoen = :seizoen')
+            ->andWhere('c.eind IS NULL')
+            ->orderBy('c.id', 'DESC');
+        $qb->setParameters(array('renner' => $renner, 'seizoen' => $seizoen));
+
+        $res = $qb->getQuery()->getResult();
         if (empty($res)) {
             return null;
         }
@@ -28,12 +35,17 @@ class ContractRepository extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function getLastContract($renner, $seizoen)
+    public function getLastContract($renner, $seizoen, $ploeg = null)
     {
         $qb = $this->createQueryBuilder('c')
             ->where('c.renner = :renner')
             ->andWhere('c.seizoen = :seizoen');
         $qb->setParameters(array('renner' => $renner, 'seizoen' => $seizoen));
+        if (null !== $ploeg) {
+            $qb->andWhere('c.ploeg = :ploeg');
+            $qb->setParameter('ploeg', $ploeg);
+        }
+        $qb->orderBy('c.id', 'DESC')->setMaxResults(1);
         $res = $qb->getQuery()->getResult();
         if (empty($res)) {
             return null;
@@ -41,14 +53,22 @@ class ContractRepository extends \Doctrine\ORM\EntityRepository
         return $res[0];
     }
 
-    private function getContractsQb($renner, $seizoen)
+    public function getLastFinishedContract($renner, $seizoen, $ploeg = null)
     {
         $qb = $this->createQueryBuilder('c')
             ->where('c.renner = :renner')
             ->andWhere('c.seizoen = :seizoen')
-            ->andWhere('c.eind IS NULL')
-            ->orderBy('c.id', 'DESC');
+            ->andWhere('c.eind IS NOT NULL');
         $qb->setParameters(array('renner' => $renner, 'seizoen' => $seizoen));
-        return $qb;
+        if (null !== $ploeg) {
+            $qb->andWhere('c.ploeg = :ploeg');
+            $qb->setParameter('ploeg', $ploeg);
+        }
+        $qb->orderBy('c.id', 'DESC')->setMaxResults(1);
+        $res = $qb->getQuery()->getResult();
+        if (empty($res)) {
+            return null;
+        }
+        return $res[0];
     }
 }

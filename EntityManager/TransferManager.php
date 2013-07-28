@@ -79,7 +79,7 @@ class TransferManager
                 $t1->setDatum(clone $datum);
                 $t1->setSeizoen($seizoen);
                 $t1->setTransferType($type);
-                
+
                 $t2 = new Transfer();
                 $t2->setRenner($renner2);
                 $t2->setPloegNaar($this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner1, $seizoen));
@@ -95,10 +95,10 @@ class TransferManager
                 $this->contractManager->releaseRenner($renner2, $seizoen, $datum);
                 $this->em->persist($releaseTransfer2);
 
-                    
+
                 $releaseTransfer1->setInversionTransfer($t2);
                 $t2->setInversionTransfer($releaseTransfer1);
-                
+
                 $releaseTransfer2->setInversionTransfer($t1);
                 $t1->setInversionTransfer($releaseTransfer2);
 
@@ -111,12 +111,13 @@ class TransferManager
                 $this->em->commit();
             } catch (Exception $e) {
                 $this->em->rollback();
+                return false;
             }
         } else {
             if ($ploeg1 instanceof Ploeg) {
                 $this->doUserTransfer($ploeg1, $renner1, $renner2, $seizoen);
             } elseif ($ploeg2 instanceof Ploeg) {
-                $this->doUserTransfer($ploeg1, $renner2, $renner1, $seizoen);
+                $this->doUserTransfer($ploeg2, $renner2, $renner1, $seizoen);
             }
         }
         return true;
@@ -159,47 +160,42 @@ class TransferManager
 
     public function revertTransfer(Transfer $transfer)
     {
-        if (null !== $transfer->getInversionTransfer()) {
-            try {
-                $this->em->beginTransaction();
-                $this->revertBaseTransfer($transfer);
+        try {
+            $this->em->beginTransaction();
+            $this->revertBaseTransfer($transfer);
+            if (null !== $transfer->getInversionTransfer()) {
                 $this->revertInversionTransfer($transfer->getInversionTransfer());
                 $this->em->remove($transfer->getInversionTransfer());
-                $this->em->remove($transfer);
-                $this->em->commit();
-                return true;
-            } catch (\Exception $e) {
-                $this->em->rollback();
-                return false;
             }
+            $this->em->remove($transfer);
+            $this->em->commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->em->rollback();
+            return false;
         }
-        $baseTransfer = $this->em->getRepository("CyclearGameBundle:Transfer")->findOneBy(array('inversionTransfer' => $transfer));
-        return $this->revertTransfer($baseTransfer);
     }
 
     private function revertInversionTransfer($transfer)
     {
-        $renner2 = $transfer->getRenner();
-        $contracts = $this->em->getRepository("CyclearGameBundle:Contract")->getContracts($renner2, $transfer->getSeizoen());
-        if (array_key_exists(0, $contracts)) {
-            $nowCurrentContract = $contracts[0];
-            $nowCurrentContract->setEind(null);
-            $this->em->persist($nowCurrentContract);
-        }
+        return $this->revertBaseTransfer($transfer);
     }
 
     private function revertBaseTransfer($transfer)
     {
         $renner = $transfer->getRenner();
-        // baseTransfer, renner has a current contract
-        $contracts = $this->em->getRepository("CyclearGameBundle:Contract")->getContracts($renner, $transfer->getSeizoen());
-        if (array_key_exists(0, $contracts)) {
-            $this->em->remove($contracts[0]);
+        if ($transfer->getPloegNaar()) {
+            $ploegNaarContract = $this->em->getRepository("CyclearGameBundle:Contract")->getLastContract($renner, $transfer->getSeizoen(), $transfer->getPloegNaar());
+            if ($ploegNaarContract) {
+                $this->em->remove($ploegNaarContract);
+            }
         }
-        if (array_key_exists(1, $contracts)) {
-            $nowCurrentContract = $contracts[1];
-            $nowCurrentContract->setEind(null);
-            $this->em->persist($nowCurrentContract);
+        if ($transfer->getPloegVan()) {
+            $ploegVanContract = $this->em->getRepository("CyclearGameBundle:Contract")->getLastFinishedContract($renner, $transfer->getSeizoen(), $transfer->getPloegVan());
+            if ($ploegVanContract) {
+                $ploegVanContract->setEind(null);
+                $this->em->persist($ploegVanContract);
+            }
         }
     }
 }
