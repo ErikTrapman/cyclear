@@ -24,7 +24,7 @@
         "jms/serializer-bundle": "0.12.*",
         
         "kriswallsmith/assetic": "1.1.*@dev",
-        "cyclear/game-bundle":"dev-transfersv2",
+        "cyclear/game-bundle":"dev-master",
         
         "friendsofsymfony/user-bundle": "dev-master",
         "friendsofsymfony/rest-bundle": "dev-master",

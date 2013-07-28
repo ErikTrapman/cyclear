@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "5a084cc9373ca081602c7a7e66669882",
+    "hash": "327bc2e6b92a745e8fe13598daf0889c",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -33,17 +33,17 @@
         },
         {
             "name": "cyclear/game-bundle",
-            "version": "dev-transfersv2",
+            "version": "dev-master",
             "target-dir": "Cyclear/GameBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ErikTrapman/CyclearGameBundle.git",
-                "reference": "2487b6d9a794649ae9da98d9f3821b4837a87613"
+                "reference": "bc69ea2f2771bef17e49320d6f30c0b576497ad8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/2487b6d9a794649ae9da98d9f3821b4837a87613",
-                "reference": "2487b6d9a794649ae9da98d9f3821b4837a87613",
+                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/bc69ea2f2771bef17e49320d6f30c0b576497ad8",
+                "reference": "bc69ea2f2771bef17e49320d6f30c0b576497ad8",
                 "shasum": ""
             },
             "require": {
@@ -78,7 +78,7 @@
                 "game",
                 "symfony"
             ],
-            "time": "2013-07-27 13:51:03"
+            "time": "2013-07-28 16:14:41"
         },
         {
             "name": "ddeboer/data-import",
@@ -975,22 +975,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSRest.git",
-                "reference": "b836af42daef72117b1694934a77fffa9d4a82a8"
+                "reference": "9375f6cc8dc0a4a45e465219c28952c0b340066e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRest/zipball/b836af42daef72117b1694934a77fffa9d4a82a8",
-                "reference": "b836af42daef72117b1694934a77fffa9d4a82a8",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRest/zipball/9375f6cc8dc0a4a45e465219c28952c0b340066e",
+                "reference": "9375f6cc8dc0a4a45e465219c28952c0b340066e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2",
-                "symfony/http-foundation": "~2.0"
+                "php": ">=5.3.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.8.x-dev"
+                    "dev-master": "0.9.x-dev"
                 }
             },
             "autoload": {
@@ -1017,7 +1016,7 @@
             "keywords": [
                 "rest"
             ],
-            "time": "2013-07-24 18:23:56"
+            "time": "2013-07-28 15:11:31"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
@@ -1026,19 +1025,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSRestBundle.git",
-                "reference": "4c573ca06686134a11388d2de55633db0e123e2e"
+                "reference": "076a1293a3f7ed86bca67b7aba6d8c5641a1804c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/4c573ca06686134a11388d2de55633db0e123e2e",
-                "reference": "4c573ca06686134a11388d2de55633db0e123e2e",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/076a1293a3f7ed86bca67b7aba6d8c5641a1804c",
+                "reference": "076a1293a3f7ed86bca67b7aba6d8c5641a1804c",
                 "shasum": ""
             },
             "require": {
                 "doctrine/inflector": "1.0.*",
                 "friendsofsymfony/rest": ">=0.7.0,<0.9.0-dev",
                 "php": ">=5.3.2",
-                "symfony/framework-bundle": "~2.1"
+                "symfony/framework-bundle": "~2.1",
+                "willdurand/negotiation": "1.0.*"
             },
             "conflict": {
                 "jms/serializer": "<0.12",
@@ -1091,7 +1091,7 @@
             "keywords": [
                 "rest"
             ],
-            "time": "2013-07-26 14:24:53"
+            "time": "2013-07-28 14:30:54"
         },
         {
             "name": "friendsofsymfony/user-bundle",
@@ -1168,12 +1168,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "9662cee48b2abe5d3805e52f8973718c7144c0c9"
+                "reference": "33cd84cd10ae2887698bd82bbbc016149cdd53ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/9662cee48b2abe5d3805e52f8973718c7144c0c9",
-                "reference": "9662cee48b2abe5d3805e52f8973718c7144c0c9",
+                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/33cd84cd10ae2887698bd82bbbc016149cdd53ed",
+                "reference": "33cd84cd10ae2887698bd82bbbc016149cdd53ed",
                 "shasum": ""
             },
             "require": {
@@ -1240,7 +1240,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2013-07-21 15:51:21"
+            "time": "2013-07-28 08:06:50"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -2000,12 +2000,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "a2987b5942301d0a10125018a2bb94f1d6f3ad50"
+                "reference": "2.6.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/a2987b5942301d0a10125018a2bb94f1d6f3ad50",
-                "reference": "a2987b5942301d0a10125018a2bb94f1d6f3ad50",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/2.6.4",
+                "reference": "2.6.4",
                 "shasum": ""
             },
             "require": {
@@ -2038,7 +2038,7 @@
                 "mobile detector",
                 "php mobile detect"
             ],
-            "time": "2013-07-09 09:03:14"
+            "time": "2013-07-28 13:14:05"
         },
         {
             "name": "monolog/monolog",
@@ -3084,6 +3084,56 @@
                 "css"
             ],
             "time": "2013-03-01 05:24:27"
+        },
+        {
+            "name": "willdurand/negotiation",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/willdurand/Negotiation.git",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/1.0.0",
+                "reference": "1.0.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Negotiation": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Durand",
+                    "email": "william.durand1@gmail.com",
+                    "homepage": "http://www.willdurand.fr"
+                }
+            ],
+            "description": "Content Negotiation tools for PHP provided as a standalone library.",
+            "homepage": "http://williamdurand.fr/Negotiation/",
+            "keywords": [
+                "accept",
+                "content",
+                "format",
+                "header",
+                "negotiation"
+            ],
+            "time": "2013-07-27 11:33:42"
         }
     ],
     "packages-dev": [
