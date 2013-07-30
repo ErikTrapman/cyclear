@@ -3,10 +3,10 @@
 namespace Cyclear\GameBundle\Tests\EntityManager;
 
 use Cyclear\GameBundle\Entity\Transfer;
-use Cyclear\GameBundle\Tests\BaseFunctionalTest;
+use Cyclear\GameBundle\Tests\BaseFunctional;
 use DateTime;
 
-class TransferManagerTest extends BaseFunctionalTest
+class TransferManagerTest extends BaseFunctional
 {
     /**
      *
@@ -19,13 +19,13 @@ class TransferManagerTest extends BaseFunctionalTest
      * @var \Cyclear\GameBundle\EntityManager\TransferManager
      */
     private $transferManager;
-    
+
     private $ploegRepo;
-    
+
     private $rennerRepo;
-    
+
     private $contractRepo;
-    
+
     private $transferRepo;
 
     public function setUp()
@@ -42,7 +42,7 @@ class TransferManagerTest extends BaseFunctionalTest
     {
         return $this->em->getRepository("CyclearGameBundle:Seizoen")->find(1);
     }
-    
+
     private function createTransfer($renner, $ploeg, $type = Transfer::DRAFTTRANSFER)
     {
         $t = new Transfer();
@@ -83,7 +83,6 @@ class TransferManagerTest extends BaseFunctionalTest
     {
         $this->doLoadFixtures();
 
-
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
 
@@ -105,17 +104,8 @@ class TransferManagerTest extends BaseFunctionalTest
         $this->transferManager->doExchangeTransfer($r1, $r2, new DateTime(), $seizoen);
         $this->em->flush();
 
-        $transfers = $this->transferRepo->findAll();
-        // FIXME test verplaatsen naar testExchangeTransfer
-        $this->assertEquals(6, count($transfers));
-
         $renner1PloegAfterExchange = $this->rennerRepo->getPloeg($r1, $seizoen);
-        // FIXME test verplaatsen naar testExchangeTransfer
-        $this->assertEquals($p2, $renner1PloegAfterExchange);
-
         $renner2PloegAfterExchange = $this->rennerRepo->getPloeg($r2, $seizoen);
-        // FIXME test verplaatsen naar testExchangeTransfer
-        $this->assertEquals($p1, $renner2PloegAfterExchange);
 
         // find the last transfer for rider 1
         $renner1PloegNaarTransfer = $this->transferRepo->find($revertId1);
@@ -172,10 +162,6 @@ class TransferManagerTest extends BaseFunctionalTest
         $this->transferManager->doUserTransfer($p1, $r1, $r2, $seizoen);
         $this->em->flush();
 
-        // FIXME hoort niet hier
-        $this->assertEquals(3, count($this->transferRepo->findAll()));
-        $this->assertEquals(2, count($this->contractRepo->findAll()));
-
         $revertTransfer = $this->transferRepo->find($transferIdToRevert);
         $this->transferManager->revertTransfer($revertTransfer);
         $this->em->flush();
@@ -220,19 +206,79 @@ class TransferManagerTest extends BaseFunctionalTest
         $this->assertEquals(null, $this->rennerRepo->getPloeg($r1, $seizoen));
     }
 
-    public function testAmountOfTransfersAndContractsByDraftTransfer()
+    public function testDraftTransfer()
     {
-        
+        $this->doLoadFixtures();
+
+        $p1 = $this->ploegRepo->find(1);
+        $r1 = $this->rennerRepo->find(1);
+
+        $draftTransfer1 = $this->createTransfer($r1, $p1, Transfer::DRAFTTRANSFER);
+        $this->transferManager->doDraftTransfer($draftTransfer1);
+        $this->em->flush();
+        $this->assertEquals(1, count($this->transferRepo->findAll()));
+        $this->assertEquals(1, count($this->contractRepo->findAll()));
+
+        $this->assertEquals($p1, $this->rennerRepo->getPloeg($r1, $this->getSeizoen()));
     }
 
-    public function testAmountOfTransfersAndContractsByUserTransfer()
+    public function testUserTransfer()
     {
-        
+        $this->doLoadFixtures();
+
+        $p1 = $this->ploegRepo->find(1);
+        $r1 = $this->rennerRepo->find(1);
+
+        $r2 = $this->rennerRepo->find(2);
+
+        $seizoen = $this->getSeizoen();
+
+        $draftTransfer1 = $this->createTransfer($r1, $p1, Transfer::DRAFTTRANSFER);
+        $this->em->persist($draftTransfer1);
+        $this->em->flush();
+
+        $this->transferManager->doDraftTransfer($draftTransfer1);
+        $this->em->flush();
+
+        $this->transferManager->doUserTransfer($p1, $r1, $r2, $seizoen);
+        $this->em->flush();
+
+        $this->assertEquals(3, count($this->transferRepo->findAll()));
+        $this->assertEquals(2, count($this->contractRepo->findAll()));
+        $this->assertEquals($p1, $this->rennerRepo->getPloeg($r2, $this->getSeizoen()));
+        $this->assertEquals(null, $this->rennerRepo->getPloeg($r1, $this->getSeizoen()));
     }
 
-    public function testAmountOfTransfersAndContractsByExchangeTransfer()
+    public function testExchangeTransfer()
     {
-        
+        $this->doLoadFixtures();
+
+        $p1 = $this->ploegRepo->find(1);
+        $r1 = $this->rennerRepo->find(1);
+
+        $p2 = $this->ploegRepo->find(2);
+        $r2 = $this->rennerRepo->find(2);
+
+        $seizoen = $this->getSeizoen();
+
+        $draftTransfer1 = $this->createTransfer($r1, $p1);
+        $draftTransfer2 = $this->createTransfer($r2, $p2);
+        $this->em->persist($draftTransfer1);
+        $this->em->persist($draftTransfer2);
+        $this->em->flush();
+
+        $this->transferManager->doDraftTransfer($draftTransfer1);
+        $this->transferManager->doDraftTransfer($draftTransfer2);
+        $this->em->flush();
+
+        $this->transferManager->doExchangeTransfer($r1, $r2, new DateTime(), $seizoen);
+        $this->em->flush();
+
+        $this->assertEquals(6, count($this->transferRepo->findAll()));
+        $this->assertEquals(4, count($this->contractRepo->findAll()));
+
+        $this->assertEquals($p2, $this->rennerRepo->getPloeg($r1, $seizoen));
+        $this->assertEquals($p1, $this->rennerRepo->getPloeg($r2, $seizoen));
     }
 
     public function testReleaseTransfersAreCreated()

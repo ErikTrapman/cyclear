@@ -2,7 +2,7 @@
 
 namespace Cyclear\GameBundle\Tests;
 
-class BaseFunctionalTest extends \Liip\FunctionalTestBundle\Test\WebTestCase
+class BaseFunctional extends \Liip\FunctionalTestBundle\Test\WebTestCase
 {
 
     public function setUp()
