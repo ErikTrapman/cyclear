@@ -43,7 +43,7 @@ class UitslagController extends Controller
         $pagination = $paginator->paginate(
             $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
-        return array('pagination' => $pagination,'seizoen' => $this->getRequest()->attributes->get('seizoen-object'));
+        return array('pagination' => $pagination, 'seizoen' => $this->getRequest()->attributes->get('seizoen-object'));
     }
 
     /**
@@ -64,6 +64,27 @@ class UitslagController extends Controller
         }
 
         return array('form' => $form->createView(), 'entity' => $uitslag);
+    }
+
+    /**
+     * @Route("/new", name="admin_uitslag_new")
+     * @Template("CyclearGameBundle:Uitslag/Admin:new.html.twig")
+     */
+    public function newAction(Request $request)
+    {
+        $uitslag = new Uitslag();
+        $seizoen = $request->get('seizoen-object');
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new UitslagType(), $uitslag, array('seizoen' => $seizoen));
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $em->persist($uitslag);
+                $em->flush();
+                return $this->redirect($this->generateUrl('admin_uitslag'));
+            }
+        }
+        return array('form' => $form->createView());
     }
 
     /**
@@ -113,5 +134,4 @@ class UitslagController extends Controller
         }
         return array('form' => $form->createView());
     }
-
 }
