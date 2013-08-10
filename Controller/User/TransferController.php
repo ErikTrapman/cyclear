@@ -67,7 +67,7 @@ class TransferController extends Controller
         $options['ploeg'] = $ploeg;
         $form = $this->createForm(new TransferUserType(), $transferUser, $options);
         if ($this->getRequest()->getMethod() == 'POST') {
-            $form->bindRequest($this->getRequest());
+            $form->submit($this->getRequest());
             if ($form->isValid()) {
                 $transferManager = $this->get('cyclear_game.manager.transfer');
                 if ($rennerPloeg !== $ploeg) {

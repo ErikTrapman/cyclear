@@ -37,7 +37,7 @@ class RennerController extends Controller
         $config = $em->getConfiguration();
         $config->addFilter("naam", "Cyclear\GameBundle\Filter\RennerNaamFilter");
         if ($this->getRequest()->getMethod() == 'POST') {
-            $filter->bindRequest($this->getRequest());
+            $filter->submit($this->getRequest());
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
                     $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData(), Type::getType(Type::STRING)->getBindingType());
@@ -72,7 +72,7 @@ class RennerController extends Controller
         $request = $this->getRequest();
 
         if ($request->getMethod() == 'POST') {
-            $editForm->bindRequest($request);
+            $editForm->submit($request);
             $em->persist($entity);
             $em->flush();
         }
@@ -111,7 +111,7 @@ class RennerController extends Controller
         $entity = new Renner ();
         $request = $this->getRequest();
         $form = $this->createForm(new RennerType(), $entity);
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -132,7 +132,7 @@ class RennerController extends Controller
     {
         $request = $this->getRequest();
         $form = $this->createDeleteForm($id);
-        $form->bindRequest($request);
+        $form->submit($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $renner = $em->getRepository("CyclearGameBundle:Renner")->find($id);

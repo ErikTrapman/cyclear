@@ -59,7 +59,7 @@ class SpelregelsController extends Controller
         $entity  = new Spelregels();
         $request = $this->getRequest();
         $form    = $this->createForm(new SpelregelsType(), $entity);
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -123,7 +123,7 @@ class SpelregelsController extends Controller
 
         $request = $this->getRequest();
 
-        $editForm->bindRequest($request);
+        $editForm->submit($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -150,7 +150,7 @@ class SpelregelsController extends Controller
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

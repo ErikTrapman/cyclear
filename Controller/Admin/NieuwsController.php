@@ -61,7 +61,7 @@ class NieuwsController extends Controller
         $entity  = new Nieuws();
         $request = $this->getRequest();
         $form    = $this->createForm(new NieuwsType(), $entity);
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -125,7 +125,7 @@ class NieuwsController extends Controller
 
         $request = $this->getRequest();
 
-        $editForm->bindRequest($request);
+        $editForm->submit($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -152,7 +152,7 @@ class NieuwsController extends Controller
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

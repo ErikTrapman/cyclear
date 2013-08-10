@@ -38,7 +38,7 @@ class PloegController extends Controller {
         $config->addFilter("seizoen", "Cyclear\GameBundle\Filter\SeizoenFilter");
 
         if ($this->getRequest()->getMethod() == 'POST') {
-            $filter->bindRequest($this->getRequest());
+            $filter->submit($this->getRequest());
             //$data = $filter->get('user')->getData();
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
@@ -90,7 +90,7 @@ class PloegController extends Controller {
         $entity = new Ploeg();
         $request = $this->getRequest();
         $form = $this->createForm(new PloegType(), $entity);
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -151,13 +151,13 @@ class PloegController extends Controller {
 
         $request = $this->getRequest();
 
-        $editForm->bindRequest($request);
+        $editForm->submit($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_ploeg_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_ploeg'));
         }
 
         return array(
@@ -177,7 +177,7 @@ class PloegController extends Controller {
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

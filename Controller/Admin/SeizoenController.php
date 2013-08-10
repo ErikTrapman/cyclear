@@ -61,7 +61,7 @@ class SeizoenController extends Controller
         $entity  = new Seizoen();
         $request = $this->getRequest();
         $form    = $this->createForm(new SeizoenType(), $entity);
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -125,7 +125,7 @@ class SeizoenController extends Controller
 
         $request = $this->getRequest();
 
-        $editForm->bindRequest($request);
+        $editForm->submit($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -152,7 +152,7 @@ class SeizoenController extends Controller
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

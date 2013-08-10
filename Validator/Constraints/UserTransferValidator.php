@@ -15,7 +15,7 @@ class UserTransferValidator extends ConstraintValidator
         $this->em = $em;
     }
 
-    public function isValid($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint)
     {
         if (null === $value->getRennerIn() && null === $value->getRennerUit()) {
             $this->setMessage("Onbekende renner opgegeven");

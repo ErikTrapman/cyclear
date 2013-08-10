@@ -61,7 +61,7 @@ class TransferController extends Controller
         $entity->setDatum(new \DateTime());
         $form = $this->getTransferForm($entity);
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->submit($request);
             if ($form->isValid()) {
                 $form->get('datum')->getData()->setTime(date('H'), date('i'), date('s'));
                 $transferManager = $this->get('cyclear_game.manager.transfer');
@@ -87,7 +87,7 @@ class TransferController extends Controller
         //$entity->setSeizoen($seizoen);
         $form = $this->getTransferForm($entity);
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->submit($request);
             if ($form->isValid()) {
                 $form->get('datum')->getData()->setTime(date('H'), date('i'), date('s'));
                 $transferManager = $this->get('cyclear_game.manager.transfer');
@@ -154,7 +154,7 @@ class TransferController extends Controller
 
         $request = $this->getRequest();
 
-        $editForm->bindRequest($request);
+        $editForm->submit($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -181,7 +181,7 @@ class TransferController extends Controller
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

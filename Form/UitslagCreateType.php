@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\DataEvent;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -40,7 +41,7 @@ class UitslagCreateType extends AbstractType
 
         $factory = $builder->getFormFactory();
 
-        $builder->addEventListener(FormEvents::PRE_BIND, function(DataEvent $e) use ($factory,
+        $builder->addEventListener(FormEvents::PRE_BIND, function(FormEvent $e) use ($factory,
             $wedstrijdManager, $uitslagManager, $crawlerManager, $request, $seizoen) {
                 $form = $e->getForm();
                 $data = $e->getData();
@@ -48,11 +49,16 @@ class UitslagCreateType extends AbstractType
                     return;
                 }
                 $helper = new PreBindValueTransformer();
+                //var_dump( $clonedForm->get('wedstrijd'));die;
+                //$clonedForm->get('wedstrijd')->getData()->getUitslagType();
+                //$clonedForm->get('referentiewedstrijd')->getData();
+                //$clonedForm->get('wedstrijd')->getData()->getDatum();
                 $uitslagType = $helper->transformPostedValue($data['wedstrijd']['uitslagtype'], $form->get('wedstrijd')->get('uitslagtype'));
                 $referentieWedstrijd = $helper->transformPostedValue($data['referentiewedstrijd'], $form->get('referentiewedstrijd'));
                 $datum = $helper->transformPostedValue($data['wedstrijd']['datum'], $form->get('wedstrijd')->get('datum'));
                 $form->add($factory->createNamed('uitslag', 'collection', null, array('type' => new UitslagType(),
                         'allow_add' => true,
+                        'auto_initialize' => false,
                         'by_reference' => false,
                         'options' => array(
                             'use_wedstrijd' => false,
@@ -69,7 +75,7 @@ class UitslagCreateType extends AbstractType
             });
 
 
-        $builder->addEventListener(FormEvents::POST_BIND, function(DataEvent $e) use($request, $rennerManager) {
+        $builder->addEventListener(FormEvents::POST_BIND, function(FormEvent $e) use($request, $rennerManager) {
                 $form = $e->getForm();
                 $data = $e->getData();
                 if (null === $data) {

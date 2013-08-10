@@ -62,7 +62,7 @@ class UitslagTypeController extends Controller
         $entity  = new UitslagType();
         $request = $this->getRequest();
         $form    = $this->createForm(new UitslagTypeType(), $entity);
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -126,7 +126,7 @@ class UitslagTypeController extends Controller
 
         $request = $this->getRequest();
 
-        $editForm->bindRequest($request);
+        $editForm->submit($request);
         
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -153,7 +153,7 @@ class UitslagTypeController extends Controller
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

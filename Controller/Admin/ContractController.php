@@ -31,7 +31,7 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
         $config->addFilter("renner", "Cyclear\GameBundle\Filter\RennerIdFilter");
         $entities = $em->getRepository('CyclearGameBundle:Contract')->createQueryBuilder('c')->orderBy('c.id', 'DESC');
         if ($this->getRequest()->getMethod() == 'POST') {
-            $filter->bindRequest($this->getRequest());
+            $filter->submit($this->getRequest());
             if ($filter->isValid()) {
                 if ($filter->get('renner')->getData()) {
                     //$em->getFilters()->enable("renner")->setParameter(
@@ -78,7 +78,7 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
         $entity = new Contract();
         $request = $this->getRequest();
         $form = $this->createForm(new ContractType(), $entity);
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -138,7 +138,7 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
 
         $request = $this->getRequest();
 
-        $editForm->bindRequest($request);
+        $editForm->submit($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);

@@ -61,7 +61,7 @@ class RennerController extends Controller
         $config = $em->getConfiguration();
         $config->addFilter("naam", "Cyclear\GameBundle\Filter\RennerNaamFilter");
         if ($this->getRequest()->getMethod() == 'POST') {
-            $filter->bindRequest($this->getRequest());
+            $filter->submit($this->getRequest());
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
                     $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData());

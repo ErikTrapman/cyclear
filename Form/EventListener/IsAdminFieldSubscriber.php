@@ -41,7 +41,7 @@ class IsAdminFieldSubscriber implements EventSubscriberInterface
      *
      * @param DataEvent $event
      */
-    public function preSetData(DataEvent $event)
+    public function preSetData(\Symfony\Component\Form\FormEvent $event)
     {
         $data = $event->getData();
         $form = $event->getForm();
@@ -53,8 +53,9 @@ class IsAdminFieldSubscriber implements EventSubscriberInterface
         $checked = $data->hasRole('ROLE_ADMIN');
 
         $form->add($this->factory->createNamed('is_admin', 'checkbox', $checked, array(
-                'property_path' => false,
-                'required' => false
+                'mapped' => false,
+                'required' => false,
+                'auto_initialize' => false
             )));
     }
 

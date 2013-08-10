@@ -67,7 +67,7 @@ class UserController extends Controller
         $form->setData($user);
         // IMPORTANT. We vragen niet om een password in het formulier. Zet hier dus tenminste een wachtwoord!
         $user->setPlainPassword(uniqid());
-        $form->bindRequest($request);
+        $form->submit($request);
         if ($form->isValid()) {
             $userManager->updateUser($user);
             return $this->redirect($this->generateUrl('admin_user_edit', array('id' => $user->getId())));
@@ -130,7 +130,7 @@ class UserController extends Controller
             $originalPloegen[] = $ploeg;
         }
 
-        $editForm->bindRequest($request);
+        $editForm->submit($request);
         if ($editForm->isValid()) {
 
             $usermanager = $this->get('cyclear_game.manager.user');

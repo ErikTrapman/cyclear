@@ -56,7 +56,7 @@ class UitslagController extends Controller
         $seizoen = $uitslag->getWedstrijd()->getSeizoen();
         $form = $this->createForm(new UitslagType(), $uitslag, array('seizoen' => $seizoen));
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->submit($request);
             if ($form->isValid()) {
                 $em->flush();
                 return $this->redirect($this->generateUrl('admin_uitslag_edit', array('uitslag' => $uitslag->getId())));
@@ -77,7 +77,7 @@ class UitslagController extends Controller
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new UitslagType(), $uitslag, array('seizoen' => $seizoen));
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->submit($request);
             if ($form->isValid()) {
                 $em->persist($uitslag);
                 $em->flush();
@@ -110,7 +110,7 @@ class UitslagController extends Controller
         $options['default_date'] = new DateTime();
         $form = $this->createForm(new \Cyclear\GameBundle\Form\UitslagCreateType(), null, $options);
         if ($request->isXmlHttpRequest()) {
-            $form->bind($request);
+            $form->submit($request);
 
             $twig = $this->get('twig');
             $templateFile = "CyclearGameBundle:Uitslag/Admin:_ajaxTemplate.html.twig";
@@ -121,7 +121,7 @@ class UitslagController extends Controller
             return new Response($body);
         }
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->submit($request);
             $wedstrijd = $form->get('wedstrijd')->getData();
             $uitslagen = $form->get('uitslag')->getData();
             $em->persist($wedstrijd);

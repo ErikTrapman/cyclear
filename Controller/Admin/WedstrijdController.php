@@ -70,7 +70,7 @@ class WedstrijdController extends Controller {
         $entity = new Wedstrijd();
         $request = $this->getRequest();
         $form = $this->createForm(new WedstrijdType(), $entity);
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -131,7 +131,7 @@ class WedstrijdController extends Controller {
 
         $request = $this->getRequest();
 
-        $editForm->bindRequest($request);
+        $editForm->submit($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -157,7 +157,7 @@ class WedstrijdController extends Controller {
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

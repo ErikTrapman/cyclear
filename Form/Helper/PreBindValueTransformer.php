@@ -16,10 +16,12 @@ class PreBindValueTransformer
      */
     public function transformPostedValue($data, $field)
     {
-        foreach ($field->getClientTransformers() as $transformer) {
+        //var_dump($data);
+        //var_dump($field);die;
+        foreach ($field->getConfig()->getViewTransformers() as $transformer) {
             $data = $transformer->reverseTransform($data);
         }
-        foreach ($field->getNormTransformers() as $transformer) {
+        foreach ($field->getConfig()->getModelTransformers() as $transformer) {
             $data = $transformer->reverseTransform($data);
         }
         return $data;
