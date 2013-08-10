@@ -9,18 +9,12 @@ $(document).ready(function(){
                     query: query
                 },
                 dataType: 'json',
-                accepts: {
-                    json: 'application/json; request=twitter.typeahead'
-                },
                 success: function(json) {
                     var options = [];
                     for(i in json){
                         options.push(json[i].naam);
                     }
                     typeof json == 'undefined' ? false : process(options);
-                    //$(':focus').closest('.selector-ttl').show();// $('.selector-ttl').show();
-                    //$('.selector-found').html(options.length+' resultaten');
-                    //$(':focus').find('.selector-found').html(options.length+' resultaten');
                     return;
                 }
             });
