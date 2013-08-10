@@ -27,7 +27,7 @@ class UserEditType extends BaseType
                 'multiple' => true,
                 'expanded' => false
             ))
-                    ->add('enabled', null, array('required'=>false))
+            ->add('enabled', null, array('required' => false))
         ;
         $subscriber = new IsAdminFieldSubscriber($builder->getFormFactory());
         $builder->addEventSubscriber($subscriber);
