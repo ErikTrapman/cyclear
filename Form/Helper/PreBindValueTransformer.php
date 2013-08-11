@@ -16,8 +16,6 @@ class PreBindValueTransformer
      */
     public function transformPostedValue($data, $field)
     {
-        //var_dump($data);
-        //var_dump($field);die;
         foreach ($field->getConfig()->getViewTransformers() as $transformer) {
             $data = $transformer->reverseTransform($data);
         }
