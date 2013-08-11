@@ -33,7 +33,7 @@ class UitslagCreateType extends AbstractType
                         ->join('w.uitslagtype', 'ut')
                         ->where('ut.isGeneralClassification = 0')
                         ->add('orderBy', 'w.id DESC')
-                        ->setMaxResults(50);
+                        ->setMaxResults(30);
                 }))
             ->add('wedstrijd', new WedstrijdType(), array('default_date' => $options['default_date']))
         ;
