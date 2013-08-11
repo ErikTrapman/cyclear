@@ -32,24 +32,21 @@ class PloegController extends Controller
         }
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
         $renners = $em->getRepository('CyclearGameBundle:Ploeg')->getRennersWithPunten($entity);
-        // TODO repository function maken
-        $uitslagenQb = $em->getRepository('CyclearGameBundle:Uitslag')
-                ->createQueryBuilder("u")
-                ->join('u.wedstrijd', 'w')
-                ->where('w.seizoen = :seizoen')->andWhere('u.ploeg = :ploeg')->andWhere('u.ploegPunten > 0')
-                ->setParameters(array("seizoen" => $seizoen[0], "ploeg" => $entity))
-                ->orderBy("u.renner")->orderBy('u.id', 'DESC')
-        ;
+        $uitslagRepo = $em->getRepository('CyclearGameBundle:Uitslag');
         $paginator = $this->get('knp_paginator');
+
         $uitslagen = $paginator->paginate(
-            $uitslagenQb->getQuery()->getResult(), $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
+            $uitslagRepo->getUitslagenForPloegQb($entity, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('page', 1)
         );
-        //var_dump($uitslagen);
-        $transferPaginator = $this->get('knp_paginator');
-        $transfers = $em->getRepository("CyclearGameBundle:Transfer")->getLatest(
-            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 9999, $entity);
-        $transfers = $transferPaginator->paginate($transfers,
-            $this->get('request')->query->get('transferPage', 1), 10, array('pageParameterName' => 'transferPage'));
+        $transfers = $paginator->paginate($em->getRepository("CyclearGameBundle:Transfer")->getLatest(
+                $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 9999, $entity), $this->get('request')->query->get('transferPage', 1), 10, array('pageParameterName' => 'transferPage'));
+        $transferUitslagen = $paginator->paginate(
+            $uitslagRepo->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('transferResultsPage', 1), 10, array('pageParameterName' => 'transferResultsPage')
+        );
+        $zeges = $paginator->paginate(
+            $uitslagRepo->getUitslagenForPloegByPositionQb($entity, 1, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('zegeResultsPage', 1), 10, array('pageParameterName' => 'zegeResultsPage')
+        );
+
         $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");
         return array(
             'entity' => $entity,
@@ -57,7 +54,9 @@ class PloegController extends Controller
             'uitslagen' => $uitslagen,
             'seizoen' => $seizoen[0],
             'transfers' => $transfers,
-            'rennerRepo' => $rennerRepo
-            );
+            'rennerRepo' => $rennerRepo,
+            'transferUitslagen' => $transferUitslagen,
+            'zeges' => $zeges
+        );
     }
 }

@@ -14,10 +14,11 @@ class UitslagRepository extends EntityRepository
         }
         $options = array(":seizoen_id" => $seizoen->getId());
         $ploegWhere = null;
-        if(null !== $ploeg){
+        if (null !== $ploeg) {
             $ploegWhere = ' AND p.id = :ploeg_id';
             $options['ploeg_id'] = $ploeg->getId();
         }
+        // TODO DQL'en net zoals getCountForPosition
         $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 
                 ( SELECT IFNULL(SUM(u.ploegPunten),0) 
                 FROM Uitslag u 
@@ -26,19 +27,11 @@ class UitslagRepository extends EntityRepository
                 FROM Ploeg p 
                 WHERE p.seizoen_id = :seizoen_id %s
                 ORDER BY punten DESC, p.afkorting ASC
-                ",$ploegWhere);
+                ", $ploegWhere);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
         $stmt->execute($options);
         return $stmt->fetchAll(\PDO::FETCH_NAMED);
-    }
-
-    public function getPuntenForPloeg($seizoen = null, $ploeg)
-    {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
-        }
-        
     }
 
     public function getPuntenByPloegForPeriode(Periode $periode, $seizoen = null)
@@ -50,7 +43,7 @@ class UitslagRepository extends EntityRepository
         $start->setTime('00', '00', '00');
         $end = clone $periode->getEind();
         $end->setTime('23', '59', '59');
-
+        // TODO DQL'en net als getCountForPosition
         $sql = "SELECT *,
                     ( SELECT IFNULL(SUM(u.ploegPunten),0)
                     FROM Uitslag u 
@@ -73,20 +66,22 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
-
-        $sql = "SELECT *,
-                    IFNULL(( SELECT SUM(IF(u.positie = :pos,1,0)) AS freqByPos
-                    FROM Uitslag u
-                    INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id
-                    WHERE u.ploeg_id = p.id AND w.seizoen_id = :seizoen_id
-                     ),0) AS freqByPos
-                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
-                GROUP BY p.id
-                ORDER BY freqByPos DESC, p.afkorting ASC";
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->prepare($sql);
-        $stmt->execute(array(":pos" => $pos, ":seizoen_id" => $seizoen->getId()));
-        return $stmt->fetchAll(\PDO::FETCH_NAMED);
+        $parameters = array('seizoen' => $seizoen, 'pos' => $pos);
+        $qb2 = $this->createQueryBuilder('u')
+            ->select('SUM(IF(u.positie = :pos,1,0))')
+            ->join('u.wedstrijd', 'w')
+            ->where('u.ploeg = p.id')
+            ->andWhere('w.seizoen = :seizoen')
+        ;
+        $qb = $this->_em->getRepository('CyclearGameBundle:Ploeg')->createQueryBuilder('p');
+        $qb
+            ->where('p.seizoen = :seizoen')
+            ->addSelect(sprintf('IFNULL((%s),0) as freqByPos', $qb2->getDql()))
+            ->groupBy('p.id')
+            ->orderBy('freqByPos DESC, p.afkorting','DESC')
+            ->setParameters($parameters);
+        ;
+        return $qb->getQuery()->getResult();
     }
 
     public function getPuntenForRenner($renner, $seizoen = null)
@@ -188,6 +183,7 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
+        // TODO DQL'en net als getCountForPosition
         $transferSql = "SELECT t.renner_id FROM Transfer t WHERE t.transferType = ".Transfer::DRAFTTRANSFER." AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id";
 
         $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting,
@@ -206,6 +202,7 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
+        // TODO DQL'en net als getCountForPosition
         $transfers = "SELECT DISTINCT t.renner_id FROM Transfer t 
             WHERE t.transferType != ".Transfer::DRAFTTRANSFER." AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
                 AND t.renner_id NOT IN ( SELECT t.renner_id FROM Transfer t WHERE t.transferType = ".Transfer::DRAFTTRANSFER." AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id )
@@ -219,5 +216,60 @@ class UitslagRepository extends EntityRepository
         $stmt = $conn->prepare($sql);
         $stmt->execute(array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER));
         return $stmt->fetchAll(\PDO::FETCH_NAMED);
+    }
+
+    public function getUitslagenForPloegForNonDraftTransfersQb($ploeg, $seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $parameters = array('ploeg' => $ploeg, 'seizoen' => $seizoen);
+        $transfers = $this->_em->getRepository('CyclearGameBundle:Transfer')->getTransferredIn($ploeg, $seizoen);
+
+        $qb = $this->createQueryBuilder('u');
+        $qb->where('u.ploeg = :ploeg')
+            ->join('u.wedstrijd', 'w')
+            ->andWhere('w.seizoen = :seizoen')
+            ->andWhere($qb->expr()->in('u.renner', array_unique(array_map(function($a) {
+                                return $a->getRenner()->getId();
+                            }, $transfers))))
+            ->andWhere('u.ploegPunten > 0')
+            ->setParameters($parameters)
+            ->orderBy('w.datum DESC, u.id', 'DESC')
+        ;
+        return $qb;
+    }
+
+    public function getUitslagenForPloegQb($ploeg, $seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $parameters = array('ploeg' => $ploeg, 'seizoen' => $seizoen);
+        return $this->createQueryBuilder('u')
+                ->join('u.wedstrijd', 'w')
+                ->where('u.ploeg = :ploeg')
+                ->andWhere('w.seizoen = :seizoen')
+                ->andWhere('u.ploegPunten > 0')
+                ->setParameters($parameters)
+                ->orderBy('w.datum DESC, u.id', 'DESC')
+        ;
+    }
+
+    public function getUitslagenForPloegByPositionQb($ploeg, $position, $seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $parameters = array('ploeg' => $ploeg, 'seizoen' => $seizoen, 'position' => $position);
+        return $this->createQueryBuilder('u')
+                ->join('u.wedstrijd', 'w')
+                ->where('u.ploeg = :ploeg')
+                ->andWhere('w.seizoen = :seizoen')
+                ->andWhere('u.ploegPunten > 0')
+                ->andWhere('u.positie = :position')
+                ->setParameters($parameters)
+                ->orderBy('w.datum DESC, u.id', 'DESC')
+        ;
     }
 }

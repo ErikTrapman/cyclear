@@ -112,5 +112,39 @@ class TransferRepository extends EntityRepository
         }
         return $res[0];
     }
+    
+    /**
+     * 
+     * @param type $ploeg
+     * @param type $seizoen
+     * @param array $transferTypes
+     */
+    public function getTransferredIn($ploeg, $seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        /** @var \Doctrine\ORM\QueryBuilder $tQb  */
+        $tQb = $this->_em->getRepository("CyclearGameBundle:Transfer")->createQueryBuilder('t');
+
+        $params = array('drafttransfer' => Transfer::DRAFTTRANSFER, 'ploeg' => $ploeg, 'seizoen' => $seizoen);
+        $qb2 = $this->_em->getRepository("CyclearGameBundle:Transfer")
+            ->createQueryBuilder('t2')
+            ->where('t2.transferType = :drafttransfer')
+            ->andWhere('t2.ploegNaar = :ploeg')
+            ->andWhere('t2.seizoen = :seizoen')
+            ->setParameters($params)
+        ;
+        
+        $tQb
+            ->where("t.transferType != :drafttransfer")
+            ->andWhere('t.ploegNaar = :ploeg')
+            ->andWhere('t.seizoen = :seizoen')
+            ->andWhere($tQb->expr()->notIn('t', $qb2->getDql()))
+            ->setParameters($params);
+        ;
+        return $tQb->getQuery()->getResult();
+    }
+    
+    
 }
-?>

@@ -12,8 +12,8 @@
     {% for uitslag in list %}
         <tr>
             <td>{{ loop.index }}</td>
-            <td>{{ uitslag.naam }}</td>
-            <td>{{ uitslag.afkorting }}</td>
+            <td>{{ uitslag.0.naam }}</td>
+            <td>{{ uitslag.0.afkorting }}</td>
             <td>{{ uitslag.freqByPos }}</td>
         </tr>
     {% endfor %}
