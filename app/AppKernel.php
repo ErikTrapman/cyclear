@@ -33,7 +33,7 @@ class AppKernel extends Kernel
             new ErikTrapman\Bundle\CQRankingParserBundle\ErikTrapmanCQRankingParserBundle(),
             new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
             new SunCat\MobileDetectBundle\MobileDetectBundle(),
-            new Cyclear\ApplicationBundle\CyclearApplicationBundle(),
+            new Cyclear\ApplicationBundle\CyclearApplicationBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
