@@ -65,6 +65,7 @@ doctrine:
         dql:
           string_functions:
             ifnull: DoctrineExtensions\Query\Mysql\IfNull
+            if: DoctrineExtensions\Query\Mysql\IfElse
     
 cyclear_game:
   enable_twitter: true  
