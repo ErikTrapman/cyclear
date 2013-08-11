@@ -88,7 +88,7 @@
                             {% endif %}
                                 <li><a href="{{ path('archief_index') }}">Archief</a></li>
                                 {%- if app.request.attributes.get('seizoen-object').id != app.request.attributes.get('current-seizoen').id %}
-                                <li class="btn btn-info">{{ app.request.attributes.get('seizoen-object') }}</li>{% endif -%}
+                                <li><a style="color:#0088cc;" href="{{ path("game",{"seizoen":app.request.attributes.get('seizoen-object').slug}) }}">{{ app.request.attributes.get('seizoen-object') }}</a></li>{% endif -%}
                         {% if is_granted("ROLE_USER") %}
                             {% include 'CyclearGameBundle:Default/User:inc_menu.html.twig' %}
                         {% endif %}
