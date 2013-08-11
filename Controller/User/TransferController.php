@@ -81,7 +81,7 @@ class TransferController extends Controller
         }
         
         $transferTypes = array(Transfer::ADMINTRANSFER,Transfer::USERTRANSFER);
-        $periode = $em->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode();
+        $periode = $em->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode($seizoen[0]);
         $transferInfo = $em->getRepository("CyclearGameBundle:Transfer")
             ->getTransferCountByType($ploeg, $periode->getStart(), $periode->getEind(),$transferTypes);
 

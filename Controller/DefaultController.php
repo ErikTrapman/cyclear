@@ -22,7 +22,7 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         $seizoen = $request->attributes->get('seizoen-object');
-        $periode = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode();
+        $periode = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode($seizoen);
 
         $nieuws = $this->getDoctrine()->getRepository("CyclearGameBundle:Nieuws")->findBy(array('seizoen' => $seizoen), array('id' => 'DESC'), 1);
         if (!array_key_exists(0, $nieuws)) {

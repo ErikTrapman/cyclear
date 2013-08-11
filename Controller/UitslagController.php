@@ -43,11 +43,11 @@ class UitslagController extends Controller
      */
     public function viewByPeriodeAction($seizoen = null, $periode_id = null)
     {
+        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
         if ($periode_id === null) {
-            $periode = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode();
+            $periode = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode($seizoen[0]);
             return new RedirectResponse($this->generateUrl("uitslag_periode", array("seizoen" => $seizoen, "periode_id" => $periode->getId())));
         }
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
 
         $em = $this->getDoctrine()->getManager();
         $periode = $em->find("CyclearGameBundle:Periode", $periode_id);
