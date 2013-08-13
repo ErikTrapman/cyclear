@@ -137,7 +137,9 @@
                      
                     <a class="btn" href="{{ path('fos_user_resetting_request') }}">Wachtwoord vergeten?</a>
                {% endif %}
+                    {% if app.request.attributes.get('seizoen-object') %}
                     <a class="btn" href="{{ path('spelregels_index',{'seizoen':app.request.attributes.get('seizoen-object').slug}) }}">Spelregels</a>
+                    {% endif %}
                     <a class="btn" href="https://github.com/ErikTrapman" target="_blank">github.com/Cyclear</a>
                     <span class="badge">0.5.1 [11-08-2013]</span>
                </p>
