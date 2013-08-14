@@ -3,7 +3,6 @@
 namespace Cyclear\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Entity\User as BaseUser;
 
 /**
  * Cyclear\GameBundle\Entity\User
@@ -11,7 +10,7 @@ use FOS\UserBundle\Entity\User as BaseUser;
  * @ORM\Table(name="User")
  * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\UserRepository")
  */
-class User extends BaseUser implements \Serializable
+class User extends \FOS\UserBundle\Model\User implements \Serializable
 {
     /**
      * @var integer $id
