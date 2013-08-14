@@ -230,9 +230,9 @@ class UitslagRepository extends EntityRepository
         $qb->where('u.ploeg = :ploeg')
             ->join('u.wedstrijd', 'w')
             ->andWhere('w.seizoen = :seizoen')
-            ->andWhere($qb->expr()->in('u.renner', array_unique(array_map(function($a) {
+            ->andWhere($qb->expr()->in('u.renner', array_merge(array_unique(array_map(function($a) {
                                 return $a->getRenner()->getId();
-                            }, $transfers))))
+                            }, $transfers)),array(0))))
             ->andWhere('u.ploegPunten > 0')
             ->setParameters($parameters)
             ->orderBy('w.datum DESC, u.id', 'DESC')
