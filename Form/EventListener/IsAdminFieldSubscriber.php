@@ -64,7 +64,7 @@ class IsAdminFieldSubscriber implements EventSubscriberInterface
      *
      * @param DataEvent $event
      */
-    public function bind(DataEvent $event)
+    public function bind(\Symfony\Component\Form\FormEvent $event)
     {
         $data = $event->getData();
         $form = $event->getForm();
