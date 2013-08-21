@@ -9,7 +9,7 @@ security:
         main:
             entity: { class: CyclearGameBundle:User, property: username }
         fos_userbundle:
-            id: fos_user.user_manager
+            id: fos_user.user_provider.username
     
     firewalls:
         main:
