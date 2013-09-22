@@ -113,10 +113,13 @@ fos_rest:
     param_fetcher_listener: true
     body_listener: true
     format_listener:
-      default_priorities:
-        - html
-        - json
-      fallback_format: json
+      rules:
+        - { path: '^/', priorities: ['html', 'json'], fallback_format: json, prefer_extension: false }
+        #priorities:
+          #name: [html, json]
+          #- html
+          #- json
+        #fallback_format: json
     view:
       formats:
         json: true
