@@ -26,6 +26,20 @@ class PloegRepository extends EntityRepository
         return $renners;
     }
 
+    public function getDraftRenners($ploeg, $seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        return $this->_em->getRepository("CyclearGameBundle:Renner")
+                ->createQueryBuilder("r")
+                ->innerJoin("CyclearGameBundle:Transfer", "t", 'WITH', 't.renner = r')
+                ->where("t.transferType = ".Transfer::DRAFTTRANSFER)
+                ->andWhere("t.ploegNaar = :ploeg")
+                ->andWhere("t.seizoen = :seizoen")
+                ->setParameters(array("ploeg" => $ploeg, "seizoen" => $seizoen))->getQuery()->getResult();
+    }
+
     public function getRennersWithPunten($ploeg, $seizoen = null)
     {
         if (null === $seizoen) {
@@ -38,12 +52,32 @@ class PloegRepository extends EntityRepository
             $punten = $uitslagRepo->getPuntenForRennerWithPloeg($renner, $ploeg, $seizoen);
             $ret[] = array(0 => $renner, 'punten' => (int) $punten);
         }
-        uasort($ret, function($a, $b) {
+        $this->puntenSort($ret);
+        return $ret;
+    }
+
+    public function getDraftRennersWithPunten($ploeg, $seizoen = null)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $ret = array();
+        $renners = $this->getDraftRenners($ploeg, $seizoen);
+        $uitslagRepo = $this->_em->getRepository("CyclearGameBundle:Uitslag");
+        foreach ($renners as $renner) {
+            $ret[] = array(0 => $renner, 'punten' => $uitslagRepo->getTotalPuntenForRenner($renner, $seizoen));
+        }
+        $this->puntenSort($ret);
+        return $ret;
+    }
+
+    private function puntenSort(&$values)
+    {
+        uasort($values, function($a, $b) {
                 if ($a['punten'] == $b['punten']) {
                     return 0;
                 }
                 return ($a['punten'] < $b['punten']) ? 1 : -1;
             });
-        return $ret;
     }
 }

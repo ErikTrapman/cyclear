@@ -1,0 +1,36 @@
+<table class="records_list table ">
+    <thead>
+        <tr>
+            <th/>
+            <th>Naam</th>
+            <th style="text-align:right;">Punten</th>
+            {% if showContract is defined and showContract %}<th>Sinds</th>{% endif %}
+            <th/>
+        </tr>
+    </thead>
+    <tbody>
+{% for renner in renners %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":renner[0],"seizoen":seizoen } %}</td>
+                <td style="text-align:right;">{{ renner.punten }}</td>
+                <td>{% if showContract is defined and showContract and renner[0].latestContract is not null %}{{ renner[0].latestContract.start|date('d-m-Y') }}{% endif %}</td>
+                <td>
+                    {% if showActions is defined and showActions %} 
+                    {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" 
+                        with {"ploeg":entity, "renner":renner[0],"seizoen":seizoen,"rennerPloeg":entity } %}
+                    {% endif %}
+                </td>
+                </tr>
+            </tbody>
+{% endfor %}
+{% if showTotal is defined and showTotal and total is defined %}
+            <tfoot>
+            <tr>
+                <td colspan="2"></td>
+                <td style="text-align:right;">{{ total }}</td>
+                <td colspan="2"></td>
+            </tr>
+            </tfoot>
+{% endif %}
+        </table>

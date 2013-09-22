@@ -178,22 +178,30 @@ class UitslagRepository extends EntityRepository
         return $ret;
     }
 
-    public function getPuntenByPloegForDraftTransfers($seizoen = null)
+    public function getPuntenByPloegForDraftTransfers($seizoen = null, $ploeg = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         // TODO DQL'en net als getCountForPosition
-        $transferSql = "SELECT t.renner_id FROM Transfer t WHERE t.transferType = ".Transfer::DRAFTTRANSFER." AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id";
-
+        $transferSql = "SELECT t.renner_id FROM Transfer t 
+            WHERE t.transferType = ".Transfer::DRAFTTRANSFER." AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id";
+        $ploegWhere = '';
+        $params = array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER);
+        if(null !== $ploeg){
+            $ploegWhere = ' AND p.id = :ploeg';
+            $params[':ploeg'] = $ploeg->getId();
+        }
         $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting,
-                ( SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE w.seizoen_id = :seizoen_id AND u.renner_id IN ( %s ) ) AS punten 
-                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id 
+                ( SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u 
+                INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id 
+                WHERE w.seizoen_id = :seizoen_id AND u.renner_id IN ( %s ) ) AS punten 
+                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id %s
                 ORDER BY punten DESC, p.afkorting ASC
-                ", $transferSql);
+                ", $transferSql, $ploegWhere);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
-        $stmt->execute(array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER));
+        $stmt->execute($params);
         return $stmt->fetchAll(\PDO::FETCH_NAMED);
     }
 

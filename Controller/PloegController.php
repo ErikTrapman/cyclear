@@ -30,8 +30,9 @@ class PloegController extends Controller
         if (null === $entity) {
             throw $this->createNotFoundException('Unable to find Ploeg entity.');
         }
+        $ploegRepo = $em->getRepository('CyclearGameBundle:Ploeg');
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        $renners = $em->getRepository('CyclearGameBundle:Ploeg')->getRennersWithPunten($entity);
+        $renners = $ploegRepo->getRennersWithPunten($entity);
         $uitslagRepo = $em->getRepository('CyclearGameBundle:Uitslag');
         $paginator = $this->get('knp_paginator');
 
@@ -49,6 +50,8 @@ class PloegController extends Controller
 
         $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");
         $punten = $uitslagRepo->getPuntenByPloeg($seizoen[0], $entity);
+        $draftRenners = $ploegRepo->getDraftRennersWithPunten($entity, $seizoen[0]);
+        $draftPunten = $uitslagRepo->getPuntenByPloegForDraftTransfers($seizoen[0], $entity);
         return array(
             'entity' => $entity,
             'renners' => $renners,
@@ -58,7 +61,9 @@ class PloegController extends Controller
             'rennerRepo' => $rennerRepo,
             'transferUitslagen' => $transferUitslagen,
             'zeges' => $zeges,
-            'punten' => $punten[0]['punten']
+            'punten' => $punten[0]['punten'],
+            'draftRenners' => $draftRenners,
+            'draftPunten' => $draftPunten[0]['punten']
         );
     }
 }

@@ -8,60 +8,33 @@
 <h2>{{ entity.naam }} - {{ punten }}</h2>
 
 <div class="span12">
-
     <ul class="nav nav-tabs" id="tabs">
         <li class="active"><a href="#ploeg" data-toggle="tab">Ploeg</a></li>
         <li><a href="#punten" data-toggle="tab">Gescoorde punten</a></li>
         <li><a href="#transfers" data-toggle="tab">Transfers</a></li>
         <li><a href="#transferpunten" data-toggle="tab">Transfer punten</a></li>
         <li><a href="#zeges" data-toggle="tab">Zeges</a></li>
+        <li><a href="#draft" data-toggle="tab">Draftploeg</a></li>
     </ul>
     <div class="tab-content">
-
         <div class="tab-pane active" id="ploeg">
-            <table class="records_list table ">
-                <thead>
-                    <tr>
-                        <th/>
-                        <th>Naam</th>
-                        <th>Punten</th>
-                        <th>Sinds</th>
-                        <th/>
-                    </tr>
-                </thead>
-        {% for renner in renners %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":renner[0],"seizoen":seizoen } %}</td>
-                    <td>{{ renner.punten }}</td>
-                    <td>{% if renner[0].latestContract is not null %}{{ renner[0].latestContract.start|date('d-m-Y') }}{% endif %}</td>
-                    <td>
-                            {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with 
-                                {"ploeg":entity, "renner":renner[0],"seizoen":seizoen,"rennerPloeg":entity } 
-                            %}
-                        </td>
-
-                    </tr>
-        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="tab-pane" id="punten">
+            {% include "CyclearGameBundle:Ploeg:_singleRenners.html.twig" with {'renners':renners,'showTotal':false,'showContract':true, 'showActions':true } %}
+        </div>
+        <div class="tab-pane" id="punten">
             {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':uitslagen} %}
-                </div>
-                <div class="tab-pane" id="transfers">
+        </div>
+        <div class="tab-pane" id="transfers">
             {% include "CyclearGameBundle:Transfer:_listWithInversion.html.twig" with {'listWithInversion':transfers, 'firstPageRoute' : 'ploeg_show','includePagination': true} %}
-                    </div>
-                <div class="tab-pane" id="transferpunten">
-                {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':transferUitslagen} %}
-                </div>
-                <div class="tab-pane" id="zeges">
-                {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':zeges} %}
-                </div>
-        
-                </div>
-        
-
-            </div>
+        </div>
+        <div class="tab-pane" id="transferpunten">
+            {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':transferUitslagen} %}
+        </div>
+        <div class="tab-pane" id="zeges">
+            {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':zeges} %}
+        </div>
+        <div class="tab-pane" id="draft">
+            {% include "CyclearGameBundle:Ploeg:_singleRenners.html.twig" with {'renners':draftRenners,'showTotal': true,'total': draftPunten, 'showContract': false,'showActions':false } %}
+        </div>
+    </div>
+</div>
 {% endblock %}
