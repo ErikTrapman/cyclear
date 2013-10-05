@@ -34,7 +34,7 @@ class SeasonRiderController extends FOSRestController
             $qb->setParameter('naam', "%".$urlQuery."%");
         }
         $entities = $paginator->paginate(
-            $qb, $paramFetcher->get('page') !== null ? $paramFetcher->get('page') : 1, 10
+            $qb, $paramFetcher->get('page') !== null ? $paramFetcher->get('page') : 1, 20
         );
         if ('html' === $request->getRequestFormat()) {
             $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->findOneBySlug($seizoen);
