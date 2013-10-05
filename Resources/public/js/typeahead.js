@@ -20,7 +20,7 @@ $(document).ready(function(){
             });
         },
         minLength: 3,
-        items: 10 /* TODO how to get this from config.yml? */
+        items: 20 /* TODO how to get this from config.yml? */
     });
     
 });
