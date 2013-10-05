@@ -26,7 +26,8 @@ class UitslagCreateType extends AbstractType
         $seizoen = $options['seizoen'];
         $rennerManager = $options['renner_manager'];
         $builder
-            ->add('url', 'eriktrapman_cqrankingmatchselector_type', array('mapped' => false, 'required' => true, 'label' => 'CQ-wedstrijd'))
+            ->add('url', 'eriktrapman_cqrankingmatchselector_type', array('mapped' => false, 'required' => false, 'label' => 'CQ-wedstrijd'))
+            ->add('url_manual', null, array('mapped' => false, 'required' => false, 'label' => 'URL', 'attr' => array('size' => 80)))
             ->add('referentiewedstrijd', 'entity', array('required' => false, 'mapped' => false, 'class' => 'CyclearGameBundle:Wedstrijd',
                 'query_builder' => function( EntityRepository $r ) {
                     return $r->createQueryBuilder('w')
@@ -64,7 +65,7 @@ class UitslagCreateType extends AbstractType
                             'use_wedstrijd' => false,
                             'seizoen' => $seizoen))));
                 if ($request->isXmlHttpRequest()) {
-                    $url = $data['url'];
+                    $url = $data['url'] ? $data['url'] : $data['url_manual'];
                     $crawler = $crawlerManager->getCrawler($url);
                     $wedstrijd = $wedstrijdManager->createWedstrijdFromCrawler($crawler, $datum);
                     $data['wedstrijd']['naam'] = $wedstrijd->getNaam();
