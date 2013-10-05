@@ -19,7 +19,6 @@ framework:
 # Twig Configuration
 twig:
     globals:
-      typeahead_max_results: %typeahead_max_results%
       logging_address: %logging_address%
       corresponding_address: %corresponding_address%
     debug:            %kernel.debug%

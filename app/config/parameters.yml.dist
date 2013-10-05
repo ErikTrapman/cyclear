@@ -21,5 +21,3 @@ parameters:
     twitter_consumer_secret: ~
     twitter_oauth_token: ~
     twitter_oauth_secret: ~
-
-    typeahead_max_results: 10
