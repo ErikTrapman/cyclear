@@ -1,8 +1,5 @@
 {% block renner_selector_widget %}
 {{ form_widget(form, { 'attr':{'class':'span4 ajax-typeahead'} } ) }}&nbsp;
-<span class="selector-ttl" style="display:none;">
-    <img src="/bundles/cycleargame/icons/famfamfam/information.png" width="16" height="16"> maximaal {{ typeahead_max_results }} getoond
-</span>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".selector-tooltip").tooltip();
