@@ -10,10 +10,10 @@
         <button class="btn" type="submit">Zoek</button>
     </form>
     
-    <table class="table">
+    <table class="table table-condensed">
         <thead>
             <tr>
-                <th>Naam</th>
+                <th>Renner</th>
                 <th>Ploeg</th>
                 <th/>
             </tr>
@@ -48,10 +48,10 @@
 
         <div class="tab-content">
             <div class="tab-pane active" id="leaderboard">
-                {% include 'CyclearGameBundle:Renner:viewWithPunten.html.twig' with { listWithPunten :with_team} %}
+                {% include 'CyclearGameBundle:Renner:viewWithPunten.html.twig' with { listWithPunten: with_team} %}
             </div>
             <div class="tab-pane" id="available">
-                {% include 'CyclearGameBundle:Renner:viewWithPuntenNoPloeg.html.twig' with { listWithPuntenNoPloeg: without_team } %}
+                {% include 'CyclearGameBundle:Renner:viewWithPunten.html.twig' with { listWithPunten: without_team } %}
             </div>
         </div>
 </div>
