@@ -1,1 +1,1 @@
-var CyclearApp = angular.module('Cyclear', ['ui']);
+//var CyclearApp = angular.module('Cyclear', ['ui']);
