@@ -4,21 +4,32 @@
 
 {% block content %}
 
-<h2>
-<div>
-<span>{% include "CyclearGameBundle:Country:_image.html.twig" with {'size':32,'country':renner.country } %}{{ renner.naam }}
-{% if ploeg is not null %} - <a href="{{ path('ploeg_show',{'id':ploeg.id,'seizoen':seizoen.slug}) }}">{{ ploeg.afkorting }}</a>{% else %} - vrij{% endif %}
-{% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with {"renner":renner,"rennerPloeg":ploeg, "seizoen":seizoen } %}
-<a href="http://cqranking.com/men/asp/gen/rider.asp?riderid={{ renner.cqranking_id }}">
-    <img src="/bundles/cycleargame/icons/cqlogo.jpg" width="32" height="32"></a>
-<a href="http://www.procyclingstats.com/find.php?keywords={{ renner.naam }}">
-    <img src="/bundles/cycleargame/icons/pcs-icon.png" width="32" height="32"></a>
-</span>
-</div>
-</h2>
+<div class="span12">
+    <h3>
+        <div>
+            <span>
+            {% include "CyclearGameBundle:Country:_image.html.twig" with {'size':32,'country':renner.country } %}{{ renner.naam }}
+            {% if ploeg is not null %} - <a href="{{ path('ploeg_show',{'id':ploeg.id,'seizoen':seizoen.slug}) }}">{{ ploeg.afkorting }}</a>{% else %} - vrij{% endif %}
+            {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with {"renner":renner,"rennerPloeg":ploeg, "seizoen":seizoen } %}
+            <a href="http://cqranking.com/men/asp/gen/rider.asp?riderid={{ renner.cqranking_id }}">
+                <img src="/bundles/cycleargame/icons/cqlogo.jpg" width="32" height="32"></a>
+            <a href="http://www.procyclingstats.com/find.php?keywords={{ renner.naam }}">
+                <img src="/bundles/cycleargame/icons/pcs-icon.png" width="32" height="32"></a>
+            </span>
+        </div>
+    </h3>
 
-<h3>Uitslagen</h3>
-{% include "CyclearGameBundle:Uitslag:_listRenner.html.twig" with {'uitslagen':uitslagen,'show_rider':false,'rennerPunten':rennerPunten} %}
-<h3>Transfers</h3>
-{% include "CyclearGameBundle:Transfer:_riderListWithInversion.html.twig" with {'listWithInversion':transfers} %}
+    <ul class="nav nav-tabs" id="tabs">
+        <li class="active"><a href="#uitslagen" data-toggle="tab">Uitslagen</a></li>
+        <li><a href="#transfers" data-toggle="tab">Transfers</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="uitslagen">
+            {% include "CyclearGameBundle:Uitslag:_listRenner.html.twig" with {'uitslagen':uitslagen,'show_rider':false,'rennerPunten':rennerPunten} %}
+        </div>
+        <div class="tab-pane" id="transfers">
+            {% include "CyclearGameBundle:Transfer:_riderListWithInversion.html.twig" with {'listWithInversion':transfers} %}
+        </div>
+    </div>
+</div>
 {% endblock %}

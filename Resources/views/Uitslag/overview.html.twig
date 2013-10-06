@@ -5,15 +5,15 @@
 {% block content %}
 
 <div class="span4">
-    <h2>Stand</h2>
+    <h3>Stand</h3>
     {% include "CyclearGameBundle:Uitslag:viewByPloegen.html.twig" with {"list": stand,"seizoen":seizoen } %}
 </div>
 <div class="span3">
-    <h2>Draftklassement</h2>
+    <h3>Draftklassement</h3>
     {% include "CyclearGameBundle:Uitslag:viewByDraftTransfer.html.twig" with {"list": draft } %}
 </div>
 <div class="span3">
-    <h2>Transferklassement</h2>
+    <h3>Transferklassement</h3>
     {% include "CyclearGameBundle:Uitslag:viewByUserTransfer.html.twig" with {"list": transfer } %}
 </div>
 {% endblock %}

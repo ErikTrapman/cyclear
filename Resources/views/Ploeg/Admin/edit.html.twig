@@ -1,7 +1,7 @@
 {% extends '::admin.base.html.twig' %}
 
 {% block content %}
-<h2>Ploeg edit</h2>
+<h3>Ploeg edit</h3>
 
 <form action="{{ path('admin_ploeg_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}

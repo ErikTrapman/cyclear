@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h2>Renner edit</h2>
+<h3>Renner edit</h3>
 
 <form action="{{ path('admin_renner_edit', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}

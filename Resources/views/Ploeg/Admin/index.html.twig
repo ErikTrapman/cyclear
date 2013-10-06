@@ -3,7 +3,7 @@
 {% block title %}Ploeg index{% endblock %}
 
 {% block content %}
-<h2>Ploegen</h2>
+<h3>Ploegen</h3>
 <form class="form-inline" action="{{ path('admin_ploeg') }}" method="post" {{ form_enctype(filter) }}>
     {{ form_widget(filter) }}
     <p>

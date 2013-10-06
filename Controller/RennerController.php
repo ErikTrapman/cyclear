@@ -112,7 +112,7 @@ class RennerController extends Controller
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $uitslagen, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
+            $uitslagen, $this->get('request')->query->get('page', 1)/* page number */, 20/* limit per page */
         );
 
         $ploeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen[0]);

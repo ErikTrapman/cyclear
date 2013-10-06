@@ -1,7 +1,7 @@
 {% extends '::admin.base.html.twig' %}
 
 {% block content %}
-<h2>Uitslag bewerken</h2>
+<h3>Uitslag bewerken</h3>
 
 <form action="{{ path('admin_uitslag_new') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
