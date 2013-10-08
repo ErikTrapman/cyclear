@@ -24,10 +24,15 @@ class PeriodeRepository extends EntityRepository
         try {
             return $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
+            $qb = $this->createQueryBuilder('p')->orderBy('p.start','ASC')
+                ->where('p.seizoen = :seizoen')
+                ->setParameter('seizoen', $seizoen)
+                ->setMaxResults(1);
+            /*
             $qb = $this->createQueryBuilder("p")->where("p.start <= :eind")
                 ->andWhere('p.seizoen = :seizoen')
                 ->setParameter('seizoen', $seizoen)
-                ->setParameter('eind', $eind)->orderBy('p.eind','DESC')->setMaxResults(1);
+                ->setParameter('eind', $eind)->orderBy('p.eind','DESC')->setMaxResults(1);*/
             return $qb->getQuery()->getSingleResult();
         }
     }
