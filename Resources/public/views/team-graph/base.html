@@ -1,0 +1,11 @@
+<div>
+    <div class="span3">
+        <ul>
+            <li ng-repeat="team in teams"><a ng-click="setSelect(team.id)" >{{ team.naam }} - {{ team.punten }}
+                    <span ng-show="selected.indexOf(team.id) > -1">[X]</span></a></li>
+        </ul>
+    </div>
+    <div class="span6">
+        <div class="graphplace"></div>
+    </div>
+</div>
