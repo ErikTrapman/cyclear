@@ -77,7 +77,7 @@ class TeamController extends \FOS\RestBundle\Controller\FOSRestController
             FROM Wedstrijd w WHERE w.seizoen_id = :seizoen ORDER BY w.datum ASC LIMIT 1");
         $stmt->execute($params);
         $minDate = $stmt->fetchAll();
-        $start = \DateTime::createFromFormat('Y-m-d 00:00:00',$minDate[0]['mindate']);
+        $start = \DateTime::createFromFormat('Y-m-d 00:00:00', !empty($minDate) ? $minDate[0]['mindate'] : date('Y-01-01 00:00:00'));
         // end-date is the end of the year
         $end = clone $start;
         $end->setDate($start->format('Y'),12,31);

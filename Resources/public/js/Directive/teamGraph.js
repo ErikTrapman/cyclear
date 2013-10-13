@@ -63,7 +63,7 @@ angular.module('Cyclear', ['d3']).directive('teamGraph', ['d3Service', function(
                             .y(function(d) {
                         return y(d.points);
                     }).defined(function(d) {
-                        return typeof d.points !== 'undefined';
+                        return d.points !== null;
                     });
                     
                     var svg2 = function() {
