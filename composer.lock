@@ -38,12 +38,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ErikTrapman/CyclearGameBundle.git",
-                "reference": "b63c8b9e3f489b12d7b8d691f1e8a370b6e736db"
+                "reference": "53035bbdcdb224ca84697c35982ae60c5c7ff181"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/b63c8b9e3f489b12d7b8d691f1e8a370b6e736db",
-                "reference": "b63c8b9e3f489b12d7b8d691f1e8a370b6e736db",
+                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/53035bbdcdb224ca84697c35982ae60c5c7ff181",
+                "reference": "53035bbdcdb224ca84697c35982ae60c5c7ff181",
                 "shasum": ""
             },
             "require": {
@@ -78,7 +78,7 @@
                 "game",
                 "symfony"
             ],
-            "time": "2013-10-06 19:24:29"
+            "time": "2013-10-13 15:57:18"
         },
         {
             "name": "ddeboer/data-import",
@@ -86,12 +86,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ddeboer/data-import.git",
-                "reference": "257df19c0a48e821197a8c51bf4f06bdd4ff4faa"
+                "reference": "38e463da12333acdb7d59f72c93cd16878774a08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ddeboer/data-import/zipball/257df19c0a48e821197a8c51bf4f06bdd4ff4faa",
-                "reference": "257df19c0a48e821197a8c51bf4f06bdd4ff4faa",
+                "url": "https://api.github.com/repos/ddeboer/data-import/zipball/38e463da12333acdb7d59f72c93cd16878774a08",
+                "reference": "38e463da12333acdb7d59f72c93cd16878774a08",
                 "shasum": ""
             },
             "require": {
@@ -145,7 +145,7 @@
                 "export",
                 "import"
             ],
-            "time": "2013-09-15 15:16:38"
+            "time": "2013-10-11 09:09:18"
         },
         {
             "name": "ddeboer/data-import-bundle",
@@ -478,12 +478,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/data-fixtures.git",
-                "reference": "b1e7d5a991ca891cd66c143a618f5ce1e679ba9f"
+                "reference": "8ffac1c63f34124f693b93889fa32f4036eb241b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/b1e7d5a991ca891cd66c143a618f5ce1e679ba9f",
-                "reference": "b1e7d5a991ca891cd66c143a618f5ce1e679ba9f",
+                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/8ffac1c63f34124f693b93889fa32f4036eb241b",
+                "reference": "8ffac1c63f34124f693b93889fa32f4036eb241b",
                 "shasum": ""
             },
             "require": {
@@ -525,7 +525,7 @@
             "keywords": [
                 "database"
             ],
-            "time": "2013-09-16 23:31:59"
+            "time": "2013-10-10 22:08:39"
         },
         {
             "name": "doctrine/dbal",
@@ -951,74 +951,22 @@
             "time": "2013-08-10 15:05:21"
         },
         {
-            "name": "friendsofsymfony/rest",
-            "version": "0.8.0",
-            "target-dir": "FOS/Rest",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/FriendsOfSymfony/FOSRest.git",
-                "reference": "0.8.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRest/zipball/0.8.0",
-                "reference": "0.8.0",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2",
-                "symfony/http-foundation": ">=2.0,<3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.8.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "FOS\\Rest": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Lukas Kahwe Smith",
-                    "email": "smith@pooteeweet.org"
-                },
-                {
-                    "name": "FriendsOfSymfony Community",
-                    "homepage": "https://github.com/FriendsOfSymfony/FOSRest/contributors"
-                }
-            ],
-            "description": "This library provides various tools to develop RESTful API's",
-            "homepage": "http://friendsofsymfony.github.com",
-            "keywords": [
-                "rest"
-            ],
-            "time": "2013-03-02 20:35:05"
-        },
-        {
             "name": "friendsofsymfony/rest-bundle",
             "version": "dev-master",
             "target-dir": "FOS/RestBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSRestBundle.git",
-                "reference": "09b63b2e18779b7ff62efbc34ac7303ba2cb1f98"
+                "reference": "adc9c6dd26f0628b7ce52072a7ea0032c60f455a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/09b63b2e18779b7ff62efbc34ac7303ba2cb1f98",
-                "reference": "09b63b2e18779b7ff62efbc34ac7303ba2cb1f98",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/adc9c6dd26f0628b7ce52072a7ea0032c60f455a",
+                "reference": "adc9c6dd26f0628b7ce52072a7ea0032c60f455a",
                 "shasum": ""
             },
             "require": {
                 "doctrine/inflector": "1.0.*",
-                "friendsofsymfony/rest": ">=0.7.0,<0.9.0-dev",
                 "php": ">=5.3.2",
                 "symfony/framework-bundle": "~2.1",
                 "willdurand/negotiation": "1.0.*"
@@ -1039,7 +987,7 @@
             "suggest": {
                 "jms/serializer-bundle": "Add support for advanced serialization capabilities, recommended, requires 0.12.*",
                 "sensio/framework-extra-bundle": "Add support for route annotations and the view response listener",
-                "symfony/serializer": "Add support for basic serialization capabilities, requires >=2.0,<2.3-dev"
+                "symfony/serializer": "Add support for basic serialization capabilities and xml decoding, requires ~2.1"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -1076,7 +1024,7 @@
             "keywords": [
                 "rest"
             ],
-            "time": "2013-10-03 11:31:51"
+            "time": "2013-10-12 18:24:51"
         },
         {
             "name": "friendsofsymfony/user-bundle",
@@ -1085,12 +1033,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "5e236332c3934fbc16b79eff3cf6ee9ee21b7519"
+                "reference": "f9ea1de0698e3055c9916e88c19f42e28844ef61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/5e236332c3934fbc16b79eff3cf6ee9ee21b7519",
-                "reference": "5e236332c3934fbc16b79eff3cf6ee9ee21b7519",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/f9ea1de0698e3055c9916e88c19f42e28844ef61",
+                "reference": "f9ea1de0698e3055c9916e88c19f42e28844ef61",
                 "shasum": ""
             },
             "require": {
@@ -1145,7 +1093,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2013-10-02 23:38:05"
+            "time": "2013-10-09 22:58:46"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -1972,12 +1920,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/liip/LiipFunctionalTestBundle.git",
-                "reference": "f4f7f4a8eec8d38b2101faa5ed4ca1de847c0da6"
+                "reference": "6054badcd590b63162ed7fdbd0d9391db88eff85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liip/LiipFunctionalTestBundle/zipball/f4f7f4a8eec8d38b2101faa5ed4ca1de847c0da6",
-                "reference": "f4f7f4a8eec8d38b2101faa5ed4ca1de847c0da6",
+                "url": "https://api.github.com/repos/liip/LiipFunctionalTestBundle/zipball/6054badcd590b63162ed7fdbd0d9391db88eff85",
+                "reference": "6054badcd590b63162ed7fdbd0d9391db88eff85",
                 "shasum": ""
             },
             "require": {
@@ -2020,7 +1968,7 @@
             "keywords": [
                 "Symfony2"
             ],
-            "time": "2013-09-24 06:16:49"
+            "time": "2013-10-08 12:57:10"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
