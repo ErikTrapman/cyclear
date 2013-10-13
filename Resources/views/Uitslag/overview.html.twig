@@ -3,17 +3,43 @@
 {% block title "Overzicht" %}
 
 {% block content %}
+<style>
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
 
-<div class="span4">
-    <h3>Stand</h3>
-    {% include "CyclearGameBundle:Uitslag:viewByPloegen.html.twig" with {"list": stand,"seizoen":seizoen } %}
-</div>
-<div class="span3">
-    <h3>Draftklassement</h3>
-    {% include "CyclearGameBundle:Uitslag:viewByDraftTransfer.html.twig" with {"list": draft } %}
-</div>
-<div class="span3">
-    <h3>Transferklassement</h3>
-    {% include "CyclearGameBundle:Uitslag:viewByUserTransfer.html.twig" with {"list": transfer } %}
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke-width: 3px;
+}
+</style>
+
+<div class="span12">
+    <ul class="nav nav-tabs" id="tabs">
+        <li class="active"><a href="#stand" data-toggle="tab">Stand</a></li>
+        <li><a href="#drafttransfer" data-toggle="tab">Draft/transfer</a></li>
+    </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="stand">
+                <team-graph seizoen="{{ seizoen.slug }}"></team-graph>
+            </div>
+            <div class="tab-pane" id="drafttransfer">
+                <div class="span5">    
+                    <h3>Draftklassement</h3>
+                    {% include "CyclearGameBundle:Uitslag:viewByDraftTransfer.html.twig" with {"list": draft } %}
+                </div>
+                <div class="span5">
+                    <h3>Transferklassement</h3>
+                    {% include "CyclearGameBundle:Uitslag:viewByUserTransfer.html.twig" with {"list": transfer } %}
+                </div>
+            </div>
+        </div>
 </div>
 {% endblock %}

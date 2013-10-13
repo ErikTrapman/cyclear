@@ -59,13 +59,4 @@ class DefaultController extends Controller
             'transferRepo' => $transferRepo
             );
     }
-    
-    /**
-     * @Route("/graphs", name="game_graphs")
-     * @Template()
-     */
-    public function graphAction(Request $request)
-    {
-        return array();
-    }
 }

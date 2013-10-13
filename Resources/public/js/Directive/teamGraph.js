@@ -1,3 +1,4 @@
+
 angular.module('Cyclear', ['d3']).directive('teamGraph', ['d3Service', function(d3Service) {
         return {
             restrict: 'E',
@@ -5,21 +6,25 @@ angular.module('Cyclear', ['d3']).directive('teamGraph', ['d3Service', function(
             templateUrl: '/bundles/cycleargame/views/team-graph/base.html',
             replace: true,
             link: function($scope, iElement, iAttr) {
-
+                $scope.seizoen = iAttr.seizoen;
+                $scope.getTeams();
+                
             },
             controller: function($scope, $http) {
                 $scope.teams = [];
                 $scope.data = [];
                 $scope.selected = [];
-                var maxSelected = 1;
-                var finishedLoading = false;
-
-                $http.get("/api/seasons/voorjaar-2013/teams.json").success(function(data) {
-                    for (i in data) {
-                        $scope.teams[i] = data[i];
-                    }
-                });
-
+                $scope.finishedLoading = false;
+                
+                $scope.getTeams = function(){
+                    // TODO set up FOS JsRouting !!! Really !
+                    $http.get("/api/seasons/"+$scope.seizoen+"/teams.json").success(function(data) {
+                        for (i in data) {
+                            $scope.teams[i] = data[i];
+                        }
+                    });
+                }
+                
                 $scope.setSelect = function(id) {
                     var index = $scope.selected.indexOf(id);
                     if (index > -1) {
@@ -37,57 +42,32 @@ angular.module('Cyclear', ['d3']).directive('teamGraph', ['d3Service', function(
 
                     var x = d3.time.scale().range([0, width]);
                     var y = d3.scale.linear().range([height, 0]);
-                    var parseDate = d3.time.format("%Y%m%d").parse;
+                    
+                    // we get dates in a 201301 -format
+                    var parseDate = d3.time.format("%Y%m").parse;
 
-                    var color = d3.scale.category10();
+                    $scope.color = d3.scale.category20();
 
                     var xAxis = d3.svg.axis()
                             .scale(x)
-                            .orient("bottom");
+                            .orient("bottom").tickFormat(d3.time.format("%b"));
 
                     var yAxis = d3.svg.axis()
                             .scale(y)
                             .orient("left");
 
-                    var line = d3.svg.line().interpolate("basis").x(function(d) {
+                    var line = d3.svg.line().interpolate("basis")
+                            .x(function(d) {
                         return x(d.date);
                     })
                             .y(function(d) {
                         return y(d.points);
+                    }).defined(function(d) {
+                        return typeof d.points !== 'undefined';
                     });
-                    var linecolors = ['red', 'green', 'yellow', 'blue', 'orange', 'brown'];
-
-                    $scope.$watch('selected', function(newvalue, oldvale) {
-                        if($scope.finishedLoading){
-                            $scope.render();
-                        }
-                    }, true);
-
-                    $http.get("/api/seasons/voorjaar-2013/teams/points.json").success(function(data) {
-                        var index = 1;
-                        for (i in data) {
-                            var newData = data[i];
-                            for (j in newData) {
-                                newData[j].date = parseDate(newData[j]['date']);
-                            }
-                            $scope.data.push(newData);
-                            if (index <= maxSelected) {
-                                //$scope.selected.push(parseInt(i,10));
-                            }
-                            index++;
-                        }
-                        x.domain(d3.extent($scope.data[1], function(d) {
-                            return d.date;
-                        }));
-                        y.domain([0, 3000]);
-                        $scope.finishedLoading = true;
-                        $scope.render();
-                        //prerender();
-                        //$scope.selected.push(1);
-                    });
-
+                    
                     var svg2 = function() {
-                        return d3.select(".graphplace")
+                        return d3.select(".graph")
                                 .append('svg')
                                 .attr("width", width + margin.left + margin.right)
                                 .attr("height", height + margin.top + margin.bottom)
@@ -97,18 +77,63 @@ angular.module('Cyclear', ['d3']).directive('teamGraph', ['d3Service', function(
 
                     var prerender = function() {
                         var svg = svg2();
-                        svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
+                        svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").text("AA").call(xAxis);
                         svg.append("g").attr("class", "y axis").call(yAxis);
                         return svg;
                     }
+
+                    $scope.$watch('teams',function(newValue, oldValue){
+                        if(newValue){
+                            $scope.getPoints();
+                        }
+                    });
+
+                    $scope.getPoints = function(){
+                        $http.get("/api/seasons/"+$scope.seizoen+"/teams/points.json").success(function(data) {
+                            for (i in data) {
+                                var teamData = [];
+                                for (j in data[i]) {
+                                    teamData.push({'date': parseDate(data[i][j].date), 'points': data[i][j].points});
+                                }
+                                $scope.data[i] = teamData;
+                            }
+                            // teams are ordered by points already
+                            for (i in $scope.teams) {
+                                $scope.selected.push($scope.teams[i].id);
+                                if (i > 9) {
+                                    break;
+                                }
+                            }
+                            for (i in $scope.data) {
+                                x.domain(d3.extent($scope.data[i], function(d) {
+                                    return d.date;
+                                }));
+                                break;
+                            }
+
+                            y.domain([0, d3.max($scope.teams, function(team) {
+                                    return parseInt(team.punten, 10);
+                                }) + 50]);
+                            $scope.finishedLoading = true;
+                            $scope.render();
+                        });
+                    }
+                    
+                    $scope.$watch('selected', function(newvalue, oldvale) {
+                        if ($scope.finishedLoading) {
+                            $scope.render();
+                        }
+                    }, true);
 
                     $scope.render = function() {
                         d3.select("svg").remove();
                         var svg = prerender();
                         for (i in $scope.selected) {
-                            svg.append("path").attr("class", "line").attr('id', 'line_' + i)
-                                    .style("stroke", linecolors[i])
-                                    .attr("d", line($scope.data[i]));
+                            svg
+                                    .append("path").attr("class", "line").attr('id', 'line_' + i)
+                                    .style("stroke", $scope.color(i))
+                                    .attr("d", line($scope.data[$scope.selected[i]]))
+                                    ;
                         }
 
 
