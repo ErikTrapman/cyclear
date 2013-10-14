@@ -7,13 +7,12 @@ angular.module('Cyclear', ['d3']).directive('teamGraph', ['d3Service', function(
             replace: true,
             link: function($scope, iElement, iAttr) {
                 $scope.seizoen = iAttr.seizoen;
-                $scope.getTeams();
-                
             },
             controller: function($scope, $http) {
                 $scope.teams = [];
                 $scope.data = [];
                 $scope.selected = [];
+                $scope.colors = [];
                 $scope.finishedLoading = false;
                 
                 $scope.getTeams = function(){
@@ -21,7 +20,9 @@ angular.module('Cyclear', ['d3']).directive('teamGraph', ['d3Service', function(
                     $http.get("/api/seasons/"+$scope.seizoen+"/teams.json").success(function(data) {
                         for (i in data) {
                             $scope.teams[i] = data[i];
+                            $scope.colors[data[i].id] = $scope.color(data[i].id);
                         }
+                        $scope.getPoints();
                     });
                 }
                 
@@ -35,6 +36,7 @@ angular.module('Cyclear', ['d3']).directive('teamGraph', ['d3Service', function(
                 }
 
                 d3Service.d3().then(function(d3) {
+                    $scope.getTeams();
 
                     var margin = {top: 20, right: 80, bottom: 30, left: 50},
                     width = 800 - margin.left - margin.right,
@@ -82,12 +84,6 @@ angular.module('Cyclear', ['d3']).directive('teamGraph', ['d3Service', function(
                         return svg;
                     }
 
-                    $scope.$watch('teams',function(newValue, oldValue){
-                        if(newValue){
-                            $scope.getPoints();
-                        }
-                    });
-
                     $scope.getPoints = function(){
                         $http.get("/api/seasons/"+$scope.seizoen+"/teams/points.json").success(function(data) {
                             for (i in data) {
@@ -100,7 +96,7 @@ angular.module('Cyclear', ['d3']).directive('teamGraph', ['d3Service', function(
                             // teams are ordered by points already
                             for (i in $scope.teams) {
                                 $scope.selected.push($scope.teams[i].id);
-                                if (i > 9) {
+                                if (i > 8) {
                                     break;
                                 }
                             }
@@ -129,9 +125,12 @@ angular.module('Cyclear', ['d3']).directive('teamGraph', ['d3Service', function(
                         d3.select("svg").remove();
                         var svg = prerender();
                         for (i in $scope.selected) {
+                            console.log($scope.selected[i]);
+                            console.log($scope.data[$scope.selected[i]]);
+                            
                             svg
                                     .append("path").attr("class", "line").attr('id', 'line_' + i)
-                                    .style("stroke", $scope.color(i))
+                                    .style("stroke", $scope.colors[$scope.selected[i]])
                                     .attr("d", line($scope.data[$scope.selected[i]]))
                                     ;
                         }

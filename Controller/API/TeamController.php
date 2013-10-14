@@ -79,8 +79,20 @@ class TeamController extends \FOS\RestBundle\Controller\FOSRestController
         $minDate = $stmt->fetchAll();
         $start = \DateTime::createFromFormat('Y-m-d 00:00:00', !empty($minDate) ? $minDate[0]['mindate'] : date('Y-01-01 00:00:00'));
         // end-date is the end of the year
-        $end = clone $start;
-        $end->setDate($start->format('Y'),12,31);
+
+        $stmt = $em->getConnection()->prepare("SELECT DATE_FORMAT(w.datum,'%Y-%m-%d 00:00:00') AS maxdate 
+            FROM Wedstrijd w WHERE w.seizoen_id = :seizoen ORDER BY w.datum DESC LIMIT 1");
+        $stmt->execute($params);
+        $maxDate = $stmt->fetchAll();
+        $end = \DateTime::createFromFormat('Y-m-d 00:00:00', !empty($maxDate) ? $maxDate[0]['maxdate'] : date('Y-12-31 00:00:00'));
+        $checkDate = clone $start;
+        $checkDate->modify("+1 month");
+        if ($end < $checkDate) {
+            $end = $checkDate;
+        } else if ($end < new \DateTime()) {
+            $end = new \DateTime();
+            $end->setTime(0, 0, 0);
+        }
         // prepare all months
         $months = array();
         do {
@@ -90,16 +102,19 @@ class TeamController extends \FOS\RestBundle\Controller\FOSRestController
         $ret = array();
         $now = new \DateTime();
         $now->modify('first day of this month');
-        foreach ($map as $ploegId => $mapData) {
+
+        foreach ($em->getRepository("CyclearGameBundle:Ploeg")->createQueryBuilder('t')->where('t.seizoen = :seizoen')
+            ->setParameter('seizoen', $seizoen)->getQuery()->getResult() as $team) {
+            $mapData = (array_key_exists($team->getId(), $map) ) ? $map[$team->getId()] : array();
             $points = 0;
             foreach ($months as $month) {
                 $monthFormat = $month->format('Ym');
                 if (array_key_exists($monthFormat, $mapData) && $month <= $now) {
                     $points = $mapData[$monthFormat]['points'];
-                } elseif($month > $now) {
+                } elseif ($month > $now) {
                     $points = null;
                 }
-                $ret[$ploegId][$monthFormat] = array('date' => $monthFormat, 'points' => $points);
+                $ret[$team->getId()][$monthFormat] = array('date' => $monthFormat, 'points' => $points);
             }
         }
         $view = $this->view($ret, 200)->setSerializationContext(SerializationContext::create()->setSerializeNull(true));
