@@ -21,6 +21,7 @@
         <span style="display:none;">{{ form_widget(form.wedstrijd.naam) }}</span>
     {% include "CyclearGameBundle:Uitslag/Admin:_ajaxTemplate.html.twig" with {"form":form} %}
     </span>
+    {{ form_rest(form) }}
 </form>
 
 <div class="well">

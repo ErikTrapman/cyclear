@@ -3,27 +3,34 @@
 
     {% if form.uitslag is defined %}
         <div class="control-group">
+            <label class="control-label">
+                Uitslagen
+            </label>
 
-            <table class="punten-confirm form-horizontal">
-                <tr>
+            <div class="controls">
+                <table class="table table-bordered table-striped table-condensed">
                     <thead>
-                    <th>Positie</th>
-                    <th>Renner</th>
-                    <th>Ploeg</th>
-                    <th>Punten ploeg</th>
-                    <th>Punten renner</th>
+                        <tr>
+                            <th>Positie</th>
+                            <th>Renner</th>
+                            <th>Ploeg</th>
+                            <th>Punten ploeg</th>
+                            <th>Punten renner</th>
+                        </tr>
                     </thead>
-                </tr>
+                    <tbody>
                     {% for rows in form.uitslag %}
-                <tr>
-                    <td>{{ form_widget(rows.positie, { 'attr': {'class': 'span1'} }) }}</td>
-                    <td>{{ form_widget(rows.renner) }}</td>
-                    <td>{{ form_widget(rows.ploeg) }}</td>
-                    <td>{{ form_widget(rows.ploegPunten, { 'attr': {'class': 'span1'} }) }}</td>
-                    <td>{{ form_widget(rows.rennerPunten, { 'attr': {'class': 'span1'} }) }}</td>
-                </tr>   
+                        <tr>
+                            <td>{{ form_widget(rows.positie, { 'attr': {'class': 'span1'} }) }}</td>
+                            <td>{{ form_widget(rows.renner) }}</td>
+                            <td>{{ form_widget(rows.ploeg) }}</td>
+                            <td>{{ form_widget(rows.ploegPunten, { 'attr': {'class': 'span1'} }) }}</td>
+                            <td>{{ form_widget(rows.rennerPunten, { 'attr': {'class': 'span1'} }) }}</td>
+                        </tr>
                     {% endfor %}
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     {% endif %}
 {% endif %}
