@@ -38,12 +38,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ErikTrapman/CyclearGameBundle.git",
-                "reference": "53035bbdcdb224ca84697c35982ae60c5c7ff181"
+                "reference": "ebdf6f2ab843ac1990252823294463c3f9ceeb9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/53035bbdcdb224ca84697c35982ae60c5c7ff181",
-                "reference": "53035bbdcdb224ca84697c35982ae60c5c7ff181",
+                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/ebdf6f2ab843ac1990252823294463c3f9ceeb9b",
+                "reference": "ebdf6f2ab843ac1990252823294463c3f9ceeb9b",
                 "shasum": ""
             },
             "require": {
@@ -78,7 +78,7 @@
                 "game",
                 "symfony"
             ],
-            "time": "2013-10-13 15:57:18"
+            "time": "2013-10-20 12:38:24"
         },
         {
             "name": "ddeboer/data-import",
