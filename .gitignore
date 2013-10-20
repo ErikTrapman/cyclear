@@ -20,4 +20,6 @@ nbproject
 
 composer.phar
 __*
-app/Resources/files/cq/CQRiders.csv
+app/Resources/files/cq/*
+.idea
+.directory
