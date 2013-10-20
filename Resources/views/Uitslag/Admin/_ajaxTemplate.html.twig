@@ -7,25 +7,31 @@
                 Uitslagen
             </label>
 
-            <div class="controls">
-                <table class="table table-bordered table-striped table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Positie</th>
-                            <th>Renner</th>
-                            <th>Ploeg</th>
-                            <th>Punten ploeg</th>
-                            <th>Punten renner</th>
-                        </tr>
-                    </thead>
+            <div class="controls table-responsive">
+                <table style="width: 100%">
                     <tbody>
                     {% for rows in form.uitslag %}
                         <tr>
-                            <td>{{ form_widget(rows.positie, { 'attr': {'class': 'span1'} }) }}</td>
-                            <td>{{ form_widget(rows.renner) }}</td>
-                            <td>{{ form_widget(rows.ploeg) }}</td>
-                            <td>{{ form_widget(rows.ploegPunten, { 'attr': {'class': 'span1'} }) }}</td>
-                            <td>{{ form_widget(rows.rennerPunten, { 'attr': {'class': 'span1'} }) }}</td>
+                            <td>
+                                <table class="table table-condensed table-bordered" style="margin-bottom:2px;">
+                                    <thead>
+                                        <th>Positie</th><!-- keep this some length to prevent the input-element to disappear on small views -->
+                                        <th/>
+                                        <th>Punten</th>
+                                        </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td rowspan="2">{{ form_widget(rows.positie, { 'attr': {'class': 'span1'} }) }}</td>
+                                        <td>{{ form_widget(rows.renner, { 'attr': {'class': 'span4'} }) }}</td>
+                                        <td>{{ form_widget(rows.rennerPunten, { 'attr': {'class': 'span1'} }) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ form_widget(rows.ploeg, { 'attr': {'class': 'span4'} }) }}</td>
+                                        <td>{{ form_widget(rows.ploegPunten, { 'attr': {'class': 'span1'} }) }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>

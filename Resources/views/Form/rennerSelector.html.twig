@@ -1,8 +1,3 @@
 {% block renner_selector_widget %}
-{{ form_widget(form, { 'attr':{'class':'span4 ajax-typeahead'} } ) }}&nbsp;
-<script type="text/javascript">
-$(document).ready(function(){
-    $(".selector-tooltip").tooltip();
-});
-</script>
+    {{ form_widget(form, { 'attr':{'class':'span4 ajax-typeahead'} } ) }}
 {% endblock %}
