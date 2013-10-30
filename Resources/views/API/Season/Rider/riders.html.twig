@@ -4,12 +4,12 @@
 
 {% block content %}
 <div class="span5">
-    
-    <form action="" method="get">
+
+    <form action="{{ path('get_season_riders',{seizoen:seizoen.slug}) }}" method="get">
         <input type="text" name="query">
         <button class="btn" type="submit">Zoek</button>
     </form>
-    
+
     <table class="table table-condensed">
         <thead>
             <tr>
@@ -29,7 +29,7 @@
                 {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with {"ploeg":app.request.attributes.get('seizoen-ploeg'), "renner":entity,"seizoen":seizoen } %}
             </td>
         </tr>
-    {% endfor %}      
+    {% endfor %}
         </tbody>
     </table>
     <div id="navigation">
@@ -39,8 +39,8 @@
 
 
 <div class="span6">
-    
-    
+
+
         <ul class="nav nav-tabs" id="tabs">
             <li class="active"><a data-toggle="tab" href="#leaderboard">Leaderboard</a></li>
             <li><a data-toggle="tab" href="#available">Vrij</a></li>
