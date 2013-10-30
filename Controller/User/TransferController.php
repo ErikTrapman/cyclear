@@ -51,6 +51,7 @@ class TransferController extends Controller
         $transferUser = new UserTransfer();
         $transferUser->setPloeg($ploeg);
         $transferUser->setSeizoen($seizoen[0]);
+        $transferUser->setDatum(new \DateTime());
 
         $options = array();
         $rennerPloeg = $em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen);
@@ -59,9 +60,11 @@ class TransferController extends Controller
                 throw new AccessDeniedException("Renner is niet in je ploeg");
             } else {
                 $options['renner_in'] = $renner;
+                $transferUser->setRennerIn($renner);
             }
         } else {
             $options['renner_uit'] = $renner;
+            $transferUser->setRennerUit($renner);
         }
         $options['ploegRenners'] = $this->getDoctrine()->getRepository("CyclearGameBundle:Ploeg")->getRenners($ploeg, $seizoen[0]);
         $options['ploeg'] = $ploeg;

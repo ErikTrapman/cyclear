@@ -2,6 +2,7 @@
 
 namespace Cyclear\GameBundle\Validator\Constraints;
 
+use Cyclear\GameBundle\Entity\Transfer;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -15,30 +16,34 @@ class UserTransferValidator extends ConstraintValidator
         $this->em = $em;
     }
 
+    /**
+     * @param $value
+     * @param Constraint $constraint
+     * @return bool
+     */
     public function validate($value, Constraint $constraint)
     {
-        if (null === $value->getRennerIn() && null === $value->getRennerUit()) {
-            $this->setMessage("Onbekende renner opgegeven");
-            return false;
-        }
-        $periode = $this->em->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode();
-        $transferCount = $this->em->getRepository("CyclearGameBundle:Transfer")
-            ->getTransferCountForUserTransfer($value->getPloeg(), $periode->getStart(), $periode->getEind());
-        if ($transferCount >= $periode->getTransfers()) {
-            $this->setMessage($constraint->message, array("%max%" => $periode->getTransfers()));
-            return false;
-        }
-        if (null !== $value->getRennerIn()) {
-            $rennerPloeg = $this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($value->getRennerIn(), $value->getSeizoen());
-            if (null !== $rennerPloeg) {
-                $this->setMessage($value->getRennerIn()->getNaam()." heeft al een ploeg");
-                return false;
-            }
+        if (null === $value->getRennerIn() || null === $value->getRennerUit()) {
+            $this->context->addViolationAt('renner', "Onbekende renner opgegeven");
         }
         if ($value->getSeizoen()->getClosed()) {
-            $this->setMessage("Het seizoen ".$value->getSeizoen()." is gesloten");
-            return false;
+            $this->context->addViolation("Het seizoen " . $value->getSeizoen() . " is gesloten");
         }
-        return true;
+        $periode = $this->em->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode();
+        $now = $value->getDatum();
+        if ($now < $periode->getStart()) {
+            $this->context->addViolation("De huidige periode staat nog geen transfers toe");
+        }
+        if ($now > $periode->getEind()) {
+            $this->context->addViolation("De huidige periode staat geen transfers meer toe");
+        }
+        $transferCount = $this->em->getRepository("CyclearGameBundle:Transfer")->getTransferCountForUserTransfer($value->getPloeg(), $periode->getStart(), $periode->getEind());
+        if ($transferCount >= $periode->getTransfers()) {
+            $this->context->addViolation("Je zit op het maximaal aantal transfers van " . $periode->getTransfers() . " voor deze periode");
+        }
+        $rennerPloeg = $this->em->getRepository("CyclearGameBundle:Renner")->getPloeg($value->getRennerIn(), $value->getSeizoen());
+        if (null !== $rennerPloeg) {
+            $this->context->addViolation($value->getRennerIn()->getNaam() . " heeft al een ploeg");
+        }
     }
 }

@@ -10,10 +10,31 @@ use Cyclear\GameBundle\Validator\Constraints as CyclearAssert;
 class UserTransfer
 {
     private $renner_in;
-    
+
     private $renner_uit;
-    
+
     private $seizoen;
+
+    private $datum;
+
+    private $ploeg;
+
+    /**
+     * @param mixed $datum
+     */
+    public function setDatum($datum)
+    {
+        $this->datum = $datum;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDatum()
+    {
+        return $this->datum;
+    }
+
 
     public function getRennerIn()
     {
@@ -34,7 +55,7 @@ class UserTransfer
     {
         return $this->ploeg;
     }
-    
+
     public function getSeizoen()
     {
         return $this->seizoen;
@@ -45,7 +66,7 @@ class UserTransfer
         $this->seizoen = $seizoen;
     }
 
-    
+
     public function getRennerUit()
     {
         return $this->renner_uit;
@@ -57,6 +78,4 @@ class UserTransfer
     }
 
 
-
-    
 }
