@@ -82,26 +82,11 @@ class TeamController extends \FOS\RestBundle\Controller\FOSRestController
             $map[$row['ploeg_id']][$row['date']] = array('date' => $row['date'], 'points' => $teampoints[$row['ploeg_id']]);
         }
         // start-date
-        $stmt = $em->getConnection()->prepare("SELECT DATE_FORMAT(w.datum,'%Y-01-01 00:00:00') AS mindate 
-            FROM Wedstrijd w WHERE w.seizoen_id = :seizoen ORDER BY w.datum ASC LIMIT 1");
-        $stmt->execute($params);
-        $minDate = $stmt->fetchAll();
-        $start = \DateTime::createFromFormat('Y-m-d 00:00:00', !empty($minDate) ? $minDate[0]['mindate'] : date('Y-01-01 00:00:00'));
+        $start = new \DateTime();
+        $start->setDate(date('Y'),1,1)->setDate(0,0,0);
         // end-date is the end of the year
-
-        $stmt = $em->getConnection()->prepare("SELECT DATE_FORMAT(w.datum,'%Y-%m-%d 00:00:00') AS maxdate 
-            FROM Wedstrijd w WHERE w.seizoen_id = :seizoen ORDER BY w.datum DESC LIMIT 1");
-        $stmt->execute($params);
-        $maxDate = $stmt->fetchAll();
-        $end = \DateTime::createFromFormat('Y-m-d 00:00:00', !empty($maxDate) ? $maxDate[0]['maxdate'] : date('Y-12-31 00:00:00'));
-        $checkDate = clone $start;
-        $checkDate->modify("+1 month");
-        if ($end < $checkDate) {
-            $end = $checkDate;
-        } else if ($end < new \DateTime()) {
-            $end = new \DateTime();
-            $end->setTime(0, 0, 0);
-        }
+        $end = new \DateTime();
+        $end->setDate(date('Y'),12,31)->setTime(23,59,59);
         // prepare all months
         $months = array();
         do {
