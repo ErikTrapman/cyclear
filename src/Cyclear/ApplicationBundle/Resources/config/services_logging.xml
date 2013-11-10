@@ -28,7 +28,7 @@
 		</service>
 
 		<service id="cyclear.logger.handler.mail" class="Cyclear\ApplicationBundle\Log\CyclearLogHandlerMail">
-			<argument key="level">400</argument>
+			<argument key="level">500</argument>
 			<argument key="bubble">false</argument>
 			<argument type="service" id="mailer" />
             <argument>%logging_address%</argument>
