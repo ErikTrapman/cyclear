@@ -31,7 +31,7 @@ class TransferUserType extends AbstractType
         }
         if (null !== $options['renner_in']) {
             $ploeg = $options['ploeg'];
-            $ploegRenners = $options['ploegRenners'];
+            $ploegRenners = array_merge(array(0), $options['ploegRenners']);
             $builder
                 ->add('renner_uit', 'entity', array(
                     'mapped' => 'rennerUit',
