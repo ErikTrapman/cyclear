@@ -28,7 +28,7 @@ class TransferType extends AbstractType
                 $builder
                     ->add('renner', 'renner_selector')
                     ->add('ploegNaar', null, array('label' => 'Ploeg naar', 'required' => true, 'query_builder' => function($e) use ($seizoen) {
-                            return $e->createQueryBuilder('p')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen);
+                            return $e->createQueryBuilder('p')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->orderBy('p.naam');
                         }));
                 break;
             case Transfer::ADMINTRANSFER:
