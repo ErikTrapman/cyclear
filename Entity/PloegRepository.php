@@ -23,12 +23,13 @@ class PloegRepository extends EntityRepository
         }
         $renners = array();
         foreach ($this->_em->getRepository("CyclearGameBundle:Contract")
-            ->createQueryBuilder('c')
-            ->where('c.ploeg = :ploeg')
-            ->andWhere('c.seizoen = :seizoen')
-            ->andWhere('c.eind IS NULL')
-            ->setParameters(array('ploeg' => $ploeg, 'seizoen' => $ploeg->getSeizoen()))
-            ->getQuery()->getResult() as $contract) {
+                     ->createQueryBuilder('c')
+                     ->where('c.ploeg = :ploeg')
+                     ->andWhere('c.seizoen = :seizoen')
+                     ->andWhere('c.eind IS NULL')
+                     ->setParameters(array('ploeg' => $ploeg, 'seizoen' => $ploeg->getSeizoen()))
+                     ->orderBy('c.id', 'ASC')
+                     ->getQuery()->getResult() as $contract) {
 
             $renners[] = $contract->getRenner();
         }
@@ -41,12 +42,12 @@ class PloegRepository extends EntityRepository
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         return $this->_em->getRepository("CyclearGameBundle:Renner")
-                ->createQueryBuilder("r")
-                ->innerJoin("CyclearGameBundle:Transfer", "t", 'WITH', 't.renner = r')
-                ->where("t.transferType = ".Transfer::DRAFTTRANSFER)
-                ->andWhere("t.ploegNaar = :ploeg")
-                ->andWhere("t.seizoen = :seizoen")
-                ->setParameters(array("ploeg" => $ploeg, "seizoen" => $seizoen))->getQuery()->getResult();
+            ->createQueryBuilder("r")
+            ->innerJoin("CyclearGameBundle:Transfer", "t", 'WITH', 't.renner = r')
+            ->where("t.transferType = " . Transfer::DRAFTTRANSFER)
+            ->andWhere("t.ploegNaar = :ploeg")
+            ->andWhere("t.seizoen = :seizoen")
+            ->setParameters(array("ploeg" => $ploeg, "seizoen" => $seizoen))->getQuery()->getResult();
     }
 
     public function getRennersWithPunten($ploeg, $seizoen = null)
@@ -57,9 +58,9 @@ class PloegRepository extends EntityRepository
         $renners = $this->getRenners($ploeg);
         $ret = array();
         $uitslagRepo = $this->_em->getRepository("CyclearGameBundle:Uitslag");
-        foreach ($renners as $renner) {
+        foreach ($renners as $index => $renner) {
             $punten = $uitslagRepo->getPuntenForRennerWithPloeg($renner, $ploeg, $seizoen);
-            $ret[] = array(0 => $renner, 'punten' => (int) $punten);
+            $ret[] = array(0 => $renner, 'punten' => (int)$punten, 'index' => $index);
         }
         $this->puntenSort($ret);
         return $ret;
@@ -73,8 +74,8 @@ class PloegRepository extends EntityRepository
         $ret = array();
         $renners = $this->getDraftRenners($ploeg, $seizoen);
         $uitslagRepo = $this->_em->getRepository("CyclearGameBundle:Uitslag");
-        foreach ($renners as $renner) {
-            $ret[] = array(0 => $renner, 'punten' => $uitslagRepo->getTotalPuntenForRenner($renner, $seizoen));
+        foreach ($renners as $index => $renner) {
+            $ret[] = array(0 => $renner, 'punten' => $uitslagRepo->getTotalPuntenForRenner($renner, $seizoen), 'index' => $index);
         }
         $this->puntenSort($ret);
         return $ret;
@@ -82,11 +83,11 @@ class PloegRepository extends EntityRepository
 
     private function puntenSort(&$values)
     {
-        uasort($values, function($a, $b) {
-                if ($a['punten'] == $b['punten']) {
-                    return 0;
-                }
-                return ($a['punten'] < $b['punten']) ? 1 : -1;
-            });
+        uasort($values, function ($a, $b) {
+            if ($a['punten'] == $b['punten']) {
+                return $a['index'] < $b['index'] ? -1 : 1;
+            }
+            return ($a['punten'] < $b['punten']) ? 1 : -1;
+        });
     }
 }
