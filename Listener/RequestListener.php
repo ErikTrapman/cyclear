@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Cyclear-game package.
  *
@@ -11,10 +10,15 @@
 
 namespace Cyclear\GameBundle\Listener;
 
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernel;
 
 class RequestListener
 {
+    /**
+     * @var EntityManager
+     */
     private $em;
 
     /**
@@ -38,9 +42,15 @@ class RequestListener
         $request = $event->getRequest();
         if (null !== $request->get('seizoen')) {
             $seizoen = $this->em->getRepository("CyclearGameBundle:Seizoen")->findBySlug($request->get('seizoen'));
+            if (empty($seizoen)) {
+                throw new NotFoundHttpException("Unknown season `".$request->get('seizoen')."`");
+            }
             $seizoen = $seizoen[0];
         } else {
             $seizoen = $this->em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+            if(null === $seizoen){
+                throw new NotFoundHttpException("No current season configured yet. Please contact your Admin");
+            }
         }
         $request->attributes->set('seizoen', $seizoen->getSlug());
         $request->attributes->set('seizoen-object', $seizoen);
