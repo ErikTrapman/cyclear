@@ -7,24 +7,13 @@
     		http://symfony.com/schema/dic/monolog http://symfony.com/schema/dic/monolog/monolog-1.0.xsd">
 
     <services>
-        <service id="cyclear_game.exceptionlistener.db" class="Cyclear\GameBundle\Listener\ExceptionListener">
-            <tag name="kernel.event_listener" event="kernel.exception"
-                 method="onKernelException" />
-            <argument type="service" id="dblog" />
-        </service>
-        
+
         <service id="cyclear_game.requestlistener" class="Cyclear\GameBundle\Listener\RequestListener">
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="security.context" />
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
         </service>
 
-        <service id="cyclear_game.exceptionlistener.mail" class="Cyclear\GameBundle\Listener\ExceptionListener">
-            <tag name="kernel.event_listener" event="kernel.exception"
-                 method="onKernelException" />
-            <argument type="service" id="maillog" />
-        </service>
-        
         <service id="cyclear_game.doctrine.listener.transfer" class="Cyclear\GameBundle\Listener\Doctrine\TransferListener">
             <tag name="doctrine.event_listener" event="postPersist" />
             <argument type="service" id="cyclear_game.twitter.tweeter" />
@@ -111,23 +100,10 @@
             <argument>%fos_user.model.user.class%</argument>
         </service>
         
-        <service id="cyclear_game.user_form.handler.registration" class="Cyclear\GameBundle\Form\Handler\UserFormHandler" scope="request" public="false">
-            <argument type="service" id="fos_user.registration.form" />
-            <argument type="service" id="request" />
-            <argument type="service" id="fos_user.user_manager" />
-            <argument type="service" id="fos_user.mailer" />
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="security.acl.provider"/>
-        </service>
-        
-        
+
         <service id="cyclear_game.validator.usertransfer" class="Cyclear\GameBundle\Validator\Constraints\UserTransferValidator">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <tag name="validator.constraint_validator" alias="user_transfer" />
-        </service>
-        
-         <service id="cyclear_game.validator.uitslagnew" class="Cyclear\GameBundle\Validator\Constraints\UitslagNewValidator">
-            <tag name="validator.constraint_validator" alias="uitslag_new" />
         </service>
         
         <service id="cyclear_game.fos_user.password_reset" class="Cyclear\GameBundle\Listener\FOSUser\PasswordResetListener">
