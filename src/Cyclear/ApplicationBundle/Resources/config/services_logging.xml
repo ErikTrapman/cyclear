@@ -2,6 +2,18 @@
 <container xmlns="http://symfony.com/schema/dic/services">
 	<services>
 
+        <service id="cyclear_game.exceptionlistener.db" class="Cyclear\ApplicationBundle\Listener\ExceptionListener">
+            <tag name="kernel.event_listener" event="kernel.exception"
+                 method="onKernelException" />
+            <argument type="service" id="dblog" />
+        </service>
+
+        <service id="cyclear_game.exceptionlistener.mail" class="Cyclear\ApplicationBundle\Listener\ExceptionListener">
+            <tag name="kernel.event_listener" event="kernel.exception"
+                 method="onKernelException" />
+            <argument type="service" id="maillog" />
+        </service>
+
 		<service id="dblog" alias="cyclear.logger.db" />
 		<service id="maillog" alias="cyclear.logger.mail" />
 		<service id="dbloghandler" alias="cyclear.logger.handler.db" />
