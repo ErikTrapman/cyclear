@@ -22,7 +22,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -66,7 +65,7 @@ class TransferController extends Controller
         $rennerPloeg = $em->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen);
         if ($rennerPloeg !== $ploeg) {
             if( null !== $rennerPloeg ){
-                throw new AccessDeniedException("Renner is niet in je ploeg");
+                throw new AccessDeniedHttpException("Renner is niet in je ploeg");
             } else {
                 $options['renner_in'] = $renner;
                 $transferUser->setRennerIn($renner);
