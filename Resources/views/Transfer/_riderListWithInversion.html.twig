@@ -25,7 +25,7 @@
                 {% else %}
                 {% if transfer.inversionTransfer %}{{ transfer.inversionTransfer.renner.naam }}{% endif %}
                 {% endif %}</td>
-            <td>{{ transfer.datum|date('d-m-Y') }}</td>
+            <td nowrap>{{ transfer.datum|date('d-m-Y') }}</td>
         </tr>
     {% endfor -%}
     </tbody>

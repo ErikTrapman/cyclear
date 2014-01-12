@@ -18,7 +18,7 @@
             <td>{% if transfer.inversionTransfer %}
                 {% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":transfer.inversionTransfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}    
                 {% endif %}</td>
-            <td>{{ transfer.datum|date('d-m-Y') }}</td>
+            <td nowrap>{{ transfer.datum|date('d-m-Y') }}</td>
         </tr>
     {% endfor %}
     </tbody>
