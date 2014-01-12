@@ -2,6 +2,14 @@
 {% block content %}
 
 <div class="row">
+    <div class="span4 nieuws">
+        <div style="padding:4px;">
+            {% if nieuws is not null %}
+                <h3>{{ nieuws.titel }}</h3>
+                <p>{{ nieuws.content|nl2br }}</p>
+            {% endif %}
+        </div>
+    </div>
     <div class="span8">
         
         <ul class="nav nav-tabs" id="tabs">
@@ -36,14 +44,7 @@
         </div>
         
     </div>
-    <div class="span4 nieuws">
-        <div style="padding:4px;">
-            {% if nieuws is not null %}
-                <h3>{{ nieuws.titel }}</h3>
-                <p>{{ nieuws.content|nl2br }}</p>
-            {% endif %}
-        </div>
-    </div>
+
 </div>
 
 <style type="text/css">
