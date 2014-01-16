@@ -50,7 +50,7 @@ class DefaultController extends Controller
         $periodestand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen);
         $zeges = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getCountForPosition($seizoen, 1);
         $draft = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen);
-        $transferstand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen);
+        //$transferstand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen);
         $transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")
             ->getLatest($seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 20);
         $transferRepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
@@ -63,7 +63,7 @@ class DefaultController extends Controller
             'periodestand' => $periodestand,
             'zegestand' => $zeges,
             'drafts' => $draft,
-            'transferstand' => $transferstand,
+            //'transferstand' => $transferstand,
             'transfers' => $transfers,
             'transferRepo' => $transferRepo
             );
