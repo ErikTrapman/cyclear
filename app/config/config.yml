@@ -66,6 +66,8 @@ doctrine:
           string_functions:
             ifnull: DoctrineExtensions\Query\Mysql\IfNull
             if: DoctrineExtensions\Query\Mysql\IfElse
+            date: DoctrineExtensions\Query\Mysql\Date
+            date_format: DoctrineExtensions\Query\Mysql\DateFormat
     
 cyclear_game:
   enable_twitter: true  
