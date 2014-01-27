@@ -66,7 +66,7 @@ class PloegRepository extends EntityRepository
         return $ret;
     }
 
-    public function getDraftRennersWithPunten($ploeg, $seizoen = null)
+    public function getDraftRennersWithPunten($ploeg, $seizoen = null, $sort = true)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
@@ -77,7 +77,9 @@ class PloegRepository extends EntityRepository
         foreach ($renners as $index => $renner) {
             $ret[] = array(0 => $renner, 'punten' => $uitslagRepo->getTotalPuntenForRenner($renner, $seizoen), 'index' => $index);
         }
-        $this->puntenSort($ret);
+        if ($sort) {
+            $this->puntenSort($ret);
+        }
         return $ret;
     }
 

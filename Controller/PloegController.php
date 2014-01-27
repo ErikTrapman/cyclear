@@ -59,7 +59,7 @@ class PloegController extends Controller
 
         $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");
         $punten = $uitslagRepo->getPuntenByPloeg($seizoen[0], $entity);
-        $draftRenners = $ploegRepo->getDraftRennersWithPunten($entity, $seizoen[0]);
+        $draftRenners = $ploegRepo->getDraftRennersWithPunten($entity, $seizoen[0], false);
         $draftPunten = $uitslagRepo->getPuntenByPloegForDraftTransfers($seizoen[0], $entity);
         return array(
             'entity' => $entity,
