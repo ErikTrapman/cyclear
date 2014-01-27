@@ -9,7 +9,7 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.3.3",
+        "symfony/symfony": "2.3.9",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-bundle": "1.2.*",
         "twig/extensions": "1.0.*",
@@ -25,7 +25,7 @@
         "jms/di-extra-bundle": "1.4.*",
         "jms/serializer-bundle": "0.12.*@dev",
         
-        "kriswallsmith/assetic": "1.1.*@dev",
+        "kriswallsmith/assetic": "1.1.2",
         "cyclear/game-bundle":"dev-master",
         
         "friendsofsymfony/user-bundle": "dev-master",
@@ -42,7 +42,7 @@
         "eriktrapman/cqrankingparser-bundle": "dev-master",
         "beberlei/DoctrineExtensions": "dev-master",
         "mopa/bootstrap-bundle": "2.3.*@dev",
-        "mobiledetect/mobiledetectlib": "dev-master",
+        "mobiledetect/mobiledetectlib": "2.7.*",
         "suncat/mobile-detect-bundle": "dev-master",
         "tijsverkoyen/twitteroauth": "dev-master",
         "ddeboer/data-import": "dev-master",
