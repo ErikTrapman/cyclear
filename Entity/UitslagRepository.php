@@ -80,7 +80,8 @@ class UitslagRepository extends EntityRepository
             ->select('SUM(IF(u.positie = :pos,1,0))')
             ->join('u.wedstrijd', 'w')
             ->where('u.ploeg = p.id')
-            ->andWhere('w.seizoen = :seizoen');
+            ->andWhere('w.seizoen = :seizoen')
+            ->andWhere('u.ploegPunten > 0');
         $qb = $this->_em->getRepository('CyclearGameBundle:Ploeg')->createQueryBuilder('p');
         $qb
             ->where('p.seizoen = :seizoen')
