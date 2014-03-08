@@ -54,6 +54,7 @@ class Wedstrijd {
     /**
      *
      * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Uitslag", mappedBy="wedstrijd", cascade={"remove"})
+     * @ORM\OrderBy({"positie" = "ASC"})
      */
     private $uitslagen;
     

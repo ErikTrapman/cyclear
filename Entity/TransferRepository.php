@@ -44,7 +44,7 @@ class TransferRepository extends EntityRepository
         $qb->orderBy('t.id', 'DESC');
         $qb->setMaxResults(1);
         $res = $qb->getQuery()->getResult();
-        return ( array_key_exists(0, $res) ) ? $res[0] : null;
+        return (array_key_exists(0, $res)) ? $res[0] : null;
     }
 
     private function getQueryBuilderForRenner($renner)
@@ -54,7 +54,7 @@ class TransferRepository extends EntityRepository
         $qb->setParameter('1', $renner);
         return $qb;
     }
-    
+
     // TODO: teveel argumenten. maak losse methoden!
     public function getLatest($seizoen = null, $types = array(), $limit = 20, $ploegNaar = null, $renner = null)
     {
@@ -67,8 +67,7 @@ class TransferRepository extends EntityRepository
             ->andWhere('t.seizoen = :seizoen')
             ->setParameters(array('seizoen' => $seizoen))
             ->setMaxResults($limit)
-            ->orderBy('t.datum', 'DESC')
-        ;
+            ->orderBy('t.datum', 'DESC');
         if (null !== $ploegNaar) {
             $qb->andWhere('t.ploegNaar = :ploegNaar')->setParameter('ploegNaar', $ploegNaar);
         }
@@ -91,8 +90,8 @@ class TransferRepository extends EntityRepository
         if (!is_array($type)) {
             $type = array($type);
         }
-        if(is_numeric($ploeg)){
-            $ploeg = $this->_em->getRepository("CyclearGameBundle:Ploeg")->find($ploeg);   
+        if (is_numeric($ploeg)) {
+            $ploeg = $this->_em->getRepository("CyclearGameBundle:Ploeg")->find($ploeg);
         }
         $cloneEnd = clone $end;
         //$cloneEnd->setTime(23,59,59);
@@ -103,7 +102,7 @@ class TransferRepository extends EntityRepository
                 WHERE t.ploegNaar = :ploeg AND t.datum BETWEEN :start AND :end AND t.transferType IN( :type )")
             ->setParameters(array("type" => $type, "ploeg" => $ploeg, "start" => $cloneStart, "end" => $cloneEnd));
         $res = $query->getSingleResult();
-        return (int) $res['freq'];
+        return (int)$res['freq'];
     }
 
     public function findLastTransferForDate($renner, \DateTime $date, $seizoen)
@@ -114,46 +113,50 @@ class TransferRepository extends EntityRepository
         $qb = $this->createQueryBuilder("t")
             ->where("t.renner = :renner")
             ->andWhere("t.datum <= :datum")->andWhere('t.seizoen = :seizoen')->
-                setParameters($params)->orderBy("t.datum", "DESC")->setMaxResults(1);
+            setParameters($params)->orderBy("t.datum", "DESC")->setMaxResults(1);
         $res = $qb->getQuery()->getResult();
         if (count($res) == 0) {
             return null;
         }
         return $res[0];
     }
-    
+
     /**
-     * 
+     *
      * @param type $ploeg
      * @param type $seizoen
      * @param array $transferTypes
      */
-    public function getTransferredIn($ploeg, $seizoen = null)
+    public function getTransferredInNonDraftRenners($ploeg, $seizoen = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
-        /** @var \Doctrine\ORM\QueryBuilder $tQb  */
+        /** @var \Doctrine\ORM\QueryBuilder $tQb */
         $tQb = $this->_em->getRepository("CyclearGameBundle:Transfer")->createQueryBuilder('t');
 
-        $params = array('drafttransfer' => Transfer::DRAFTTRANSFER, 'ploeg' => $ploeg, 'seizoen' => $seizoen);
+        $draftrenners = $this->_em->getRepository("CyclearGameBundle:Ploeg")->getDraftRenners($ploeg, $seizoen);
+        $params = array(
+            'drafttransfer' => Transfer::DRAFTTRANSFER,
+            'ploeg' => $ploeg,
+            'seizoen' => $seizoen,
+            'draftrenners' => $draftrenners);
         $qb2 = $this->_em->getRepository("CyclearGameBundle:Transfer")
             ->createQueryBuilder('t2')
             ->where('t2.transferType = :drafttransfer')
             ->andWhere('t2.ploegNaar = :ploeg')
             ->andWhere('t2.seizoen = :seizoen')
-            ->setParameters($params)
-        ;
-        
+            ->orWhere('t2.renner IN (:draftrenners)')
+            ->setParameters($params);
+
         $tQb
             ->where("t.transferType != :drafttransfer")
             ->andWhere('t.ploegNaar = :ploeg')
             ->andWhere('t.seizoen = :seizoen')
             ->andWhere($tQb->expr()->notIn('t', $qb2->getDql()))
-            ->setParameters($params);
-        ;
+            ->setParameters($params);;
         return $tQb->getQuery()->getResult();
     }
-    
-    
+
+
 }

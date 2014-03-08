@@ -224,7 +224,7 @@ class UitslagRepository extends EntityRepository
                 ((SELECT IFNULL(SUM(u.ploegPunten),0)
                 FROM Uitslag u
                 INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id
-                WHERE w.seizoen_id = :seizoen_id AND u.renner_id IN (%s)) -
+                WHERE w.seizoen_id = :seizoen_id AND u.ploeg_id = p.id AND u.renner_id IN (%s)) -
 
                 (SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE w.seizoen_id = :seizoen_id
                 AND u.renner_id IN ( SELECT t.renner_id FROM Transfer t WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id)
@@ -245,7 +245,7 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         $parameters = array('ploeg' => $ploeg, 'seizoen' => $seizoen);
-        $transfers = $this->_em->getRepository('CyclearGameBundle:Transfer')->getTransferredIn($ploeg, $seizoen);
+        $transfers = $this->_em->getRepository('CyclearGameBundle:Transfer')->getTransferredInNonDraftRenners($ploeg, $seizoen);
 
         $qb = $this->createQueryBuilder('u');
         $qb->where('u.ploeg = :ploeg')
