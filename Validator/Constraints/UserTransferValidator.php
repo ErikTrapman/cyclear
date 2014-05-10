@@ -39,7 +39,8 @@ class UserTransferValidator extends ConstraintValidator
             $this->context->addViolation("Het seizoen " . $value->getSeizoen() . " is gesloten");
         }
         $periode = $this->em->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode();
-        $now = $value->getDatum();
+        $now = clone $value->getDatum();
+        $now->setTime(0, 0, 0);
         if ($now < $periode->getStart()) {
             $this->context->addViolation("De huidige periode staat nog geen transfers toe");
         }
