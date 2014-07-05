@@ -44,7 +44,7 @@ class DefaultController extends Controller
         // TODO: dit naar repository-class
         $wedstrijden = $doctrine->getRepository("CyclearGameBundle:Wedstrijd")->createQueryBuilder('w')
             ->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
-            ->orderBy('w.datum', 'DESC')
+            ->orderBy('w.datum DESC, w.id', 'DESC')
             ->setMaxResults(20)->getQuery()->getResult();
         ;
         $periodestand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen);
