@@ -1,7 +1,8 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
     "hash": "3e1ab35e4995e1de7d375f3b1f54951d",
     "packages": [
@@ -38,12 +39,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ErikTrapman/CyclearGameBundle.git",
-                "reference": "c5d05ba1904c139ed74c73d7863d26d18dcfa565"
+                "reference": "53924ff6a991e8c69b939b4b6a388105c6c57926"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/c5d05ba1904c139ed74c73d7863d26d18dcfa565",
-                "reference": "c5d05ba1904c139ed74c73d7863d26d18dcfa565",
+                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/53924ff6a991e8c69b939b4b6a388105c6c57926",
+                "reference": "53924ff6a991e8c69b939b4b6a388105c6c57926",
                 "shasum": ""
             },
             "require": {
@@ -78,7 +79,7 @@
                 "game",
                 "symfony"
             ],
-            "time": "2014-05-10 08:56:32"
+            "time": "2014-07-05 11:35:19"
         },
         {
             "name": "ddeboer/data-import",
