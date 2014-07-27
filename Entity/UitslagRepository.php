@@ -12,35 +12,38 @@
 namespace Cyclear\GameBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 class UitslagRepository extends EntityRepository
 {
 
-    public function getPuntenByPloeg($seizoen = null, $ploeg = null)
+    public function getPuntenByPloeg($seizoen = null, $ploeg = null, \DateTime $maxDate = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
-        $options = array(":seizoen_id" => $seizoen->getId());
-        $ploegWhere = null;
-        if (null !== $ploeg) {
-            $ploegWhere = ' AND p.id = :ploeg_id';
-            $options['ploeg_id'] = $ploeg->getId();
+        $params = array('seizoen' => $seizoen);
+        $subQuery = $this->createQueryBuilder('u')
+            ->select('ifnull(sum(u.ploegPunten),0)')
+            ->innerJoin('u.wedstrijd', 'w')->where('w.seizoen = :seizoen')
+            ->andWhere('u.ploeg = p')->setParameters(array('seizoen' => $seizoen));
+        if (null !== $maxDate) {
+            $subQuery->andWhere('w.datum <= :maxdate');
+            $maxDate->setTime(23, 59, 59);
+            //$subQuery->setParameter('maxdate', $maxDate);
+            $params['maxdate'] = $maxDate;
         }
-        // TODO DQL'en net zoals getCountForPosition
-        $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 
-                ( SELECT IFNULL(SUM(u.ploegPunten),0) 
-                FROM Uitslag u 
-                INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id 
-                WHERE w.seizoen_id = :seizoen_id AND u.ploeg_id = p.id ) AS punten 
-                FROM Ploeg p 
-                WHERE p.seizoen_id = :seizoen_id %s
-                ORDER BY punten DESC, p.afkorting ASC
-                ", $ploegWhere);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->prepare($sql);
-        $stmt->execute($options);
-        return $stmt->fetchAll(\PDO::FETCH_NAMED);
+
+        $qb = $this->_em->getRepository('CyclearGameBundle:Ploeg')->createQueryBuilder('p');
+        $qb->addSelect('(' . $subQuery->getDQL() . ') AS punten');
+        $qb->where('p.seizoen = :seizoen');
+        if (null !== $ploeg) {
+            $qb->andWhere('p = :ploeg');
+            $params['ploeg'] = $ploeg;
+        }
+        $qb->orderBy('punten', 'DESC, p.afkorting DESC');
+        $qb->setParameters($params);
+        return $qb->getQuery()->getResult();
     }
 
     public function getPuntenByPloegForPeriode(Periode $periode, $seizoen = null)
@@ -99,7 +102,7 @@ class UitslagRepository extends EntityRepository
         }
         $qb = $this->getPuntenForRennerQb($renner);
         $qb->andWhere("w.seizoen = :seizoen");
-        if($excludeZeros){
+        if ($excludeZeros) {
             $qb->andWhere('u.rennerPunten > 0');
         }
         $qb->setParameters(array('seizoen' => $seizoen, 'renner' => $renner));

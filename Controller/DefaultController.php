@@ -41,12 +41,16 @@ class DefaultController extends Controller
         }
         $doctrine = $this->getDoctrine();
         $stand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen);
+        $shadowStandingsById = array();
+        foreach ($doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen, null, (new \DateTime)->modify('-2 weeks')) as $key => $value) {
+            $value['position'] = $key + 1;
+            $shadowStandingsById[$value[0]->getId()] = $value;
+        }
         // TODO: dit naar repository-class
         $wedstrijden = $doctrine->getRepository("CyclearGameBundle:Wedstrijd")->createQueryBuilder('w')
             ->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
             ->orderBy('w.datum DESC, w.id', 'DESC')
             ->setMaxResults(20)->getQuery()->getResult();
-        ;
         $periodestand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen);
         $zeges = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getCountForPosition($seizoen, 1);
         $draft = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen);
@@ -55,10 +59,11 @@ class DefaultController extends Controller
             ->getLatest($seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 20);
         $transferRepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
         return array(
-            'periode' => $periode, 
-            'seizoen' => $seizoen, 
+            'periode' => $periode,
+            'seizoen' => $seizoen,
             'nieuws' => $nieuws,
             'stand' => $stand,
+            'shadowstandingsById' => $shadowStandingsById,
             'wedstrijden' => $wedstrijden,
             'periodestand' => $periodestand,
             'zegestand' => $zeges,
@@ -66,6 +71,6 @@ class DefaultController extends Controller
             //'transferstand' => $transferstand,
             'transfers' => $transfers,
             'transferRepo' => $transferRepo
-            );
+        );
     }
 }
