@@ -9,7 +9,7 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.3.9",
+        "symfony/symfony": "~2.3.9",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-bundle": "1.2.*",
         "twig/extensions": "1.0.*",
@@ -28,8 +28,8 @@
         "kriswallsmith/assetic": "1.1.2",
         "cyclear/game-bundle":"dev-master",
         
-        "friendsofsymfony/user-bundle": "dev-master",
-        "friendsofsymfony/rest-bundle": "~1.3",
+        "friendsofsymfony/user-bundle": "dev-master#13c173ff60eef8e32c10f76225eacca00a430826",
+        "friendsofsymfony/rest-bundle": "1.3",
         "knplabs/knp-paginator-bundle": "2.3.*",
         "knplabs/knp-components": "1.2.*",
         "stof/doctrine-extensions-bundle":"dev-master",
@@ -41,10 +41,10 @@
         "twitter/bootstrap": "v2.3.1",
         "eriktrapman/cqrankingparser-bundle": "dev-master",
         "beberlei/DoctrineExtensions": "dev-master",
-        "mopa/bootstrap-bundle": "2.3.*@dev",
+        "mopa/bootstrap-bundle": "dev-master#5152f29f4b1b9e4d9d622561d26c1b8e603f0e11",
         "mobiledetect/mobiledetectlib": "2.7.*",
         "suncat/mobile-detect-bundle": "0.9.3",
-        "tijsverkoyen/twitteroauth": "dev-master",
+        "tijsverkoyen/twitteroauth": "~2.3",
         "ddeboer/data-import": "dev-master",
         "ddeboer/data-import-bundle": "dev-master"
     },
