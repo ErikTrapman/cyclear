@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="nl" ng-app="Cyclear">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -6,27 +6,34 @@
         <meta name="keywords" content="wielrennen, wielersite, wielerspel, spel, wielerploegen, punten scoren, punten, scoren, wielrenners, 20 renners per ploeg, verschillende ploegen, cyclear, Cyclear, CYCLEAR, cyclea, yclear, wielerseizoen, koersen, coureurs" />
     	<meta name="description" content="Cyclear is een leuk spel voor mensen die van wielrennen houden, waarbij deelnemers een unieke ploeg samenstellen van twintig wielrenners die in alle wielerwedstrijden gedurende een heel seizoen punten scoren." />
         <title>{% block title %}Cyclear{% endblock %}{% if is_granted("ROLE_ADMIN") %} - Adminstrator{% else %}{% if is_granted("ROLE_USER") %} - User {% endif %}{% endif %}</title>
-        
+
         {% if app.request.isXmlHttpRequest == false %}
-        
+
         {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/jquery-ui-1.8.16.custom.css') }}" media="all" />
-            <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/sticky-footer.css') }}" media="all" />
             {% stylesheets filter='cssrewrite' output='css/twitter.css'
                 '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/css/bootstrap.css'
-                '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/css/bootstrap-responsive.css'%}
+                '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/css/bootstrap-responsive.css'
+                'bundles/cycleargame/css/jquery-ui-1.8.16.custom.css'
+                'bundles/cycleargame/css/sticky-footer.css'
+            %}
             {% if is_mobile_view() %}
                 <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/mobile-tweaks.css') }}" media="all" />
             {% endif %}
-            <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+            <link rel="stylesheet" href="{{ asset_url }}" media="all"/>
             {% endstylesheets %}
-            <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/bootstrap-custom.css') }}" media="all" />       
+
+            {% stylesheets filter='cssrewrite' output='css/custom.css'
+            'bundles/cycleargame/css/bootstrap-custom.css'
+            'bundles/cycleargame/css/development.css'%}
+            <link rel="stylesheet" href="{{ asset_url }}" media="all"/>
+            {% endstylesheets %}
+
         {% endblock %}
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script src="//code.angularjs.org/1.1.5/angular.min.js"></script>
-        <script src="//code.angularjs.org/1.1.5/i18n/angular-locale_nl-nl.js"></script>
         {% block javascripts %}
         {% javascripts output='js/cyclear.js'
+                '@CyclearGameBundle/Resources/public/js/lib/jquery.1.8.3.min.js'
+                '@CyclearGameBundle/Resources/public/js/lib/angularjs.1.1.5.min.js'
+                '@CyclearGameBundle/Resources/public/js/lib/angular-locale_nl-nl.js'
                 '@CyclearApplicationBundle/Resources/public/js/*.js'
                 '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap.min.js'
                 '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap-dropdown.js'
@@ -101,34 +108,34 @@
                         </ul>
                     </div>
                 </div>
-            </div>  
-            
-            
+            </div>
 
-       
+
+
+
             <div class="container">
-                
+
                 {% for flashMessage in app.session.flashbag.get('notice') %}
                     <div class="alert alert-info">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                         {{ flashMessage|raw }}
                     </div>
                 {% endfor %}
-                
+
                 {% for flashMessage in app.session.flashbag.get('error') %}
                     <div class="alert alert-error">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                         {{ flashMessage|raw }}
                     </div>
                 {% endfor %}
-                
+
                 {% block content %}
                     {% block fos_user_content %}{% endblock %}
                 {% endblock %}
-            </div>  
+            </div>
             <div id="push"></div>
         </div>
-            
+
         <div id="footer">
             <div class="container">
                 <p class="muted credit">
@@ -137,7 +144,7 @@
                 <a class="btn" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
                {% else %}
                     <a class="btn" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
-                     
+
                     <a class="btn" href="{{ path('fos_user_resetting_request') }}">Wachtwoord vergeten?</a>
                {% endif %}
                     {% if app.request.attributes.get('seizoen-object') %}
