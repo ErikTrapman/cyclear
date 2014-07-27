@@ -35,7 +35,7 @@ class TeamController extends \FOS\RestBundle\Controller\FOSRestController
             ->getQuery()->getResult();
         $map = array();
         foreach ($em->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen) as $result) {
-            $map[$result['id']] = $result['punten'];
+            $map[$result[0]->getId()] = $result['punten'];
         }
         foreach ($ploegen as $ploeg) {
             $ploeg->setPunten($map[$ploeg->getId()]);
