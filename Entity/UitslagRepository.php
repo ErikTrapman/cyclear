@@ -92,13 +92,16 @@ class UitslagRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function getPuntenForRenner($renner, $seizoen = null)
+    public function getPuntenForRenner($renner, $seizoen = null, $excludeZeros = false)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         $qb = $this->getPuntenForRennerQb($renner);
         $qb->andWhere("w.seizoen = :seizoen");
+        if($excludeZeros){
+            $qb->andWhere('u.rennerPunten > 0');
+        }
         $qb->setParameters(array('seizoen' => $seizoen, 'renner' => $renner));
         return $qb->getQuery()->getResult();
     }

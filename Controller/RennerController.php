@@ -40,7 +40,7 @@ class RennerController extends Controller
             $query = $request->query->get('query');
             $em = $this->getDoctrine()->getManager();
             $qb = $em->getRepository("CyclearGameBundle:Renner")->createQueryBuilder('r');
-            $qb->where('r.naam LIKE :naam')->setParameter('naam', "%".$query."%")->orderBy('r.naam');
+            $qb->where('r.naam LIKE :naam')->setParameter('naam', "%" . $query . "%")->orderBy('r.naam');
             $ret = array();
             $ret['options'] = array();
             $rennerManager = new RennerManager();
@@ -75,7 +75,7 @@ class RennerController extends Controller
                 if ($filter->get('naam')->getData()) {
                     $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData());
                     $sql = "SELECT * FROM Renner r WHERE r.naam LIKE :naam ORDER BY r.naam";
-                    $params = array(":naam" => "%".$filter->get('naam')->getData()."%");
+                    $params = array(":naam" => "%" . $filter->get('naam')->getData() . "%");
                 }
             }
         }
@@ -90,7 +90,7 @@ class RennerController extends Controller
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $entities, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
+            $entities, $this->get('request')->query->get('page', 1) /* page number */, 10 /* limit per page */
         );
 
         return array(
@@ -114,20 +114,20 @@ class RennerController extends Controller
 
         //$transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->getLatest(
         //    $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 999, null, $renner);
-        
-        $transfers = $transferrepo->findByRenner( $renner, $seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER) );
 
-        $uitslagen = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenForRenner($renner, $seizoen[0]);
+        $transfers = $transferrepo->findByRenner($renner, $seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER));
+
+        $uitslagen = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenForRenner($renner, $seizoen[0], true);
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $uitslagen, $this->get('request')->query->get('page', 1)/* page number */, 20/* limit per page */
+            $uitslagen, $this->get('request')->query->get('page', 1) /* page number */, 20 /* limit per page */
         );
 
         $ploeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen[0]);
-        
+
         $punten = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getTotalPuntenForRenner($renner, $seizoen[0]);
-                
+
         return array(
             'seizoen' => $seizoen[0],
             'renner' => $renner,
