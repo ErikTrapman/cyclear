@@ -15,18 +15,15 @@
                 '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/css/bootstrap-responsive.css'
                 'bundles/cycleargame/css/jquery-ui-1.8.16.custom.css'
                 'bundles/cycleargame/css/sticky-footer.css'
-            %}
+                'bundles/cycleargame/css/bootstrap-custom.css' %}
+                <link rel="stylesheet" href="{{ asset_url }}" media="all"/>
+            {% endstylesheets %}
             {% if is_mobile_view() %}
                 <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/mobile-tweaks.css') }}" media="all" />
             {% endif %}
-            <link rel="stylesheet" href="{{ asset_url }}" media="all"/>
-            {% endstylesheets %}
-
-            {% stylesheets filter='cssrewrite' output='css/custom.css'
-            'bundles/cycleargame/css/bootstrap-custom.css'
-            'bundles/cycleargame/css/development.css'%}
-            <link rel="stylesheet" href="{{ asset_url }}" media="all"/>
-            {% endstylesheets %}
+            {% if app.environment == 'dev' %}
+                <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/development.css') }}" media="all"/>
+            {% endif %}
 
         {% endblock %}
         {% block javascripts %}
