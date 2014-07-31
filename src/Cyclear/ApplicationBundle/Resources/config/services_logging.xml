@@ -1,50 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <container xmlns="http://symfony.com/schema/dic/services">
-	<services>
+    <services>
 
         <service id="cyclear_game.exceptionlistener.db" class="Cyclear\ApplicationBundle\Listener\ExceptionListener">
             <tag name="kernel.event_listener" event="kernel.exception"
-                 method="onKernelException" />
-            <argument type="service" id="dblog" />
+                 method="onKernelException"/>
+            <argument type="service" id="dblog"/>
         </service>
 
-        <service id="cyclear_game.exceptionlistener.mail" class="Cyclear\ApplicationBundle\Listener\ExceptionListener">
-            <tag name="kernel.event_listener" event="kernel.exception"
-                 method="onKernelException" />
-            <argument type="service" id="maillog" />
+        <service id="dblog" alias="cyclear.logger.db"/>
+        <service id="dbloghandler" alias="cyclear.logger.handler.db"/>
+
+        <service id="cyclear.logger.db" class="Symfony\Bridge\Monolog\Logger">
+            <argument index="0">cyclear</argument>
+            <call method="pushHandler">
+                <argument type="service" id="dbloghandler"/>
+            </call>
         </service>
 
-		<service id="dblog" alias="cyclear.logger.db" />
-		<service id="maillog" alias="cyclear.logger.mail" />
-		<service id="dbloghandler" alias="cyclear.logger.handler.db" />
-		<service id="mailloghandler" alias="cyclear.logger.handler.mail" />
+        <service id="cyclear.logger.handler.db" class="Cyclear\ApplicationBundle\Log\CyclearLogHandlerDb">
+            <argument key="level">100</argument>
+            <argument key="bubble">false</argument>
+            <argument type="service" id="pdo"/>
+        </service>
 
-		<service id="cyclear.logger.db" class="Symfony\Bridge\Monolog\Logger">
-			<argument index="0">cyclear</argument>
-			<call method="pushHandler">
-				<argument type="service" id="dbloghandler" />
-			</call>
-		</service>
-
-		<service id="cyclear.logger.mail" class="Symfony\Bridge\Monolog\Logger">
-			<argument index="0">cyclear</argument>
-			<call method="pushHandler">
-				<argument type="service" id="mailloghandler" />
-			</call>
-		</service>
-
-		<service id="cyclear.logger.handler.db" class="Cyclear\ApplicationBundle\Log\CyclearLogHandlerDb">
-			<argument key="level">100</argument>
-			<argument key="bubble">false</argument>
-			<argument type="service" id="pdo" />
-		</service>
-
-		<service id="cyclear.logger.handler.mail" class="Cyclear\ApplicationBundle\Log\CyclearLogHandlerMail">
-			<argument key="level">400</argument>
-			<argument key="bubble">false</argument>
-			<argument type="service" id="mailer" />
-            <argument>%logging_address%</argument>
-		</service>
-
-	</services>
+    </services>
 </container>
