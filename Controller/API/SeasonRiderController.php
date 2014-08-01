@@ -26,7 +26,7 @@ class SeasonRiderController extends FOSRestController
     
     /**
      * 
-     * @QueryParam(name="page", requirements="\d+", strict=true, nullable=true, description="Page")
+     * @QueryParam(name="page", nullable=true, description="Page")
      * @QueryParam(name="query", strict=true, nullable=true, description="Query")
      * 
      */
