@@ -42,7 +42,12 @@ class DefaultController extends Controller
         $doctrine = $this->getDoctrine();
         $stand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen);
         $shadowStandingsById = array();
-        foreach ($doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen, null, (new \DateTime)->modify('-2 weeks')) as $key => $value) {
+        if (null !== $periode) {
+            $refdate = $periode->getStart();
+        } else {
+            $refdate = new \DateTime;
+        }
+        foreach ($doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen, null, $refdate) as $key => $value) {
             $value['position'] = $key + 1;
             $shadowStandingsById[$value[0]->getId()] = $value;
         }
