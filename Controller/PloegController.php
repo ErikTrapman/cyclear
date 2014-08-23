@@ -46,18 +46,18 @@ class PloegController extends Controller
         $paginator = $this->get('knp_paginator');
 
         $uitslagen = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegQb($entity, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('page', 1)
+            $uitslagRepo->getUitslagenForPloegQb($entity, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('page', 1), 20
         );
         $transfers = $paginator->paginate($em->getRepository("CyclearGameBundle:Transfer")->getLatest(
-            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 9999, $entity), $this->get('request')->query->get('transferPage', 1), 10, array('pageParameterName' => 'transferPage'));
+            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 9999, $entity), $this->get('request')->query->get('transferPage', 1), 20, array('pageParameterName' => 'transferPage'));
         $transferUitslagen = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('transferResultsPage', 1), 10, array('pageParameterName' => 'transferResultsPage')
+            $uitslagRepo->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('transferResultsPage', 1), 20, array('pageParameterName' => 'transferResultsPage')
         );
         $lostDrafts = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegForLostDraftsQb($entity, $seizoen)->getQuery()->getResult(), $this->get('request')->query->get('page', 1)
+            $uitslagRepo->getUitslagenForPloegForLostDraftsQb($entity, $seizoen)->getQuery()->getResult(), $this->get('request')->query->get('page', 1), 20
         );
         $zeges = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegByPositionQb($entity, 1, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('zegeResultsPage', 1), 10, array('pageParameterName' => 'zegeResultsPage')
+            $uitslagRepo->getUitslagenForPloegByPositionQb($entity, 1, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('zegeResultsPage', 1), 20, array('pageParameterName' => 'zegeResultsPage')
         );
 
         $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");
