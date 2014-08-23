@@ -1,6 +1,7 @@
 {% block content %}
-<table class="records_list table table-condensed ">
-    <thead>
+    {% set show = show is defined ? show : 'ploegPunten' %}
+    <table class="records_list table table-condensed ">
+        <thead>
         <tr>
             <th>Datum</th>
             <th>Pos</th>
@@ -8,23 +9,25 @@
             <th>Wedstrijd</th>
             <th>Punten</th>
         </tr>
-    </thead>
-    <tbody>
-    {% for uitslag in uitslagen %}
-        <tr>
-            <td>{{ uitslag.wedstrijd.datum|date('d-m-Y') }}</td>
-            <td>{{ uitslag.positie }}</td>
-            <td>{{ uitslag.renner.naam }}</td>
-            <td>
-                {% include "CyclearGameBundle:Wedstrijd:_singleRow.html.twig" with {wedstrijd:uitslag.wedstrijd, seizoen:uitslag.wedstrijd.seizoen } %}
-                {# <a href="{{ path('wedstrijd_show',{wedstrijd:uitslag.wedstrijd.id,seizoen:uitslag.wedstrijd.seizoen}) }}">{{ uitslag.wedstrijd.naam }}</a> #}
-            </td>
-            <td>{{ uitslag.ploegPunten }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-<div id="navigation">
-    {{ knp_pagination_render(uitslagen, null, {}, {'firstPageRoute': 'ploeg_show'}) }}
-</div>
+        </thead>
+        <tbody>
+        {% for uitslag in uitslagen %}
+            <tr>
+                <td>{{ uitslag.wedstrijd.datum|date('d-m-Y') }}</td>
+                <td>{{ uitslag.positie }}</td>
+                <td>{{ uitslag.renner.naam }}</td>
+                <td>
+                    {% include "CyclearGameBundle:Wedstrijd:_singleRow.html.twig" with {wedstrijd:uitslag.wedstrijd, seizoen:uitslag.wedstrijd.seizoen } %}
+                    {# <a href="{{ path('wedstrijd_show',{wedstrijd:uitslag.wedstrijd.id,seizoen:uitslag.wedstrijd.seizoen}) }}">{{ uitslag.wedstrijd.naam }}</a> #}
+                </td>
+                <td>
+                    {% if show == 'rennerPunten' %}{{ uitslag.rennerPunten }}{% else %}{{ uitslag.ploegPunten }}{% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div id="navigation">
+        {{ knp_pagination_render(uitslagen, null, {}, {'firstPageRoute': 'ploeg_show'}) }}
+    </div>
 {% endblock %}

@@ -94,9 +94,9 @@ class TransferRepository extends EntityRepository
             $ploeg = $this->_em->getRepository("CyclearGameBundle:Ploeg")->find($ploeg);
         }
         $cloneEnd = clone $end;
-        $cloneEnd->setTime(23,59,59);
+        $cloneEnd->setTime(23, 59, 59);
         $cloneStart = clone $start;
-        $cloneStart->setTime(0,0,0);
+        $cloneStart->setTime(0, 0, 0);
         $query = $this->getEntityManager()
             ->createQuery("SELECT COUNT(t.id) AS freq FROM CyclearGameBundle:Transfer t 
                 WHERE t.ploegNaar = :ploeg AND t.datum BETWEEN :start AND :end AND t.transferType IN( :type )")
@@ -157,6 +157,5 @@ class TransferRepository extends EntityRepository
             ->setParameters($params);;
         return $tQb->getQuery()->getResult();
     }
-
 
 }

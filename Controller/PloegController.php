@@ -49,9 +49,12 @@ class PloegController extends Controller
             $uitslagRepo->getUitslagenForPloegQb($entity, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('page', 1)
         );
         $transfers = $paginator->paginate($em->getRepository("CyclearGameBundle:Transfer")->getLatest(
-                $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 9999, $entity), $this->get('request')->query->get('transferPage', 1), 10, array('pageParameterName' => 'transferPage'));
+            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 9999, $entity), $this->get('request')->query->get('transferPage', 1), 10, array('pageParameterName' => 'transferPage'));
         $transferUitslagen = $paginator->paginate(
             $uitslagRepo->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('transferResultsPage', 1), 10, array('pageParameterName' => 'transferResultsPage')
+        );
+        $lostDrafts = $paginator->paginate(
+            $uitslagRepo->getUitslagenForPloegForLostDraftsQb($entity, $seizoen)->getQuery()->getResult(), $this->get('request')->query->get('page', 1)
         );
         $zeges = $paginator->paginate(
             $uitslagRepo->getUitslagenForPloegByPositionQb($entity, 1, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('zegeResultsPage', 1), 10, array('pageParameterName' => 'zegeResultsPage')
@@ -69,6 +72,7 @@ class PloegController extends Controller
             'transfers' => $transfers,
             'rennerRepo' => $rennerRepo,
             'transferUitslagen' => $transferUitslagen,
+            'lostDrafts' => $lostDrafts,
             'zeges' => $zeges,
             'punten' => $punten[0]['punten'],
             'draftRenners' => $draftRenners,

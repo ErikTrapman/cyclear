@@ -120,8 +120,23 @@ class UitslagController extends Controller
     {
         $seizoen = $request->attributes->get('seizoen-object');
         $transfer = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen);
+
+        $gained = array();
+        foreach ($this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfersWithoutLoss($seizoen) as $teamResult) {
+            $gained[$teamResult['id']] = $teamResult['punten'];
+        }
+        $lost = array();
+        foreach ($this->getDoctrine()->getRepository('CyclearGameBundle:Uitslag')->getLostDraftPuntenByPloeg($seizoen) as $teamResult) {
+            $lost[$teamResult['id']] = $teamResult['punten'];
+        }
         $stand = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen);
         $draft = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen);
-        return array('seizoen' => $seizoen, 'transfer' => $transfer, 'stand' => $stand, 'draft' => $draft);
+        return array(
+            'seizoen' => $seizoen,
+            'transfer' => $transfer,
+            'shadowgained' => $gained,
+            'shadowlost' => $lost,
+            'stand' => $stand,
+            'draft' => $draft);
     }
 }

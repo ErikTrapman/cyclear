@@ -1,22 +1,32 @@
 {% block content %}
-<table class="records_list table table-condensed ">
-    <thead>
+    <table class="records_list table table-condensed ">
+        <thead>
         <tr>
             <th/>
             <th>Ploeg</th>
             <th/>
             <th>Punten</th>
+            <th/>
         </tr>
-    </thead>
-    <tbody>
-    {% for ploeg in list %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ ploeg.naam }}</td>
-            <td>{{ ploeg.afkorting }}</td>
-            <td>{{ ploeg.punten }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% for ploeg in list %}
+            {% set id = ploeg.id %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td><a href="{{ path('ploeg_show', {id: ploeg.id, seizoen:seizoen.slug}) }}">{{ ploeg.naam }}</a></td>
+                <td>{{ ploeg.afkorting }}</td>
+                <td style="text-align: right;">{{ ploeg.punten }}</td>
+                <td>
+                    <table border="0" cellpadding="0" cellspacing="2">
+                        <tr>
+                            <td style="text-align: right; width:42px; border: 0; padding: 0px;color:green;">+{{ shadowgained[id] }}</td>
+                            <td style="width:42px; border: 0; padding: 0px;text-align: right;color:red">
+                                -{{ shadowlost[id] }}</td>
+                        </tr>
+                    </table>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

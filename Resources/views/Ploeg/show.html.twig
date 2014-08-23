@@ -1,40 +1,44 @@
 {% extends '::base.html.twig' %}
 
 {% block title %}
-{{ entity.naam }}
+    {{ entity.naam }}
 {% endblock %}
 
 {% block content %}
 
-<div class="span12">
-    <h3>{{ entity.naam }} - {{ punten }}</h3>
-    <ul class="nav nav-tabs" id="tabs">
-        <li class="active"><a href="#ploeg" data-toggle="tab">Ploeg</a></li>
-        <li><a href="#punten" data-toggle="tab">Gescoorde punten</a></li>
-        <li><a href="#transfers" data-toggle="tab">Transfers</a></li>
-        <li><a href="#transferpunten" data-toggle="tab">Transfer punten</a></li>
-        <li><a href="#zeges" data-toggle="tab">Zeges</a></li>
-        <li><a href="#draft" data-toggle="tab">Draftploeg</a></li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane active" id="ploeg">
-            {% include "CyclearGameBundle:Ploeg:_singleRenners.html.twig" with {'renners':renners,'showTotal':false,'showContract':true, 'showActions':true } %}
-        </div>
-        <div class="tab-pane" id="punten">
-            {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':uitslagen} %}
-        </div>
-        <div class="tab-pane" id="transfers">
-            {% include "CyclearGameBundle:Transfer:_listWithInversion.html.twig" with {'listWithInversion':transfers, 'firstPageRoute' : 'ploeg_show','includePagination': true} %}
-        </div>
-        <div class="tab-pane" id="transferpunten">
-            {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':transferUitslagen} %}
-        </div>
-        <div class="tab-pane" id="zeges">
-            {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':zeges} %}
-        </div>
-        <div class="tab-pane" id="draft">
-            {% include "CyclearGameBundle:Ploeg:_singleRenners.html.twig" with {'renners':draftRenners,'showTotal': true,'total': draftPunten, 'showContract': false,'showActions':false } %}
+    <div class="span12">
+        <h3>{{ entity.naam }} - {{ punten }}</h3>
+        <ul class="nav nav-tabs" id="tabs">
+            <li class="active"><a href="#ploeg" data-toggle="tab">Ploeg</a></li>
+            <li><a href="#punten" data-toggle="tab">Gescoorde punten</a></li>
+            <li><a href="#transfers" data-toggle="tab">Transfers</a></li>
+            <li><a href="#transferpunten" data-toggle="tab">Transfer punten</a></li>
+            <li><a href="#zeges" data-toggle="tab">Zeges</a></li>
+            <li><a href="#draft" data-toggle="tab">Draftploeg</a></li>
+            <li><a href="#lostdrafts" data-toggle="tab">Draft-</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="ploeg">
+                {% include "CyclearGameBundle:Ploeg:_singleRenners.html.twig" with {'renners':renners,'showTotal':false,'showContract':true, 'showActions':true } %}
+            </div>
+            <div class="tab-pane" id="punten">
+                {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':uitslagen} %}
+            </div>
+            <div class="tab-pane" id="transfers">
+                {% include "CyclearGameBundle:Transfer:_listWithInversion.html.twig" with {'listWithInversion':transfers, 'firstPageRoute' : 'ploeg_show','includePagination': true} %}
+            </div>
+            <div class="tab-pane" id="transferpunten">
+                {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':transferUitslagen} %}
+            </div>
+            <div class="tab-pane" id="zeges">
+                {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':zeges} %}
+            </div>
+            <div class="tab-pane" id="draft">
+                {% include "CyclearGameBundle:Ploeg:_singleRenners.html.twig" with {'renners':draftRenners,'showTotal': true,'total': draftPunten, 'showContract': false,'showActions':false } %}
+            </div>
+            <div class="tab-pane" id="lostdrafts">
+                {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':lostDrafts,'show':'rennerPunten' } %}
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
