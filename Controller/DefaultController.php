@@ -46,8 +46,8 @@ class DefaultController extends Controller
             $refdate = $periode->getStart();
         } else {
             $refdate = new \DateTime;
-            $refdate->setTime(0, 0, 0);
         }
+        $refdate->setTime(0, 0, 0);
         foreach ($doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen, null, $refdate) as $key => $value) {
             $value['position'] = $key + 1;
             $shadowStandingsById[$value[0]->getId()] = $value;
