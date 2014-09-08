@@ -28,8 +28,8 @@ class UitslagRepository extends EntityRepository
             ->innerJoin('u.wedstrijd', 'w')->where('w.seizoen = :seizoen')
             ->andWhere('u.ploeg = p')->setParameters(array('seizoen' => $seizoen));
         if (null !== $maxDate) {
-            $subQuery->andWhere('w.datum <= :maxdate');
-            $maxDate->setTime(23, 59, 59);
+            $subQuery->andWhere('w.datum < :maxdate');
+            $maxDate->setTime(0, 0, 0);
             //$subQuery->setParameter('maxdate', $maxDate);
             $params['maxdate'] = $maxDate;
         }
