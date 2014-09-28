@@ -4,7 +4,7 @@
     "autoload": {
         "psr-0": {
             "": "src/",
-            "TijsVerkoyen\\Twitter":"vendor/tijsverkoyen/twitteroauth"
+            "TijsVerkoyen\\Twitter": "vendor/tijsverkoyen/twitteroauth"
         }
     },
     "require": {
@@ -20,24 +20,25 @@
         "sensio/framework-extra-bundle": "2.3.*",
         "sensio/generator-bundle": "2.3.*",
         "incenteev/composer-parameter-handler": "~2.0",
-        
+
         "jms/security-extra-bundle": "1.5.*",
         "jms/di-extra-bundle": "1.4.*",
         "jms/serializer-bundle": "0.12.*@dev",
-        
+
         "kriswallsmith/assetic": "1.1.2",
-        "cyclear/game-bundle":"dev-master",
-        
+        "cyclear/game-bundle": "dev-master",
+
         "friendsofsymfony/user-bundle": "dev-master#13c173ff60eef8e32c10f76225eacca00a430826",
         "friendsofsymfony/rest-bundle": "1.3",
-        "knplabs/knp-paginator-bundle": "2.3.*",
+        "friendsofsymfony/jsrouting-bundle": "~1.5.2",
+        "knplabs/knp-paginator-bundle": "~2.3.3",
         "knplabs/knp-components": "1.2.*",
-        "stof/doctrine-extensions-bundle":"dev-master",
-        
-        "liip/functional-test-bundle":"dev-master",
-        "doctrine/doctrine-fixtures-bundle":"dev-master",
-        "doctrine/data-fixtures":"dev-master",
-        
+        "stof/doctrine-extensions-bundle": "dev-master",
+
+        "liip/functional-test-bundle": "dev-master",
+        "doctrine/doctrine-fixtures-bundle": "dev-master",
+        "doctrine/data-fixtures": "dev-master",
+
         "twitter/bootstrap": "v2.3.1",
         "eriktrapman/cqrankingparser-bundle": "dev-master",
         "beberlei/DoctrineExtensions": "dev-master",
@@ -46,7 +47,9 @@
         "suncat/mobile-detect-bundle": "0.9.3",
         "tijsverkoyen/twitteroauth": "~2.3",
         "ddeboer/data-import": "dev-master",
-        "ddeboer/data-import-bundle": "dev-master"
+        "ddeboer/data-import-bundle": "dev-master",
+        "samson/autocomplete-bundle": "~2.0.1",
+        "samson/dataview-bundle": "1.0.1"
     },
     "scripts": {
         "post-install-cmd": [
@@ -74,21 +77,21 @@
         }
     },
     "repositories": [
-           {
-               "type": "package",
-               "package": {
-                   "version": "master",
-                   "name": "twitter/bootstrap",
-                   "source": {
-                       "url": "https://github.com/twitter/bootstrap.git",
-                       "type": "git",
-                       "reference": "master"
-                   },
-                   "dist": {
-                       "url": "https://github.com/twitter/bootstrap/zipball/master",
-                       "type": "zip"
-                   }
-               }
-           }
-       ]
+        {
+            "type": "package",
+            "package": {
+                "version": "master",
+                "name": "twitter/bootstrap",
+                "source": {
+                    "url": "https://github.com/twitter/bootstrap.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/twitter/bootstrap/zipball/master",
+                    "type": "zip"
+                }
+            }
+        }
+    ]
 }

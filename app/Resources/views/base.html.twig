@@ -38,6 +38,7 @@
                 '%kernel.root_dir%/../vendor/twitter/bootstrap/docs/assets/js/bootstrap-tooltip.js'
                 '@CyclearGameBundle/Resources/public/js/*.js'
                 '@CyclearGameBundle/Resources/public/js/*/*.js'
+                '@CyclearGameBundle/Resources/public/js/*/*/*.js'
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
@@ -51,6 +52,8 @@
                     $thisform.addClass('form-horizontal');
                 });
             </script>
+            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
             {% endblock %}
             {% block buttonjs %}
             <script type="text/javascript">
@@ -78,6 +81,8 @@
               var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();
 
+            var seizoenSlug = '{{ app.request.attributes.get('seizoen-object').slug }}';
+
           </script>
     </head>
     <body>
@@ -89,7 +94,7 @@
                         <ul class="nav" role="navigation">
                             <li><a href="http://www.cyclear.nl/forum" target="_blank">Forum</a></li>
                             {% if app.request.attributes.get('seizoen') %}
-                                <li><a href="{{ path('get_season_riders', {'seizoen':app.request.attributes.get('seizoen')} ) }}">Renners</a></li>
+                                <li><a href="{{ path('rider_index', {'seizoen':app.request.attributes.get('seizoen-object').slug} ) }}">Renners</a></li>
                             {% else %}
                                 <li><a href="{{ path('get_riders') }}">Renners</a></li>
                             {% endif %}
