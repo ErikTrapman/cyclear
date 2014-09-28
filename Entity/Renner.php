@@ -31,7 +31,7 @@ class Renner
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * 
+     *
      * @Serializer\Expose
      * @Serializer\Groups({"small","medium"})
      */
@@ -42,14 +42,14 @@ class Renner
      *
      * @ORM\Column(name="naam", type="string", length=255)
      * @Serializer\Expose
-     * @Serializer\Accessor(getter="__toString")
+     * @Serializer\Accessor(getter="getNaam")
      * @Serializer\Groups({"small","medium"})
      */
     private $naam;
 
     /**
      * @ORM\Column(name="cqranking_id", type="integer", length=11, nullable=true, unique=true)
-     * 
+     *
      */
     private $cqranking_id;
 
@@ -91,7 +91,7 @@ class Renner
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -111,7 +111,7 @@ class Renner
     /**
      * Get naam
      *
-     * @return string 
+     * @return string
      */
     public function getNaam()
     {
@@ -176,7 +176,7 @@ class Renner
 
     public function getCountryIso()
     {
-        return $this->getCountry()->getIso2();
+        return strtolower($this->getCountry()->getIso2());
     }
 
     public function getContracts()

@@ -12,6 +12,9 @@
 namespace Cyclear\GameBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 /**
  * RennerRepository
@@ -63,8 +66,7 @@ class RennerRepository extends EntityRepository
         $qb = $this->_em->getRepository("CyclearGameBundle:Contract")->createQueryBuilder('c');
         $qb->where('c.renner = :renner')
             ->andWhere('c.start <= DATE(:date) AND ( c.end IS NULL OR c.end >= DATE(:date) )')
-            ->andWhere('c.seizoen = :seizoen')
-        ;
+            ->andWhere('c.seizoen = :seizoen');
         $qb->setParameters(array('renner' => $renner, 'date' => $date, 'seizoen' => $seizoen));
         $contracts = $qb->getQuery()->getResult();
         if (empty($contracts)) {
@@ -83,12 +85,43 @@ class RennerRepository extends EntityRepository
         }
         $rennersWithPloeg = array();
         foreach ($this->_em->getRepository("CyclearGameBundle:Contract")
-            ->createQueryBuilder('c')
-            ->where('c.seizoen = :seizoen')
-            ->andWhere('c.eind IS NULL')->setParameter('seizoen', $seizoen)
-            ->getQuery()->getResult() as $contract) {
+                     ->createQueryBuilder('c')
+                     ->where('c.seizoen = :seizoen')
+                     ->andWhere('c.eind IS NULL')->setParameter('seizoen', $seizoen)
+                     ->getQuery()->getResult() as $contract) {
             $rennersWithPloeg [] = $contract->getRenner();
         }
         return $rennersWithPloeg;
     }
+
+    public function getRennersWithPunten($seizoen = null, $excludeWithTeam = false)
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        }
+        $puntenQb = $this->_em->getRepository('CyclearGameBundle:Uitslag')
+            ->createQueryBuilder('u')
+            ->select('SUM(u.rennerPunten)')
+            ->innerJoin('u.wedstrijd', 'w')
+            ->where('u.renner = r')
+            ->andWhere('w.seizoen = :seizoen')//    ->setParameter('seizoen', $seizoen)
+        ;
+        $teamQb = $this->_em->getRepository('CyclearGameBundle:Contract')
+            ->createQueryBuilder('c')
+            ->select('p.afkorting')
+            ->innerJoin('c.ploeg', 'p')
+            ->where('c.seizoen = :seizoen')
+            ->andWhere('c.eind IS NULL')
+            ->andWhere('c.renner = r')//->setParameter('seizoen', $seizoen)
+        ;
+        $qb = $this->createQueryBuilder('r')
+            ->addSelect('IFNULL((' . $puntenQb->getDQL() . '), 0) AS punten', 'IFNULL((' . $teamQb->getDQL() . '), -1) AS team')
+            ->leftJoin('r.country', 'cty')->addSelect('cty')
+            ->orderBy('punten', 'DESC');
+        if (true === $excludeWithTeam) {
+            $qb->having("team < 0");
+        }
+        return $qb->setParameter('seizoen', $seizoen); //->setMaxResults(20)->getQuery()->getResult();
+    }
+
 }

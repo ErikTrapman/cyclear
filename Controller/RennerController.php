@@ -11,7 +11,9 @@
 
 namespace Cyclear\GameBundle\Controller;
 
+use Cyclear\GameBundle\DataView\RiderSearchView;
 use Cyclear\GameBundle\Entity\Renner;
+use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\Transfer;
 use Cyclear\GameBundle\EntityManager\RennerManager;
 use Doctrine\ORM\AbstractQuery;
@@ -23,13 +25,58 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Ploeg controller.
+ * Renner controller.
  *
  */
 class RennerController extends Controller
 {
+
+    /**
+     * @Route("/{seizoen}/renners.{_format}", name="rider_index", options={"_format"="json|html","expose"=true}, defaults={"_format":"html"})
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Template
+     */
+    public function indexAction(Request $request, Seizoen $seizoen)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $exclude = $request->query->get('excludeWithTeam') === 'true' ? true : false;
+        $renners = $em->getRepository("CyclearGameBundle:Renner")->getRennersWithPunten($seizoen, $exclude);
+        $paginator = $this->get('knp_paginator');
+
+        $this->get('samson.autocomplete.results_fetcher')->getResultsByArray($this->assertArray($request->query->get('filter'), "/\s+/"), $request->query->get('page', 1), $renners, array('r.naam'));
+        $pagination = $paginator->paginate($renners, $request->query->get('page', 1), 20);
+
+        $ret = array();
+        foreach ($pagination as $r) {
+            $ret [] = (new RiderSearchView())->serialize($r)->getData();
+        }
+        $pagination->setItems($ret);
+        $serializer = $this->get('jms_serializer');
+        $entities = $serializer->serialize($pagination, 'json');
+
+        if ('json' === $request->getRequestFormat()) {
+            return new Response($entities);
+        }
+
+        return array('seizoen' => $seizoen);
+    }
+
+    private function assertArray($value, $separator)
+    {
+        if (is_array($value)) {
+            return $value;
+        }
+
+        if ($separator[0] == '/') {
+            return preg_split($separator, $value);
+        } else {
+            return explode($separator, $value);
+        }
+    }
+
 
     /**
      * @Route("/renner/search", name="renner_search", defaults={"_format"="json"})
@@ -103,7 +150,7 @@ class RennerController extends Controller
     }
 
     /**
-     * @Route("/{seizoen}/renner/{renner}", name="renner_show")
+     * @Route("/{seizoen}/renner/{renner}", name="renner_show", options={"expose"=true})
      * @Template("CyclearGameBundle:Renner:show.html.twig")
      * @ParamConverter("renner", class="CyclearGameBundle:Renner", options={"mapping": {"renner": "slug"}});
      */

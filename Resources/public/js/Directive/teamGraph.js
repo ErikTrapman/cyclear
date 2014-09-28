@@ -1,4 +1,4 @@
-angular.module('Cyclear', ['d3']).directive('teamGraph', ['d3Service', function (d3Service) {
+angular.module('Cyclear').directive('teamGraph', ['d3Service', function (d3Service) {
     return {
         restrict: 'E',
         scope: true,

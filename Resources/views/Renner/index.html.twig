@@ -1,0 +1,66 @@
+{% extends '::base.html.twig' %}
+
+
+{% block content %}
+    <div ng-controller="riderlistCtrl">
+        <div class="span6">
+            <table class="table table-bordered table-condensed">
+                <thead>
+                <tr>
+                    <th>Renner</th>
+                    <th>Punten</th>
+                    <th>Ploeg</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="r in riders">
+                <tr>
+                    {% verbatim %}
+                    <td>
+                        <img ng-if="initialLoad" style="margin-right:3px; margin-bottom:2px;" width="16" height="16"
+                             ng-src="/bundles/cycleargame/icons/flags/16/{{ r.country.iso2 | lowercase }}.png"
+                             alt="{{ r.country.name }}">
+                        <a ng-href="{{ getUrl(r.slug) }}">{{ r.naam }}</a>
+                    </td>
+                    <td>{{ r.punten }}</td>
+                    <td>{{ r.team }}</td>
+                    {% endverbatim %}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="span5">
+            <table class="table">
+                <tr>
+                    <th colspan="2">Filter</th>
+                </tr>
+                <tr>
+                    <td>Naam</td>
+                    <td><input id="filter_naam" type="text" ng-model="filter.name" placeholder="Filter..."></td>
+                </tr>
+                <tr>
+                    <td>Vrij</td>
+                    <td><input type="checkbox" id="filter_hasteam" ng-model="filter.excludeWithTeam"></td>
+                </tr>
+            </table>
+            {% verbatim %}
+            <div id="navigation">
+                <div class="pagination" ng-if="true == initialLoad && pages.length > 1">
+                    <ul>
+                        <li ng-class="{ disabled: 1 == pagination.currentPage}">
+                            <a ng-href="#" ng-click="setPage(pagination.currentPage - 1)">&laquo;&nbsp;Previous</a></li>
+                        <li ng-class="{ disabled: 1 == pagination.currentPage}">
+                            <a ng-href="#" ng-click="setPage(1)">1</a></li>
+                        <li ng-class="disabled" ng-if="pagination.currentPage > 2"><a>&hellip;</a></li>
+                        <li ng-repeat="page in pagination.options"
+                            ng-class="{ disabled: page == pagination.currentPage }">
+                            <a ng-href="#" ng-click="setPage(page)">{{ page }}</a>
+                        </li>
+                        <li><a ng-href="#" ng-click="setPage(pagination.currentPage + 1)">Next&nbsp;&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+            {% endverbatim %}
+        </div>
+    </div>
+{% endblock %}
