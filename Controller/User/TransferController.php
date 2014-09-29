@@ -74,7 +74,7 @@ class TransferController extends Controller
             $options['renner_uit'] = $renner;
             $transferUser->setRennerUit($renner);
         }
-        $options['ploegRenners'] = $this->getDoctrine()->getRepository("CyclearGameBundle:Ploeg")->getRenners($ploeg, $seizoen[0]);
+        $options['ploegRenners'] = $this->getDoctrine()->getRepository("CyclearGameBundle:Ploeg")->getRenners($ploeg);
         $options['ploeg'] = $ploeg;
         $form = $this->createForm(new TransferUserType(), $transferUser, $options);
         if ($this->getRequest()->getMethod() == 'POST') {

@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Cyclear\GameBundle\Entity\User
  *
  * @ORM\Table(name="User")
- * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\UserRepository")
+ * @ORM\Entity()
  */
 class User extends \FOS\UserBundle\Model\User implements \Serializable
 {

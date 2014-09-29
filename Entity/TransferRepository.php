@@ -38,15 +38,6 @@ class TransferRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findLastByRenner(Renner $renner)
-    {
-        $qb = $this->getQueryBuilderForRenner($renner);
-        $qb->orderBy('t.id', 'DESC');
-        $qb->setMaxResults(1);
-        $res = $qb->getQuery()->getResult();
-        return (array_key_exists(0, $res)) ? $res[0] : null;
-    }
-
     private function getQueryBuilderForRenner($renner)
     {
         $qb = $this->createQueryBuilder("t");
@@ -135,7 +126,7 @@ class TransferRepository extends EntityRepository
         /** @var \Doctrine\ORM\QueryBuilder $tQb */
         $tQb = $this->_em->getRepository("CyclearGameBundle:Transfer")->createQueryBuilder('t');
 
-        $draftrenners = $this->_em->getRepository("CyclearGameBundle:Ploeg")->getDraftRenners($ploeg, $seizoen);
+        $draftrenners = $this->_em->getRepository("CyclearGameBundle:Ploeg")->getDraftRenners($ploeg);
         $params = array(
             'drafttransfer' => Transfer::DRAFTTRANSFER,
             'ploeg' => $ploeg,

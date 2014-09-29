@@ -319,7 +319,7 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         $parameters = array('ploeg' => $ploeg, 'seizoen' => $seizoen);
-        $draftrenners = $this->_em->getRepository("CyclearGameBundle:Ploeg")->getDraftRenners($ploeg, $seizoen);
+        $draftrenners = $this->_em->getRepository("CyclearGameBundle:Ploeg")->getDraftRenners($ploeg);
         $qb = $this->createQueryBuilder('u');
         $qb
             //->where('u.ploeg = :ploeg')

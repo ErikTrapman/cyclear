@@ -36,6 +36,7 @@ class RennerController extends Controller
 
     /**
      * @Route("/{seizoen}/renners.{_format}", name="rider_index", options={"_format"="json|html","expose"=true}, defaults={"_format":"html"})
+     * @Route("/api/v1/{seizoen}/riders.{_format}", name="api_season_rider_index", options={"_format"="json"}, defaults={"_format":"json"})
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template
      */
@@ -141,7 +142,8 @@ class RennerController extends Controller
         );
 
         return array(
-            'pagination' => $pagination, 'filter' => $filter->createView(),
+            'pagination' => $pagination,
+            'filter' => $filter->createView(),
             'listWithPunten' => $listWithPunten,
             'seizoen' => $seizoen[0],
             'rennerRepo' => $this->getDoctrine()->getRepository("CyclearGameBundle:Renner"),

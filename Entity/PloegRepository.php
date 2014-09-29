@@ -16,11 +16,8 @@ use Doctrine\ORM\EntityRepository;
 class PloegRepository extends EntityRepository
 {
 
-    public function getRenners($ploeg, $seizoen = null)
+    public function getRenners($ploeg)
     {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
-        }
         $renners = array();
         foreach ($this->_em->getRepository("CyclearGameBundle:Contract")
                      ->createQueryBuilder('c')
@@ -36,46 +33,37 @@ class PloegRepository extends EntityRepository
         return $renners;
     }
 
-    public function getDraftRenners($ploeg, $seizoen = null)
+    public function getDraftRenners(Ploeg $ploeg)
     {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
-        }
         return $this->_em->getRepository("CyclearGameBundle:Renner")
             ->createQueryBuilder("r")
             ->innerJoin("CyclearGameBundle:Transfer", "t", 'WITH', 't.renner = r')
             ->where("t.transferType = " . Transfer::DRAFTTRANSFER)
             ->andWhere("t.ploegNaar = :ploeg")
             ->andWhere("t.seizoen = :seizoen")
-            ->setParameters(array("ploeg" => $ploeg, "seizoen" => $seizoen))->getQuery()->getResult();
+            ->setParameters(array("ploeg" => $ploeg, "seizoen" => $ploeg->getSeizoen()))->getQuery()->getResult();
     }
 
-    public function getRennersWithPunten($ploeg, $seizoen = null)
+    public function getRennersWithPunten(Ploeg $ploeg)
     {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
-        }
         $renners = $this->getRenners($ploeg);
         $ret = array();
         $uitslagRepo = $this->_em->getRepository("CyclearGameBundle:Uitslag");
         foreach ($renners as $index => $renner) {
-            $punten = $uitslagRepo->getPuntenForRennerWithPloeg($renner, $ploeg, $seizoen);
+            $punten = $uitslagRepo->getPuntenForRennerWithPloeg($renner, $ploeg, $ploeg->getSeizoen());
             $ret[] = array(0 => $renner, 'punten' => (int)$punten, 'index' => $index);
         }
         $this->puntenSort($ret);
         return $ret;
     }
 
-    public function getDraftRennersWithPunten($ploeg, $seizoen = null, $sort = true)
+    public function getDraftRennersWithPunten(Ploeg $ploeg, $sort = true)
     {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
-        }
         $ret = array();
-        $renners = $this->getDraftRenners($ploeg, $seizoen);
+        $renners = $this->getDraftRenners($ploeg);
         $uitslagRepo = $this->_em->getRepository("CyclearGameBundle:Uitslag");
         foreach ($renners as $index => $renner) {
-            $ret[] = array(0 => $renner, 'punten' => $uitslagRepo->getTotalPuntenForRenner($renner, $seizoen), 'index' => $index);
+            $ret[] = array(0 => $renner, 'punten' => $uitslagRepo->getTotalPuntenForRenner($renner, $ploeg->getSeizoen()), 'index' => $index);
         }
         if ($sort) {
             $this->puntenSort($ret);

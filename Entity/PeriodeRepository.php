@@ -37,11 +37,6 @@ class PeriodeRepository extends EntityRepository
                 ->where('p.seizoen = :seizoen')
                 ->setParameter('seizoen', $seizoen)
                 ->setMaxResults(1);
-            /*
-            $qb = $this->createQueryBuilder("p")->where("p.start <= :eind")
-                ->andWhere('p.seizoen = :seizoen')
-                ->setParameter('seizoen', $seizoen)
-                ->setParameter('eind', $eind)->orderBy('p.eind','DESC')->setMaxResults(1);*/
             return $qb->getQuery()->getSingleResult();
         }
     }

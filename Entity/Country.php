@@ -19,7 +19,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 /**
  *
- * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\CountryRepository")
+ * @ORM\Entity()
  * @Serializer\ExclusionPolicy("all")
  */
 class Country implements Translatable

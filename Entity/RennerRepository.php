@@ -60,24 +60,6 @@ class RennerRepository extends EntityRepository
         return $contract->getPloeg();
     }
 
-    public function getPloegOnDate($renner, $seizoen, $date)
-    {
-        //c.start <= DATE(m.date) AND ( c.end IS NULL OR c.end >= DATE(m.date) )
-        $qb = $this->_em->getRepository("CyclearGameBundle:Contract")->createQueryBuilder('c');
-        $qb->where('c.renner = :renner')
-            ->andWhere('c.start <= DATE(:date) AND ( c.end IS NULL OR c.end >= DATE(:date) )')
-            ->andWhere('c.seizoen = :seizoen');
-        $qb->setParameters(array('renner' => $renner, 'date' => $date, 'seizoen' => $seizoen));
-        $contracts = $qb->getQuery()->getResult();
-        if (empty($contracts)) {
-            return null;
-        }
-        if (count($contracts) > 0) {
-            throw new \RuntimeException("Cannot have multiple ploegen from this query");
-        }
-        return $contracts[0]->getPloeg();
-    }
-
     public function getRennersWithPloeg($seizoen = null)
     {
         if (null === $seizoen) {

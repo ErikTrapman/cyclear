@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 angular.module('Cyclear').directive('teamGraph', ['d3Service', function (d3Service) {
     return {
         restrict: 'E',
