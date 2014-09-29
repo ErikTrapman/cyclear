@@ -39,10 +39,5 @@ fos_user_security_logout:
     prefix: /
     pattern: /logout
 
-# app/config/routing.yml
-api:
-  type:     rest
-  resource: "@CyclearGameBundle/Resources/config/routing.yml"
-
 fos_js_routing:
   resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

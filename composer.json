@@ -29,7 +29,6 @@
         "cyclear/game-bundle": "dev-master",
 
         "friendsofsymfony/user-bundle": "dev-master#13c173ff60eef8e32c10f76225eacca00a430826",
-        "friendsofsymfony/rest-bundle": "1.3",
         "friendsofsymfony/jsrouting-bundle": "~1.5.2",
         "knplabs/knp-paginator-bundle": "~2.3.3",
         "knplabs/knp-components": "1.2.*",

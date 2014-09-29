@@ -25,7 +25,6 @@ class AppKernel extends Kernel
             new Cyclear\GameBundle\CyclearGameBundle(),
             
             new FOS\UserBundle\FOSUserBundle(),
-            new FOS\RestBundle\FOSRestBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             
