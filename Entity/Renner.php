@@ -42,7 +42,7 @@ class Renner
      *
      * @ORM\Column(name="naam", type="string", length=255)
      * @Serializer\Expose
-     * @Serializer\Accessor(getter="getNaam")
+     * @Serializer\Accessor(getter="__toString")
      * @Serializer\Groups({"small","medium"})
      */
     private $naam;

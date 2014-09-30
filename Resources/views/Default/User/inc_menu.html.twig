@@ -1,7 +1,7 @@
 {% if app.request.attributes.get('seizoen-ploeg') != null %}
     <li><a href="{{ path('ploeg_show', 
             {
-                seizoen:app.request.attributes.get('seizoen'),
+                seizoen:app.request.attributes.get('seizoen-object').slug,
                 id:app.request.attributes.get('seizoen-ploeg').id
             } ) }}">Mijn ploeg</a>
     </li>
