@@ -4,7 +4,7 @@
 {% block content %}
     <div ng-controller="riderlistCtrl">
         <div class="span6">
-            <table class="table table-bordered table-condensed">
+            <table class="table table-condensed">
                 <thead>
                 <tr>
                     <th>Renner</th>
@@ -30,7 +30,7 @@
         </div>
 
         <div class="span5">
-            <table class="table">
+            <table class="table table-condensed">
                 <tr>
                     <th colspan="2">Filter</th>
                 </tr>
@@ -51,7 +51,6 @@
                             <a ng-href="#" ng-click="setPage(pagination.currentPage - 1)">&laquo;&nbsp;Previous</a></li>
                         <li ng-class="{ disabled: 1 == pagination.currentPage}">
                             <a ng-href="#" ng-click="setPage(1)">1</a></li>
-                        <li ng-class="disabled" ng-if="pagination.currentPage > 2"><a>&hellip;</a></li>
                         <li ng-repeat="page in pagination.options"
                             ng-class="{ disabled: page == pagination.currentPage }">
                             <a ng-href="#" ng-click="setPage(page)">{{ page }}</a>
