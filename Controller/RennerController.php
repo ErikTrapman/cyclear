@@ -17,6 +17,7 @@ use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\Transfer;
 use Cyclear\GameBundle\EntityManager\RennerManager;
 use Doctrine\ORM\AbstractQuery;
+use JMS\Serializer\SerializationContext;
 use PDO;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -63,6 +64,31 @@ class RennerController extends Controller
         }
 
         return array('seizoen' => $seizoen);
+    }
+
+    /**
+     * @Route("/renners/get.{_format}", name="get_riders", options={"_format"="json"}, defaults={"_format"="json"})
+     */
+    public function getAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $paginator = $this->get('knp_paginator');
+        $qb = $em->getRepository("CyclearGameBundle:Renner")->createQueryBuilder('r')->orderBy('r.naam', 'ASC');
+        $urlQuery = $request->query->get('query');
+        if (strlen($urlQuery) > 0) {
+            if (is_numeric($urlQuery)) {
+                $qb->where('r.cqranking_id = :identifier');
+                $qb->setParameter('identifier', (int)$urlQuery);
+            } else {
+                $qb->where($qb->expr()->orx($qb->expr()->like('r.naam', ":naam")));
+                $qb->setParameter('naam', "%" . $urlQuery . "%");
+            }
+        }
+        $entities = $paginator->paginate(
+            $qb, $request->query->get('page') !== null ? $request->query->get('page') : 1, 999
+        );
+        $serializer = $this->get('jms_serializer');
+        return new Response($serializer->serialize($entities->getItems(), 'json', SerializationContext::create()->setGroups(array('small'))));
     }
 
     private function assertArray($value, $separator)
