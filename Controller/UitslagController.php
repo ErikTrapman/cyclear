@@ -11,9 +11,12 @@
 
 namespace Cyclear\GameBundle\Controller;
 
+use Cyclear\GameBundle\Entity\Periode;
+use Cyclear\GameBundle\Entity\Seizoen;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,100 +28,59 @@ class UitslagController extends Controller
 {
 
     /**
-     * @Route("/zeges", name="uitslag_zeges")
+     * @Route("/periodes/{periode}", name="uitslag_periodes")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
-    public function viewByPositionAction($seizoen, $pos = 1)
+    public function periodesAction(Seizoen $seizoen, Periode $periode)
     {
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getCountForPosition($seizoen[0], $pos);
-        return array('list' => $list, 'seizoen' => $seizoen[0]);
-    }
-
-    /**
-     * @Route("/stand", name="uitslag_stand")
-     * @Template()
-     */
-    public function viewByPloegenAction($seizoen)
-    {
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen[0]);
-        return array('list' => $list, 'seizoen' => $seizoen[0]);
-    }
-
-    /**
-     * @Route("/periode/{periode_id}", name="uitslag_periode")
-     * @Template()
-     */
-    public function viewByPeriodeAction($seizoen = null, $periode_id = null)
-    {
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        if ($periode_id === null) {
-            $periode = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode($seizoen[0]);
-            return new RedirectResponse($this->generateUrl("uitslag_periode", array("seizoen" => $seizoen, "periode_id" => $periode->getId())));
-        }
-
         $em = $this->getDoctrine()->getManager();
-        $periode = $em->find("CyclearGameBundle:Periode", $periode_id);
-        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen[0]);
-        return array('list' => $list, 'seizoen' => $seizoen[0], 'periode' => $periode);
-    }
-
-    /**
-     * @Route("/periodes/{periode_id}", name="uitslag_periodes")
-     * @Template()
-     */
-    public function periodesAction($seizoen, $periode_id)
-    {
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-
-        $em = $this->getDoctrine()->getManager();
-        $periode = $em->find("CyclearGameBundle:Periode", $periode_id);
-        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen[0]);
-        $periodes = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->findBy(array("seizoen" => $seizoen[0]));
-        return array('list' => $list, 'seizoen' => $seizoen[0], 'periodes' => $periodes, 'periode' => $periode, 'transferRepo' => $em->getRepository("CyclearGameBundle:Transfer"));
+        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen);
+        $periodes = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->findBy(array("seizoen" => $seizoen));
+        return array('list' => $list, 'seizoen' => $seizoen, 'periodes' => $periodes, 'periode' => $periode, 'transferRepo' => $em->getRepository("CyclearGameBundle:Transfer"));
     }
 
     /**
      * @Route("/posities/{positie}", name="uitslag_posities")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
-    public function positiesAction(Request $request, $positie = 1)
+    public function positiesAction(Request $request, Seizoen $seizoen, $positie = 1)
     {
-        $seizoen = $request->attributes->get('seizoen-object');
         $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getCountForPosition($seizoen, $positie);
         return array('list' => $list, 'seizoen' => $seizoen, 'positie' => $positie);
     }
 
     /**
      * @Route("/draft-klassement", name="uitslag_draft")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
-    public function viewByDraftTransferAction($seizoen)
+    public function viewByDraftTransferAction(Seizoen $seizoen)
     {
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen[0]);
-        return array('list' => $list, 'seizoen' => $seizoen[0]);
+        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen);
+        return array('list' => $list, 'seizoen' => $seizoen);
     }
 
     /**
      * @Route("/transfer-klassement", name="uitslag_transfers")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
-    public function viewByUserTransferAction($seizoen)
+    public function viewByUserTransferAction(Seizoen $seizoen)
     {
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen[0]);
-        return array('list' => $list, 'seizoen' => $seizoen[0]);
+        $list = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen);
+        return array('list' => $list, 'seizoen' => $seizoen);
     }
 
     /**
      * @Route("/overzicht", name="uitslag_overview")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
-    public function overviewAction(Request $request)
+    public function overviewAction(Request $request, Seizoen $seizoen)
     {
-        $seizoen = $request->attributes->get('seizoen-object');
         $transfer = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen);
 
         $gained = array();

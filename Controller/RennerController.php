@@ -130,12 +130,11 @@ class RennerController extends Controller
 
     /**
      * @Route("/{seizoen}/renner/punten", name="renner_punten")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
-    public function puntenAction(Request $request)
+    public function puntenAction(Request $request, Seizoen $seizoen)
     {
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($request->get('seizoen'));
-
         $filter = $this->createForm('renner_filter');
         $em = $this->getDoctrine()->getManager();
         $sql = "SELECT * FROM Renner r ORDER BY r.naam";
@@ -159,19 +158,18 @@ class RennerController extends Controller
         if (array_key_exists('naam', $em->getFilters()->getEnabledFilters())) {
             $em->getFilters()->disable('naam');
         }
-        $listWithPunten = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenWithRenners($seizoen[0], 20);
-        $listWithPuntenNoPloeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenWithRennersNoPloeg($seizoen[0], 20);
+        $listWithPunten = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenWithRenners($seizoen, 20);
+        $listWithPuntenNoPloeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenWithRennersNoPloeg($seizoen, 20);
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $entities, $this->get('request')->query->get('page', 1) /* page number */, 10 /* limit per page */
-        );
+            $entities, $this->get('request')->query->get('page', 1), 10);
 
         return array(
             'pagination' => $pagination,
             'filter' => $filter->createView(),
             'listWithPunten' => $listWithPunten,
-            'seizoen' => $seizoen[0],
+            'seizoen' => $seizoen,
             'rennerRepo' => $this->getDoctrine()->getRepository("CyclearGameBundle:Renner"),
             'listWithPuntenNoPloeg' => $listWithPuntenNoPloeg
         );
@@ -181,30 +179,24 @@ class RennerController extends Controller
      * @Route("/{seizoen}/renner/{renner}", name="renner_show", options={"expose"=true})
      * @Template("CyclearGameBundle:Renner:show.html.twig")
      * @ParamConverter("renner", class="CyclearGameBundle:Renner", options={"mapping": {"renner": "slug"}});
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      */
-    public function showAction($seizoen, $renner)
+    public function showAction(Seizoen $seizoen, Renner $renner)
     {
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
         $transferrepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
-
-        //$transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")->getLatest(
-        //    $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 999, null, $renner);
-
         $transfers = $transferrepo->findByRenner($renner, $seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER));
-
-        $uitslagen = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenForRenner($renner, $seizoen[0], true);
-
+        $uitslagen = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenForRenner($renner, $seizoen, true);
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $uitslagen, $this->get('request')->query->get('page', 1) /* page number */, 20 /* limit per page */
+            $uitslagen, $this->get('request')->query->get('page', 1) , 20
         );
 
-        $ploeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen[0]);
+        $ploeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen);
 
-        $punten = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getTotalPuntenForRenner($renner, $seizoen[0]);
+        $punten = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getTotalPuntenForRenner($renner, $seizoen);
 
         return array(
-            'seizoen' => $seizoen[0],
+            'seizoen' => $seizoen,
             'renner' => $renner,
             'transfers' => $transfers,
             'uitslagen' => $pagination,

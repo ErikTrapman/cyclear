@@ -52,7 +52,8 @@ class UitslagController extends Controller
         $pagination = $paginator->paginate(
             $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
         );
-        return array('pagination' => $pagination, 'seizoen' => $this->getRequest()->attributes->get('seizoen-object'));
+        $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
+        return array('pagination' => $pagination, 'seizoen' => $seizoen);
     }
 
     /**
@@ -82,7 +83,8 @@ class UitslagController extends Controller
     public function newAction(Request $request)
     {
         $uitslag = new Uitslag();
-        $seizoen = $request->get('seizoen-object');
+        $em = $this->getDoctrine()->getManager();
+        $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new UitslagType(), $uitslag, array('seizoen' => $seizoen));
         if ('POST' === $request->getMethod()) {
@@ -114,7 +116,7 @@ class UitslagController extends Controller
         $options['wedstrijd_manager'] = $wedstrijdManager;
         $options['uitslag_manager'] = $uitslagManager;
         $options['request'] = $request;
-        $options['seizoen'] = $request->attributes->get('seizoen-object');
+        $options['seizoen'] = $em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         $options['renner_manager'] = $rennerManager;
         $options['default_date'] = new DateTime();
         $form = $this->createForm(new \Cyclear\GameBundle\Form\UitslagCreateType(), null, $options);

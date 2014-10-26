@@ -11,10 +11,13 @@
 
 namespace Cyclear\GameBundle\Controller;
 
+use Cyclear\GameBundle\Entity\Ploeg;
+use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\Transfer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -29,46 +32,46 @@ class PloegController extends Controller
      * Finds and displays a Ploeg entity.
      *
      * @Route("/{id}/show", name="ploeg_show")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
-    public function showAction($seizoen, $id)
+    public function showAction(Seizoen $seizoen, Ploeg $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('CyclearGameBundle:Ploeg')->find($id);
+        $entity = $id;
         if (null === $entity) {
             throw $this->createNotFoundException('Unable to find Ploeg entity.');
         }
         $ploegRepo = $em->getRepository('CyclearGameBundle:Ploeg');
-        $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
         $renners = $ploegRepo->getRennersWithPunten($entity);
         $uitslagRepo = $em->getRepository('CyclearGameBundle:Uitslag');
         $paginator = $this->get('knp_paginator');
 
         $uitslagen = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegQb($entity, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('page', 1), 20
+            $uitslagRepo->getUitslagenForPloegQb($entity, $seizoen)->getQuery()->getResult(), $this->get('request')->query->get('page', 1), 20
         );
         $transfers = $paginator->paginate($em->getRepository("CyclearGameBundle:Transfer")->getLatest(
-            $seizoen[0], array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 9999, $entity), $this->get('request')->query->get('transferPage', 1), 20, array('pageParameterName' => 'transferPage'));
+            $seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 9999, $entity), $this->get('request')->query->get('transferPage', 1), 20, array('pageParameterName' => 'transferPage'));
         $transferUitslagen = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('transferResultsPage', 1), 20, array('pageParameterName' => 'transferResultsPage')
+            $uitslagRepo->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen)->getQuery()->getResult(), $this->get('request')->query->get('transferResultsPage', 1), 20, array('pageParameterName' => 'transferResultsPage')
         );
         $lostDrafts = $paginator->paginate(
             $uitslagRepo->getUitslagenForPloegForLostDraftsQb($entity, $seizoen)->getQuery()->getResult(), $this->get('request')->query->get('page', 1), 20
         );
         $zeges = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegByPositionQb($entity, 1, $seizoen[0])->getQuery()->getResult(), $this->get('request')->query->get('zegeResultsPage', 1), 20, array('pageParameterName' => 'zegeResultsPage')
+            $uitslagRepo->getUitslagenForPloegByPositionQb($entity, 1, $seizoen)->getQuery()->getResult(), $this->get('request')->query->get('zegeResultsPage', 1), 20, array('pageParameterName' => 'zegeResultsPage')
         );
 
         $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");
-        $punten = $uitslagRepo->getPuntenByPloeg($seizoen[0], $entity);
+        $punten = $uitslagRepo->getPuntenByPloeg($seizoen, $entity);
         $draftRenners = $ploegRepo->getDraftRennersWithPunten($entity, false);
-        $draftPunten = $uitslagRepo->getPuntenByPloegForDraftTransfers($seizoen[0], $entity);
+        $draftPunten = $uitslagRepo->getPuntenByPloegForDraftTransfers($seizoen, $entity);
         return array(
             'entity' => $entity,
             'renners' => $renners,
             'uitslagen' => $uitslagen,
-            'seizoen' => $seizoen[0],
+            'seizoen' => $seizoen,
             'transfers' => $transfers,
             'rennerRepo' => $rennerRepo,
             'transferUitslagen' => $transferUitslagen,

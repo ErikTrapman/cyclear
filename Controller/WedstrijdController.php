@@ -11,10 +11,12 @@
 
 namespace Cyclear\GameBundle\Controller;
 
+use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\Wedstrijd;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,12 +28,12 @@ class WedstrijdController extends Controller
 
     /**
      * @Route("/latest", name="wedstrijd_latest")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
-    public function latestAction(Request $request)
+    public function latestAction(Request $request, Seizoen $seizoen)
     {
         $em = $this->getDoctrine()->getManager();
-        $seizoen = $request->attributes->get('seizoen-object');
         $uitslagenQb = $em->getRepository("CyclearGameBundle:Wedstrijd")->createQueryBuilder('w')
             ->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
             ->orderBy('w.datum', 'DESC')

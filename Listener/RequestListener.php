@@ -52,8 +52,7 @@ class RequestListener
                 throw new NotFoundHttpException("No current season configured yet. Please contact your Admin");
             }
         }
-        $request->attributes->set('seizoen', $seizoen->getSlug());
-        $request->attributes->set('seizoen-object', $seizoen);
+        $request->attributes->set('seizoen', $seizoen);
         $request->attributes->set('current-seizoen', $this->em->getRepository("CyclearGameBundle:Seizoen")->getCurrent());
         if (null !== $token = $this->security->getToken()) {
             $user = $token->getUser();

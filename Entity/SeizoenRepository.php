@@ -20,7 +20,7 @@ class SeizoenRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder("s")->where("s.current = 1");
         $res = $qb->getQuery()->getResult();
-        if(array_key_exists(0, $res)){
+        if (array_key_exists(0, $res)) {
             return $res[0];
         }
         return null;

@@ -17,7 +17,7 @@ use Cyclear\GameBundle\Validator\Constraints as CyclearAssert;
 
 /**
  * @CyclearAssert\UserTransfer
- * 
+ *
  */
 class TransferUserType extends AbstractType
 {
@@ -26,8 +26,7 @@ class TransferUserType extends AbstractType
     {
         if (null !== $options['renner_uit']) {
             $builder
-                ->add('renner_in', 'renner_selector', array('label' => 'Renner in', 'mapped' => 'rennerIn'))
-            ;
+                ->add('renner_in', 'renner_selector', array('label' => 'Renner in', 'mapped' => 'rennerIn'));
         }
         if (null !== $options['renner_in']) {
             $ploeg = $options['ploeg'];
@@ -37,10 +36,12 @@ class TransferUserType extends AbstractType
                     'mapped' => 'rennerUit',
                     'label' => 'Renner uit',
                     'class' => 'CyclearGameBundle:Renner',
-                    'query_builder' => function(\Doctrine\ORM\EntityRepository $e) use ($ploeg, $ploegRenners) {
-                        return $e->createQueryBuilder('r')->where('r IN ( :renners )')->setParameter(':renners', $ploegRenners);
-                    }))
-            ;
+                    'query_builder' => function (\Doctrine\ORM\EntityRepository $e) use ($ploeg, $ploegRenners) {
+                            return $e->createQueryBuilder('r')
+                                ->where('r IN ( :renners )')
+                                ->setParameter(':renners', $ploegRenners)
+                                ->orderBy('r.naam');
+                        }));
         }
     }
 

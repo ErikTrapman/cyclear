@@ -33,7 +33,7 @@ class PeriodeRepository extends EntityRepository
         try {
             return $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
-            $qb = $this->createQueryBuilder('p')->orderBy('p.start','ASC')
+            $qb = $this->createQueryBuilder('p')->orderBy('p.start','DESC')
                 ->where('p.seizoen = :seizoen')
                 ->setParameter('seizoen', $seizoen)
                 ->setMaxResults(1);

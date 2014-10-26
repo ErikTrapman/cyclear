@@ -16,6 +16,8 @@ angular.module('Cyclear').controller('riderlistCtrl', function ($scope, $http, $
     $scope.data;
     $scope.pages;
 
+    alert("fixme: dubbele lookup, pagination-maximum uitrekenen");
+
 
     var getRiders = function (initial) {
         var routeparams = {_format: 'json', seizoen: seizoenSlug };
@@ -24,7 +26,6 @@ angular.module('Cyclear').controller('riderlistCtrl', function ($scope, $http, $
             routeparams.excludeWithTeam = $scope.filter.excludeWithTeam;
             routeparams.page = $scope.pagination.currentPage;
         }
-        console.log('getriders' + Math.random());
         $http.get(Routing.generate('rider_index', routeparams))
             .success(function (data) {
                 $scope.riders = data.items;

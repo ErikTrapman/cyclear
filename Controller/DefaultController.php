@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Cyclear-game package.
  *
@@ -11,9 +10,11 @@
 
 namespace Cyclear\GameBundle\Controller;
 
+use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\Transfer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,11 +27,11 @@ class DefaultController extends Controller
 
     /**
      * @Route("/", name="game")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, Seizoen $seizoen)
     {
-        $seizoen = $request->attributes->get('seizoen-object');
         $periode = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode($seizoen);
 
         $nieuws = $this->getDoctrine()->getRepository("CyclearGameBundle:Nieuws")->findBy(array('seizoen' => $seizoen), array('id' => 'DESC'), 1);

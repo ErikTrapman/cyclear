@@ -11,9 +11,11 @@
 
 namespace Cyclear\GameBundle\Controller\User;
 
+use Cyclear\GameBundle\Entity\Seizoen;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  *
@@ -24,10 +26,10 @@ class DefaultController extends Controller
     /**
      * @Route("/")
      * @Template("CyclearGameBundle:Default/User:index.html.twig")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      */
-    public function indexAction($seizoen)
+    public function indexAction(Seizoen $seizoen)
     {
-    	$seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->findBySlug($seizoen);
-        return array('seizoen' => $seizoen[0]);
+        return array('seizoen' => $seizoen);
     }
 }

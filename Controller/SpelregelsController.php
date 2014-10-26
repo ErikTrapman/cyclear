@@ -11,9 +11,11 @@
 
 namespace Cyclear\GameBundle\Controller;
 
+use Cyclear\GameBundle\Entity\Seizoen;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -25,11 +27,11 @@ class SpelregelsController extends Controller
 
     /**
      * @Route("/", name="spelregels_index")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, Seizoen $seizoen)
     {
-        $seizoen = $request->attributes->get('seizoen-object');
         $spelregels = $this->getDoctrine()->getRepository("CyclearGameBundle:Spelregels")->createQueryBuilder("s")
             ->where('s.seizoen = :seizoen')->orderBy('s.id','DESC')->setMaxResults(1)
             ->setParameter('seizoen', $seizoen )

@@ -5,7 +5,7 @@
 {% block content %}
     <ul class="nav nav-pills">
     {% for p in periodes %}
-        <li {% if p.id == periode.id %} class="active" {% endif %}><a href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode_id':p.id}) }}">Periode {{ loop.index }}</a></li>
+        <li {% if p.id == periode.id %} class="active" {% endif %}><a href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode':p.id}) }}">Periode {{ loop.index }}</a></li>
     {% endfor %}
     </ul>
     <div class="well">van {{ periode.start|date('d-m-Y') }} t/m {{ periode.eind|date('d-m-Y') }}</div>

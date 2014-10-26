@@ -11,8 +11,10 @@
 
 namespace Cyclear\GameBundle\Controller;
 
+use Cyclear\GameBundle\Entity\Seizoen;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  *
@@ -23,9 +25,10 @@ class ArchiefController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
 
     /**
      * @Route("/", name="archief_index")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Seizoen $seizoen)
     {
         $em = $this->getDoctrine()->getManager();
 

@@ -28,7 +28,7 @@
                 {% include "CyclearGameBundle:Uitslag:viewByPloegen.html.twig" with {"list": stand,'shadowlist': shadowstandingsById } %}
             </div>
             <div class="tab-pane frontpage-stand" id="periode">
-                <div style="text-align: center;"><a href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode_id':periode.id} ) }}">Alle periodes</a></div>
+                <div style="text-align: center;"><a href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode':periode.id} ) }}">Alle periodes</a></div>
                 {% include "CyclearGameBundle:Uitslag:viewByPeriode.html.twig" with {"list": periodestand,'transferRepo':transferRepo } %}
             </div>
             <div class="tab-pane frontpage-stand" id="uitslagen">

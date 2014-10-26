@@ -118,7 +118,8 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find entity.');
         }
-        $seizoen = $this->getRequest()->attributes->get('seizoen-object');
+
+        $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         $editForm = $this->createForm(new ContractType(), $entity, array('seizoen' => $seizoen));
 
         return array(
