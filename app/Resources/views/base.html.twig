@@ -81,7 +81,7 @@
               var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();
 
-            var seizoenSlug = '{{ app.request.attributes.get('seizoen-object').slug }}';
+            var seizoenSlug = '{{ app.request.attributes.get('seizoen').slug }}';
 
           </script>
     </head>
@@ -94,13 +94,13 @@
                         <ul class="nav" role="navigation">
                             <li><a href="http://www.cyclear.nl/forum" target="_blank">Forum</a></li>
                             {% if app.request.attributes.get('seizoen') %}
-                                <li><a href="{{ path('rider_index', {'seizoen':app.request.attributes.get('seizoen-object').slug} ) }}">Renners</a></li>
+                                <li><a href="{{ path('rider_index', {'seizoen':app.request.attributes.get('seizoen').slug} ) }}">Renners</a></li>
                             {% else %}
                                 <li><a href="{{ path('get_riders') }}">Renners</a></li>
                             {% endif %}
                                 <li><a href="{{ path('archief_index') }}">Archief</a></li>
-                                {%- if app.request.attributes.get('seizoen-object') and app.request.attributes.get('seizoen-object').id != app.request.attributes.get('current-seizoen').id %}
-                                <li><a style="color:#0088cc;" href="{{ path("game",{"seizoen":app.request.attributes.get('seizoen-object').slug}) }}">{{ app.request.attributes.get('seizoen-object') }}</a></li>{% endif -%}
+                                {%- if app.request.attributes.get('seizoen') and app.request.attributes.get('seizoen').id != app.request.attributes.get('current-seizoen').id %}
+                                <li><a style="color:#0088cc;" href="{{ path("game",{"seizoen":app.request.attributes.get('seizoen').slug}) }}">{{ app.request.attributes.get('seizoen') }}</a></li>{% endif -%}
                         {% if is_granted("ROLE_USER") %}
                             {% include 'CyclearGameBundle:Default/User:inc_menu.html.twig' %}
                         {% endif %}
@@ -149,11 +149,11 @@
 
                     <a class="btn" href="{{ path('fos_user_resetting_request') }}">Wachtwoord vergeten?</a>
                {% endif %}
-                    {% if app.request.attributes.get('seizoen-object') %}
-                    <a class="btn" href="{{ path('spelregels_index',{'seizoen':app.request.attributes.get('seizoen-object').slug}) }}">Spelregels</a>
+                    {% if app.request.attributes.get('seizoen') %}
+                    <a class="btn" href="{{ path('spelregels_index',{'seizoen':app.request.attributes.get('seizoen').slug}) }}">Spelregels</a>
                     {% endif %}
                     <a class="btn" href="https://github.com/ErikTrapman" target="_blank">github.com/Cyclear</a>
-                    <span class="badge">0.7.0 [27-07-2014]</span>
+                    <span class="badge">{{ version }}</span>
                </p>
             </div>
         </div>

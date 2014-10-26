@@ -3,6 +3,9 @@ imports:
     - { resource: public_parameters.yml }
     - { resource: security.yml }
 
+parameters:
+    version: v080
+
 framework:
     #esi:             ~
     #translator:      { fallback: %locale% }
@@ -13,7 +16,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: v080
+        assets_version: %version%
 
     translator:      { fallback: en_GB }
     default_locale: %locale%
@@ -23,6 +26,7 @@ framework:
 # Twig Configuration
 twig:
     globals:
+      version: %version%
       logging_address: %logging_address%
       corresponding_address: %corresponding_address%
     debug:            %kernel.debug%
