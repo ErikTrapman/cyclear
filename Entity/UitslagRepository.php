@@ -90,7 +90,7 @@ class UitslagRepository extends EntityRepository
             ->where('p.seizoen = :seizoen')
             ->addSelect(sprintf('IFNULL((%s),0) as freqByPos', $qb2->getDql()))
             ->groupBy('p.id')
-            ->orderBy('freqByPos DESC, p.afkorting', 'DESC')
+            ->orderBy('freqByPos DESC, p.afkorting', 'ASC')
             ->setParameters($parameters);;
         return $qb->getQuery()->getResult();
     }
