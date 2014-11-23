@@ -76,6 +76,11 @@ class RennerRepository extends EntityRepository
         return $rennersWithPloeg;
     }
 
+    /**
+     * @param null $seizoen
+     * @param bool $excludeWithTeam
+     * @return \Doctrine\ORM\QueryBuilder
+     */
     public function getRennersWithPunten($seizoen = null, $excludeWithTeam = false)
     {
         if (null === $seizoen) {
@@ -99,7 +104,7 @@ class RennerRepository extends EntityRepository
         $qb = $this->createQueryBuilder('r')
             ->addSelect('IFNULL((' . $puntenQb->getDQL() . '), 0) AS punten', 'IFNULL((' . $teamQb->getDQL() . '), -1) AS team')
             ->leftJoin('r.country', 'cty')->addSelect('cty')
-            ->orderBy('punten', 'DESC');
+            ->orderBy('punten', 'DESC, r.naam ASC');
         if (true === $excludeWithTeam) {
             $qb->having("team < 0");
         }
