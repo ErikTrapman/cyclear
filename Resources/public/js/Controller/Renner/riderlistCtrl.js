@@ -16,9 +16,6 @@ angular.module('Cyclear').controller('riderlistCtrl', function ($scope, $http, $
     $scope.data;
     $scope.pages;
 
-    alert("fixme: dubbele lookup, pagination-maximum uitrekenen");
-
-
     var getRiders = function (initial) {
         var routeparams = {_format: 'json', seizoen: seizoenSlug };
         if (!initial) {
