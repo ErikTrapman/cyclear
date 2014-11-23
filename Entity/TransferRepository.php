@@ -130,15 +130,19 @@ class TransferRepository extends EntityRepository
         $params = array(
             'drafttransfer' => Transfer::DRAFTTRANSFER,
             'ploeg' => $ploeg,
-            'seizoen' => $seizoen,
-            'draftrenners' => $draftrenners);
+            'seizoen' => $seizoen
+        );
+
         $qb2 = $this->_em->getRepository("CyclearGameBundle:Transfer")
             ->createQueryBuilder('t2')
             ->where('t2.transferType = :drafttransfer')
             ->andWhere('t2.ploegNaar = :ploeg')
-            ->andWhere('t2.seizoen = :seizoen')
-            ->orWhere('t2.renner IN (:draftrenners)')
-            ->setParameters($params);
+            ->andWhere('t2.seizoen = :seizoen');
+        if (!empty($draftrenners)) {
+            $qb2->orWhere('t2.renner IN (:draftrenners)');
+            $params['draftrenners'] = $draftrenners;
+        }
+        $qb2->setParameters($params);
 
         $tQb
             ->where("t.transferType != :drafttransfer")
