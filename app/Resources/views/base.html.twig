@@ -57,6 +57,9 @@
             {% endblock %}
             {% block buttonjs %}
             <script type="text/javascript">
+                $(document).ready( function(){
+
+
                     var $button = $(this).find('button')
                     $button.addClass('btn');
                     var $lastgroup = $(this).find('fieldset').last('div.controls');
@@ -64,6 +67,7 @@
                     $newlastgroup.addClass('controls');
                     $button.clone().appendTo($newlastgroup);
                     $button.remove();
+                });
             </script>
             {% endblock %}
         {% endif %}
