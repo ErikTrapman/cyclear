@@ -41,7 +41,7 @@ class UitslagRepository extends EntityRepository
             $qb->andWhere('p = :ploeg');
             $params['ploeg'] = $ploeg;
         }
-        $qb->orderBy('punten', 'DESC, p.afkorting DESC');
+        $qb->orderBy('punten', 'DESC, p.afkorting ASC');
         $qb->setParameters($params);
         return $qb->getQuery()->getResult();
     }
