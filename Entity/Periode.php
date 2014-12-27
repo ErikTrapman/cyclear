@@ -52,7 +52,7 @@ class Periode
     private $transfers;
 
     /**
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
      */
     private $seizoen;
@@ -60,7 +60,7 @@ class Periode
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -80,7 +80,7 @@ class Periode
     /**
      * Get start
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getStart()
     {
@@ -100,7 +100,7 @@ class Periode
     /**
      * Get eind
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getEind()
     {
@@ -120,7 +120,7 @@ class Periode
     /**
      * Get transfers
      *
-     * @return smallint 
+     * @return smallint
      */
     public function getTransfers()
     {
@@ -135,5 +135,10 @@ class Periode
     public function setSeizoen($seizoen)
     {
         $this->seizoen = $seizoen;
+    }
+
+    public function getEnd()
+    {
+        return $this->getEind();
     }
 }

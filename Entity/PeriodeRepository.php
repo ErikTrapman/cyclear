@@ -15,9 +15,9 @@ use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 
-class PeriodeRepository extends EntityRepository 
+class PeriodeRepository extends EntityRepository
 {
-    
+
     public function getCurrentPeriode($seizoen = null)
     {
         if (null === $seizoen) {
@@ -29,17 +29,21 @@ class PeriodeRepository extends EntityRepository
         $eind->setTime(23, 59, 59);
         $qb = $this->createQueryBuilder("p")
             ->where("p.eind >= :start AND p.start <= :eind")
-            ->andWhere('p.seizoen = :seizoen')->setParameter('start',$start)->setParameter('eind', $eind)->setParameter('seizoen', $seizoen);
+            ->andWhere('p.seizoen = :seizoen')->setParameter('start', $start)->setParameter('eind', $eind)->setParameter('seizoen', $seizoen);
         try {
             return $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
-            $qb = $this->createQueryBuilder('p')->orderBy('p.start','DESC')
-                ->where('p.seizoen = :seizoen')
-                ->setParameter('seizoen', $seizoen)
-                ->setMaxResults(1);
-            return $qb->getQuery()->getSingleResult();
+            $now = new DateTime();
+            $now->setTime(0, 0, 0);
+            $periods = $this->createQueryBuilder('p')->orderBy('p.start', 'ASC')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen);
+            foreach ($periods->getQuery()->getResult() as $period) {
+                if ($period->getEnd() < $now) {
+                    continue;
+                }
+            }
+            return $period;
         }
     }
-    
-    
+
+
 }
