@@ -39,12 +39,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ErikTrapman/CyclearGameBundle.git",
-                "reference": "409d5632cdabc84f0b9ab105edd2436438019502"
+                "reference": "9118b1e73f0a6a12f052e948dcb52dd2b912b238"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/409d5632cdabc84f0b9ab105edd2436438019502",
-                "reference": "409d5632cdabc84f0b9ab105edd2436438019502",
+                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/9118b1e73f0a6a12f052e948dcb52dd2b912b238",
+                "reference": "9118b1e73f0a6a12f052e948dcb52dd2b912b238",
                 "shasum": ""
             },
             "require": {
@@ -79,7 +79,7 @@
                 "game",
                 "symfony"
             ],
-            "time": "2014-10-26 19:27:53"
+            "time": "2014-12-27 19:08:47"
         },
         {
             "name": "ddeboer/data-import",
@@ -87,12 +87,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ddeboer/data-import.git",
-                "reference": "39ac4dcffd927e68e1ebbd32cc0c750d231a3928"
+                "reference": "a8f07ced736b9288d2a840b7d2547ffe4da9b9f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ddeboer/data-import/zipball/39ac4dcffd927e68e1ebbd32cc0c750d231a3928",
-                "reference": "39ac4dcffd927e68e1ebbd32cc0c750d231a3928",
+                "url": "https://api.github.com/repos/ddeboer/data-import/zipball/a8f07ced736b9288d2a840b7d2547ffe4da9b9f3",
+                "reference": "a8f07ced736b9288d2a840b7d2547ffe4da9b9f3",
                 "shasum": ""
             },
             "require": {
@@ -148,7 +148,7 @@
                 "export",
                 "import"
             ],
-            "time": "2014-08-21 20:27:50"
+            "time": "2014-10-07 10:33:30"
         },
         {
             "name": "ddeboer/data-import-bundle",
@@ -2019,21 +2019,24 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.10.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "25b16e801979098cb2f120e697bfce454b18bf23"
+                "reference": "ec3961874c43840e96da3a8a1ed20d8c73d7e5aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/25b16e801979098cb2f120e697bfce454b18bf23",
-                "reference": "25b16e801979098cb2f120e697bfce454b18bf23",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/ec3961874c43840e96da3a8a1ed20d8c73d7e5aa",
+                "reference": "ec3961874c43840e96da3a8a1ed20d8c73d7e5aa",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
                 "psr/log": "~1.0"
+            },
+            "provide": {
+                "psr/log-implementation": "1.0.0"
             },
             "require-dev": {
                 "aws/aws-sdk-php": "~2.4, >2.4.8",
@@ -2041,7 +2044,8 @@
                 "graylog2/gelf-php": "~1.0",
                 "phpunit/phpunit": "~3.7.0",
                 "raven/raven": "~0.5",
-                "ruflin/elastica": "0.90.*"
+                "ruflin/elastica": "0.90.*",
+                "videlalvaro/php-amqplib": "~2.4"
             },
             "suggest": {
                 "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
@@ -2051,12 +2055,13 @@
                 "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
                 "raven/raven": "Allow sending log messages to a Sentry server",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
+                "videlalvaro/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.10.x-dev"
+                    "dev-master": "1.11.x-dev"
                 }
             },
             "autoload": {
@@ -2072,8 +2077,7 @@
                 {
                     "name": "Jordi Boggiano",
                     "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be",
-                    "role": "Developer"
+                    "homepage": "http://seld.be"
                 }
             ],
             "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
@@ -2083,7 +2087,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2014-06-04 16:30:04"
+            "time": "2014-09-30 13:30:58"
         },
         {
             "name": "mopa/bootstrap-bundle",
@@ -2638,12 +2642,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/stof/StofDoctrineExtensionsBundle.git",
-                "reference": "cfe13e8c64a5067f6d0ce63630a0c97911789198"
+                "reference": "2ff8473e33e224af87dc00d48a552a35a75115af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/cfe13e8c64a5067f6d0ce63630a0c97911789198",
-                "reference": "cfe13e8c64a5067f6d0ce63630a0c97911789198",
+                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/2ff8473e33e224af87dc00d48a552a35a75115af",
+                "reference": "2ff8473e33e224af87dc00d48a552a35a75115af",
                 "shasum": ""
             },
             "require": {
@@ -2658,7 +2662,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
@@ -2691,7 +2695,7 @@
                 "translatable",
                 "tree"
             ],
-            "time": "2014-08-28 20:29:53"
+            "time": "2014-09-30 08:24:40"
         },
         {
             "name": "suncat/mobile-detect-bundle",
@@ -2746,20 +2750,20 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.2.2",
+            "version": "v5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "e02f71a35436af4bd58a1bd90116089e632e29e1"
+                "reference": "b86b927dfefdb56ab0b22d1350033d9a38e9f205"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/e02f71a35436af4bd58a1bd90116089e632e29e1",
-                "reference": "e02f71a35436af4bd58a1bd90116089e632e29e1",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/b86b927dfefdb56ab0b22d1350033d9a38e9f205",
+                "reference": "b86b927dfefdb56ab0b22d1350033d9a38e9f205",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2.4"
+                "php": ">=5.3.3"
             },
             "require-dev": {
                 "mockery/mockery": "~0.9.1"
@@ -2767,7 +2771,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.2-dev"
+                    "dev-master": "5.3-dev"
                 }
             },
             "autoload": {
@@ -2794,36 +2798,36 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2014-09-20 07:17:36"
+            "time": "2014-10-04 05:53:18"
         },
         {
             "name": "symfony/assetic-bundle",
-            "version": "v2.3.0",
+            "version": "v2.3.1",
             "target-dir": "Symfony/Bundle/AsseticBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/AsseticBundle.git",
-                "reference": "v2.3.0"
+                "reference": "099e0bb5d80e7039af20db384a41017fde521f21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/AsseticBundle/zipball/v2.3.0",
-                "reference": "v2.3.0",
+                "url": "https://api.github.com/repos/symfony/AsseticBundle/zipball/099e0bb5d80e7039af20db384a41017fde521f21",
+                "reference": "099e0bb5d80e7039af20db384a41017fde521f21",
                 "shasum": ""
             },
             "require": {
-                "kriswallsmith/assetic": ">=1.1,<2.0",
+                "kriswallsmith/assetic": "1.1.x",
                 "php": ">=5.3.0",
-                "symfony/framework-bundle": ">=2.1,<3.0"
+                "symfony/framework-bundle": "~2.1"
             },
             "require-dev": {
-                "symfony/class-loader": ">=2.1,<3.0",
-                "symfony/console": ">=2.1,<3.0",
-                "symfony/css-selector": ">=2.1,<3.0",
-                "symfony/dom-crawler": ">=2.1,<3.0",
-                "symfony/form": ">=2.1,<3.0",
-                "symfony/twig-bundle": ">=2.1,<3.0",
-                "symfony/yaml": ">=2.1,<3.0"
+                "symfony/class-loader": "~2.1",
+                "symfony/console": "~2.1",
+                "symfony/css-selector": "~2.1",
+                "symfony/dom-crawler": "~2.1",
+                "symfony/form": "~2.1",
+                "symfony/twig-bundle": "~2.1",
+                "symfony/yaml": "~2.1"
             },
             "suggest": {
                 "symfony/twig-bundle": "~2.1"
@@ -2831,7 +2835,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1.x-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
             "autoload": {
@@ -2857,56 +2861,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2013-05-16 05:32:23"
-        },
-        {
-            "name": "symfony/icu",
-            "version": "v1.2.2",
-            "target-dir": "Symfony/Component/Icu",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/Icu.git",
-                "reference": "d4d85d6055b87f394d941b45ddd3a9173e1e3d2a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Icu/zipball/d4d85d6055b87f394d941b45ddd3a9173e1e3d2a",
-                "reference": "d4d85d6055b87f394d941b45ddd3a9173e1e3d2a",
-                "shasum": ""
-            },
-            "require": {
-                "ext-intl": "*",
-                "lib-icu": ">=4.4",
-                "php": ">=5.3.3",
-                "symfony/intl": "~2.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Symfony\\Component\\Icu\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
-                    "name": "Bernhard Schussek",
-                    "email": "bschussek@gmail.com"
-                }
-            ],
-            "description": "Contains an excerpt of the ICU data and classes to load it.",
-            "homepage": "http://symfony.com",
-            "keywords": [
-                "icu",
-                "intl"
-            ],
-            "time": "2014-07-25 09:58:17"
+            "time": "2013-11-25 16:34:50"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -3025,23 +2980,22 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.3.20",
+            "version": "v2.3.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "5ef0ea8414fd61df090f6aa60a3d78bfb4d8bd1c"
+                "reference": "0a6e90e0918d273ac451fc77c4887beffbeb368d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/5ef0ea8414fd61df090f6aa60a3d78bfb4d8bd1c",
-                "reference": "5ef0ea8414fd61df090f6aa60a3d78bfb4d8bd1c",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/0a6e90e0918d273ac451fc77c4887beffbeb368d",
+                "reference": "0a6e90e0918d273ac451fc77c4887beffbeb368d",
                 "shasum": ""
             },
             "require": {
                 "doctrine/common": "~2.2",
                 "php": ">=5.3.3",
                 "psr/log": "~1.0",
-                "symfony/icu": "~1.0",
                 "twig/twig": "~1.12"
             },
             "replace": {
@@ -3129,7 +3083,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2014-09-28 16:24:47"
+            "time": "2014-10-24 05:54:08"
         },
         {
             "name": "tijsverkoyen/twitteroauth",
@@ -3220,16 +3174,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.16.0",
+            "version": "v1.16.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "8ce37115802e257a984a82d38254884085060024"
+                "reference": "42f758d9fe2146d1f0470604fc05ee43580873fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/8ce37115802e257a984a82d38254884085060024",
-                "reference": "8ce37115802e257a984a82d38254884085060024",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/42f758d9fe2146d1f0470604fc05ee43580873fc",
+                "reference": "42f758d9fe2146d1f0470604fc05ee43580873fc",
                 "shasum": ""
             },
             "require": {
@@ -3273,7 +3227,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-07-05 12:19:05"
+            "time": "2014-10-17 12:53:44"
         },
         {
             "name": "twitter/bootstrap",
@@ -3343,12 +3297,8 @@
             "time": "2014-01-20 22:35:06"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "jms/serializer-bundle": 20,
@@ -3368,7 +3318,5 @@
     "platform": {
         "php": ">=5.3.3"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }
