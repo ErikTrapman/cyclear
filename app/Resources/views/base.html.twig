@@ -96,7 +96,7 @@
                     <div class="container">
                         <a class="brand" href="/">Cyclear</a>
                         <ul class="nav" role="navigation">
-                            <li><a href="http://www.cyclear.nl/forum" target="_blank">Forum</a></li>
+                            <li><a href="http://www.cyclear.nl/cyclear/forum/index.php" target="_blank">Forum</a></li>
                             {% if app.request.attributes.get('seizoen') %}
                                 <li><a href="{{ path('rider_index', {'seizoen':app.request.attributes.get('seizoen').slug} ) }}">Renners</a></li>
                             {% else %}
