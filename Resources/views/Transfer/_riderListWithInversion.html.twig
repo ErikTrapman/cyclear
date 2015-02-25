@@ -32,7 +32,7 @@
 </table>
 {% if includePagination %}
 <div id="navigation">
-    {{ knp_pagination_render(listWithInversion, null, {}, {'firstPageRoute': firstPageRoute}) }}
+    {{ knp_pagination_render(listWithInversion, null, {'seizoen': seizoen.slug}, {'firstPageRoute': firstPageRoute}) }}
 </div>
 {% endif %}
 {% endblock %}
