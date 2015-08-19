@@ -73,7 +73,7 @@ class UitslagRepository extends EntityRepository
         return $res;
     }
 
-    public function getCountForPosition($seizoen = null, $pos = 1)
+    public function getCountForPosition($seizoen = null, $pos = 1, \DateTime $start = null, \DateTime $end = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
@@ -85,6 +85,15 @@ class UitslagRepository extends EntityRepository
             ->where('u.ploeg = p.id')
             ->andWhere('w.seizoen = :seizoen')
             ->andWhere('u.ploegPunten > 0');
+        if ($start && $end) {
+            $start = clone $start;
+            $start->setTime(0, 0, 0);
+            $end = clone $end;
+            $end->setTime(23, 59, 59);
+            $qb2->andWhere('w.datum >= :start AND w.datum <= :end');
+            $parameters['start'] = $start;
+            $parameters['end'] = $end;
+        }
         $qb = $this->_em->getRepository('CyclearGameBundle:Ploeg')->createQueryBuilder('p');
         $qb
             ->where('p.seizoen = :seizoen')
@@ -217,11 +226,23 @@ class UitslagRepository extends EntityRepository
     }
 
 
-    public function getPuntenByPloegForUserTransfersWithoutLoss($seizoen = null)
+    public function getPuntenByPloegForUserTransfersWithoutLoss($seizoen = null, \DateTime $start = null, \DateTime $end = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
+        $params = array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER);
+        $startEndWhere = null;
+        if ($start && $end) {
+            $startEndWhere = ' AND (w.datum >= :start AND w.datum <= :end)';
+            $start = clone $start;
+            $start->setTime(0, 0, 0);
+            $end = clone $end;
+            $end->setTime(0, 0, 0);
+            $params['start'] = $start->format('Y-m-d H:i:s');
+            $params['end'] = $end->format('Y-m-d H:i:s');
+        }
+
         // TODO DQL'en net als getCountForPosition
         $transfers = "SELECT DISTINCT t.renner_id FROM Transfer t
             WHERE t.transferType != " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
@@ -230,37 +251,45 @@ class UitslagRepository extends EntityRepository
                 ((SELECT IFNULL(SUM(u.ploegPunten),0)
                 FROM Uitslag u
                 INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id
-                WHERE w.seizoen_id = :seizoen_id AND u.ploeg_id = p.id AND u.renner_id IN (%s))) AS punten
+                WHERE w.seizoen_id = :seizoen_id %s AND u.ploeg_id = p.id AND u.renner_id IN (%s))) AS punten
 
                 FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
-                ", $transfers);
+                ", $startEndWhere, $transfers);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
-        $stmt->execute(array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER));
+        $stmt->execute($params);
         return $stmt->fetchAll(\PDO::FETCH_NAMED);
     }
 
-    public function getLostDraftPuntenByPloeg($seizoen = null)
+    public function getLostDraftPuntenByPloeg($seizoen = null, \DateTime $start = null, \DateTime $end = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
-        // TODO DQL'en net als getCountForPosition
-        $transfers = "SELECT DISTINCT t.renner_id FROM Transfer t
-            WHERE t.transferType != " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
-                AND t.renner_id NOT IN ( SELECT t.renner_id FROM Transfer t WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id )";
+        $params = array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER);
+        $startEndWhere = null;
+        if ($start && $end) {
+            $startEndWhere = ' AND (w.datum >= :start AND w.datum <= :end)';
+            $start = clone $start;
+            $start->setTime(0, 0, 0);
+            $end = clone $end;
+            $end->setTime(0, 0, 0);
+            $params['start'] = $start->format('Y-m-d H:i:s');
+            $params['end'] = $end->format('Y-m-d H:i:s');
+        }
         $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting,
-                (SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE w.seizoen_id = :seizoen_id
+                (SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u
+                INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE w.seizoen_id = :seizoen_id %s
                 AND u.renner_id IN ( SELECT t.renner_id FROM Transfer t WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id)
                 AND (u.ploeg_id IS NULL OR u.ploeg_id <> p.id)) AS punten
 
                 FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
-                ", $transfers);
+                ", $startEndWhere);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
-        $stmt->execute(array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER));
+        $stmt->execute($params);
         return $stmt->fetchAll(\PDO::FETCH_NAMED);
     }
 

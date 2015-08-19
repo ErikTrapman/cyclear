@@ -58,7 +58,24 @@ class DefaultController extends Controller
             ->orderBy('w.datum DESC, w.id', 'DESC')
             ->setMaxResults(20)->getQuery()->getResult();
         $periodestand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen);
+        $gainedTransferpoints = [];
+        foreach ($doctrine->getRepository('CyclearGameBundle:Uitslag')
+                     ->getPuntenByPloegForUserTransfersWithoutLoss($seizoen, $periode->getStart(), $periode->getEind()) as $teamResult) {
+            $gainedTransferpoints[$teamResult['id']] = $teamResult['punten'];
+        }
+        $lostDraftPoints = [];
+        foreach ($doctrine->getRepository('CyclearGameBundle:Uitslag')->getLostDraftPuntenByPloeg($seizoen, $periode->getStart(), $periode->getEind()) as $teamResult) {
+            $lostDraftPoints[$teamResult['id']] = $teamResult['punten'];
+        }
+        $transferSaldo = [];
+        foreach ($gainedTransferpoints as $teamId => $gainedPoints) {
+            $transferSaldo[$teamId] = $gainedPoints - $lostDraftPoints[$teamId];
+        }
         $zeges = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getCountForPosition($seizoen, 1);
+        $zegesInPeriode = [];
+        foreach ($doctrine->getRepository('CyclearGameBundle:Uitslag')->getCountForPosition($seizoen, 1, $periode->getStart(), $periode->getEind()) as $teamResult) {
+            $zegesInPeriode[$teamResult[0]->getId()] = $teamResult['freqByPos'];
+        }
         $draft = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen);
         //$transferstand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen);
         $transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")
@@ -72,7 +89,9 @@ class DefaultController extends Controller
             'shadowstandingsById' => $shadowStandingsById,
             'wedstrijden' => $wedstrijden,
             'periodestand' => $periodestand,
+            'transferpuntenPeriode' => $transferSaldo,
             'zegestand' => $zeges,
+            'zegesInPeriode' => $zegesInPeriode,
             'drafts' => $draft,
             //'transferstand' => $transferstand,
             'transfers' => $transfers,

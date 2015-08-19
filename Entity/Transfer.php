@@ -218,6 +218,10 @@ class Transfer
         $this->inversionTransfer = $inversionTransfer;
     }
 
+    public function __toString()
+    {
+        return (string) $this->getId();
+    }
 
 
 }

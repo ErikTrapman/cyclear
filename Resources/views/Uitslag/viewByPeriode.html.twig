@@ -1,28 +1,38 @@
 {% block content %}
-<table class="records_list table table-condensed ">
-    <thead>
+    <table class="records_list table table-condensed ">
+        <thead>
         <tr>
             <th/>
             <th>Ploeg</th>
             <th/>
             <th>Punten</th>
             {% if transferRepo is defined %}
-            <th>Transfers</th>
+                <th>Transfer</th>
+            {% endif %}
+            {% if positionCount is defined %}
+                <th>Zeges</th>
             {% endif %}
         </tr>
-    </thead>
-    <tbody>
-    {% for ploeg in list %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ ploeg.naam }}</td>
-            <td>{{ ploeg.afkorting }}</td>
-            <td>{{ ploeg.punten }}</td>
-            {% if transferRepo is defined %}
-            <td>{{ transferRepo.getTransferCountForUserTransfer(ploeg.id, periode.start, periode.eind) }}</td>
-            {% endif %}
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% for ploeg in list %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ ploeg.naam }}</td>
+                <td>{{ ploeg.afkorting }}</td>
+                <td>{{ ploeg.punten }}</td>
+                {% if transferRepo is defined %}
+                    <td>{{ transferRepo.getTransferCountForUserTransfer(ploeg.id, periode.start, periode.eind) }}
+                        {% if transferpoints is defined %}
+                            [{% if transferpoints[ploeg.id] > 0 %}+{% endif %}{{ transferpoints[ploeg.id] }}]
+                        {% endif %}
+                    </td>
+                {% endif %}
+                {% if positionCount is defined %}
+                    <td>{{ positionCount[ploeg.id] }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
