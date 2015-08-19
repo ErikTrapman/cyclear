@@ -30,7 +30,6 @@ class ExceptionListener
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-
         $exception = $event->getException();
         $request = $event->getRequest();
         if ($exception instanceof NotFoundHttpException) {
