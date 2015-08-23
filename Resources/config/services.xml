@@ -9,14 +9,15 @@
     <services>
 
         <service id="cyclear_game.requestlistener" class="Cyclear\GameBundle\Listener\RequestListener">
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="security.context" />
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="security.context"/>
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest"/>
         </service>
 
-        <service id="cyclear_game.doctrine.listener.transfer" class="Cyclear\GameBundle\Listener\Doctrine\TransferListener">
-            <tag name="doctrine.event_listener" event="postPersist" />
-            <argument type="service" id="cyclear_game.twitter.tweeter" />
+        <service id="cyclear_game.doctrine.listener.transfer"
+                 class="Cyclear\GameBundle\Listener\Doctrine\TransferListener">
+            <tag name="doctrine.event_listener" event="postPersist"/>
+            <argument type="service" id="cyclear_game.twitter.tweeter"/>
         </service>
 
         <service id="pdo" class="PDO">
@@ -26,91 +27,94 @@
         </service>
 
         <service id="cyclear_game.manager.transfer" class="Cyclear\GameBundle\EntityManager\TransferManager">
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="cyclear_game.manager.contract" />
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="cyclear_game.manager.contract"/>
         </service>
-        
+
         <service id="cyclear_game.manager.wedstrijd" class="Cyclear\GameBundle\EntityManager\WedstrijdManager">
             <argument type="service" id="eriktrapman_cqparser.parser"/>
         </service>
-            
+
         <service id="cyclear_game.manager.uitslag" class="Cyclear\GameBundle\EntityManager\UitslagManager">
-            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="eriktrapman_cqparser.parser"/>
             <argument type="service" id="cyclear_game.calculator.punten"/>
             <argument>%cq_ranking-wedstrijdurl%</argument>
-            <argument type="service" id="cyclear_game.manager.renner" />
+            <argument type="service" id="cyclear_game.manager.renner"/>
             <argument type="service" id="eriktrapman_cqparser.nationality_resolver"/>
+            <argument type="service" id="eriktrapman_cqparser.twitterparser"/>
         </service>
-        
+
         <service id="cyclear_game.manager.renner" class="Cyclear\GameBundle\EntityManager\RennerManager"/>
-        
+
         <service id="cyclear_game.manager.user" class="Cyclear\GameBundle\EntityManager\UserManager">
             <argument type="service" id="security.acl.provider"/>
         </service>
-        
+
         <service id="cyclear_game.manager.contract" class="Cyclear\GameBundle\EntityManager\ContractManager">
-            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
-        
+
         <service id="cyclear_game.type.renner_selector" class="Cyclear\GameBundle\Form\RennerSelectorType">
             <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="cyclear_game.manager.renner" />
-            <argument type="service" id="router" />
-            <tag name="form.type" alias="renner_selector" />
+            <argument type="service" id="cyclear_game.manager.renner"/>
+            <argument type="service" id="router"/>
+            <tag name="form.type" alias="renner_selector"/>
         </service>
-        
+
         <service id="cyclear_game.type.seizoen_selector" class="Cyclear\GameBundle\Form\SeizoenSelectorType">
             <argument type="service" id="doctrine.orm.entity_manager"/>
-            <tag name="form.type" alias="seizoen_selector" />
+            <tag name="form.type" alias="seizoen_selector"/>
         </service>
-        
+
         <service id="cyclear_game.type.filter.ploeg" class="Cyclear\GameBundle\Form\Filter\PloegFilterType">
             <argument type="service" id="doctrine.orm.entity_manager"/>
-            <tag name="form.type" alias="ploeg_filter" />
+            <tag name="form.type" alias="ploeg_filter"/>
         </service>
-        
+
         <service id="cyclear_game.type.filter.renner" class="Cyclear\GameBundle\Form\Filter\RennerFilterType">
-            <tag name="form.type" alias="renner_filter" />
+            <tag name="form.type" alias="renner_filter"/>
         </service>
-        
+
         <service id="cyclear_game.type.filter.renner_id" class="Cyclear\GameBundle\Form\Filter\RennerIdFilterType">
-            <tag name="form.type" alias="renner_id_filter" />
+            <tag name="form.type" alias="renner_id_filter"/>
         </service>
-        
+
         <service id="cyclear_game.transfer_repository" class="Cyclear\GameBundle\Entity\TransferRepository"
                  factory-service="doctrine.orm.entity_manager"
                  factory-method="getRepository">
             <argument>Cyclear\GameBundle\Entity\Transfer</argument>
         </service>
-        
+
         <service id="cyclear_game.calculator.punten" class="Cyclear\GameBundle\Calculator\PuntenCalculator">
-            <argument type="service" id="doctrine.orm.entity_manager"/>   
+            <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
-        
-        
+
+
         <service id="crawler" class="Symfony\Component\DomCrawler\Crawler"/>
         <!-- FOS User Bundle -->
         <service id="cyclear_game.user_registration.form.type" class="Cyclear\GameBundle\Form\UserType">
-            <tag name="form.type" alias="admin_user_new" />
+            <tag name="form.type" alias="admin_user_new"/>
             <argument>%fos_user.model.user.class%</argument>
         </service>
         <service id="cyclear_game.user_edit.form.type" class="Cyclear\GameBundle\Form\UserEditType">
-            <tag name="form.type" alias="admin_user_edit" />
+            <tag name="form.type" alias="admin_user_edit"/>
             <argument>%fos_user.model.user.class%</argument>
         </service>
-        
 
-        <service id="cyclear_game.validator.usertransfer" class="Cyclear\GameBundle\Validator\Constraints\UserTransferValidator">
-            <argument type="service" id="doctrine.orm.default_entity_manager" />
-            <tag name="validator.constraint_validator" alias="user_transfer" />
+
+        <service id="cyclear_game.validator.usertransfer"
+                 class="Cyclear\GameBundle\Validator\Constraints\UserTransferValidator">
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
+            <tag name="validator.constraint_validator" alias="user_transfer"/>
         </service>
-        
-        <service id="cyclear_game.fos_user.password_reset" class="Cyclear\GameBundle\Listener\FOSUser\PasswordResetListener">
+
+        <service id="cyclear_game.fos_user.password_reset"
+                 class="Cyclear\GameBundle\Listener\FOSUser\PasswordResetListener">
             <argument type="service" id="router"/>
             <tag name="kernel.event_subscriber"/>
         </service>
-        
+
         <service id="cyclear_game.twitter.helper" class="TijsVerkoyen\Twitter\Twitter">
             <argument>%twitter_consumer_key%</argument>
             <argument>%twitter_consumer_secret%</argument>
@@ -120,17 +124,17 @@
             <call method="setOAuthTokenSecret">
                 <argument>%twitter_oauth_secret%</argument>
             </call>
-        </service>    
-            
+        </service>
+
         <service id="cyclear_game.twitter.tweeter" class="Cyclear\GameBundle\Twitter\Tweeter">
             <argument type="service" id="cyclear_game.twitter.helper"/>
-            <argument type="service" id="service_container" /> 
-        </service>    
-        
-        <service class="Twig_Extensions_Extension_Text">
-            <tag name="twig.extension" />
+            <argument type="service" id="service_container"/>
         </service>
-        
+
+        <service class="Twig_Extensions_Extension_Text">
+            <tag name="twig.extension"/>
+        </service>
+
     </services>
 
     <!-- <parameters> <parameter key="cyclear_game.example.class">Cyclear\GameBundle\Example</parameter> 

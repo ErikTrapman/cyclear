@@ -32,16 +32,17 @@ class TransferListener
             if (null !== $entity->getPloegNaar() && $entity->getTransferType() != Transfer::DRAFTTRANSFER) {
                 $inversion = $entity->getInversionTransfer();
                 $ploegNaar = $entity->getPloegNaar()->getAfkorting();
-                if(null !== $inversion){
-                    $rennerUit = $inversion->getRenner()->getNaam();
-                } else {
-                    $rennerUit = '-';
+                $rennerUit = null;
+                if (null !== $inversion) {
+                    $rennerUit = $inversion->getRenner();
                 }
-                $rennerIn = $entity->getRenner()->getNaam();
-                $msg = sprintf('Transfer voor %s ~ [IN] %s, [UIT] %s', $ploegNaar, $rennerIn, $rennerUit);
-                try { 
+                $rennerIn = $entity->getRenner();
+                $rennerInDisplay = $rennerIn->getTwitter() ? '@' . $rennerIn->getTwitter() : $rennerIn->getNaam();
+                $rennerUitDisplay = $rennerUit && $rennerUit->getTwitter() ? '@' . $rennerUit->getTwitter() : '-';
+                $msg = sprintf('Transfer for %s: [IN] %s, [OUT] %s', $ploegNaar, $rennerInDisplay, $rennerUitDisplay);
+                try {
                     $this->tweeter->sendTweet($msg);
-                } catch(\Exception $e){
+                } catch (\Exception $e) {
                     // do nothing. Exception is logged
                 }
             }

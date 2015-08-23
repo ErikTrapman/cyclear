@@ -16,26 +16,52 @@ use Cyclear\GameBundle\Entity\Uitslag;
 use Cyclear\GameBundle\Entity\Wedstrijd;
 use Cyclear\GameBundle\Entity\UitslagType;
 use Doctrine\ORM\EntityManager;
+use ErikTrapman\Bundle\CQRankingParserBundle\Nationality\NationalityResolver;
+use ErikTrapman\Bundle\CQRankingParserBundle\Parser\CQParser;
+use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Twitter\TwitterParser;
 
 class UitslagManager
 {
     /**
-     * 
+     *
      * @var EntityManager
      */
     private $entityManager;
 
+    /**
+     * @var PuntenCalculator
+     */
     private $puntenCalculator;
 
+    /**
+     * @var CQParser
+     */
     private $cqParser;
 
     private $cqRankingWedstrijdUrl;
 
+    /**
+     * @var RennerManager
+     */
     private $rennerManager;
 
+    /**
+     * @var NationalityResolver
+     */
     private $nationalityResolver;
 
-    public function __construct(EntityManager $em, $parser, PuntenCalculator $puntenCalculator, $cqRankingWedstrijdUrl, $rennerManager, $cqNationalityResolver)
+    /**
+     * @var TwitterParser
+     */
+    private $twitterParser;
+
+    public function __construct(EntityManager $em,
+                                CQParser $parser,
+                                PuntenCalculator $puntenCalculator,
+                                $cqRankingWedstrijdUrl,
+                                RennerManager $rennerManager,
+                                NationalityResolver $cqNationalityResolver,
+                                TwitterParser $twitterParser)
     {
         $this->entityManager = $em;
         $this->puntenCalculator = $puntenCalculator;
@@ -43,10 +69,11 @@ class UitslagManager
         $this->cqRankingWedstrijdUrl = $cqRankingWedstrijdUrl;
         $this->rennerManager = $rennerManager;
         $this->nationalityResolver = $cqNationalityResolver;
+        $this->twitterParser = $twitterParser;
     }
 
     /**
-     * 
+     *
      * @param UitslagType $uitslagType
      * @param type $crawler
      * @param Wedstrijd $wedstrijd
@@ -77,7 +104,7 @@ class UitslagManager
                 $row['renner'] = $rennerManager->getRennerSelectorTypeStringFromRenner($renner);
                 $transfer = $transferRepo->findLastTransferForDate($renner, $wedstrijd->getDatum(), $seizoen);
                 if (null !== $transfer) {
-                    $row['ploeg'] = ( null !== $transfer->getPloegNaar() ) ? $transfer->getPloegNaar()->getId() : null;
+                    $row['ploeg'] = (null !== $transfer->getPloegNaar()) ? $transfer->getPloegNaar()->getId() : null;
                     if (null !== $row['ploeg'] && $this->puntenCalculator->canGetTeamPoints($renner, $wedstrijd->getDatum(), $seizoen, $puntenReferentieDatum)) {
                         $row['ploegPunten'] = $uitslagregel['points'];
                     }
@@ -109,6 +136,7 @@ class UitslagManager
             $country = $countryRepo->find($trans->getForeignKey());
         }
         $renner->setCountry($country);
+        $renner->setTwitter($this->twitterParser->getTwitterHandle($renner->getCqRankingId()));
         // save renner immediately to database.
         $this->entityManager->persist($renner);
         $this->entityManager->flush($renner);

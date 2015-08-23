@@ -24,10 +24,10 @@ class RennerType extends AbstractType
             ->add('cqranking_id', null, array('required' => true, 'label' => 'CQ-id'))
             ->add('country', 'entity', array(
                 'class' => 'CyclearGameBundle:Country',
-                'query_builder' => function(\Doctrine\ORM\EntityRepository $e) {
+                'query_builder' => function (\Doctrine\ORM\EntityRepository $e) {
                     return $e->createQueryBuilder('c')->orderBy('c.name');
                 }))
-        ;
+            ->add('twitter', null, ['required' => false]);
     }
 
     public function getName()

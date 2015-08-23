@@ -78,6 +78,11 @@ class Renner
     private $slug;
 
     /**
+     * @ORM\Column(nullable=true)
+     */
+    private $twitter;
+
+    /**
      * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Contract", mappedBy="renner")
      * @ORM\OrderBy({"id" = "DESC"}))
      */
@@ -197,4 +202,21 @@ class Renner
         }
         return null;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTwitter()
+    {
+        return $this->twitter;
+    }
+
+    /**
+     * @param mixed $twitter
+     */
+    public function setTwitter($twitter)
+    {
+        $this->twitter = $twitter;
+    }
+
 }
