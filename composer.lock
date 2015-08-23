@@ -39,12 +39,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ErikTrapman/CyclearGameBundle.git",
-                "reference": "255799cb17abc75f3d335fb6406b11f341e3d272"
+                "reference": "91eed65a7d01c1b0e92ffdc7da180e7bb3fd4ff9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/255799cb17abc75f3d335fb6406b11f341e3d272",
-                "reference": "255799cb17abc75f3d335fb6406b11f341e3d272",
+                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/91eed65a7d01c1b0e92ffdc7da180e7bb3fd4ff9",
+                "reference": "91eed65a7d01c1b0e92ffdc7da180e7bb3fd4ff9",
                 "shasum": ""
             },
             "require": {
@@ -79,7 +79,7 @@
                 "game",
                 "symfony"
             ],
-            "time": "2015-08-19 11:35:39"
+            "time": "2015-08-23 20:16:35"
         },
         {
             "name": "ddeboer/data-import",
@@ -913,12 +913,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ErikTrapman/CQRankingParserBundle.git",
-                "reference": "4248d44d4a8a8ac4f47a4737dad71073b8681ba6"
+                "reference": "f710bc8d7ec5cc906c6a9e776f2f723beccd1525"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/CQRankingParserBundle/zipball/e83baa8aa55252746239e05b1adebcff14ddbb80",
-                "reference": "4248d44d4a8a8ac4f47a4737dad71073b8681ba6",
+                "url": "https://api.github.com/repos/ErikTrapman/CQRankingParserBundle/zipball/f710bc8d7ec5cc906c6a9e776f2f723beccd1525",
+                "reference": "f710bc8d7ec5cc906c6a9e776f2f723beccd1525",
                 "shasum": ""
             },
             "require": {
@@ -951,7 +951,7 @@
                 "results",
                 "symfony"
             ],
-            "time": "2013-11-02 18:55:00"
+            "time": "2015-08-23 19:49:41"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
