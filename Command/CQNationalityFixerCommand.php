@@ -25,7 +25,7 @@ class CQNationalityFixerCommand extends ContainerAwareCommand
 
     protected function configure()
     {
-        $this->setName('cyclear:cqnat-fixer')
+        $this->setName('cyclear:fixer:nationality')
             ->setDescription('Nationaliteit toevoegen obv CQ-nationaliteit code')
         ;
     }
