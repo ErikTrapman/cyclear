@@ -9,8 +9,8 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "~2.3.9",
-        "doctrine/orm": ">=2.2.3,<2.4-dev",
+        "symfony/symfony": "~2.7.0",
+        "doctrine/orm": "~2.2,>=2.2.3,<2.5",
         "doctrine/doctrine-bundle": "1.2.*",
         "twig/extensions": "1.0.*",
         "symfony/assetic-bundle": "2.3.*",
@@ -29,7 +29,7 @@
 
         "friendsofsymfony/user-bundle": "dev-master#13c173ff60eef8e32c10f76225eacca00a430826",
         "friendsofsymfony/jsrouting-bundle": "~1.5.2",
-        "knplabs/knp-paginator-bundle": "~2.3.3",
+        "knplabs/knp-paginator-bundle": "~2.4",
         "knplabs/knp-components": "1.2.*",
         "stof/doctrine-extensions-bundle": "dev-master",
 
