@@ -27,7 +27,7 @@
 
         "kriswallsmith/assetic": "1.1.2",
 
-        "friendsofsymfony/user-bundle": "dev-master#13c173ff60eef8e32c10f76225eacca00a430826",
+        "friendsofsymfony/user-bundle": "dev-master",
         "friendsofsymfony/jsrouting-bundle": "~1.5.2",
         "knplabs/knp-paginator-bundle": "~2.4",
         "knplabs/knp-components": "1.2.*",

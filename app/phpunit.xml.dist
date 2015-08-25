@@ -14,11 +14,10 @@
     bootstrap                   = "bootstrap.php.cache" >
 
     <testsuites>
-        <testsuite name="Project Test Suite"><!--
+        <testsuite name="Project Test Suite">
             <directory>../src/*/*Bundle/Tests</directory>
-            <directory>../src/*/Bundle/*Bundle/Tests</directory>-->
+            <directory>../src/*/Bundle/*Bundle/Tests</directory>
             <directory>../vendor/eriktrapman/cqrankingparser-bundle/ErikTrapman/Bundle/*Bundle/Tests</directory>
-            <directory>../vendor/cyclear/game-bundle/Cyclear/*Bundle/Tests</directory>
         </testsuite>
     </testsuites>
 
