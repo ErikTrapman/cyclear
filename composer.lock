@@ -864,12 +864,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ErikTrapman/CQRankingParserBundle.git",
-                "reference": "e78676b7cf87a97d790df696adb427ff170afcc8"
+                "reference": "4356f60539f74b083352c11380715e7b9dcc8853"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/CQRankingParserBundle/zipball/e78676b7cf87a97d790df696adb427ff170afcc8",
-                "reference": "e78676b7cf87a97d790df696adb427ff170afcc8",
+                "url": "https://api.github.com/repos/ErikTrapman/CQRankingParserBundle/zipball/4356f60539f74b083352c11380715e7b9dcc8853",
+                "reference": "4356f60539f74b083352c11380715e7b9dcc8853",
                 "shasum": ""
             },
             "require": {
@@ -902,7 +902,7 @@
                 "results",
                 "symfony"
             ],
-            "time": "2015-08-25 08:08:46"
+            "time": "2015-08-25 11:35:03"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
