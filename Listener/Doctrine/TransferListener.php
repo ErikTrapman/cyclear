@@ -38,7 +38,10 @@ class TransferListener
                 }
                 $rennerIn = $entity->getRenner();
                 $rennerInDisplay = $rennerIn->getTwitter() ? '@' . $rennerIn->getTwitter() : $rennerIn->getNaam();
-                $rennerUitDisplay = $rennerUit && $rennerUit->getTwitter() ? '@' . $rennerUit->getTwitter() : '-';
+                $rennerUitDisplay = '';
+                if ($rennerUit) {
+                    $rennerUitDisplay = $rennerUit->getTwitter() ? '@' . $rennerUit->getTwitter() : $rennerUit->getNaam();
+                }
                 $msg = sprintf('Transfer for %s: [IN] %s, [OUT] %s', $ploegNaar, $rennerInDisplay, $rennerUitDisplay);
                 try {
                     $this->tweeter->sendTweet($msg);
