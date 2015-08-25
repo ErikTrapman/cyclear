@@ -1,0 +1,22 @@
+{% block content %}
+<table class="records_list table table-condensed ">
+    <thead>
+        <tr>
+            <th/>
+            <th>Naam</th>
+            <th/>
+            <th/>
+        </tr>
+    </thead>
+    <tbody>
+    {% for uitslag in list %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ uitslag.0.naam }}</td>
+            <td>{{ uitslag.0.afkorting }}</td>
+            <td>{{ uitslag.freqByPos }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

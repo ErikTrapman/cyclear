@@ -1,0 +1,44 @@
+{% extends '::admin.base.html.twig' %}
+
+{% block content %}
+<h3>Seizoenen</h3>
+
+<table class="records_list table ">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Identifier</th>
+            <th>Huidig seizoen</th>
+            <th>Gesloten</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('admin_seizoen_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.identifier }}</td>
+            <td>{{ entity.current }}</td>
+            <td>{{ entity.closed }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('admin_seizoen_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="alert alert-info">
+    Let op, als je een nieuw seizoen wilt starten, eerst het nieuwe seizoen op 'huidig' zetten, pas daarna het oude seizoen sluiten.
+</div>
+<ul>
+    <li>
+        <a href="{{ path('admin_seizoen_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
+{% endblock %}

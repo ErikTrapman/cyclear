@@ -1,0 +1,46 @@
+{% extends '::base.html.twig' %}
+
+{% form_theme form _self %}
+
+{% block _cyclear_gamebundle_transferusertype_renner_renner_uit_widget %}
+    <label class="control-label">Renner uit</label>
+    <div class="controls">{{ form_widget(form) }}</div>
+{% endblock %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            <div class="controls alert alert-error">
+                {% for error in errors %}
+                    {{ error.message }}{% if not loop.last %}<br>{% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    {% endspaceless %}
+{% endblock form_errors %}
+
+{% block content %}
+
+    <form action="{{ path('user_transfer', { seizoen:seizoen.slug, id:ploeg.id, renner:renner.slug }) }}"
+          method="post" {{ form_enctype(form) }}>
+        <div class="control-group">
+            <div class="controls"><h3>{{ renner.naam }}</h3></div>
+            <div class="controls">
+                <p>{{ transferInfo['count'] }} transfers deze periode gedaan</p>
+
+                <p>{{ transferInfo['left'] }} transfers mogelijk</p>
+            </div>
+            {{ form_errors(form) }}
+        </div>
+
+        {{ form_widget(form) }}
+        <div class="control-group">
+            <div class="controls">
+                <br/>
+                <input type="submit" class="btn" value="Transfer"/>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

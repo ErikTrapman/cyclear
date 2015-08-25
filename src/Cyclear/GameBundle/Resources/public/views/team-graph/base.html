@@ -1,0 +1,30 @@
+<div>
+    <div class="span3">
+        <table class="records_list table table-condensed ">
+        <thead>
+            <tr>
+                <th/>
+                <th/>
+                <th>Ploeg</th>
+                <th>Punten</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="team in teams" ng-switch="selected.indexOf(team.id) > -1">
+                <td>
+                    <div ng-click="setSelect(team.id)" style="width: 12px; height:12px; border-radius: 2px; cursor: pointer;" 
+                         ng-style="{'border': '2px solid' + colors[team.id] }" ng-switch-when="false"></div>
+                    <div ng-click="setSelect(team.id)" style="width: 16px; height:16px; border-radius: 2px; cursor: pointer;" 
+                         ng-style="{'background-color': colors[team.id] }" ng-switch-when="true"></div>
+                </td>
+                <td>{{ $index+1 }}</td>
+                <td>{{ team.afkorting }}</td>
+                <td>{{ team.punten }}</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+    <div class="span7">
+        <div class="graph"></div>
+    </div>
+</div>
