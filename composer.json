@@ -1,12 +1,20 @@
 {
-    "name": "symfony/framework-standard-edition",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "name": "cyclear/application",
+    "description": "A cyclinggame in the Cyclear-tradition",
+    "keywords": ["cycling", "game", "cyclinggame","cqranking", "cyclear"],
+    "homepage": "http://game.cyclear.nl",
     "autoload": {
         "psr-0": {
             "": "src/",
             "TijsVerkoyen\\Twitter": "vendor/tijsverkoyen/twitteroauth"
         }
     },
+    "authors": [
+        {
+            "name": "Erik Trapman",
+            "email": "veggatron+cyclear@gmail.com"
+        }
+    ],
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "~2.7.0",
