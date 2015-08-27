@@ -1,0 +1,26 @@
+{% extends '::admin.base.html.twig' %}
+
+{% form_theme form _self %}
+
+{% block _cyclear_gamebundle_uitslagtype_renner_widget %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block content %}
+<h3>Uitslag bewerken</h3>
+
+<form action="{{ path('admin_uitslag_edit', {uitslag:entity.id} ) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Edit</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_uitslag') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

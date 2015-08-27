@@ -1,0 +1,31 @@
+{% set includePagination = includePagination is defined ? includePagination : false %}
+{% block content %}
+<table class="records_list table table-condensed ">
+    <thead>
+        <tr>
+            <th/>
+            <th>IN</th>
+            <th>UIT</th>
+            <th/>
+        </tr>
+    </thead>
+    <tbody>
+    {% for transfer in listWithInversion %}
+        <tr>
+            <td>{% if transfer.ploegNaar %}{{ transfer.ploegNaar.afkorting }}{% endif %}</td>
+            <td>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":transfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}
+            </td>
+            <td>{% if transfer.inversionTransfer %}
+                {% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":transfer.inversionTransfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}    
+                {% endif %}</td>
+            <td nowrap><span title="{{ transfer.datum|date('H:i') }}">{{ transfer.datum|date('d-m-Y') }}</span></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if includePagination %}
+<div id="navigation">
+    {{ knp_pagination_render(listWithInversion, null, {'seizoen': seizoen.slug}, {'firstPageRoute': firstPageRoute}) }}
+</div>
+{% endif %}
+{% endblock %}

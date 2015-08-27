@@ -1,0 +1,31 @@
+{% extends '::admin.base.html.twig' %}
+
+{% block title %}Transfer new{% endblock %}
+
+{% block content %}
+<h3>Transfer</h3>
+
+<div class="span12">
+
+    <ul class="nav nav-tabs" id="tabs">
+        <li class="active"><a href="#draft" data-toggle="tab">Draft</a></li>
+        <li><a href="#exchange" data-toggle="tab">Ruil/User</a></li>
+    </ul>
+    
+    <div class="tab-content">
+        <div class="tab-pane active" id="draft">{{ render(controller('CyclearGameBundle:Admin/Transfer:newDraft')) }}</div>
+        <div class="tab-pane" id="exchange">{{ render(controller('CyclearGameBundle:Admin/Transfer:newExchange')) }}</div>
+    
+    </div>
+    
+</div>
+
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_transfer') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

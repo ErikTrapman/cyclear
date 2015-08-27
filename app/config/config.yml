@@ -1,10 +1,10 @@
 imports:
     - { resource: parameters.yml }
-    - { resource: public_parameters.yml }
     - { resource: security.yml }
 
 parameters:
     version: v090
+    cq_ranking-wedstrijdurl: 'http://cqranking.com/men/asp/gen/race.asp?raceid='
 
 framework:
     #esi:             ~

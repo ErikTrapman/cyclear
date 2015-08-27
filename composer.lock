@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0e0569cda772bf9c1e19d3f75f53e3a4",
+    "hash": "a2d3d075eb6971cfed67f4d655bdf4e6",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -31,55 +31,6 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "time": "2013-12-20 22:02:19"
-        },
-        {
-            "name": "cyclear/game-bundle",
-            "version": "dev-master",
-            "target-dir": "Cyclear/GameBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ErikTrapman/CyclearGameBundle.git",
-                "reference": "91eed65a7d01c1b0e92ffdc7da180e7bb3fd4ff9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/CyclearGameBundle/zipball/91eed65a7d01c1b0e92ffdc7da180e7bb3fd4ff9",
-                "reference": "91eed65a7d01c1b0e92ffdc7da180e7bb3fd4ff9",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "symfony/symfony": ">=2.2.0"
-            },
-            "require-dev": {
-                "symfony/symfony": ">=2.2.0"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "Cyclear\\GameBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Erik Trapman",
-                    "email": "veggatron+cyclear@gmail.com"
-                }
-            ],
-            "description": "A cyclinggame in the Cyclear-tradition",
-            "homepage": "https://github.com/ErikTrapman/CyclearGameBundle",
-            "keywords": [
-                "cqranking",
-                "cycling",
-                "cyclinggame",
-                "game",
-                "symfony"
-            ],
-            "time": "2015-08-23 20:16:35"
         },
         {
             "name": "ddeboer/data-import",
@@ -913,12 +864,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ErikTrapman/CQRankingParserBundle.git",
-                "reference": "f710bc8d7ec5cc906c6a9e776f2f723beccd1525"
+                "reference": "4356f60539f74b083352c11380715e7b9dcc8853"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/CQRankingParserBundle/zipball/f710bc8d7ec5cc906c6a9e776f2f723beccd1525",
-                "reference": "f710bc8d7ec5cc906c6a9e776f2f723beccd1525",
+                "url": "https://api.github.com/repos/ErikTrapman/CQRankingParserBundle/zipball/4356f60539f74b083352c11380715e7b9dcc8853",
+                "reference": "4356f60539f74b083352c11380715e7b9dcc8853",
                 "shasum": ""
             },
             "require": {
@@ -951,7 +902,7 @@
                 "results",
                 "symfony"
             ],
-            "time": "2015-08-23 19:49:41"
+            "time": "2015-08-25 11:35:03"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
@@ -3303,7 +3254,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "jms/serializer-bundle": 20,
-        "cyclear/game-bundle": 20,
         "friendsofsymfony/user-bundle": 20,
         "stof/doctrine-extensions-bundle": 20,
         "liip/functional-test-bundle": 20,

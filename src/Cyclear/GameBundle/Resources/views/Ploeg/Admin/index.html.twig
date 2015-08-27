@@ -1,0 +1,51 @@
+{% extends '::admin.base.html.twig' %}
+
+{% block title %}Ploeg index{% endblock %}
+
+{% block content %}
+<h3>Ploegen</h3>
+<form class="form-inline" action="{{ path('admin_ploeg') }}" method="post" {{ form_enctype(filter) }}>
+    {{ form_widget(filter) }}
+    <p>
+        <button type="submit">Zoek</button>
+    </p>
+</form>
+<table class="records_list table ">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Naam</th>
+            <th>Afkorting</th>
+            <th>Seizoen</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('admin_ploeg_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.naam }}</td>
+            <td>{{ entity.afkorting }}</td>
+            <td>{{ entity.seizoen }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('admin_ploeg_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div id="navigation">
+    {{ knp_pagination_render(entities, null, {}, {'firstPageRoute': 'admin_ploeg'}) }}
+</div>
+<ul>
+    <li>
+        <a href="{{ path('admin_ploeg_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
+{% endblock %}

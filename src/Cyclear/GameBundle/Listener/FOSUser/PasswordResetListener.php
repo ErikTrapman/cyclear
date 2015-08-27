@@ -1,0 +1,48 @@
+<?php
+
+/*
+ * This file is part of the Cyclear-game package.
+ *
+ * (c) Erik Trapman <veggatron@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Cyclear\GameBundle\Listener\FOSUser;
+
+use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Event\FormEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+/**
+ * Listener responsible to change the redirection at the end of the password resetting
+ */
+class PasswordResetListener implements EventSubscriberInterface
+{
+    private $router;
+
+    public function __construct(UrlGeneratorInterface $router)
+    {
+        $this->router = $router;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            FOSUserEvents::RESETTING_RESET_SUCCESS => 'onPasswordResettingSuccess',
+        );
+    }
+
+    public function onPasswordResettingSuccess(FormEvent $event)
+    {
+        $url = $this->router->generate('_welcome');
+
+        $event->setResponse(new RedirectResponse($url));
+    }
+}

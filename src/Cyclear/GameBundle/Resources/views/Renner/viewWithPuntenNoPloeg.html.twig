@@ -1,0 +1,26 @@
+{% block content %}
+<table class="records_list table table-condensed">
+    <thead>
+        <tr>
+            <th/>
+            <th>Renner</th>
+            <th>Punten</th>
+            <th/>
+        </tr>
+    </thead>
+    <tbody>
+    {% for renner in listWithPuntenNoPloeg %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td nowrap>
+                {% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":renner[0],"seizoen":seizoen } %}
+            </td>
+            <td>{{ renner.punten }}</td>
+            <td>
+            {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with {"seizoen":seizoen,"renner":renner[0]} %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
