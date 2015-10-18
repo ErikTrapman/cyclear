@@ -1,38 +1,38 @@
 {% set includePagination = includePagination is defined ? includePagination : false %}
 {% block content %}
-<table class="records_list table table-condensed ">
-    <thead>
+    <table class="table table-bordered table-striped">
+
         <tr>
             <th/>
             <th>IN</th>
             <th>UIT</th>
             <th/>
         </tr>
-    </thead>
-    <tbody>
-    {%- for transfer in listWithInversion %}
-        <tr>
-            <td>{% if transfer.ploegNaar %}{{ transfer.ploegNaar.afkorting }}
-                {% else %}
-                {{ transfer.ploegVan.afkorting }}{% endif %}
-            </td>
-            <td>{% if transfer.ploegNaar %}{{ transfer.renner.naam }}{% else %} 
-                {% if transfer.inversionTransfer %}{{ transfer.inversionTransfer.renner.naam }}{% endif %}
-                {% endif %}
-            </td>
-            <td>{% if transfer.ploegVan %}
-                    {{ transfer.renner.naam }}
-                {% else %}
-                {% if transfer.inversionTransfer %}{{ transfer.inversionTransfer.renner.naam }}{% endif %}
-                {% endif %}</td>
-            <td nowrap>{{ transfer.datum|date('d-m-Y') }}</td>
-        </tr>
-    {% endfor -%}
-    </tbody>
-</table>
-{% if includePagination %}
-<div id="navigation">
-    {{ knp_pagination_render(listWithInversion, null, {'seizoen': seizoen.slug}, {'firstPageRoute': firstPageRoute}) }}
-</div>
-{% endif %}
+
+
+        {%- for transfer in listWithInversion %}
+            <tr>
+                <td>{% if transfer.ploegNaar %}{{ transfer.ploegNaar.afkorting }}
+                    {% else %}
+                        {{ transfer.ploegVan.afkorting }}{% endif %}
+                </td>
+                <td>{% if transfer.ploegNaar %}{{ transfer.renner.naam }}{% else %}
+                        {% if transfer.inversionTransfer %}{{ transfer.inversionTransfer.renner.naam }}{% endif %}
+                    {% endif %}
+                </td>
+                <td>{% if transfer.ploegVan %}
+                        {{ transfer.renner.naam }}
+                    {% else %}
+                        {% if transfer.inversionTransfer %}{{ transfer.inversionTransfer.renner.naam }}{% endif %}
+                    {% endif %}</td>
+                <td nowrap>{{ transfer.datum|date('d-m-Y') }}</td>
+            </tr>
+        {% endfor -%}
+
+    </table>
+    {% if includePagination %}
+        <div id="navigation">
+            {{ knp_pagination_render(listWithInversion, null, {'seizoen': seizoen.slug}, {'firstPageRoute': firstPageRoute}) }}
+        </div>
+    {% endif %}
 {% endblock %}

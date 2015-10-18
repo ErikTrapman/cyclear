@@ -19,7 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Wedstrijd {
+class Wedstrijd
+{
 
     /**
      * @var integer $id
@@ -45,34 +46,35 @@ class Wedstrijd {
     private $naam;
 
     /**
-     * @var int $uitslagtype
-     *
-     * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\UitslagType")
-     */
-    private $uitslagtype;
-    
-    /**
      *
      * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Uitslag", mappedBy="wedstrijd", cascade={"remove"})
      * @ORM\OrderBy({"positie" = "ASC"})
      */
     private $uitslagen;
-    
+
     /**
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
      */
     private $seizoen;
-    
-    public function __construct(){
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $generalClassification = false;
+
+    public function __construct()
+    {
+
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -81,16 +83,18 @@ class Wedstrijd {
      *
      * @param datetime $datum
      */
-    public function setDatum($datum) {
+    public function setDatum($datum)
+    {
         $this->datum = $datum;
     }
 
     /**
      * Get datum
      *
-     * @return datetime 
+     * @return datetime
      */
-    public function getDatum() {
+    public function getDatum()
+    {
         return $this->datum;
     }
 
@@ -99,56 +103,58 @@ class Wedstrijd {
      *
      * @param string $naam
      */
-    public function setNaam($naam) {
+    public function setNaam($naam)
+    {
         $this->naam = $naam;
     }
 
     /**
      * Get naam
      *
-     * @return string 
+     * @return string
      */
-    public function getNaam() {
+    public function getNaam()
+    {
         return $this->naam;
     }
 
-    /**
-     * Set uitslagtype
-     *
-     * @param object $uitslagtype
-     */
-    public function setUitslagtype($uitslagtype) {
-        $this->uitslagtype = $uitslagtype;
-    }
-
-    /**
-     * Get uitslagtype
-     *
-     * @return object 
-     */
-    public function getUitslagtype() {
-        return $this->uitslagtype;
-    }
-    
-    public function getUitslagen() {
+    public function getUitslagen()
+    {
         return $this->uitslagen;
     }
 
 
-    
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getNaam();
     }
-    
-    
-    public function getSeizoen() {
+
+
+    public function getSeizoen()
+    {
         return $this->seizoen;
     }
 
-    public function setSeizoen($seizoen) {
+    public function setSeizoen($seizoen)
+    {
         $this->seizoen = $seizoen;
     }
 
+    /**
+     * @return mixed
+     */
+    public function isGeneralClassification()
+    {
+        return $this->generalClassification;
+    }
+
+    /**
+     * @param mixed $generalClassification
+     */
+    public function setGeneralClassification($generalClassification)
+    {
+        $this->generalClassification = $generalClassification;
+    }
 
 
 }

@@ -37,12 +37,13 @@ class TransferUserType extends AbstractType
                     'label' => 'Renner uit',
                     'class' => 'CyclearGameBundle:Renner',
                     'query_builder' => function (\Doctrine\ORM\EntityRepository $e) use ($ploeg, $ploegRenners) {
-                            return $e->createQueryBuilder('r')
-                                ->where('r IN ( :renners )')
-                                ->setParameter(':renners', $ploegRenners)
-                                ->orderBy('r.naam');
-                        }));
+                        return $e->createQueryBuilder('r')
+                            ->where('r IN ( :renners )')
+                            ->setParameter(':renners', $ploegRenners)
+                            ->orderBy('r.naam');
+                    }));
         }
+        $builder->add('userComment', null, ['label' => 'Commentaar', 'attr' => ['placeholder' => 'Commentaar...']]);
     }
 
     public function getName()

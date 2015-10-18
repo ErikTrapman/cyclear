@@ -30,13 +30,13 @@ class AppKernel extends Kernel
             
             #new Samson\Bundle\FilterBundle\SamsonFilterBundle(),
             new ErikTrapman\Bundle\CQRankingParserBundle\ErikTrapmanCQRankingParserBundle(),
-            new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
             new SunCat\MobileDetectBundle\MobileDetectBundle(),
             new Cyclear\ApplicationBundle\CyclearApplicationBundle(),
 
             new \FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new \Samson\Bundle\AutocompleteBundle\SamsonAutocompleteBundle(),
-            new \Samson\Bundle\DataViewBundle\SamsonDataViewBundle()
+            new \Samson\Bundle\DataViewBundle\SamsonDataViewBundle(),
+            new \Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

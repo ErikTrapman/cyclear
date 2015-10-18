@@ -3,7 +3,7 @@ imports:
     - { resource: security.yml }
 
 parameters:
-    version: v090
+    version: 2.0.0
     cq_ranking-wedstrijdurl: 'http://cqranking.com/men/asp/gen/race.asp?raceid='
 
 framework:
@@ -36,7 +36,7 @@ twig:
     form:
       resources:
         - 'CyclearGameBundle:Form:rennerSelector.html.twig'
-        #- 'MopaBootstrapBundle:Form:fields.html.twig'
+        - 'bootstrap_3_layout.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -48,8 +48,28 @@ assetic:
         # closure:
         #     jar: %kernel.root_dir%/java/compiler.jar
         # yui_css:
-        #     jar: %kernel.root_dir%/java/yuicompressor-2.4.2.jar
-
+        # %kernel.root_dir%/../vendor/twbs/bootstrap/dist/js/bootstrap.min.js
+    assets:
+            fonts_glyphicons_eot:
+                inputs:
+                   - "%kernel.root_dir%/../vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.eot"
+                output: "fonts/glyphicons-halflings-regular.eot"
+            fonts_glyphicons_svg:
+                inputs:
+                    - "%kernel.root_dir%/../vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.svg"
+                output: "fonts/glyphicons-halflings-regular.svg"
+            fonts_glyphicons_ttf:
+                inputs:
+                    - "%kernel.root_dir%/../vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.ttf"
+                output: "fonts/glyphicons-halflings-regular.ttf"
+            fonts_glyphicons_woff:
+                inputs:
+                    - "%kernel.root_dir%/../vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.woff"
+                output: "fonts/glyphicons-halflings-regular.woff"
+            fonts_glyphicons_woff2:
+                inputs:
+                    - "%kernel.root_dir%/../vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.woff2"
+                output: "fonts/glyphicons-halflings-regular.woff2"
 # Doctrine Configuration
 doctrine:
     dbal:
@@ -79,7 +99,8 @@ doctrine:
             date_format: DoctrineExtensions\Query\Mysql\DateFormat
     
 cyclear_game:
-  enable_twitter: true  
+  enable_twitter: true
+  max_transfers: %max_transfers%
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -110,10 +131,6 @@ stof_doctrine_extensions:
           sluggable: true
           translatable: true
 
-mopa_bootstrap:
-    form:
-        show_legend: false
-        
 mobile_detect:
     redirect:
         mobile: ~
@@ -122,4 +139,4 @@ mobile_detect:
 
 knp_paginator:
     template:
-        pagination: CyclearGameBundle:Pagination:bootstrap.html.twig
+        pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig

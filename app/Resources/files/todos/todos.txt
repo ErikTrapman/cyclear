@@ -1,0 +1,1 @@
+UPDATE Wedstrijd SET generalClassification = 1 WHERE uitslagType_id IN (22,23);

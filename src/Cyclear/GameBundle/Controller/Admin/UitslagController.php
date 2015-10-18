@@ -50,7 +50,7 @@ class UitslagController extends Controller
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
+            $query, $this->get('request')->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         return array('pagination' => $pagination, 'seizoen' => $seizoen);
@@ -134,13 +134,14 @@ class UitslagController extends Controller
         if ($request->getMethod() == 'POST') {
             $form->submit($request);
             $wedstrijd = $form->get('wedstrijd')->getData();
+            $uitslagType = $form->get('wedstrijd')->get('uitslagtype')->getData();
+            $wedstrijd->setGeneralClassification($uitslagType->getIsGeneralClassification());
             $uitslagen = $form->get('uitslag')->getData();
             $em->persist($wedstrijd);
             foreach ($uitslagen as $uitslag) {
                 $em->persist($uitslag);
             }
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'Wedstrijd `'.$wedstrijd->getNaam().'` succesvol verwerkt');
             return $this->redirect($this->generateUrl('admin_uitslag_create'));
         }
         return array('form' => $form->createView());

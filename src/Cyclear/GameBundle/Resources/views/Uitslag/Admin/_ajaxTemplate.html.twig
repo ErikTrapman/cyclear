@@ -2,41 +2,37 @@
     {{ form_row(form.wedstrijd.naam,{ 'attr':{'class':'span6'} }) }}
 
     {% if form.uitslag is defined %}
-        <div class="control-group">
-            <label class="control-label">
-                Uitslagen
-            </label>
-
-            <div class="controls table-responsive">
-                <table style="width: 100%">
-                    <tbody>
-                    {% for rows in form.uitslag %}
-                        <tr>
-                            <td>
-                                <table class="table table-condensed table-bordered" style="margin-bottom:2px;">
-                                    <thead>
-                                        <th>Positie</th><!-- keep this some length to prevent the input-element to disappear on small views -->
-                                        <th/>
-                                        <th>Punten</th>
-                                        </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td rowspan="2">{{ form_widget(rows.positie, { 'attr': {'class': 'span1'} }) }}</td>
-                                        <td>{{ form_widget(rows.renner, { 'attr': {'class': 'span4'} }) }}</td>
-                                        <td>{{ form_widget(rows.rennerPunten, { 'attr': {'class': 'span1'} }) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ form_widget(rows.ploeg, { 'attr': {'class': 'span4'} }) }}</td>
-                                        <td>{{ form_widget(rows.ploegPunten, { 'attr': {'class': 'span1'} }) }}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <table style="width: 100%">
+            {% for rows in form.uitslag %}
+                <tr>
+                    <td>
+                        <table class="table table-condensed" style="margin-bottom:6px;">
+                            <tr>
+                                <th>{{ "%02d"|format(loop.index) }}</th>
+                                <!-- keep this some length to prevent the input-element to disappear on small views -->
+                                <th>Punten</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {{ form_widget(rows.renner, { 'attr': {'class': 'col-lg-8'} }) }}
+                                </td>
+                                <td>
+                                    {{ form_widget(rows.rennerPunten, { 'attr': {'class': 'col-sm-1'} }) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {{ form_widget(rows.ploeg, { 'attr': {'class': 'col-lg-8'} }) }}
+                                    {{ form_widget(rows.positie, { 'attr': {'class': 'col-sm-1'} }) }}
+                                </td>
+                                <td>
+                                    {{ form_widget(rows.ploegPunten, { 'attr': {'class': 'col-sm-1'} }) }}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
 {% endif %}

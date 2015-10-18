@@ -35,10 +35,8 @@ class ArchiefController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
         $current = $em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         if (null !== $current) {
             $seizoenen = $em->getRepository("CyclearGameBundle:Seizoen")->createQueryBuilder("s")
-                ->where("s != :current")
-                ->andWhere('s.id < :currentId')
-                ->setParameters(array('current' => $current, 'currentId' => $current->getId()));
-            ;
+                ->where("s != :current")->andWhere('s.closed = 1')
+                ->setParameters(array('current' => $current));;
             $res = $seizoenen->getQuery()->getResult();
         } else {
             $res = array();

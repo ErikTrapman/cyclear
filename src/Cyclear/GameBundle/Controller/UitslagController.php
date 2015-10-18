@@ -128,4 +128,5 @@ class UitslagController extends Controller
             'stand' => $stand,
             'draft' => $draft);
     }
+
 }

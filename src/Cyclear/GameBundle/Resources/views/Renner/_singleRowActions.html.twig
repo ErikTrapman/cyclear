@@ -3,11 +3,21 @@
 {% set rennerPloeg = ( rennerPloeg is defined ) ? rennerPloeg : null %}
 
 {% if rennerPloeg and is_granted("ROLE_USER") and is_granted('OWNER', ploeg) and rennerPloeg == ingelogdPloeg %}
-<a href="{{ path('user_transfer', {'id':rennerPloeg.id,'renner':renner.slug,'seizoen':seizoen.slug} ) }}">
-    <img src="/bundles/cycleargame/icons/famfamfam/coins_delete.png"/></a>
+    <td class="col-sm-1">
+        <a style="color: red"
+           href="{{ path('user_transfer', {'id':rennerPloeg.id,'renner':renner.slug,'seizoen':seizoen.slug} ) }}">
+        <span style="margin:0; padding:0; width: 16px; height:16px;" data-toggle="tooltip" data-placement="top"
+              class="glyphicon glyphicon-transfer"
+              title="Transfereer {{ renner.naam }}"></span></a>
+    </td>
 {% endif %}
 
 {% if is_granted("ROLE_USER") and ingelogdPloeg is not null and rennerPloeg is null %}
-<a href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner:renner.slug} ) }}">
-    <img src="/bundles/cycleargame/icons/famfamfam/coins_add.png"></a>
+    <td class="col-sm-1">
+        <a style="color: green"
+           href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner:renner.slug} ) }}">
+        <span style="margin:0; padding:0; width: 16px; height:16px;"
+              data-toggle="tooltip" data-placement="top" title="Transfereer {{ renner.naam }}"
+              class="glyphicon glyphicon-transfer"></span></a>
+    </td>
 {% endif %}

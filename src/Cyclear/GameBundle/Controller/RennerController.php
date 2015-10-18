@@ -11,6 +11,7 @@
 
 namespace Cyclear\GameBundle\Controller;
 
+use Cyclear\GameBundle\DataView\BloodHoundRiderView;
 use Cyclear\GameBundle\DataView\RiderSearchView;
 use Cyclear\GameBundle\Entity\Renner;
 use Cyclear\GameBundle\Entity\Seizoen;
@@ -88,7 +89,11 @@ class RennerController extends Controller
             $qb, $request->query->get('page') !== null ? $request->query->get('page') : 1, 999
         );
         $serializer = $this->get('jms_serializer');
-        return new Response($serializer->serialize($entities->getItems(), 'json', SerializationContext::create()->setGroups(array('small'))));
+        $ret = [];
+        foreach ($entities->getItems() as $item) {
+            $ret[] = (new BloodHoundRiderView())->serialize($item)->getData();
+        }
+        return new Response($serializer->serialize($ret, 'json', SerializationContext::create()->setGroups(array('small'))));
     }
 
     private function assertArray($value, $separator)
@@ -188,7 +193,7 @@ class RennerController extends Controller
         $uitslagen = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenForRenner($renner, $seizoen, true);
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $uitslagen, $this->get('request')->query->get('page', 1) , 20
+            $uitslagen, $this->get('request')->query->get('page', 1), 20
         );
 
         $ploeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen);
@@ -202,6 +207,6 @@ class RennerController extends Controller
             'uitslagen' => $pagination,
             'transferrepo' => $transferrepo,
             'ploeg' => $ploeg,
-            'rennerPunten' => $punten);
+            'rennerPunten' => intval($punten));
     }
 }

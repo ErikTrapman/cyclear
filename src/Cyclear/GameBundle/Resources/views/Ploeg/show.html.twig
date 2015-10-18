@@ -6,39 +6,70 @@
 
 {% block content %}
 
-    <div class="span12">
-        <h3>{{ entity.naam }} - {{ punten }}</h3>
-        <ul class="nav nav-tabs" id="tabs">
-            <li class="active"><a href="#ploeg" data-toggle="tab">Ploeg</a></li>
-            <li><a href="#punten" data-toggle="tab">Gescoorde punten</a></li>
-            <li><a href="#transfers" data-toggle="tab">Transfers</a></li>
-            <li><a href="#transferpunten" data-toggle="tab">Transfer punten</a></li>
-            <li><a href="#zeges" data-toggle="tab">Zeges</a></li>
-            <li><a href="#draft" data-toggle="tab">Draftploeg</a></li>
-            <li><a href="#lostdrafts" data-toggle="tab">Draft-</a></li>
+
+    <div class="big-header" style="margin-bottom: 0;">
+        <h2>{{ entity.naam }}</h2>
+    </div>
+    <div class="big-header-ext">
+        <ul class="list-inline">
+            <li>{{ punten }} punten</li>
         </ul>
-        <div class="tab-content">
-            <div class="tab-pane active" id="ploeg">
-                {% include "CyclearGameBundle:Ploeg:_singleRenners.html.twig" with {'renners':renners,'showTotal':false,'showContract':true, 'showActions':true } %}
-            </div>
-            <div class="tab-pane" id="punten">
-                {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':uitslagen} %}
-            </div>
-            <div class="tab-pane" id="transfers">
-                {% include "CyclearGameBundle:Transfer:_listWithInversion.html.twig" with {'listWithInversion':transfers, 'firstPageRoute' : 'ploeg_show','includePagination': true} %}
-            </div>
-            <div class="tab-pane" id="transferpunten">
-                {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':transferUitslagen} %}
-            </div>
-            <div class="tab-pane" id="zeges">
-                {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':zeges} %}
-            </div>
-            <div class="tab-pane" id="draft">
-                {% include "CyclearGameBundle:Ploeg:_singleRenners.html.twig" with {'renners':draftRenners,'showTotal': true,'total': draftPunten, 'showContract': false,'showActions':false } %}
-            </div>
-            <div class="tab-pane" id="lostdrafts">
-                {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':lostDrafts,'show':'rennerPunten' } %}
+    </div>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div id="filters">
+
+                    <ul id="tabs" class="list-group list-inline">
+                        <li class="active"><a href="#ploeg" data-toggle="tab"><h5>Ploeg</h5></a></li>
+                        <li><a href="#punten" data-toggle="tab"><h5>Gescoorde punten</h5></a></li>
+                        <li><a href="#transfers" data-toggle="tab"><h5>Transfers</h5></a></li>
+                        <li><a href="#transferpunten" data-toggle="tab"><h5>Transfer punten</h5></a></li>
+                        <li><a href="#zeges" data-toggle="tab"><h5>Zeges</h5></a></li>
+                        <li><a href="#draft" data-toggle="tab"><h5>Draftploeg</h5></a></li>
+                        <li><a href="#lostdrafts" data-toggle="tab"><h5>Draft-</h5></a></li>
+                    </ul>
+
+                </div>
+
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="ploeg">
+                        {% include "CyclearGameBundle:Ploeg:_singleRenners.html.twig" with {'renners':renners,'showTotal':false,'showContract':true, 'showActions':true } %}
+                    </div>
+                    <div class="tab-pane" id="punten">
+                        <div class="table-responsive">
+                            {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':uitslagen} %}
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="transfers">
+                        {% include "CyclearGameBundle:Transfer:_listWithInversion.html.twig" with {'fromTeamPage': true, 'listWithInversion':transfers, 'firstPageRoute' : 'ploeg_show','includePagination': true} %}
+                    </div>
+                    <div class="tab-pane" id="transferpunten">
+                        <div class="table-responsive">
+                            {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':transferUitslagen} %}
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="zeges">
+                        <div class="table-responsive">
+                            {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':zeges} %}
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="draft">
+                        {% include "CyclearGameBundle:Ploeg:_singleRenners.html.twig" with {'renners':draftRenners,'showTotal': true,'total': draftPunten, 'showContract': false,'showActions':false } %}
+                    </div>
+                    <div class="tab-pane" id="lostdrafts">
+                        <div class="table-responsive">
+                            {% include "CyclearGameBundle:Uitslag:_listPloeg.html.twig" with {'uitslagen':lostDrafts,'show':'rennerPunten' } %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+
 {% endblock %}

@@ -11,6 +11,7 @@
 
 namespace Cyclear\GameBundle\EntityManager;
 
+use Cyclear\GameBundle\Entity\Seizoen;
 use Doctrine\ORM\EntityManager;
 use Cyclear\GameBundle\Entity\Transfer,
     Cyclear\GameBundle\Entity\Renner,
@@ -19,22 +20,31 @@ use Cyclear\GameBundle\Entity\Transfer,
 class TransferManager
 {
     /**
-     * 
+     *
      * @var EntityManager
      */
     private $em;
 
+    /**
+     * @var ContractManager
+     */
     private $contractManager;
 
     /**
-     * 
+     * @var int|null
+     */
+    private $maxTransferAmount;
+
+    /**
+     *
      * @param EntityManager $em
      * @param Transfer $entity
      */
-    public function __construct(EntityManager $em, \Cyclear\GameBundle\EntityManager\ContractManager $contractManager)
+    public function __construct(EntityManager $em, ContractManager $contractManager, $maxTransferAmount = null)
     {
         $this->em = $em;
         $this->contractManager = $contractManager;
+        $this->maxTransferAmount = $maxTransferAmount;
     }
 
     public function doDraftTransfer(Transfer $transfer)
@@ -132,7 +142,7 @@ class TransferManager
         return true;
     }
 
-    public function doUserTransfer(Ploeg $ploeg, Renner $rennerUit, Renner $rennerIn, $seizoen)
+    public function doUserTransfer(Ploeg $ploeg, Renner $rennerUit, Renner $rennerIn, $seizoen, $msg = null)
     {
         try {
             $this->em->beginTransaction();
@@ -155,6 +165,7 @@ class TransferManager
             $transferIn->setDatum(new \DateTime());
             $transferIn->setTransferType(Transfer::USERTRANSFER);
             $transferIn->setSeizoen($seizoen);
+            $transferIn->setUserComment($msg);
             $this->em->persist($transferIn);
             $this->contractManager->createContract($rennerIn, $ploeg, $seizoen, $datum);
             //$transferUit->setInversionTransfer($transferIn);
@@ -207,4 +218,37 @@ class TransferManager
             }
         }
     }
+
+    /**
+     * @param Ploeg $ploeg
+     * @return int
+     */
+    public function getTtlTransfersDoneByPloeg(Ploeg $ploeg)
+    {
+        $transferTypes = [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER];
+        $seizoen = $ploeg->getSeizoen();
+        if ($this->maxTransferAmount) {
+            return $this->em->getRepository('CyclearGameBundle:Transfer')
+                ->getTransferCountByType($ploeg, $seizoen->getStart(), $seizoen->getEnd(), $transferTypes);
+
+        } else {
+            $periode = $this->em->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode($seizoen);
+            return $this->em->getRepository("CyclearGameBundle:Transfer")
+                ->getTransferCountByType($ploeg, $periode->getStart(), $periode->getEind(), $transferTypes);
+        }
+    }
+
+    /**
+     * @param Seizoen $seizoen
+     * @return int|null
+     */
+    public function getTtlTransfersAtm(Seizoen $seizoen)
+    {
+        if ($this->maxTransferAmount) {
+            return $this->maxTransferAmount;
+        } else {
+            return $this->em->getRepository('CyclearGameBundle:Periode')->getCurrentPeriode($seizoen)->getTransfers();
+        }
+    }
+
 }

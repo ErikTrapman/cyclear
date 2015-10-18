@@ -1,22 +1,22 @@
-{% extends '::admin.base.html.twig' %}
+{% extends '::admin.base_normal.twig' %}
 
 {% block title %}Renner creation{% endblock %}
 
 {% block content %}
-<h3>Renner creation</h3>
+    <h3>Renner creation</h3>
 
-<form action="{{ path('admin_renner_create') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <p>
-        <button type="submit">Create</button>
-    </p>
-</form>
+    <form action="{{ path('admin_renner_create') }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <p>
+            <button class="btn btn-default" type="submit">Create</button>
+        </p>
+    </form>
 
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_renner') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('admin_renner') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
 {% endblock %}

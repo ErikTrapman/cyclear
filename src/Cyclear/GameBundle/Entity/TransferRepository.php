@@ -153,4 +153,38 @@ class TransferRepository extends EntityRepository
         return $tQb->getQuery()->getResult();
     }
 
+    /**
+     * Creates a temporary table following this scheme:
+     * CREATE TEMPORARY TABLE IF NOT EXISTS $tableName (ploeg_id int, renner_id int)
+     *
+     * @param Seizoen $seizoen
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function generateTempTableWithDraftRiders(Seizoen $seizoen, $tableName = 'draftriders')
+    {
+        $conn = $this->_em->getConnection();
+        $conn->executeQuery("DROP TABLE IF EXISTS $tableName; CREATE TEMPORARY TABLE " . $tableName . " (ploeg_id int, renner_id int)");
+        $conn->executeQuery("INSERT INTO " . $tableName . "
+          ( SELECT ploegNaar_id, renner_id FROM Transfer t
+          WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.seizoen_id = " . $seizoen->getId() . " )");
+    }
+
+    public function generateTempTableWithTransferredRiders(Seizoen $seizoen, $tableName = 'transferriders')
+    {
+        $this->generateTempTableWithDraftRiders($seizoen);
+        $conn = $this->_em->getConnection();
+        $conn->executeQuery("DROP TABLE IF EXISTS $tableName; CREATE TEMPORARY TABLE IF NOT EXISTS " . $tableName . " (ploeg_id int, renner_id int)");
+
+        $seizoenId = $seizoen->getId();
+
+        $a = "SELECT t.renner_id, t.ploegNaar_id
+                FROM Transfer t
+                WHERE t.renner_id NOT IN ( SELECT dr.renner_id FROM draftriders dr WHERE dr.ploeg_id = t.ploegNaar_id )
+                AND t.seizoen_id = $seizoenId AND t.ploegNaar_id IS NOT NULL AND t.transferType <> " . Transfer::DRAFTTRANSFER . "
+                GROUP BY t.renner_id, t.ploegNaar_id
+                ORDER BY t.ploegNaar_id";
+        $conn->executeQuery("INSERT INTO $tableName (" . $a . ")");
+
+    }
+
 }

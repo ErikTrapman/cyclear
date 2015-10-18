@@ -22,34 +22,24 @@ use Cyclear\GameBundle\Entity\Wedstrijd,
  *
  * @Route("/admin/wedstrijd")
  */
-class WedstrijdController extends Controller {
+class WedstrijdController extends Controller
+{
 
     /**
      * @Route("/", name="admin_wedstrijd")
      * @Template("CyclearGameBundle:Wedstrijd/Admin:index.html.twig")
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQuery('SELECT w FROM CyclearGameBundle:Wedstrijd w ORDER BY w.id DESC');
-        
+
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-                $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
+            $query, $this->get('request')->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         return array('pagination' => $pagination);
-        
-        $adapter = $this->get('knp_paginator.adapter');
-        $adapter->setQuery($query);
-        $adapter->setDistinct(true);
-
-        $paginator = new \Zend\Paginator\Paginator($adapter);
-        $paginator->setCurrentPageNumber($this->get('request')->query->get('page', 1));
-        $paginator->setItemCountPerPage(10);
-        $paginator->setPageRange(5);
-
-
-        return array('paginator' => $paginator);
     }
 
 
@@ -59,7 +49,8 @@ class WedstrijdController extends Controller {
      * @Route("/new", name="admin_wedstrijd_new")
      * @Template("CyclearGameBundle:Wedstrijd/Admin:new.html.twig")
      */
-    public function newAction() {
+    public function newAction()
+    {
         $entity = new Wedstrijd();
         $form = $this->createForm(new WedstrijdType(), $entity);
 
@@ -75,7 +66,8 @@ class WedstrijdController extends Controller {
      * @Route("/create", name="admin_wedstrijd_create")
      * @Method("post")
      */
-    public function createAction() {
+    public function createAction()
+    {
         $entity = new Wedstrijd();
         $request = $this->getRequest();
         $form = $this->createForm(new WedstrijdType(), $entity);
@@ -101,7 +93,8 @@ class WedstrijdController extends Controller {
      * @Route("/{id}/edit", name="admin_wedstrijd_edit")
      * @Template("CyclearGameBundle:Wedstrijd/Admin:edit.html.twig")
      */
-    public function editAction($id) {
+    public function editAction($id)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Wedstrijd')->find($id);
@@ -126,7 +119,8 @@ class WedstrijdController extends Controller {
      * @Route("/{id}/update", name="admin_wedstrijd_update")
      * @Method("post")
      */
-    public function updateAction($id) {
+    public function updateAction($id)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Wedstrijd')->find($id);
@@ -162,7 +156,8 @@ class WedstrijdController extends Controller {
      * @Route("/{id}/delete", name="admin_wedstrijd_delete")
      * @Method("post")
      */
-    public function deleteAction($id) {
+    public function deleteAction($id)
+    {
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
@@ -183,11 +178,11 @@ class WedstrijdController extends Controller {
         return $this->redirect($this->generateUrl('admin_wedstrijd'));
     }
 
-    private function createDeleteForm($id) {
+    private function createDeleteForm($id)
+    {
         return $this->createFormBuilder(array('id' => $id))
-                        ->add('id', 'hidden')
-                        ->getForm()
-        ;
+            ->add('id', 'hidden')
+            ->getForm();
     }
 
 }

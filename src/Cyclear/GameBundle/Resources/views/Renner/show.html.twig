@@ -4,6 +4,75 @@
 
 {% block content %}
 
+    <div class="big-header" style="margin-bottom: 0;">
+        <h2>{% include "CyclearGameBundle:Country:_image.html.twig" with {'size':32,'country':renner.country } %}
+            {{ renner.naam }}{% if rennerPunten is defined %} - {{ rennerPunten }}{% endif %}
+        </h2>
+    </div>
+    <div class="big-header-ext" style="">
+        <div class="container">
+            <div class="col-lg-12">
+                {% if ploeg is not null %}
+                    <ul class="list-inline">
+                        <li>{{ ploeg.naam }}</li>
+                        <li>
+                            {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with {"renner":renner,"rennerPloeg":ploeg, "seizoen":seizoen } %}
+                        </li>
+                    </ul>
+                {% else %}
+                    <ul class="list-inline">
+                        <li>Beschikbaar</li>
+                        <li>
+                            {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with {"renner":renner,"rennerPloeg":ploeg, "seizoen":seizoen } %}
+                        </li>
+                    </ul>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div id="filters">
+                    <ul id="tabs" class="list-group list-inline">
+                        <li class="active"><a href="#uitslagen" data-toggle="tab"><h5>Uitslagen</h5></a></li>
+                        <li><a href="#transfers" data-toggle="tab"><h5>Transfers</h5></a></li>
+                        <li>
+                            <a href="http://www.procyclingstats.com/find.php?keywords={{ renner.naam }}">
+                                <h5><img src="/bundles/cycleargame/icons/pcs-icon.png" width="16" height="16"></h5></a>
+                        </li>
+                        <li>
+                            <a href="http://cqranking.com/men/asp/gen/rider.asp?riderid={{ renner.cqranking_id }}">
+                                <h5><img src="/bundles/cycleargame/icons/cqlogo.jpg" width="16" height="16"></h5></a>
+                        </li>
+                        {% if renner.twitter %}
+                            <li><a href="https://www.twitter.com/{{ renner.twitter }}" target="_blank">
+                                    <h5><i
+                                                class="fa fa-twitter"></i></h5></a></li>
+                        {% endif %}
+
+                    </ul>
+                </div>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="uitslagen">
+                        <div class="table-responsive">
+                            {% include "CyclearGameBundle:Uitslag:_listRenner.html.twig" with {'uitslagen':uitslagen,'show_rider':false,'rennerPunten':rennerPunten} %}
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="transfers">
+                        {% include "CyclearGameBundle:Transfer:_riderListWithInversion.html.twig" with {'listWithInversion':transfers} %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {#
     <div class="span12">
         <h3>
             <div>
@@ -11,30 +80,12 @@
             {% include "CyclearGameBundle:Country:_image.html.twig" with {'size':32,'country':renner.country } %}{{ renner.naam }}
                 {% if ploeg is not null %} - <a
                     href="{{ path('ploeg_show',{'id':ploeg.id,'seizoen':seizoen.slug}) }}">{{ ploeg.afkorting }}</a>{% else %} - vrij{% endif %}
-                {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with {"renner":renner,"rennerPloeg":ploeg, "seizoen":seizoen } %}
-                <a href="http://cqranking.com/men/asp/gen/rider.asp?riderid={{ renner.cqranking_id }}">
-                    <img src="/bundles/cycleargame/icons/cqlogo.jpg" width="32" height="32"></a>
-            <a href="http://www.procyclingstats.com/find.php?keywords={{ renner.naam }}">
-                <img src="/bundles/cycleargame/icons/pcs-icon.png" width="32" height="32"></a>
-                {% if renner.twitter %}
-                    <a href="https://www.twitter.com/{{ renner.twitter }}" target="_blank">
-                        <img src="{{ asset('bundles/cycleargame/icons/twitter.png') }}" width="32" height="32"></a>
-                {% endif %}
+
             </span>
             </div>
         </h3>
 
-        <ul class="nav nav-tabs" id="tabs">
-            <li class="active"><a href="#uitslagen" data-toggle="tab">Uitslagen</a></li>
-            <li><a href="#transfers" data-toggle="tab">Transfers</a></li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane active" id="uitslagen">
-                {% include "CyclearGameBundle:Uitslag:_listRenner.html.twig" with {'uitslagen':uitslagen,'show_rider':false,'rennerPunten':rennerPunten} %}
-            </div>
-            <div class="tab-pane" id="transfers">
-                {% include "CyclearGameBundle:Transfer:_riderListWithInversion.html.twig" with {'listWithInversion':transfers} %}
-            </div>
-        </div>
+
     </div>
+    #}
 {% endblock %}

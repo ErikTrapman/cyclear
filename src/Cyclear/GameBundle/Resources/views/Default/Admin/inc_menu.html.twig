@@ -1,11 +1,10 @@
-
 <li><a href="{{ path('admin_uitslag_create') }}">Nieuwe uitslag</a></li>
 <li><a href="{{ path('admin_transfer_new') }}">Nieuwe transfer</a></li>
 <li class="dropdown">
-    <a href="#" class="dropdown-toggle">Configuratie
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Configuratie
         <b class="caret"></b>
     </a>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+    <ul class="dropdown-menu">
         <li><a href="{{ path('admin_contract') }}">Contracten</a></li>
         <li><a href="{{ path('admin_user') }}">Gebruikers</a></li>
         <li><a href="{{ path('admin_nieuws') }}">Nieuws</a></li>

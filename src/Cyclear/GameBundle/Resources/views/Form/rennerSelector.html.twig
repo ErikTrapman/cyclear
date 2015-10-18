@@ -1,3 +1,5 @@
 {% block renner_selector_widget %}
-    {{ form_widget(form, { 'attr':{'class':'span4 ajax-typeahead'} } ) }}
+    <div>
+        {{ form_widget(form, { 'attr':{'class':'ajax-typeahead','placeholder': 'Zoek renner...'} } ) }}
+    </div>
 {% endblock %}

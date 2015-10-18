@@ -43,8 +43,6 @@ class PloegController extends Controller {
 
         $config = $em->getConfiguration();
         $config->addFilter("naam", "Cyclear\GameBundle\Filter\Ploeg\PloegNaamFilter");
-        $config->addFilter("user", "Cyclear\GameBundle\Filter\Ploeg\PloegUserFilter");
-        $config->addFilter("seizoen", "Cyclear\GameBundle\Filter\SeizoenFilter");
 
         if ($this->getRequest()->getMethod() == 'POST') {
             $filter->submit($this->getRequest());
@@ -63,7 +61,7 @@ class PloegController extends Controller {
         }
         $paginator = $this->get('knp_paginator');
         $entities = $paginator->paginate(
-            $query, $this->get('request')->query->get('page', 1)/* page number */, 10/* limit per page */
+            $query, $this->get('request')->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         
         //$entities = $em->getRepository('CyclearGameBundle:Ploeg')->findAll();

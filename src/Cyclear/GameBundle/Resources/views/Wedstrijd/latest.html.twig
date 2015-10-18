@@ -1,20 +1,39 @@
 {% block content %}
-<table class="records_list table table-condensed ">
-    <thead>
+    <script type="text/javascript">
+        function toggleResults(e, id) {
+            e.preventDefault();
+            $(".results_match_" + id).toggle();
+        }
+    </script>
+    <table class="table table-bordered table-striped">
         <tr>
-            <th>Datum</th>
-            <th>Wedstrijd</th>
+            <th class="hidden-xs hidden-sm">Datum</th>
+            <th colspan="6">Uitslagen</th>
         </tr>
-    </thead>
-    <tbody>
-    {% for wedstrijd in wedstrijden %}
-        <tr>
-            <td nowrap>{{ wedstrijd.datum|date('d-m-Y') }}</td>
-            <td>
-             {% include "CyclearGameBundle:Wedstrijd:_singleRow.html.twig" with {wedstrijd:wedstrijd, seizoen:wedstrijd.seizoen } %}
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+
+        {% for wedstrijd in wedstrijden %}
+            <tr>
+                <td class="hidden-xs hidden-sm">
+                    {{ wedstrijd.datum|date('d M') }}
+                </td>
+                <td colspan="4">
+                    {#{% include "CyclearGameBundle:Wedstrijd:_singleRow.html.twig" with {wedstrijd:wedstrijd, seizoen:wedstrijd.seizoen } %}#}
+                    <a href="javascript:void(0);"
+                       onclick="toggleResults(event, {{ wedstrijd.id }})">{{ wedstrijd.naam }}</a>
+
+                </td>
+            </tr>
+
+            {% for uitslag in wedstrijd.uitslagen %}
+                <tr class="results_match_{{ wedstrijd.id }}" style="display: none;">
+                    <td>{{ "%02d"|format(loop.index) }}</td>
+                    <td nowrap>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {renner:uitslag.renner,seizoen:uitslag.wedstrijd.seizoen } %}</td>
+                    <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
+                    <td>{{ uitslag.ploegPunten }}</td>
+                </tr>
+            {% endfor %}
+
+        {% endfor %}
+
+    </table>
 {% endblock %}

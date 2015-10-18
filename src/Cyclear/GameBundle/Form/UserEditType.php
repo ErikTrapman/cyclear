@@ -30,7 +30,7 @@ class UserEditType extends BaseType
                     return $e->createQueryBuilder("p")
                         //->where("p.user IS NULL OR p.user = :user")
                         //->setParameter("user", $user)
-                        ->orderBy("p.seizoen ASC, p.naam")
+                        ->orderBy("p.seizoen ASC, p.afkorting")
                     ;
                 },
                 'multiple' => true,

@@ -1,12 +1,22 @@
 {% extends '::base.html.twig' %}
 {% block content %}
 
-<div class="span4">
-    <h3>Archieven</h3>
-    {% for seizoen in seizoenen %}
-    <p>
-        <a class="btn btn-large btn-primary btn-block" href="{{ path('game' , {'seizoen':seizoen.slug}) }}">{{ seizoen.identifier }}</a>
-    </p>
-    {% endfor %}
-</div>
+    <div class="big-header" style="margin-bottom: 0;">
+        <h2>Archieven</h2>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul style="margin:20px; display: inline-block">
+                    {% for seizoen in seizoenen %}
+                        <li style="margin:12px;">
+                            <a class="btn btn-default"
+                               href="{{ path('game' , {'seizoen':seizoen.slug}) }}">{{ seizoen.identifier }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}

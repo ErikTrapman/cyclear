@@ -243,15 +243,27 @@ class UitslagRepository extends EntityRepository
             $params['end'] = $end->format('Y-m-d H:i:s');
         }
 
+        $this->_em->getRepository('CyclearGameBundle:Transfer')->generateTempTableWithDraftRiders($seizoen);
+
         // TODO DQL'en net als getCountForPosition
         $transfers = "SELECT DISTINCT t.renner_id FROM Transfer t
             WHERE t.transferType != " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
-                AND t.renner_id NOT IN ( SELECT t.renner_id FROM Transfer t WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id )";
-        $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting,
-                ((SELECT IFNULL(SUM(u.ploegPunten),0)
+                AND t.renner_id NOT IN
+                (SELECT t.renner_id FROM Transfer t
+                WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id
+                AND t.seizoen_id = :seizoen_id)";
+
+
+        $sql = sprintf("
+                SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 100 AS b,
+                (
+
+                (SELECT IFNULL(SUM(u.ploegPunten),0)
                 FROM Uitslag u
                 INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id
-                WHERE w.seizoen_id = :seizoen_id %s AND u.ploeg_id = p.id AND u.renner_id IN (%s))) AS punten
+                WHERE w.seizoen_id = :seizoen_id %s AND u.ploeg_id = p.id AND u.renner_id IN (%s))
+
+                ) AS punten
 
                 FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
@@ -278,11 +290,19 @@ class UitslagRepository extends EntityRepository
             $params['start'] = $start->format('Y-m-d H:i:s');
             $params['end'] = $end->format('Y-m-d H:i:s');
         }
-        $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting,
-                (SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u
+
+        $this->_em->getRepository('CyclearGameBundle:Transfer')->generateTempTableWithDraftRiders($seizoen);
+
+        $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 200 AS c,
+                (
+                SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u
                 INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE w.seizoen_id = :seizoen_id %s
-                AND u.renner_id IN ( SELECT t.renner_id FROM Transfer t WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id)
-                AND (u.ploeg_id IS NULL OR u.ploeg_id <> p.id)) AS punten
+                AND u.renner_id IN
+                    (SELECT t.renner_id FROM Transfer t
+                    WHERE t.transferType = " . Transfer::DRAFTTRANSFER . "
+                    AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id)
+                AND (u.ploeg_id IS NULL OR u.ploeg_id <> p.id)
+                ) AS punten
 
                 FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
@@ -298,6 +318,8 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
+        $this->_em->getRepository('CyclearGameBundle:Transfer')->generateTempTableWithDraftRiders($seizoen);
+
         // TODO DQL'en net als getCountForPosition
         $transfers = "SELECT DISTINCT t.renner_id FROM Transfer t 
             WHERE t.transferType != " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
@@ -306,11 +328,17 @@ class UitslagRepository extends EntityRepository
                 ((SELECT IFNULL(SUM(u.ploegPunten),0)
                 FROM Uitslag u
                 INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id
-                WHERE w.seizoen_id = :seizoen_id AND u.ploeg_id = p.id AND u.renner_id IN (%s)) -
+                WHERE w.seizoen_id = :seizoen_id AND u.ploeg_id = p.id AND u.renner_id IN (%s))
 
-                (SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE w.seizoen_id = :seizoen_id
-                AND u.renner_id IN ( SELECT t.renner_id FROM Transfer t WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id)
-                AND (u.ploeg_id IS NULL OR u.ploeg_id <> p.id))) AS punten
+                -
+
+                (SELECT IFNULL(SUM(u.rennerPunten),0)
+                FROM Uitslag u
+                INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id AND w.seizoen_id = :seizoen_id
+                INNER JOIN draftriders dr ON u.renner_id = dr.renner_id
+                WHERE dr.ploeg_id = p.id AND (u.ploeg_id IS NULL OR u.ploeg_id <> p.id))
+
+                ) AS punten
 
                 FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC

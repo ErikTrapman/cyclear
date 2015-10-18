@@ -87,6 +87,11 @@ class Transfer
     private $inversionTransfer;
 
     /**
+     * @ORM\Column(nullable=true)
+     */
+    private $userComment;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -223,5 +228,19 @@ class Transfer
         return (string) $this->getId();
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUserComment()
+    {
+        return $this->userComment;
+    }
 
+    /**
+     * @param mixed $userComment
+     */
+    public function setUserComment($userComment)
+    {
+        $this->userComment = $userComment;
+    }
 }

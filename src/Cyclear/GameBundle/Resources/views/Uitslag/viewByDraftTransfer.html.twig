@@ -1,22 +1,20 @@
 {% block content %}
-    <table class="records_list table table-condensed ">
-        <thead>
+    <table class="table table-bordered table-striped">
+
         <tr>
-            <th/>
-            <th>Ploeg</th>
-            <th/>
+            <th colspan="3">Ploeg</th>
             <th>Punten</th>
         </tr>
-        </thead>
-        <tbody>
+
+
         {% for ploeg in list %}
             <tr>
-                <td>{{ loop.index }}</td>
-                <td><a href="{{ path('ploeg_show',{id:ploeg.id,seizoen:seizoen.slug}) }}">{{ ploeg.naam }}</a></td>
+                <td>{{ "%02d"|format(loop.index) }}</td>
+                <td class="hidden-xs hidden-sm"><a href="{{ path('ploeg_show',{id:ploeg.id,seizoen:seizoen.slug}) }}">{{ ploeg.naam }}</a></td>
                 <td>{{ ploeg.afkorting }}</td>
-                <td style="text-align: right">{{ ploeg.punten }}</td>
+                <td>{{ ploeg.punten }}</td>
             </tr>
         {% endfor %}
-        </tbody>
+
     </table>
 {% endblock %}

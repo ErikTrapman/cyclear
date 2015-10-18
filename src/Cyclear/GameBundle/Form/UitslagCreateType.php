@@ -40,8 +40,7 @@ class UitslagCreateType extends AbstractType
             ->add('referentiewedstrijd', 'entity', array('required' => false, 'mapped' => false, 'class' => 'CyclearGameBundle:Wedstrijd',
                 'query_builder' => function( EntityRepository $r ) {
                     return $r->createQueryBuilder('w')
-                        ->join('w.uitslagtype', 'ut')
-                        ->where('ut.isGeneralClassification = 0')
+                        ->where('w.generalClassification = 0')
                         ->add('orderBy', 'w.id DESC')
                         ->setMaxResults(90);
                 }))
@@ -78,6 +77,7 @@ class UitslagCreateType extends AbstractType
                     $crawler = $crawlerManager->getCrawler($url);
                     $wedstrijd = $wedstrijdManager->createWedstrijdFromCrawler($crawler, $datum);
                     $data['wedstrijd']['naam'] = $wedstrijd->getNaam();
+                    $data['wedstrijd']['uitslagtype'] = $uitslagType;
                     $refDatum = ( null !== $referentieWedstrijd ) ? $referentieWedstrijd->getDatum() : null;
                     $data['uitslag'] = $uitslagManager->prepareUitslagen($uitslagType, $crawler, $wedstrijd, $seizoen, $refDatum);
                     $e->setData($data);

@@ -23,19 +23,21 @@ class UitslagType extends AbstractType
     {
         $seizoen = $options['seizoen'];
         // array( 'allow_add' => true, 'type' => $w)
-        $builder->add('positie')
+        $builder
+            ->add('positie', 'hidden')
             ->add('ploegPunten')
             ->add('rennerPunten');
         if ($options['use_wedstrijd']) {
             $builder->add('wedstrijd', 'entity', array('class' => 'Cyclear\GameBundle\Entity\Wedstrijd', 'query_builder' =>
-                function(EntityRepository $e) use ($seizoen) {
+                function (EntityRepository $e) use ($seizoen) {
                     return $e->createQueryBuilder('w')->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->orderBy('w.id', 'DESC');
                 }));
         }
-        $builder->add('ploeg', 'entity', array('required' => false,
+        $builder
+            ->add('ploeg', 'entity', array('required' => false,
                 'class' => 'CyclearGameBundle:Ploeg',
-                'query_builder' => function(EntityRepository $e) use ($seizoen) {
-                    return $e->createQueryBuilder('p')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->orderBy('p.naam');
+                'query_builder' => function (EntityRepository $e) use ($seizoen) {
+                    return $e->createQueryBuilder('p')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->orderBy('p.afkorting');
                 }))
             ->add('renner', 'renner_selector');
     }

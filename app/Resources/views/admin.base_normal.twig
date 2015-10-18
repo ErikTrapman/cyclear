@@ -1,0 +1,14 @@
+{% extends '::base_normal.html.twig' %}
+
+
+{% block contentcontainer %}
+    <div class="container container-admin">
+        <div class="row">
+            <div class="col-lg-12">
+                {% block content %}
+                    {% block fos_user_content %}{% endblock %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

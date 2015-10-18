@@ -17,7 +17,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\SeizoenRepository")
  */
-class Seizoen {
+class Seizoen
+{
 
     /**
      * @ORM\Column(name="id", type="integer")
@@ -49,40 +50,92 @@ class Seizoen {
      */
     private $current = false;
 
-    public function getId() {
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $start;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $end;
+
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getIdentifier() {
+    public function getIdentifier()
+    {
         return $this->identifier;
     }
 
-    public function setIdentifier($identifier) {
+    public function setIdentifier($identifier)
+    {
         $this->identifier = $identifier;
     }
 
-    public function getClosed() {
+    public function getClosed()
+    {
         return $this->closed;
     }
 
-    public function setClosed($closed) {
+    public function setClosed($closed)
+    {
         $this->closed = $closed;
     }
 
-    public function getSlug() {
+    public function getSlug()
+    {
         return $this->slug;
     }
 
-    public function isCurrent() {
-        return (bool) $this->current;
+    public function isCurrent()
+    {
+        return (bool)$this->current;
     }
-    
-    public function setCurrent($current){
+
+    public function setCurrent($current)
+    {
         $this->current = $current;
     }
-    
-    public function __toString(){
+
+    public function __toString()
+    {
         return $this->identifier;
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
+
+    /**
+     * @param \DateTime
+     */
+    public function setStart($start)
+    {
+        $this->start = $start;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getEnd()
+    {
+        return $this->end;
+    }
+
+    /**
+     * @param \DateTime
+     */
+    public function setEnd($end)
+    {
+        $this->end = $end;
+    }
+
 
 }

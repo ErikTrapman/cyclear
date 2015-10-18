@@ -3,42 +3,42 @@
 {% block title "Renners" %}
 
 {% block content %}
-<div class="span5">
+    <div class="span5">
 
-    <form action="{{ path('get_season_riders',{seizoen:seizoen.slug}) }}" method="get">
-        <input type="text" name="query">
-        <button class="btn" type="submit">Zoek</button>
-    </form>
+        <form action="{{ path('get_season_riders',{seizoen:seizoen.slug}) }}" method="get">
+            <input type="text" name="query">
+            <button class="btn" type="submit">Zoek</button>
+        </form>
 
-    <table class="table table-condensed">
-        <thead>
+        <table class="table table-condensed">
+
             <tr>
                 <th>Renner</th>
                 <th>Ploeg</th>
                 <th/>
             </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-        {% set rennerploegIndex = rennerRepo.getPloeg(entity.id, seizoen) %}
-        {% set ingelogdPloeg = app.request.attributes.get('seizoen-ploeg') %}
-        <tr>
-            <td nowrap>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {'renner':rennerRepo.find(entity.id),'seizoen':seizoen } %}</td>
-            <td>{% if rennerploegIndex %}{{ rennerploegIndex.afkorting }}{% else %}-{% endif %}</td>
-            <td>
-                {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with {"ploeg":app.request.attributes.get('seizoen-ploeg'), "renner":entity,"seizoen":seizoen } %}
-            </td>
-        </tr>
-    {% endfor %}
-        </tbody>
-    </table>
-    <div id="navigation">
-        {{ knp_pagination_render(entities, null, {}, {'firstPageRoute': 'get_season_riders'}) }}
+
+
+            {% for entity in entities %}
+                {% set rennerploegIndex = rennerRepo.getPloeg(entity.id, seizoen) %}
+                {% set ingelogdPloeg = app.request.attributes.get('seizoen-ploeg') %}
+                <tr>
+                    <td nowrap>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {'renner':rennerRepo.find(entity.id),'seizoen':seizoen } %}</td>
+                    <td>{% if rennerploegIndex %}{{ rennerploegIndex.afkorting }}{% else %}-{% endif %}</td>
+                    <td>
+                        {% include "CyclearGameBundle:Renner:_singleRowActions.html.twig" with {"ploeg":app.request.attributes.get('seizoen-ploeg'), "renner":entity,"seizoen":seizoen } %}
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+        <div id="navigation">
+            {{ knp_pagination_render(entities, null, {}, {'firstPageRoute': 'get_season_riders'}) }}
+        </div>
     </div>
-</div>
 
 
-<div class="span6">
+    <div class="span6">
 
 
         <ul class="nav nav-tabs" id="tabs">
@@ -54,7 +54,7 @@
                 {% include 'CyclearGameBundle:Renner:viewWithPunten.html.twig' with { listWithPunten: without_team } %}
             </div>
         </div>
-</div>
+    </div>
 
 
 {% endblock %}

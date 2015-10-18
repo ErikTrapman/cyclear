@@ -76,25 +76,21 @@ class TransferController extends Controller
         $options['ploegRenners'] = $this->getDoctrine()->getRepository("CyclearGameBundle:Ploeg")->getRenners($ploeg);
         $options['ploeg'] = $ploeg;
         $form = $this->createForm(new TransferUserType(), $transferUser, $options);
+        $transferManager = $this->get('cyclear_game.manager.transfer');
         if ($this->getRequest()->getMethod() == 'POST') {
             $form->submit($this->getRequest());
             if ($form->isValid()) {
-                $transferManager = $this->get('cyclear_game.manager.transfer');
                 if ($rennerPloeg !== $ploeg) {
-                    $transferManager->doUserTransfer($ploeg, $form->get('renner_uit')->getData(), $renner, $seizoen);
+                    $transferManager->doUserTransfer($ploeg, $form->get('renner_uit')->getData(), $renner, $seizoen, $form->get('userComment')->getData());
                 } else {
-                    $transferManager->doUserTransfer($ploeg, $renner, $form->get('renner_in')->getData(), $seizoen);
+                    $transferManager->doUserTransfer($ploeg, $renner, $form->get('renner_in')->getData(), $seizoen, $form->get('userComment')->getData());
                 }
                 $em->flush();
                 return new RedirectResponse($this->generateUrl("ploeg_show", array("seizoen" => $seizoen->getSlug(), "id" => $ploeg->getId())));
             }
         }
-
-        $transferTypes = array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER);
-        $periode = $em->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode($seizoen);
-        $transferInfo = $em->getRepository("CyclearGameBundle:Transfer")
-            ->getTransferCountByType($ploeg, $periode->getStart(), $periode->getEind(), $transferTypes);
-
+        $transferInfo = $transferManager->getTtlTransfersDoneByPloeg($ploeg);
+        $ttlTransfersAtm = $transferManager->getTtlTransfersAtm($seizoen);
         return
             array(
                 'ploeg' => $ploeg,
@@ -103,7 +99,7 @@ class TransferController extends Controller
                 'seizoen' => $seizoen,
                 'transferInfo' => array(
                     'count' => $transferInfo,
-                    'left' => $periode->getTransfers() - $transferInfo)
+                    'left' => $ttlTransfersAtm - $transferInfo)
             );
     }
 }

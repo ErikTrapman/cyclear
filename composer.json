@@ -45,17 +45,18 @@
         "doctrine/doctrine-fixtures-bundle": "dev-master",
         "doctrine/data-fixtures": "dev-master",
 
-        "twitter/bootstrap": "v2.3.1",
         "eriktrapman/cqrankingparser-bundle": "dev-master",
         "beberlei/DoctrineExtensions": "dev-master",
-        "mopa/bootstrap-bundle": "dev-master#5152f29f4b1b9e4d9d622561d26c1b8e603f0e11",
         "mobiledetect/mobiledetectlib": "2.7.*",
         "suncat/mobile-detect-bundle": "0.9.3",
         "tijsverkoyen/twitteroauth": "~2.3",
         "ddeboer/data-import": "dev-master",
         "ddeboer/data-import-bundle": "dev-master",
         "samson/autocomplete-bundle": "~2.0.1",
-        "samson/dataview-bundle": "1.0.1"
+        "samson/dataview-bundle": "1.0.1",
+        "twbs/bootstrap": "^3.3",
+        "twitter/typeahead.js": "0.11",
+        "bmatzner/fontawesome-bundle": "~4.4"
     },
     "scripts": {
         "post-install-cmd": [

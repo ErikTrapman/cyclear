@@ -1,22 +1,16 @@
 {% block content %}
-<table class="records_list table table-condensed ">
-    <thead>
+    <table class="table table-bordered table-striped">
         <tr>
-            <th/>
-            <th>Naam</th>
-            <th/>
+            <th colspan="3">Ploeg</th>
             <th/>
         </tr>
-    </thead>
-    <tbody>
-    {% for uitslag in list %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ uitslag.0.naam }}</td>
-            <td>{{ uitslag.0.afkorting }}</td>
-            <td>{{ uitslag.freqByPos }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        {% for uitslag in list %}
+            <tr>
+                <td>{{ "%02d"|format(loop.index) }}</td>
+                <td>{{ uitslag.0.naam }}</td>
+                <td>{{ uitslag.0.afkorting }}</td>
+                <td>{{ uitslag.freqByPos }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

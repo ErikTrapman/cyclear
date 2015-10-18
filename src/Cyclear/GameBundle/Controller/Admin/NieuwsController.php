@@ -35,11 +35,16 @@ class NieuwsController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->get('doctrine.orm.default_entity_manager');
 
-        $entities = $em->getRepository('CyclearGameBundle:Nieuws')->findAll();
-        
-        return array('entities' => $entities);
+        $entities = $em->getRepository('CyclearGameBundle:Nieuws')->createQueryBuilder('n')->orderBy('n.id', 'DESC');
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities, $this->get('request')->query->get('page', 1), 20
+        );
+
+        return array('entities' => $pagination);
     }
 
     /**
@@ -51,11 +56,11 @@ class NieuwsController extends Controller
     public function newAction()
     {
         $entity = new Nieuws();
-        $form   = $this->createForm(new NieuwsType(), $entity);
+        $form = $this->createForm(new NieuwsType(), $entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         );
     }
 
@@ -67,9 +72,9 @@ class NieuwsController extends Controller
      */
     public function createAction()
     {
-        $entity  = new Nieuws();
+        $entity = new Nieuws();
         $request = $this->getRequest();
-        $form    = $this->createForm(new NieuwsType(), $entity);
+        $form = $this->createForm(new NieuwsType(), $entity);
         $form->submit($request);
 
         if ($form->isValid()) {
@@ -78,12 +83,12 @@ class NieuwsController extends Controller
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_nieuws'));
-            
+
         }
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         );
     }
 
@@ -107,8 +112,8 @@ class NieuwsController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -129,7 +134,7 @@ class NieuwsController extends Controller
             throw $this->createNotFoundException('Unable to find Nieuws entity.');
         }
 
-        $editForm   = $this->createForm(new NieuwsType(), $entity);
+        $editForm = $this->createForm(new NieuwsType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();
@@ -144,8 +149,8 @@ class NieuwsController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -182,7 +187,6 @@ class NieuwsController extends Controller
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

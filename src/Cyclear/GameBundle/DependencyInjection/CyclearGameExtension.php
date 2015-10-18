@@ -31,9 +31,18 @@ class CyclearGameExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
-        
+
         $container->setParameter('enable_twitter', $config['enable_twitter']);
+        if (isset($config['max_transfers'])) {
+            $container->setParameter('max_transfers', $config['max_transfers']);
+        } else {
+            $container->removeDefinition('cyclear_game.validator.fixedusertransfer');
+            // stub for the sake of allowing max-transfers as injection-argument. can be null, no worries.
+            $container->setParameter('max_transfers', null);
+        }
+
+
     }
 }

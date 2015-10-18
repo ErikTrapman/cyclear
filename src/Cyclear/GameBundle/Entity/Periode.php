@@ -47,7 +47,7 @@ class Periode
     /**
      * @var smallint $transfers
      *
-     * @ORM\Column(name="transfers", type="smallint")
+     * @ORM\Column(name="transfers", type="smallint", nullable=true)
      */
     private $transfers;
 

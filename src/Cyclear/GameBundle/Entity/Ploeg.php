@@ -30,14 +30,14 @@ class Ploeg
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * 
+     *
      * @Serializer\Expose
      * @Serializer\Groups({"small","medium"})
      */
     private $id;
 
     /**
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\User", inversedBy="ploeg")
      */
     private $user;
@@ -46,7 +46,7 @@ class Ploeg
      * @var string $naam
      *
      * @ORM\Column(name="naam", type="string", length=255)
-     * 
+     *
      * @Serializer\Expose
      * @Serializer\Groups({"small","medium"})
      */
@@ -56,18 +56,18 @@ class Ploeg
      * @var string $afkorting
      *
      * @ORM\Column(name="afkorting", type="string", length=6)
-     * 
+     *
      * @Serializer\Expose
      * @Serializer\Groups({"small","medium"})
      */
     private $afkorting;
 
     /**
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
      */
     private $seizoen;
-    
+
     private $punten;
 
     /**
@@ -89,7 +89,7 @@ class Ploeg
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -109,7 +109,7 @@ class Ploeg
     /**
      * Get naam
      *
-     * @return string 
+     * @return string
      */
     public function getNaam()
     {
@@ -134,9 +134,12 @@ class Ploeg
 
     public function __toString()
     {
-        return (string) $this->getNaam();
+        return (string)$this->getAfkorting();
     }
 
+    /**
+     * @return Seizoen
+     */
     public function getSeizoen()
     {
         return $this->seizoen;
@@ -149,13 +152,13 @@ class Ploeg
 
     public function getNaamWithSeizoen()
     {
-        return $this->getNaam().' ['.$this->getSeizoen()->getIdentifier().']';
+        return $this->getNaam() . ' [' . $this->getSeizoen()->getIdentifier() . ']';
     }
 
     /**
      * @Serializer\Groups({"small","medium"})
      * @Serializer\VirtualProperty()
-     * 
+     *
      */
     public function getPunten()
     {

@@ -28,7 +28,7 @@ class CleanUpRidersCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        
+
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $qb = $em->getRepository("CyclearGameBundle:Renner")->createQueryBuilder('r')->where('r.country IS NULL');
         foreach($qb->getQuery()->getResult() as $i => $renner ){

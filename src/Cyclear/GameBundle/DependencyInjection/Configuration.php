@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
         
         $rootNode->children()
             ->booleanNode('enable_twitter')->defaultFalse()->end()
+			->scalarNode('max_transfers')->defaultNull()->end()
             ->end();
         
 		/*

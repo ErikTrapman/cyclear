@@ -1,24 +1,17 @@
 {% block content %}
-<table class="records_list table table-condensed">
-    <thead>
+    <table class="table table-bordered">
         <tr>
-            <th/>
-            <th>Renner</th>
+            <th colspan="2">Uitslag</th>
             <th>Ploeg</th>
-            <th>Punten ploeg</th>
-            <th>Punten renner</th>
+            <th>Punten</th>
         </tr>
-    </thead>
-    <tbody>
-    {% for uitslag in uitslagen %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td nowrap>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {renner:uitslag.renner,seizoen:uitslag.wedstrijd.seizoen } %}</td>
-            <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
-            <td>{{ uitslag.ploegPunten }}</td>
-            <td>{{ uitslag.rennerPunten }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        {% for uitslag in uitslagen %}
+            <tr>
+                <td>{{ "%02d"|format(loop.index) }}</td>
+                <td nowrap>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {renner:uitslag.renner,seizoen:uitslag.wedstrijd.seizoen } %}</td>
+                <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
+                <td>{{ uitslag.ploegPunten }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

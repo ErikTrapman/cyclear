@@ -28,6 +28,8 @@ class UserTransfer
 
     private $ploeg;
 
+    private $userComment;
+
     /**
      * @param mixed $datum
      */
@@ -86,5 +88,20 @@ class UserTransfer
         $this->renner_uit = $renner_uit;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUserComment()
+    {
+        return $this->userComment;
+    }
+
+    /**
+     * @param mixed $userComment
+     */
+    public function setUserComment($userComment)
+    {
+        $this->userComment = $userComment;
+    }
 
 }

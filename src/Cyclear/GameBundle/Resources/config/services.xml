@@ -29,6 +29,7 @@
         <service id="cyclear_game.manager.transfer" class="Cyclear\GameBundle\EntityManager\TransferManager">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="cyclear_game.manager.contract"/>
+            <argument>%max_transfers%</argument>
         </service>
 
         <service id="cyclear_game.manager.wedstrijd" class="Cyclear\GameBundle\EntityManager\WedstrijdManager">
@@ -106,6 +107,15 @@
         <service id="cyclear_game.validator.usertransfer"
                  class="Cyclear\GameBundle\Validator\Constraints\UserTransferValidator">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
+            <tag name="validator.constraint_validator" alias="user_transfer"/>
+        </service>
+
+        <service
+                decorates="cyclear_game.validator.usertransfer"
+                id="cyclear_game.validator.fixedusertransfer"
+                class="Cyclear\GameBundle\Validator\Constraints\UserTransferFixedValidator">
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
+            <argument>%max_transfers%</argument>
             <tag name="validator.constraint_validator" alias="user_transfer"/>
         </service>
 
