@@ -45,6 +45,7 @@ h2 a:hover {
 a {
     color: #df0031;
     color: #860087;
+    color: #2e002f;
     text-decoration: dotted;
 }
 
@@ -57,6 +58,7 @@ ul {
 ul.clearfix li.active {
     color: #df0031;
     color: #860087;
+    color: #2e002f;
 }
 
 a:hover {
@@ -66,6 +68,7 @@ a:hover {
 a:active {
     color: #df0031;
     color: #860087;
+    color: #2e002f;
 }
 
 #main-navbar {
@@ -76,6 +79,7 @@ a:active {
     background: #A400A5;
     background: #860087;
     background: #720073;
+    background: #2e002f;
     padding: 52px 0;
     margin: 0px;
     margin-bottom: 30px;
@@ -83,6 +87,7 @@ a:active {
 
 .subheader-news {
     border-top: 2px solid #720073;
+    border-top: 2px solid #2e002f;
     padding: 52px 0;
     margin: 0px;
     margin-bottom: 30px;
@@ -120,9 +125,11 @@ a:active {
     background: #fff;
     color: #df0031;
     color: #860087;
+    color: #2e002f;
     text-decoration: none;
     border: #df0031 solid 1px;
     border: #860087 solid 1px;
+    border: #2e002f solid 1px;
 }
 
 /* for desktops */
@@ -167,7 +174,9 @@ a.read_more {
     -webkit-transition: all 0.2s ease-in-out;
     background: transparent;
     color: #860087;
+    color: #2e002f;
     border: 1px solid #860087;
+    border: 1px solid #2e002f;
 }
 
 a.read_more:hover {
@@ -224,14 +233,19 @@ a.read_more:hover {
 }
 ul.pagination a {
     color: #860087;
+    color: #2e002f;
 }
 .pagination>.active>span, .pagination>.active>span:hover {
     background-color: #860087;
+    background-color: #2e002f;
     border: 1px solid #860087;
+    border: 1px solid #2e002f;
 }
 .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
     background-color: #860087;
+    background-color: #2e002f;
     border-color: #860087;
+    border-color: #2e002f;
 }
 
 /** prevent horizontal scrollbar
@@ -255,6 +269,7 @@ body {
 
 .typeahead:focus {
     border: 2px solid #860087;
+    border: 2px solid #2e002f;
 }
 
 .tt-query {
@@ -284,11 +299,13 @@ body {
     cursor: pointer;
     color: #fff;
     background-color: #860087;
+    background-color: #2e002f;
 }
 
 .tt-suggestion.tt-cursor {
     color: #fff;
     background-color: #860087;
+    background-color: #2e002f;
 
 }
 
