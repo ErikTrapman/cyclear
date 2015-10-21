@@ -21,3 +21,5 @@ parameters:
     twitter_consumer_secret: ~
     twitter_oauth_token: ~
     twitter_oauth_secret: ~
+
+    max_transfers: ~
