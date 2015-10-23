@@ -173,7 +173,7 @@ class TransferRepository extends EntityRepository
     {
         $this->generateTempTableWithDraftRiders($seizoen);
         $conn = $this->_em->getConnection();
-        $conn->executeQuery("DROP TABLE IF EXISTS $tableName; CREATE TEMPORARY TABLE IF NOT EXISTS " . $tableName . " (ploeg_id int, renner_id int)");
+        $conn->executeQuery("DROP TABLE IF EXISTS $tableName; CREATE TEMPORARY TABLE IF NOT EXISTS " . $tableName . " (ploeg_id int, renner_id int) ENGINE=MEMORY");
 
         $seizoenId = $seizoen->getId();
 
