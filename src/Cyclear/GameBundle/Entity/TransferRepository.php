@@ -163,7 +163,7 @@ class TransferRepository extends EntityRepository
     public function generateTempTableWithDraftRiders(Seizoen $seizoen, $tableName = 'draftriders')
     {
         $conn = $this->_em->getConnection();
-        $conn->executeQuery("DROP TABLE IF EXISTS $tableName; CREATE TEMPORARY TABLE " . $tableName . " (ploeg_id int, renner_id int)");
+        $conn->executeQuery("DROP TABLE IF EXISTS $tableName; CREATE TEMPORARY TABLE " . $tableName . " (ploeg_id int, renner_id int) ENGINE=MEMORY");
         $conn->executeQuery("INSERT INTO " . $tableName . "
           ( SELECT ploegNaar_id, renner_id FROM Transfer t
           WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.seizoen_id = " . $seizoen->getId() . " )");
