@@ -28,6 +28,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Renner controller.
@@ -208,5 +209,34 @@ class RennerController extends Controller
             'transferrepo' => $transferrepo,
             'ploeg' => $ploeg,
             'rennerPunten' => intval($punten));
+    }
+
+    /**
+     * @Route("/{seizoen}/download", name="renner_download")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     */
+    public function csvDownloadAction(Request $request, Seizoen $seizoen)
+    {
+        $q = sprintf('SELECT r.id, r.naam, (SELECT SUM(rennerPunten) FROM Uitslag u
+            INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE u.renner_id = r.id AND w.seizoen_id = %d ) AS pts
+            FROM Renner r HAVING pts > 0 ORDER BY pts DESC, r.naam', $seizoen->getId());
+
+        $em = $this->get('doctrine.orm.default_entity_manager');
+        $delimiter = ';';
+        $response = new StreamedResponse(function () use ($em, $q, $delimiter) {
+            $stmt = $em->getConnection()->executeQuery($q);
+            $handle = fopen('php://output', 'r+');
+            fputcsv($handle, ['id', 'name', 'points'], $delimiter);
+            foreach ($stmt->fetchAll() as $row) {
+                fputcsv($handle, $row, $delimiter);
+            }
+            fclose($handle);
+        });
+
+        $response->headers->set('Content-Type', 'application/force-download');
+        $filename = 'riders-' . $seizoen->getSlug() . date('-dmYHis') . '_65001utf8';
+        $response->headers->set('Content-Disposition', sprintf('attachment; filename="%s.csv"', $filename));
+
+        return $response;
     }
 }

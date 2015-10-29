@@ -71,7 +71,7 @@
 
     </script>
 </head>
-<body>
+<body id="cyclear">
 
 <!--Header_section-->
 <nav id="main-navbar" class="navbar navbar-default">
@@ -162,18 +162,50 @@
 
 <div id="footer">
     <div class="row">
-        <div class="col-lg-6">
-            <p class="text-center">
-                Copyright 2015 - Cyclear {% if app.request.attributes.has('seizoen') %}|
-                <a style="text-decoration: underline"
-                   href="{{ path('spelregels_index',{'seizoen':app.request.attributes.get('seizoen').slug}) }}">Spelregels {{ app.request.attributes.get('seizoen') }}</a>
-                |{% endif %} {{ version }}
-            </p>
+
+        <div class="col-lg-4 col-md-offset-2">
+            <div>
+                <h1 style="margin-top:0;">Cyclear <span class="badge">{{ version }}</span></h1>
+                <a href="https://twitter.com/Cyclear" target="_blank"><i class="fa fa-2x fa-twitter"></i></a>
+                <a href="https://github.com/ErikTrapman" target="_blank"><i class="fa fa-2x fa-github"></i></a>
+            </div>
         </div>
-        <div class="col-lg-2 pull-right">
-            <a href="https://twitter.com/Cyclear" target="_blank"><i class="fa fa-2x fa-twitter"></i></a>
-            &nbsp;
-            <a href="https://github.com/ErikTrapman" target="_blank"><i class="fa fa-2x fa-github"></i></a>
+        <div class="col-lg-4">
+            <ul style="text-decoration: underline">
+                {% if app.request.attributes.has('seizoen') %}
+                    <li>
+                        <a
+                                href="{{ path('spelregels_index',{'seizoen':app.request.attributes.get('seizoen').slug}) }}">Spelregels {{ app.request.attributes.get('seizoen') }}</a>
+                    </li>
+                {% endif %}
+                <li>
+                    <a href="http://www.cyclear.nl/cyclear/forum/index.php" target="_blank">Forum</a>
+                </li>
+                {% if app.request.attributes.has('seizoen') %}
+                    <li>
+                        <a href="{{ path('rider_index', {'seizoen':app.request.attributes.get('seizoen').slug} ) }}">Renners</a>
+                    </li>
+                {% endif %}
+                <li><a href="{{ path('archief_index') }}">Archief</a></li>
+                {%- if app.request.attributes.get('seizoen') and app.request.attributes.get('seizoen').id != app.request.attributes.get('current-seizoen').id %}
+                    <li><a style="color: #860087"
+                           href="{{ path("game",{"seizoen":app.request.attributes.get('seizoen').slug}) }}">{{ app.request.attributes.get('seizoen') }}</a>
+                    </li>
+                {% endif -%}
+                {% if is_granted("ROLE_USER") %}
+                    {% include 'CyclearGameBundle:Default/User:inc_menu.html.twig' %}
+                {% endif %}
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    <li class="active">
+                        <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+                    </li>
+                {% endif %}
+
+            </ul>
         </div>
     </div>
 </div>

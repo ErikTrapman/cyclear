@@ -3,21 +3,21 @@
 
     <table class="table table-bordered table-striped">
         <tr>
-            <th>Datum</th>
+
             {% if show_rider %}
                 <th>Renner</th>
             {% endif %}
             <th>Ploeg</th>
-            <th>Punten ploeg</th>
+            <th>Punten</th>
             {% if show_rider %}
                 <th>Punten renner</th>
             {% endif %}
-            <th>Pos</th>
+            <th>#</th>
             <th>Wedstrijd</th>
+            <th>Datum</th>
         </tr>
         {% for uitslag in uitslagen %}
             <tr>
-                <td>{{ uitslag.wedstrijd.datum|date('d M') }}</td>
                 {% if show_rider %}
                     <td>{{ uitslag.renner.naam }}</td>
                 {% endif %}
@@ -30,6 +30,7 @@
                 <td>
                     {% include "CyclearGameBundle:Wedstrijd:_singleRow.html.twig" with {wedstrijd:uitslag.wedstrijd, seizoen:uitslag.wedstrijd.seizoen } %}
                 </td>
+                <td>{{ uitslag.wedstrijd.datum|date('d M') }}</td>
             </tr>
         {% endfor %}
     </table>

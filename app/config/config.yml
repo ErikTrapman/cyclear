@@ -3,7 +3,7 @@ imports:
     - { resource: security.yml }
 
 parameters:
-    version: 2.0.0
+    version: 2.0.1
     cq_ranking-wedstrijdurl: 'http://cqranking.com/men/asp/gen/race.asp?raceid='
 
 framework:
@@ -20,7 +20,7 @@ framework:
         engines: ['twig']
         assets_version: %version%
 
-    translator:      { fallback: en_GB }
+    translator:      { fallback: nl_NL }
     default_locale: %locale%
     session:
       save_path: ~ 

@@ -45,8 +45,7 @@ h2 a:hover {
 a {
     color: #df0031;
     color: #860087;
-    color: #2e002f;
-    text-decoration: dotted;
+    color: #680069;
 }
 
 ul {
@@ -85,16 +84,17 @@ a:active {
     margin-bottom: 30px;
 }
 
-.subheader-news {
+.subheader {
     border-top: 2px solid #720073;
     border-top: 2px solid #2e002f;
     padding: 52px 0;
     margin: 0px;
-    margin-bottom: 30px;
-    background: whitesmoke;
 }
-.subheader-news h2 {
+.subheader h2 {
     color: #2f2f2f;
+}
+.subheader h2 a {
+    color: lightgrey;
 }
 
 .news {
@@ -198,8 +198,9 @@ a.read_more:hover {
 #footer {
     background-color: #2f2f2f;
     color: whitesmoke;
-    padding-top: 80px;
-    padding-bottom: 80px;
+    margin-top: 22px;
+    padding-top: 42px;
+    padding-bottom: 22px;
 }
 
 #footer ul {
@@ -211,7 +212,7 @@ a.read_more:hover {
     height: 100%;
 }
 
-.big-header-ext {
+.big-header-ext, .big-header-dashboard {
     background-color: #2f2f2f;
     color: whitesmoke;
     padding: 10px;
@@ -225,6 +226,18 @@ a.read_more:hover {
 
 .big-header-ext .list-inline a {
     vertical-align: middle;
+    color: whitesmoke;
+    text-decoration: underline;
+}
+
+.big-header-dashboard {
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+.big-header-dashboard a {
+    color: whitesmoke;
+    text-decoration: underline;
 }
 
 /** bootstrap override **/
@@ -247,7 +260,6 @@ ul.pagination a {
     border-color: #860087;
     border-color: #2e002f;
 }
-
 /** prevent horizontal scrollbar
 http://stackoverflow.com/questions/23768152/using-container-fluid-within-bootstrap-cause-horizontal-scrollbar
  */

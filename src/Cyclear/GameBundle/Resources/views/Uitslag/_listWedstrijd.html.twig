@@ -4,6 +4,7 @@
             <th colspan="2">Uitslag</th>
             <th>Ploeg</th>
             <th>Punten</th>
+            <th class="hidden-xs hidden-sm">Renner</th>
         </tr>
         {% for uitslag in uitslagen %}
             <tr>
@@ -11,6 +12,7 @@
                 <td nowrap>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {renner:uitslag.renner,seizoen:uitslag.wedstrijd.seizoen } %}</td>
                 <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
                 <td>{{ uitslag.ploegPunten }}</td>
+                <td class="hidden-xs hidden-sm">{{ uitslag.rennerPunten }}</td>
             </tr>
         {% endfor %}
     </table>

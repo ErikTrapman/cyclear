@@ -2,76 +2,75 @@
 
 {% block content %}
 
-    <div class="big-header">
+    <div class="big-header" style="margin-bottom: 0px">
         <h2>{{ seizoen }}</h2>
     </div>
+    <div class="big-header-dashboard">
+        <ul class="list-inline">
+            <li><a href="#transfers">Transfers</a></li>
+            <li><a href="#uitslagen">Uitslagen</a></a></li>
+        </ul>
+    </div>
 
-    <div class="container">
+    <div id="stand" class="container">
 
         <div class="row">
             <div class="col-lg-12">
-
-                <div id="filters">
-
-                    <ul id="tabs" class="list-group list-inline">
-                        <li class="active"><a data-toggle="tab" href="#stand"><h5>Stand</h5></a></li>
-                        <li><a data-toggle="tab" href="#uitslagen"><h5>Uitslagen</h5></a></li>
-                        <li><a data-toggle="tab" href="#periode"><h5>Periode</h5></a></li>
-                        <li><a data-toggle="tab" href="#zeges"><h5>Zeges</h5></a></li>
-                        <li><a data-toggle="tab" href="#transfers"><h5>Transfers</h5></a></li>
-                    </ul>
-                </div>
-
-                <div class="tab-content">
-
-                    <div class="tab-pane active frontpage-stand" id="stand">
-                        {% include "CyclearGameBundle:Uitslag:viewByPloegen.html.twig" with {"list": stand,'shadowlist': shadowstandingsById } %}
-                        <p class="text-center">
-                            <a href="{{ path('uitslag_overview',{seizoen: seizoen.slug}) }}">Meer standen</a>
-                        </p>
-                    </div>
-                    <div class="tab-pane frontpage-stand" id="uitslagen">
-                        {% include "CyclearGameBundle:Wedstrijd:latest.html.twig" with {"wedstrijden": wedstrijden } %}
-                        <p class="text-center">
-                            <a href="{{ path('wedstrijd_list',{seizoen: seizoen.slug}) }}">Alle uitslagen</a>
-                        </p>
-                    </div>
-                    <div class="tab-pane frontpage-stand" id="periode">
-                        {% include "CyclearGameBundle:Uitslag:viewByPeriode.html.twig" with {
-                        "list": periodestand,
-                        'transferpoints': transferpuntenPeriode,
-                        'transferRepo':transferRepo,
-                        'positionCount' : zegesInPeriode } %}
-                        <div style="text-align: center;">
-                            {{ periode.start|date('d-m-Y') }} - {{ periode.eind|date('d-m-Y') }} ~ <a
-                                    href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode':periode.id} ) }}">Alle periodes</a>
-                        </div>
-                    </div>
-                    <div class="tab-pane frontpage-stand" id="transfers">
-                        {% include 'CyclearGameBundle:Transfer:_listWithInversion.html.twig' with {"listWithInversion":transfers, 'firstPageRoute':'homepage', 'includePagination': false } %}
-                        <p class="text-center">
-                            <a href="{{ path('transfer_list',{seizoen: seizoen.slug}) }}">Alle transfers</a>
-                        </p>
-                    </div>
-                    <div class="tab-pane frontpage-stand" id="zeges">
-                        {% include "CyclearGameBundle:Uitslag:viewByPosition.html.twig" with {"list": zegestand } %}
-                        <p class="text-center"><a
-                                    href="{{ path('uitslag_posities', {'seizoen':seizoen.slug,'positie':1} ) }}">Alle
-                                posities</a></p></div>
-                    </div>
-                </div>
+                {% include "CyclearGameBundle:Uitslag:viewByPloegen.html.twig" with {"list": stand,'shadowlist': shadowstandingsById } %}
+                <p class="text-center">
+                    <a href="{{ path('uitslag_overview',{seizoen: seizoen.slug}) }}">Meer standen</a>
+                </p>
 
             </div>
 
+        </div>
+    </div>
 
+    <div id="transfers" class="subheader">
+        <h2 style="margin-bottom: 0px;">Transfers
+            <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a></h2>
+    </div>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-12">
+                {% include 'CyclearGameBundle:Transfer:_listWithInversion.html.twig' with {"listWithInversion":transfers, 'firstPageRoute':'homepage', 'includePagination': false } %}
+                <p class="text-center">
+                    <a href="{{ path('transfer_list',{seizoen: seizoen.slug}) }}">Alle transfers</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <div id="uitslagen" class="subheader">
+        <h2 style="margin-bottom: 0px;">Uitslagen
+            <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a></h2>
+    </div>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-12">
+                {% include "CyclearGameBundle:Wedstrijd:latest.html.twig" with {"wedstrijden": wedstrijden } %}
+                <p class="text-center">
+                    <a href="{{ path('wedstrijd_list',{seizoen: seizoen.slug}) }}">Alle uitslagen</a>
+                </p>
+
+
+            </div>
         </div>
     </div>
 
     {% if nieuws is not null %}
-        <div class="subheader-news" style="margin-bottom: 0px;">
-            <h2 style="margin-bottom: 0px;">{{ nieuws.titel }}</h2>
+        <div class="subheader" style="background-color: whitesmoke">
+            <h2 style="margin-bottom: 0px;">{{ nieuws.titel }}
+                <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a>
+            </h2>
         </div>
-        <div class="news">
+        <div class="news" style="">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
@@ -85,5 +84,57 @@
             </div>
         </div>
     {% endif %}
+
+
+    <div id="periodes" class="subheader">
+        <h2 style="margin-bottom: 0px;">Periode
+            <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a></h2>
+
+        <p class="text-center">{{ periode.start|date('d M') }} - {{ periode.eind|date('d M') }}</p>
+    </div>
+
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-lg-12">
+                {% include "CyclearGameBundle:Uitslag:viewByPeriode.html.twig" with {
+                "list": periodestand,
+                'transferpoints': transferpuntenPeriode,
+                'transferRepo':transferRepo,
+                'positionCount' : zegesInPeriode } %}
+                <p class="text-center">
+                    <a
+                            href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode':periode.id} ) }}">Alle
+                        periodes</a>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id="zeges" class="subheader">
+        <h2 style="margin-bottom: 0px;">Zeges
+            <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a></h2>
+    </div>
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-lg-12">
+                {% include "CyclearGameBundle:Uitslag:viewByPosition.html.twig" with {"list": zegestand } %}
+                <p class="text-center"><a
+                            href="{{ path('uitslag_posities', {'seizoen':seizoen.slug,'positie':1} ) }}">Alle
+                        posities</a></p>
+            </div>
+            <h2>
+                <a style="color: #2f2f2f" href="#cyclear"><span style="vertical-align: bottom"
+                                                                class="glyphicon glyphicon-chevron-up"/></a>
+            </h2>
+        </div>
+    </div>
 
 {% endblock %}
