@@ -11,6 +11,7 @@
 
 namespace Cyclear\GameBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -63,9 +64,19 @@ class Wedstrijd
      */
     private $generalClassification = false;
 
+    /**
+     * @ORM\Column(nullable=true)
+     */
+    private $externalIdentifier;
+
+    /**
+     * @ORM\Column(nullable=true)
+     */
+    private $fullyProcessed;
+
     public function __construct()
     {
-
+        $this->uitslagen = new ArrayCollection();
     }
 
     /**
@@ -118,6 +129,9 @@ class Wedstrijd
         return $this->naam;
     }
 
+    /**
+     * @return Uitslag[]|ArrayCollection
+     */
     public function getUitslagen()
     {
         return $this->uitslagen;
@@ -156,5 +170,43 @@ class Wedstrijd
         $this->generalClassification = $generalClassification;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getExternalIdentifier()
+    {
+        return $this->externalIdentifier;
+    }
+
+    /**
+     * @param mixed $externalIdentifier
+     */
+    public function setExternalIdentifier($externalIdentifier)
+    {
+        $this->externalIdentifier = $externalIdentifier;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFullyProcessed()
+    {
+        return $this->fullyProcessed;
+    }
+
+    /**
+     * @param mixed $fullyProcessed
+     */
+    public function setFullyProcessed($fullyProcessed)
+    {
+        $this->fullyProcessed = $fullyProcessed;
+    }
+
+    public function addUitslag(Uitslag $uitslag)
+    {
+        if (!$this->uitslagen->contains($uitslag)) {
+            $this->uitslagen->add($uitslag);
+        }
+    }
 
 }

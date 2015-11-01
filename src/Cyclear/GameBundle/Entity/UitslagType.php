@@ -52,6 +52,11 @@ class UitslagType
      */
     private $cqParsingStrategy;
 
+    /**
+     * @ORM\Column(nullable=true)
+     */
+    private $automaticResolvingCategories;
+
     public function getId()
     {
         return $this->id;
@@ -102,7 +107,22 @@ class UitslagType
         $this->cqParsingStrategy = $cqParsingStrategy;
     }
 
-    
+    /**
+     * @return mixed
+     */
+    public function getAutomaticResolvingCategories()
+    {
+        return $this->automaticResolvingCategories;
+    }
+
+    /**
+     * @param mixed $automaticResolvingCategories
+     */
+    public function setAutomaticResolvingCategories($automaticResolvingCategories)
+    {
+        $this->automaticResolvingCategories = $automaticResolvingCategories;
+    }
+
     public function __toString()
     {
         return $this->getNaam();

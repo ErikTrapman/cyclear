@@ -58,6 +58,9 @@
         "twitter/typeahead.js": "0.11",
         "bmatzner/fontawesome-bundle": "~4.4"
     },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
     "scripts": {
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",

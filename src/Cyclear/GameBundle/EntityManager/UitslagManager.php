@@ -78,7 +78,7 @@ class UitslagManager
      * @param type $crawler
      * @param Wedstrijd $wedstrijd
      * @param type $puntenReferentieDatum
-     * @return array of Cyclear\GameBundle\Entity\Uitslag
+     * @return Uitslag[]
      */
     public function prepareUitslagen(UitslagType $uitslagType, $crawler, Wedstrijd $wedstrijd, $seizoen, $puntenReferentieDatum = null)
     {

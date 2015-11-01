@@ -145,6 +145,23 @@
             <tag name="twig.extension"/>
         </service>
 
+        <service class="Cyclear\GameBundle\CQ\RaceCategoryMatcher"
+                 id="cyclear_game.cq.race_category_matcher">
+            <argument id="doctrine.orm.default_entity_manager" type="service"/>
+        </service>
+
+
+        <service class="Cyclear\GameBundle\CQ\CQAutomaticResultsResolver"
+                 id="cyclear_game.cq.cqautomatic_results_resolver">
+            <argument id="eriktrapman_cqparser.recentracesparser" type="service"/>
+            <argument id="doctrine.orm.default_entity_manager" type="service"/>
+            <argument id="cyclear_game.cq.race_category_matcher" type="service"/>
+            <argument id="cyclear_game.manager.uitslag" type="service"/>
+            <argument id="eriktrapman_cqparser.crawler_manager" type="service"/>
+            <argument id="logger" type="service"/>
+        </service>
+
+
     </services>
 
     <!-- <parameters> <parameter key="cyclear_game.example.class">Cyclear\GameBundle\Example</parameter> 
