@@ -81,13 +81,18 @@ class RaceCategoryMatcher
         if (empty($parts)) {
             throw new CyclearGameBundleCQException('Unable to lookup refStage for ' . $wedstrijd->getNaam());
         }
-        $stage1 = $parts[0] . ', Stage 1';
-        $prologue = $parts[0] . ', Prologue';
+        $transliterator = \Transliterator::createFromRules(':: NFD; :: [:Nonspacing Mark:] Remove; :: NFC;', \Transliterator::FORWARD);
+        $stage1 = $transliterator->transliterate($parts[0]);
+        $prologue = $transliterator->transliterate($parts[0]);
+        $stage1 = $stage1 . ', Stage 1%';
+        $prologue = $prologue . ', Prologue%';
         $qb = $this->em->getRepository('CyclearGameBundle:Wedstrijd')->createQueryBuilder('w');
         $qb->where('w.seizoen = :seizoen')->andWhere(
-            $qb->expr()->orX($qb->expr()->like('w.naam', "'" . $stage1 . "%'"), $qb->expr()->like('w.naam', "'" . $prologue . "%'"))
+            $qb->expr()->orX(
+                $qb->expr()->like('w.naam', ":stage1"),
+                $qb->expr()->like('w.naam', ":prol"))
         );
-        $qb->setParameter('seizoen', $wedstrijd->getSeizoen());
+        $qb->setParameters(['seizoen' => $wedstrijd->getSeizoen(), 'stage1' => $stage1, 'prol' => $prologue]);
         $res = $qb->getQuery()->getResult();
         if (count($res) !== 1) {
             throw new CyclearGameBundleCQException('Unable to lookup refStage for ' . $wedstrijd->getNaam() . '. Have ' . count($res) . ' results');

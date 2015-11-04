@@ -559,7 +559,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/a02f0e7e2c68cc0237c33cbc8e8605aceb3b481a",
+                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/b4213c21f138c96c29ba2f57349d6fca5b2878a9",
                 "reference": "a02f0e7e2c68cc0237c33cbc8e8605aceb3b481a",
                 "shasum": ""
             },
@@ -749,7 +749,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/817c2d233fde0fe85cb7e4d25d43fbfcd028aef8",
+                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/e7b514c46215f6b9c4856e3fd715397f3586052f",
                 "reference": "817c2d233fde0fe85cb7e4d25d43fbfcd028aef8",
                 "shasum": ""
             },
@@ -997,12 +997,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ErikTrapman/CQRankingParserBundle.git",
-                "reference": "05ff8b2e75c90dbceff2a9b7053ec43aa86ef20e"
+                "reference": "b9b206bab3f23c8580aa09fe45affeaf3cd5bfe7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/CQRankingParserBundle/zipball/05ff8b2e75c90dbceff2a9b7053ec43aa86ef20e",
-                "reference": "05ff8b2e75c90dbceff2a9b7053ec43aa86ef20e",
+                "url": "https://api.github.com/repos/ErikTrapman/CQRankingParserBundle/zipball/b9b206bab3f23c8580aa09fe45affeaf3cd5bfe7",
+                "reference": "b9b206bab3f23c8580aa09fe45affeaf3cd5bfe7",
                 "shasum": ""
             },
             "require": {
@@ -1035,7 +1035,7 @@
                 "results",
                 "symfony"
             ],
-            "time": "2015-11-01 20:43:07"
+            "time": "2015-11-04 21:01:44"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
@@ -1105,7 +1105,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/d5b28c367d393f9d9fbc48c4138b2a74d51c0c83",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/45d6f40178216a840885b4ca6d7de9e67068568a",
                 "reference": "d5b28c367d393f9d9fbc48c4138b2a74d51c0c83",
                 "shasum": ""
             },

@@ -48,7 +48,7 @@ class Wedstrijd
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Uitslag", mappedBy="wedstrijd", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Uitslag", mappedBy="wedstrijd", cascade={"all"})
      * @ORM\OrderBy({"positie" = "ASC"})
      */
     private $uitslagen;
@@ -70,7 +70,7 @@ class Wedstrijd
     private $externalIdentifier;
 
     /**
-     * @ORM\Column(nullable=true)
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $fullyProcessed;
 

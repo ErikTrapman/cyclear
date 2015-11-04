@@ -34,6 +34,7 @@ class Uitslag
      * @var object $wedstrijd
      *
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Wedstrijd", inversedBy="uitslagen", cascade={"all"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $wedstrijd;
 
@@ -127,7 +128,7 @@ class Uitslag
      *
      * @param object $ploeg
      */
-    public function setPloeg($ploeg)
+    public function setPloeg(Ploeg $ploeg = null)
     {
         $this->ploeg = $ploeg;
     }

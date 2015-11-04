@@ -27,18 +27,12 @@ class CQAutomaticResultsResolverCommand extends ContainerAwareCommand
         $resolver = $this->getContainer()->get('cyclear_game.cq.cqautomatic_results_resolver');
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
         $seizoen = $em->getRepository('CyclearGameBundle:Seizoen')->getCurrent();
-        $res = $resolver->resolve($seizoen, 100);
-
+        $res = $resolver->resolve($seizoen, 5);
         foreach ($res as $r) {
-            var_dump($r->getNaam());
-            foreach ($r->getUitslagen() as $u) {
-                var_dump($u->getRenner()->__toString());
-            }
-            // r->setFullyProcessed to true
-            // persist
+            $r->setFullyProcessed(true);
+            $em->persist($r);
         }
-        // flush
-
+        $em->flush();
     }
 
 
