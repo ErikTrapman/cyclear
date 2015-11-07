@@ -21,6 +21,7 @@ use Cyclear\GameBundle\EntityManager\UitslagManager;
 use Cyclear\GameBundle\Form\DataTransformer\RennerNameToRennerIdTransformer;
 use Doctrine\ORM\EntityManager;
 use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Crawler\CrawlerManager;
+use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Exception\CQParserException;
 use ErikTrapman\Bundle\CQRankingParserBundle\Parser\RecentRaces\RecentRacesParser;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
@@ -66,7 +67,8 @@ class CQAutomaticResultsResolver
                                 EntityManager $em,
                                 RaceCategoryMatcher $raceCategoryMatcher,
                                 UitslagManager $uitslagManager,
-                                CrawlerManager $crawlerManager, LoggerInterface $logger)
+                                CrawlerManager $crawlerManager,
+                                LoggerInterface $logger)
     {
         $this->parser = $parser;
         $this->em = $em;
@@ -78,19 +80,30 @@ class CQAutomaticResultsResolver
     }
 
     /**
+     * @param Seizoen $seizoen
+     * @param \DateTime $upTo
+     * @param int $max
+     * @throws CyclearGameBundleCQException
+     * @throws NotEnoughContentException
+     *
      * Resolves results with RecentRacesParser.
      *
      * @return Wedstrijd[]
      */
-    public function resolve(Seizoen $seizoen, $max = 1)
+    public function resolve(Seizoen $seizoen, \DateTime $upTo, $max = 1)
     {
         $races = $this->parser->getRecentRaces();
         $repo = $this->em->getRepository('CyclearGameBundle:Wedstrijd');
+        $ploegRepo = $this->em->getRepository('CyclearGameBundle:Ploeg');
         $ret = [];
-        foreach ($races as $race) {
+        foreach ($races as $i => $race) {
+
             // we simply use the url as external identifier
             $wedstrijd = $repo->findOneByExternalIdentifier($race->url);
             if ($wedstrijd) {
+                continue;
+            }
+            if ($race->date > $upTo) {
                 continue;
             }
             $wedstrijd = new Wedstrijd();
@@ -101,27 +114,31 @@ class CQAutomaticResultsResolver
 
             $type = $this->categoryMatcher->getUitslagTypeAccordingToCategory($race->category);
             if (null === $type) {
-                $this->logger->error('Unable to resolve uitslagtype from category `' . $race->category . '``');
+                $this->logger->notice('Unable to resolve uitslagtype from category `' . $race->category . '``');
                 continue;
             }
+            $wedstrijd->setGeneralClassification($type->isGeneralClassification());
             $wedstrijdRefDate = null;
             if ($this->categoryMatcher->needsRefStage($wedstrijd)) {
                 $this->categoryMatcher->getRefStage($wedstrijd);
             }
+            // TODO parametrize CQ-urls!
             $uitslagen = $this->uitslagManager->prepareUitslagen(
                 $type,
                 $this->crawlerManager->getCrawler('http://cqranking.com/men/asp/gen/' . $race->url),
                 $wedstrijd,
                 $seizoen);
             if (count($uitslagen) < $type->getMaxResults()) {
-                throw new NotEnoughContentException();
+                $this->logger->notice($race->url . ' has not enough content yet');
+                continue;
             }
             foreach ($uitslagen as $uitslagRow) {
                 $uitslag = new Uitslag();
                 $uitslag->setWedstrijd($wedstrijd);
-                $uitslag->setPloeg($uitslagRow['ploeg']);
+                $uitslag->setPloeg($uitslagRow['ploeg'] ? $ploegRepo->find($uitslagRow['ploeg']) : null);
                 $uitslag->setRennerPunten($uitslagRow['rennerPunten']);
                 $uitslag->setPloegPunten($uitslagRow['ploegPunten']);
+                $uitslag->setPositie($uitslagRow['positie']);
                 $t = new RennerNameToRennerIdTransformer($this->em, $this->rennerManager);
                 $uitslag->setRenner($t->reverseTransform($uitslagRow['renner']));
                 $wedstrijd->addUitslag($uitslag);

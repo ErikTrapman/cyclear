@@ -43,7 +43,7 @@ class UitslagType
 
     /**
      * @ORM\Column(name="isGeneralClassification", type="boolean")
-     * 
+     *
      */
     private $isGeneralClassification;
 
@@ -92,11 +92,16 @@ class UitslagType
         return $this->isGeneralClassification;
     }
 
+    public function isGeneralClassification()
+    {
+        return $this->getIsGeneralClassification();
+    }
+
     public function setIsGeneralClassification($isGeneralClassification)
     {
         $this->isGeneralClassification = $isGeneralClassification;
     }
-    
+
     public function getCqParsingStrategy()
     {
         return $this->cqParsingStrategy;

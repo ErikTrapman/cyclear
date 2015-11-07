@@ -94,7 +94,7 @@ class RaceCategoryMatcher
         );
         $qb->setParameters(['seizoen' => $wedstrijd->getSeizoen(), 'stage1' => $stage1, 'prol' => $prologue]);
         $res = $qb->getQuery()->getResult();
-        if (count($res) !== 1) {
+        if (0 === count($res)) {
             throw new CyclearGameBundleCQException('Unable to lookup refStage for ' . $wedstrijd->getNaam() . '. Have ' . count($res) . ' results');
         }
         return $res[0];

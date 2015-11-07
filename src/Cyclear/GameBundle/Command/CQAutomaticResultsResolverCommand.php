@@ -11,6 +11,7 @@
 
 namespace Cyclear\GameBundle\Command;
 
+use Cyclear\GameBundle\Entity\Seizoen;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,9 +27,14 @@ class CQAutomaticResultsResolverCommand extends ContainerAwareCommand
     {
         $resolver = $this->getContainer()->get('cyclear_game.cq.cqautomatic_results_resolver');
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+        /** @var Seizoen $seizoen */
         $seizoen = $em->getRepository('CyclearGameBundle:Seizoen')->getCurrent();
-        $res = $resolver->resolve($seizoen, 5);
-        foreach ($res as $r) {
+        if (!$seizoen) {
+            return;
+        }
+        $upTo = clone $seizoen->getEnd();
+        $upTo->setTime(23, 59, 59);
+        foreach ($resolver->resolve($seizoen, $upTo, 20) as $r) {
             $r->setFullyProcessed(true);
             $em->persist($r);
         }
