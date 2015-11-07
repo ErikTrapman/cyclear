@@ -18,10 +18,10 @@ class UitslagTypeType extends \Symfony\Component\Form\AbstractType
     {
         $builder
             ->add('naam')
-            ->add('maxResults','integer')
-            ->add('isGeneralClassification',null,array('required'=>false))
-            ->add('cqParsingStrategy', 'eriktrapman_cqparser_strategy', array('property_path'=>'cqParsingStrategy'))
-        ;
+            ->add('maxResults', 'integer')
+            ->add('isGeneralClassification', null, array('required' => false))
+            ->add('cqParsingStrategy', 'eriktrapman_cqparser_strategy', array('property_path' => 'cqParsingStrategy'))
+            ->add('automaticResolvingCategories');
     }
 
     public function getName()
