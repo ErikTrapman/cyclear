@@ -20,6 +20,7 @@ use Cyclear\GameBundle\EntityManager\RennerManager;
 use Cyclear\GameBundle\EntityManager\UitslagManager;
 use Cyclear\GameBundle\Form\DataTransformer\RennerNameToRennerIdTransformer;
 use Doctrine\ORM\EntityManager;
+use ErikTrapman\Bundle\CQRankingParserBundle\DataContainer\RecentRaceDataContainer;
 use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Crawler\CrawlerManager;
 use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Exception\CQParserException;
 use ErikTrapman\Bundle\CQRankingParserBundle\Parser\RecentRaces\RecentRacesParser;
@@ -27,11 +28,6 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class CQAutomaticResultsResolver
 {
-
-    /**
-     * @var RecentRacesParser
-     */
-    private $parser;
 
     /**
      * @var EntityManager
@@ -63,36 +59,45 @@ class CQAutomaticResultsResolver
      */
     private $logger;
 
-    public function __construct(RecentRacesParser $parser,
-                                EntityManager $em,
-                                RaceCategoryMatcher $raceCategoryMatcher,
-                                UitslagManager $uitslagManager,
-                                CrawlerManager $crawlerManager,
-                                LoggerInterface $logger)
+    /**
+     * @var RennerNameToRennerIdTransformer
+     */
+    private $transformer;
+
+
+    public function __construct(
+        EntityManager $em,
+        RaceCategoryMatcher $raceCategoryMatcher,
+        UitslagManager $uitslagManager,
+        CrawlerManager $crawlerManager,
+        RennerNameToRennerIdTransformer $transformer,
+        LoggerInterface $logger)
     {
-        $this->parser = $parser;
         $this->em = $em;
         $this->categoryMatcher = $raceCategoryMatcher;
         $this->uitslagManager = $uitslagManager;
         $this->crawlerManager = $crawlerManager;
         $this->rennerManager = new RennerManager();
         $this->logger = $logger;
+        $this->transformer = $transformer;
     }
 
+
     /**
+     * @param array $races
      * @param Seizoen $seizoen
-     * @param \DateTime $upTo
+     * @param \DateTime $start
+     * @param \DateTime $end
      * @param int $max
-     * @throws CyclearGameBundleCQException
-     * @throws NotEnoughContentException
-     *
-     * Resolves results with RecentRacesParser.
-     *
      * @return Wedstrijd[]
+     * @throws CyclearGameBundleCQException
      */
-    public function resolve(Seizoen $seizoen, \DateTime $upTo, $max = 1)
+    public function resolve(array $races, Seizoen $seizoen, \DateTime $start, \DateTime $end, $max = 1)
     {
-        $races = $this->parser->getRecentRaces();
+        $start = clone $start;
+        $start->setTime(0, 0, 0);
+        $end = clone $end;
+        $end->setTime(0, 0, 0);
         $repo = $this->em->getRepository('CyclearGameBundle:Wedstrijd');
         $ploegRepo = $this->em->getRepository('CyclearGameBundle:Ploeg');
         $ret = [];
@@ -103,11 +108,13 @@ class CQAutomaticResultsResolver
             if ($wedstrijd) {
                 continue;
             }
-            if ($race->date > $upTo) {
+            if ($race->date < $start || $race->date > $end) {
                 continue;
             }
             $wedstrijd = new Wedstrijd();
-            $wedstrijd->setDatum(clone $race->date);
+            $date = clone $race->date;
+            $date->setTime(0, 0, 0);
+            $wedstrijd->setDatum($date);
             $wedstrijd->setExternalIdentifier($race->url);
             $wedstrijd->setNaam($race->name);
             $wedstrijd->setSeizoen($seizoen);
@@ -139,8 +146,7 @@ class CQAutomaticResultsResolver
                 $uitslag->setRennerPunten($uitslagRow['rennerPunten']);
                 $uitslag->setPloegPunten($uitslagRow['ploegPunten']);
                 $uitslag->setPositie($uitslagRow['positie']);
-                $t = new RennerNameToRennerIdTransformer($this->em, $this->rennerManager);
-                $uitslag->setRenner($t->reverseTransform($uitslagRow['renner']));
+                $uitslag->setRenner($this->transformer->reverseTransform($uitslagRow['renner']));
                 $wedstrijd->addUitslag($uitslag);
             }
             $ret[] = $wedstrijd;

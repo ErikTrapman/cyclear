@@ -32,9 +32,12 @@ class CQAutomaticResultsResolverCommand extends ContainerAwareCommand
         if (!$seizoen) {
             return;
         }
-        $upTo = clone $seizoen->getEnd();
-        $upTo->setTime(23, 59, 59);
-        foreach ($resolver->resolve($seizoen, $upTo, 20) as $r) {
+        $start = clone $seizoen->getStart();
+        $end = clone $seizoen->getEnd();
+        $parser = $this->getContainer()->get('eriktrapman_cqparser.recentracesparser');
+        $races = $parser->getRecentRaces();
+
+        foreach ($resolver->resolve($races, $seizoen, $start, $end, 100) as $r) {
             $r->setFullyProcessed(true);
             $em->persist($r);
         }

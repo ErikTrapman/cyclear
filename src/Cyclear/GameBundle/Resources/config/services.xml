@@ -153,12 +153,19 @@
 
         <service class="Cyclear\GameBundle\CQ\CQAutomaticResultsResolver"
                  id="cyclear_game.cq.cqautomatic_results_resolver">
-            <argument id="eriktrapman_cqparser.recentracesparser" type="service"/>
             <argument id="doctrine.orm.default_entity_manager" type="service"/>
             <argument id="cyclear_game.cq.race_category_matcher" type="service"/>
             <argument id="cyclear_game.manager.uitslag" type="service"/>
             <argument id="eriktrapman_cqparser.crawler_manager" type="service"/>
+            <argument id="cyclear_game.transformer.rennername_rennerid" type="service"/>
             <argument id="logger" type="service"/>
+        </service>
+
+        <service
+                class="Cyclear\GameBundle\Form\DataTransformer\RennerNameToRennerIdTransformer"
+                id="cyclear_game.transformer.rennername_rennerid">
+            <argument id="doctrine.orm.default_entity_manager" type="service"/>
+            <argument type="service" id="cyclear_game.manager.renner"/>
         </service>
 
 

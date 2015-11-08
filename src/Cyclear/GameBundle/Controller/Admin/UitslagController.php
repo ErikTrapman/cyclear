@@ -133,9 +133,15 @@ class UitslagController extends Controller
         }
         if ($request->getMethod() == 'POST') {
             $form->submit($request);
+            /** @var Wedstrijd $wedstrijd */
             $wedstrijd = $form->get('wedstrijd')->getData();
             $uitslagType = $form->get('wedstrijd')->get('uitslagtype')->getData();
             $wedstrijd->setGeneralClassification($uitslagType->getIsGeneralClassification());
+            $wedstrijd->setFullyProcessed(true);
+            $url = $form->get('url')->getData() ? $form->get('url')->getData() : $form->get('url_manual')->getData();
+            // we use the last part of the URL as identifier
+            $parts = explode('/', $url);
+            $wedstrijd->setExternalIdentifier(end($parts));
             $uitslagen = $form->get('uitslag')->getData();
             $em->persist($wedstrijd);
             foreach ($uitslagen as $uitslag) {
