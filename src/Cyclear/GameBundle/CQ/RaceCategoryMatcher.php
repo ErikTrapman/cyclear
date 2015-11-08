@@ -106,7 +106,7 @@ class RaceCategoryMatcher
      */
     public function getPregPattern($string)
     {
-        return implode('|', explode(',', $string));
+        return implode('|', explode(',', str_replace(' ', '', $string)));
     }
 
 }

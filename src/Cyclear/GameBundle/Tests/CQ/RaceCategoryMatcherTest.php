@@ -46,9 +46,9 @@ class RaceCategoryMatcherTest extends WebTestCase
     public function successDataProvider()
     {
         return [
-            ['2.HCs,2.1s,GT2s', '2.1s'],
-            ['2.HCs,2.1s,GT2s', '2.HCs'],
-            ['2.HCs,2.1s,GT2s', 'GT2s']
+            ['2.HCs, 2.1s, GT2s', '2.1s'],
+            ['2.HCs, 2.1s, GT2s', '2.HCs'],
+            ['2.HCs, 2.1s, GT2s', 'GT2s']
         ];
     }
 
