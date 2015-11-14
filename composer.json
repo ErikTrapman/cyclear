@@ -56,7 +56,8 @@
         "samson/dataview-bundle": "1.0.1",
         "twbs/bootstrap": "^3.3",
         "twitter/typeahead.js": "0.11",
-        "bmatzner/fontawesome-bundle": "~4.4"
+        "bmatzner/fontawesome-bundle": "~4.4",
+        "vich/uploader-bundle": "^0.14.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0"

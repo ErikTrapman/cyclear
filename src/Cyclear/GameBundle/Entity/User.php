@@ -11,6 +11,7 @@
 
 namespace Cyclear\GameBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,23 +32,29 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable
     protected $id;
 
     /**
-     * 
+     *
      * @ORM\OneToMany(
      *  targetEntity="Cyclear\GameBundle\Entity\Ploeg", mappedBy="user"
      * )
      */
     private $ploeg;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\AwardedBadge", mappedBy="user")
+     */
+    private $awardedBadges;
+
     public function __construct()
     {
         parent::__construct();
         $this->ploeg = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->awardedBadges = new ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -57,8 +64,8 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable
     public function serialize()
     {
         return serialize(array(
-                $this->id,
-            ));
+            $this->id,
+        ));
     }
 
     public function unserialize($data)
@@ -80,11 +87,20 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable
 
     public function getPloegBySeizoen($seizoen)
     {
-        foreach($this->getPloeg() as $ploeg){
-            if($ploeg->getSeizoen() === $seizoen){
+        foreach ($this->getPloeg() as $ploeg) {
+            if ($ploeg->getSeizoen() === $seizoen) {
                 return $ploeg;
             }
         }
         return null;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAwardedBadges()
+    {
+        return $this->awardedBadges;
+    }
+
 }

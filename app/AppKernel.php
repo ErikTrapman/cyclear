@@ -36,7 +36,8 @@ class AppKernel extends Kernel
             new \FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new \Samson\Bundle\AutocompleteBundle\SamsonAutocompleteBundle(),
             new \Samson\Bundle\DataViewBundle\SamsonDataViewBundle(),
-            new \Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle()
+            new \Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle(),
+            new \Vich\UploaderBundle\VichUploaderBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -29,20 +29,20 @@ class Nieuws
     private $id;
 
     /**
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
      */
     private $seizoen;
-    
+
     /**
      *
      * @ORM\Column()
      */
     private $titel;
-    
+
     /**
      *
-     * @ORM\Column(type="string", length=65536, nullable=true)
+     * @ORM\Column(type="text")
      */
     private $content;
 
@@ -80,6 +80,6 @@ class Nieuws
     {
         $this->content = $content;
     }
-    
-    
+
+
 }

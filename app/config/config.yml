@@ -140,3 +140,10 @@ mobile_detect:
 knp_paginator:
     template:
         pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig
+
+vich_uploader:
+    db_driver: orm
+    mappings:
+            badges:
+                uri_prefix:         /images/badges
+                upload_destination: %kernel.root_dir%/../web/images/badges

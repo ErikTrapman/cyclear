@@ -36,7 +36,7 @@ class Spelregels
 
     /**
      *
-     * @ORM\Column(type="string", length=65536, nullable=true)
+     * @ORM\Column(type="text")
      */
     private $content;
 

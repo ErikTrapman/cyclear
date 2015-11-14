@@ -71,5 +71,19 @@
         </div>
     </div>
 
+    <div class="big-header-ext" style="background-color: white; color:black;">
+        <ul class="list-inline">
+            {% for b in entity.user.awardedBadges %}
+                <li style="vertical-align: top;">
+                    <img src="{{ vich_uploader_asset(b.badge, 'imageFile') }}" alt="{{ b.badge.name }}"/>
+                    {% if b.recurringAmount %}
+                        <br>{{ b.recurringAmount }}x
+                    {% endif %}
+                </li>
+
+            {% endfor %}
+        </ul>
+    </div>
+
 
 {% endblock %}
