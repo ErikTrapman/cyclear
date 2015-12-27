@@ -67,9 +67,6 @@ class CQAutomaticResultsResolverTest extends WebTestCase
         $end->setTime(0, 0, 0);
 
         $res = $resolver->resolve($races, $seizoen, $start, $end, 999);
-        foreach ($res as $r) {
-            var_dump($r->getNaam());
-        }
         $this->assertCount(32, $res);
 
     }
