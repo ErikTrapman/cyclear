@@ -11,6 +11,7 @@
 
 namespace Cyclear\GameBundle\Form\Entity;
 
+use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Validator\Constraints as CyclearAssert;
 
 /**
@@ -67,6 +68,9 @@ class UserTransfer
         return $this->ploeg;
     }
 
+    /**
+     * @return Seizoen
+     */
     public function getSeizoen()
     {
         return $this->seizoen;

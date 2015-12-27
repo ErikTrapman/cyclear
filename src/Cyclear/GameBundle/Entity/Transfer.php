@@ -74,7 +74,7 @@ class Transfer
     private $transferType;
 
     /**
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
      */
     private $seizoen;
@@ -94,7 +94,7 @@ class Transfer
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -114,7 +114,7 @@ class Transfer
     /**
      * Get renner
      *
-     * @return object 
+     * @return object
      */
     public function getRenner()
     {
@@ -134,7 +134,7 @@ class Transfer
     /**
      * Get ploegVan
      *
-     * @return object 
+     * @return object
      */
     public function getPloegVan()
     {
@@ -154,7 +154,7 @@ class Transfer
     /**
      * Get ploegNaar
      *
-     * @return object 
+     * @return object
      */
     public function getPloegNaar()
     {
@@ -174,7 +174,7 @@ class Transfer
     /**
      * Get datum
      *
-     * @return date 
+     * @return date
      */
     public function getDatum()
     {
@@ -203,6 +203,9 @@ class Transfer
         $this->transferType = $transferType;
     }
 
+    /**
+     * @return Seizoen
+     */
     public function getSeizoen()
     {
         return $this->seizoen;
@@ -225,7 +228,7 @@ class Transfer
 
     public function __toString()
     {
-        return (string) $this->getId();
+        return (string)$this->getId();
     }
 
     /**
