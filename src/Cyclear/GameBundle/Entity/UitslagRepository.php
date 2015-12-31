@@ -261,9 +261,6 @@ class UitslagRepository extends EntityRepository
             $params['start'] = $start->format('Y-m-d H:i:s');
             $params['end'] = $end->format('Y-m-d H:i:s');
         }
-
-        $this->_em->getRepository('CyclearGameBundle:Transfer')->generateTempTableWithDraftRiders($seizoen);
-
         // TODO DQL'en net als getCountForPosition
         $transfers = "SELECT DISTINCT t.renner_id FROM Transfer t
             WHERE t.transferType != " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
@@ -298,38 +295,44 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
-        $params = array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER);
         $startEndWhere = null;
         if ($start && $end) {
-            $startEndWhere = ' AND (w.datum >= :start AND w.datum <= :end)';
             $start = clone $start;
             $start->setTime(0, 0, 0);
             $end = clone $end;
             $end->setTime(0, 0, 0);
-            $params['start'] = $start->format('Y-m-d H:i:s');
-            $params['end'] = $end->format('Y-m-d H:i:s');
         }
+        $subQRiders = $this->_em->getRepository('CyclearGameBundle:Renner')->createQueryBuilder('r');
+        $subQRiders->innerJoin('Cyclear\GameBundle\Entity\Transfer', 't', 'WITH',
+            't.renner = r AND t.transferType = :draft AND t.seizoen = :seizoen')->andWhere('t.ploegNaar = p');
+        $subQRiders->select('DISTINCT r.id');
 
-        $this->_em->getRepository('CyclearGameBundle:Transfer')->generateTempTableWithDraftRiders($seizoen);
+        $subQbPoints = $this->_em->getRepository('CyclearGameBundle:Uitslag')->createQueryBuilder('u');
+        $subQbPoints
+            ->innerJoin('u.wedstrijd', 'w', 'WITH', sprintf('w.seizoen = :seizoen %s', $startEndWhere))
+            ->where($subQbPoints->expr()->in('u.renner', $subQRiders->getDQL()))
+            ->andWhere('u.ploeg IS NULL OR u.ploeg <> p')
+            ->select('IFNULL(SUM(u.rennerPunten),0)');
 
-        $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 200 AS c,
-                (
-                SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u
-                INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE w.seizoen_id = :seizoen_id %s
-                AND u.renner_id IN
-                    (SELECT t.renner_id FROM Transfer t
-                    WHERE t.transferType = " . Transfer::DRAFTTRANSFER . "
-                    AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id)
-                AND (u.ploeg_id IS NULL OR u.ploeg_id <> p.id)
-                ) AS punten
-
-                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
-                ORDER BY punten DESC, p.afkorting ASC
-                ", $startEndWhere);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchAll(\PDO::FETCH_NAMED);
+        $qb = $this->_em->getRepository('CyclearGameBundle:Ploeg')
+            ->createQueryBuilder('p')
+            ->where('p.seizoen = :seizoen')->andWhere('p = :p')
+            ->select(sprintf('(%s) AS punten', $subQbPoints->getDQL()))
+            ->orderBy('punten', 'DESC')->addOrderBy('p.afkorting', 'ASC');
+        if ($start && $end) {
+            $qb->setParameter('start', $start)->setParameter('end', $end);
+        }
+        $qb->setParameter('seizoen', $seizoen)->setParameter('draft', Transfer::DRAFTTRANSFER);
+        $res = [];
+        foreach ($this->_em->getRepository('CyclearGameBundle:Ploeg')
+                     ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
+                     ->setParameter('seizoen', $seizoen)->getQuery()->getArrayResult() as $ploeg) {
+            $qb->setParameter('p', $ploeg['id']);
+            $ploeg['punten'] = $qb->getQuery()->getSingleScalarResult();
+            $res[] = $ploeg;
+        }
+        static::puntenSort($res);
+        return $res;
     }
 
     public function getPuntenByPloegForUserTransfers($seizoen = null)
@@ -343,7 +346,7 @@ class UitslagRepository extends EntityRepository
         $transfers = "SELECT DISTINCT t.renner_id FROM Transfer t 
             WHERE t.transferType != " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
                 AND t.renner_id NOT IN ( SELECT t.renner_id FROM Transfer t WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id )";
-        $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting,
+        $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 400 as d,
                 ((SELECT IFNULL(SUM(u.ploegPunten),0)
                 FROM Uitslag u
                 INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id
