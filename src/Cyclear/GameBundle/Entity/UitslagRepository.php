@@ -297,6 +297,7 @@ class UitslagRepository extends EntityRepository
         }
         $startEndWhere = null;
         if ($start && $end) {
+            $startEndWhere = ' AND (w.datum >= :start AND w.datum <= :end)';
             $start = clone $start;
             $start->setTime(0, 0, 0);
             $end = clone $end;
