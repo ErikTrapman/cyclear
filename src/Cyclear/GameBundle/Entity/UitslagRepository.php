@@ -17,6 +17,20 @@ use Doctrine\ORM\Query;
 class UitslagRepository extends EntityRepository
 {
 
+    /**
+     * @param $values
+     * @param string $fallBackSort
+     */
+    public static function puntenSort(&$values, $fallBackSort = 'afkorting')
+    {
+        uasort($values, function ($a, $b) use ($fallBackSort) {
+            if ($a['punten'] == $b['punten']) {
+                return $a[$fallBackSort] < $b[$fallBackSort] ? -1 : 1;
+            }
+            return ($a['punten'] < $b['punten']) ? 1 : -1;
+        });
+    }
+
     public function getPuntenByPloeg($seizoen = null, $ploeg = null, \DateTime $maxDate = null)
     {
         if (null === $seizoen) {
@@ -55,22 +69,22 @@ class UitslagRepository extends EntityRepository
         $start->setTime('00', '00', '00');
         $end = clone $periode->getEind();
         $end->setTime('23', '59', '59');
-        // TODO DQL'en net als getCountForPosition
-        $sql = "SELECT *,
-                    ( SELECT IFNULL(SUM(u.ploegPunten),0)
-                    FROM Uitslag u 
-                    INNER JOIN Wedstrijd w ON w.id = u.wedstrijd_id
-                    WHERE w.datum BETWEEN :start AND :end AND u.ploeg_id = p.id
-                     ) AS punten
-                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
-                GROUP BY p.id
-                ORDER BY punten DESC, p.afkorting ASC
-                ";
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->prepare($sql);
-        $stmt->execute(array(":seizoen_id" => $seizoen->getId(), ":start" => $start->format('Y-m-d'), ":end" => $end->format('Y-m-d')));
-        $res = $stmt->fetchAll(\PDO::FETCH_NAMED);
-        return $res;
+        $qb = $this->_em->getRepository('CyclearGameBundle:Ploeg')->createQueryBuilder('p');
+        $subQ = $this->_em->getRepository('CyclearGameBundle:Uitslag')->createQueryBuilder('u')
+            ->innerJoin('u.wedstrijd', 'w')
+            ->where($qb->expr()->between('w.datum', ':start', ':end'))->andWhere('u.ploeg = p')
+            ->select('IFNULL(SUM(u.ploegPunten),0)');
+        $qb->select('p')
+            ->where('p.seizoen = :seizoen')
+            ->addSelect(sprintf('(%s) AS punten', $subQ->getDQL()))
+            ->groupBy('p')
+            ->orderBy('punten', 'DESC')
+            ->addOrderBy('p.afkorting', 'ASC');
+        $qb->setParameters(['start' => $start, 'end' => $end, 'seizoen' => $seizoen]);
+        // flatten the result
+        return array_map(function ($row) {
+            return array_merge($row[0], ['punten' => $row['punten']]);
+        }, $qb->getQuery()->getArrayResult());
     }
 
     public function getCountForPosition($seizoen = null, $pos = 1, \DateTime $start = null, \DateTime $end = null)
@@ -198,33 +212,38 @@ class UitslagRepository extends EntityRepository
         return $ret;
     }
 
-    public function getPuntenByPloegForDraftTransfers($seizoen = null, $ploeg = null)
+    public function getPuntenByPloegForDraftTransfers($seizoen = null, Ploeg $ploeg = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
-        // TODO DQL'en net als getCountForPosition
-        $transferSql = "SELECT t.renner_id FROM Transfer t 
-            WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id";
-        $ploegWhere = '';
-        $params = array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER);
-        if (null !== $ploeg) {
-            $ploegWhere = ' AND p.id = :ploeg';
-            $params[':ploeg'] = $ploeg->getId();
+        $subQ = $this->_em->getRepository('CyclearGameBundle:Renner')->createQueryBuilder('r');
+        $subQ->innerJoin('Cyclear\GameBundle\Entity\Transfer', 't', 'WITH',
+            't.renner = r AND t.transferType = :draft AND t.seizoen = :seizoen')->andWhere('t.ploegNaar = :p');
+        $subQ->select('DISTINCT r.id');
+        $subQPoints = $this->_em->getRepository('CyclearGameBundle:Uitslag')->createQueryBuilder('u');
+        $subQPoints->select('IFNULL(SUM(u.rennerPunten),0)')
+            ->innerJoin('u.wedstrijd', 'w')
+            ->where('w.seizoen = :seizoen')
+            ->andWhere($subQ->expr()->in('u.renner', $subQ->getDQL()));
+        $subQPoints->setParameter('draft', Transfer::DRAFTTRANSFER)->setParameter('seizoen', $seizoen);
+        if ($ploeg) {
+            $retPloeg = $this->_em->getRepository('CyclearGameBundle:Ploeg')
+                ->createQueryBuilder('p')->where($subQ->expr()->eq('p', $ploeg->getId()))->getQuery()->getArrayResult();
+            $retPloeg['punten'] = $subQPoints->setParameter('p', $ploeg)->getQuery()->getSingleScalarResult();
+            return [$retPloeg];
         }
-        $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting,
-                ( SELECT IFNULL(SUM(u.rennerPunten),0) FROM Uitslag u 
-                INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id 
-                WHERE w.seizoen_id = :seizoen_id AND u.renner_id IN ( %s ) ) AS punten 
-                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id %s
-                ORDER BY punten DESC, p.afkorting ASC
-                ", $transferSql, $ploegWhere);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchAll(\PDO::FETCH_NAMED);
+        $res = [];
+        foreach ($this->_em->getRepository('CyclearGameBundle:Ploeg')
+                     ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
+                     ->setParameter('seizoen', $seizoen)->getQuery()->getArrayResult() as $ploeg) {
+            $subQPoints->setParameter('p', $ploeg['id']);
+            $ploeg['punten'] = $subQPoints->getQuery()->getSingleScalarResult();
+            $res[] = $ploeg;
+        }
+        static::puntenSort($res, 'afkorting');
+        return $res;
     }
-
 
     public function getPuntenByPloegForUserTransfersWithoutLoss($seizoen = null, \DateTime $start = null, \DateTime $end = null)
     {
