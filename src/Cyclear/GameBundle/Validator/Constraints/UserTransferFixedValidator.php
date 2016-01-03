@@ -11,7 +11,6 @@
 namespace Cyclear\GameBundle\Validator\Constraints;
 
 
-use Cyclear\GameBundle\Form\Entity\UserTransfer;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -62,7 +61,7 @@ class UserTransferFixedValidator extends ConstraintValidator
     /**
      * @param UserTransfer $value
      */
-    protected function doSpecificValidate(UserTransfer $value)
+    protected function doSpecificValidate($value)
     {
         $seizoen = $value->getSeizoen();
 
