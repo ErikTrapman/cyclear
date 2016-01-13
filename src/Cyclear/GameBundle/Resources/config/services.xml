@@ -18,6 +18,7 @@
                  class="Cyclear\GameBundle\Listener\Doctrine\TransferListener">
             <tag name="doctrine.event_listener" event="postPersist"/>
             <argument type="service" id="cyclear_game.twitter.tweeter"/>
+            <argument type="service" id="translator"/>
         </service>
 
         <service id="pdo" class="PDO">

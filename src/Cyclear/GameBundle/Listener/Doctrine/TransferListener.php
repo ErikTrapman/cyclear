@@ -13,14 +13,25 @@ namespace Cyclear\GameBundle\Listener\Doctrine;
 
 use Cyclear\GameBundle\Entity\Transfer;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class TransferListener
 {
     private $tweeter;
 
-    public function __construct($tweeter)
+    private $translator;
+
+    private $tweetMsgs = [
+        '%team% gives %out% the boot and welcomes %in% into the team!',
+        '%team% says "Hi" to %in% and "Bye" to %out%',
+        '%team% fires %out% and hires %in%',
+        '%team% kicks %out% out in favour of %in%'
+    ];
+
+    public function __construct($tweeter, TranslatorInterface $translator)
     {
         $this->tweeter = $tweeter;
+        $this->translator = $translator;
     }
 
     public function postPersist(LifecycleEventArgs $args)
@@ -42,7 +53,8 @@ class TransferListener
                 if ($rennerUit) {
                     $rennerUitDisplay = $rennerUit->getTwitter() ? '@' . $rennerUit->getTwitter() : $rennerUit->getNaam();
                 }
-                $msg = sprintf('Transfer for %s: [IN] %s, [OUT] %s', $ploegNaar, $rennerInDisplay, $rennerUitDisplay);
+                $params = ['%team%' => $ploegNaar, '%in%' => $rennerInDisplay, '%out%' => $rennerUitDisplay];
+                $msg = $this->translator->trans($this->tweetMsgs[rand(0, 3)], $params);
                 try {
                     $this->tweeter->sendTweet($msg);
                 } catch (\Exception $e) {
