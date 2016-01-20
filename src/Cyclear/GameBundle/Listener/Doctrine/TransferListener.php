@@ -22,16 +22,24 @@ class TransferListener
     private $translator;
 
     private $tweetMsgs = [
-        '%team% gives %out% the boot and welcomes %in% into the team!',
+        '%team% gives %out% the boot and welcomes %in% into the team',
         '%team% says "Hi" to %in% and "Bye" to %out%',
         '%team% fires %out% and hires %in%',
-        '%team% kicks %out% out in favour of %in%'
+        '%team% kicks %out% out in favour of %in%',
+        '%out% got the sack, %in% a contract at %team%',
+        'High expectations at %team% for new siging %in%; %out% failed to extend'
     ];
 
     public function __construct($tweeter, TranslatorInterface $translator)
     {
         $this->tweeter = $tweeter;
         $this->translator = $translator;
+    }
+
+    private function getRandomTweet()
+    {
+        $index = rand(0, count($this->tweetMsgs) - 1);
+        return $this->tweetMsgs[$index];
     }
 
     public function postPersist(LifecycleEventArgs $args)
@@ -54,7 +62,7 @@ class TransferListener
                     $rennerUitDisplay = $rennerUit->getTwitter() ? '@' . $rennerUit->getTwitter() : $rennerUit->getNaam();
                 }
                 $params = ['%team%' => $ploegNaar, '%in%' => $rennerInDisplay, '%out%' => $rennerUitDisplay];
-                $msg = $this->translator->trans($this->tweetMsgs[rand(0, 3)], $params);
+                $msg = $this->translator->trans($this->getRandomTweet(), $params);
                 try {
                     $this->tweeter->sendTweet($msg);
                 } catch (\Exception $e) {
@@ -63,4 +71,6 @@ class TransferListener
             }
         }
     }
+
+
 }
