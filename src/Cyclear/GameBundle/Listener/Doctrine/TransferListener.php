@@ -26,7 +26,7 @@ class TransferListener
         '%team% says "Hi" to %in% and "Bye" to %out%',
         '%team% fires %out% and hires %in%',
         '%team% kicks %out% out in favour of %in%',
-        '%out% got the sack, %in% a contract at %team%',
+        ' %out% got the sack, %in% a contract at %team%',
         'High expectations at %team% for new siging %in%; %out% failed to extend'
     ];
 
