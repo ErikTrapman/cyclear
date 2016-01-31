@@ -111,6 +111,10 @@ class CQAutomaticResultsResolver
             if ($race->date < $start || $race->date > $end) {
                 continue;
             }
+            // we skip Team Time Trials. Just try this...
+            if (false !== strpos($race->name, 'T.T.T') || false !== strpos($race->name, 'TTT')) {
+                continue;
+            }
             $wedstrijd = new Wedstrijd();
             $date = clone $race->date;
             $date->setTime(0, 0, 0);
