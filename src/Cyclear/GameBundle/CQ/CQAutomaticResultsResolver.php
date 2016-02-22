@@ -130,15 +130,18 @@ class CQAutomaticResultsResolver
             }
             $wedstrijd->setGeneralClassification($type->isGeneralClassification());
             $wedstrijdRefDate = null;
-            if ($this->categoryMatcher->needsRefStage($wedstrijd)) {
-                $this->categoryMatcher->getRefStage($wedstrijd);
+            $needsRefStage = $this->categoryMatcher->needsRefStage($wedstrijd);
+            if ($needsRefStage) {
+                $refStage = $this->categoryMatcher->getRefStage($wedstrijd);
+                $wedstrijdRefDate = $refStage->getDatum();
             }
             // TODO parametrize CQ-urls!
             $uitslagen = $this->uitslagManager->prepareUitslagen(
                 $type,
                 $this->crawlerManager->getCrawler('http://cqranking.com/men/asp/gen/' . $race->url),
                 $wedstrijd,
-                $seizoen);
+                $seizoen,
+                $wedstrijdRefDate);
             if (count($uitslagen) < $type->getMaxResults()) {
                 $this->logger->notice($race->url . ' has not enough content yet');
                 continue;

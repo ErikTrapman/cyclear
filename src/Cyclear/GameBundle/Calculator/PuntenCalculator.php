@@ -41,7 +41,7 @@ class PuntenCalculator
             if ($transferFromWedstrijd !== $transferFromRefDatum) {
                 return false;
             }
-            return $this->validateTransfer($transferFromRefDatum, $wedstrijdDatum);
+            return $this->validateTransfer($transferFromRefDatum, $referentieDatum);
         } else {
             $lastTransfer = $transferRepo->findLastTransferForDate($renner, $wedstrijdDatum, $seizoen);
             if (!$lastTransfer) {
