@@ -75,12 +75,8 @@
                                     <tr>
                                         <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
                                         <td>
-                                            {% if 0 == uitslag.ploegPunten and uitslag.rennerPunten > 0 and uitslag.ploeg %}
-                                                <s>{{ uitslag.rennerPunten }}</s>
-                                            {% else %}
-                                                {{ uitslag.rennerPunten }}
-                                            {% endif %}
-                                            </td>
+                                            {% include 'CyclearGameBundle:Uitslag:_singlePoints.html.twig' with {uitslag: uitslag} %}
+                                        </td>
                                         <td>{{ uitslag.positie }}</td>
                                         <td>
                                             {% include "CyclearGameBundle:Wedstrijd:_singleRow.html.twig" with {wedstrijd:uitslag.wedstrijd, seizoen:uitslag.wedstrijd.seizoen } %}
@@ -96,7 +92,7 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="transfers">
-                        {% include "CyclearGameBundle:Transfer:_riderListWithInversion.html.twig" with {'listWithInversion':transfers} %}
+                        {% include "CyclearGameBundle:Transfer:_listWithInversion.html.twig" with {'listWithInversion':transfers} %}
                     </div>
                 </div>
 

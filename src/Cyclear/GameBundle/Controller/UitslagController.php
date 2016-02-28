@@ -13,6 +13,7 @@ namespace Cyclear\GameBundle\Controller;
 
 use Cyclear\GameBundle\Entity\Periode;
 use Cyclear\GameBundle\Entity\Seizoen;
+use Cyclear\GameBundle\Entity\Transfer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -120,13 +121,15 @@ class UitslagController extends Controller
         }
         $stand = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen);
         $draft = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen);
+        $transferRepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
         return array(
             'seizoen' => $seizoen,
             'transfer' => $transfer,
             'shadowgained' => $gained,
             'shadowlost' => $lost,
             'stand' => $stand,
-            'draft' => $draft);
+            'draft' => $draft,
+            'transferRepo' => $transferRepo);
     }
 
 }

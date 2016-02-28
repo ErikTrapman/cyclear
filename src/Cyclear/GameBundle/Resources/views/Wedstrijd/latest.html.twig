@@ -28,7 +28,7 @@
                 <tr class="results_match_{{ wedstrijd.id }}" style="display: none;">
                     <td class="hidden-xs hidden-sm">{{ "%02d"|format(loop.index) }}</td>
                     <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
-                    <td>{{ uitslag.ploegPunten }}</td>
+                    <td>{% include '@CyclearGame/Uitslag/_singlePoints.html.twig' with {uitslag: uitslag} %}</td>
                     <td nowrap>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {renner:uitslag.renner,seizoen:uitslag.wedstrijd.seizoen } %}</td>
 
                 </tr>
