@@ -71,6 +71,11 @@ class Ploeg
     private $punten;
 
     /**
+     * @ORM\Column(type="text", nullable=true, length=16777215)
+     */
+    private $memo;
+
+    /**
      * @return the $user
      */
     public function getUser()
@@ -169,4 +174,21 @@ class Ploeg
     {
         $this->punten = $punten;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMemo()
+    {
+        return $this->memo;
+    }
+
+    /**
+     * @param mixed $memo
+     */
+    public function setMemo($memo)
+    {
+        $this->memo = $memo;
+    }
+
 }

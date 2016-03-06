@@ -169,6 +169,14 @@
             <argument type="service" id="cyclear_game.manager.renner"/>
         </service>
 
+        <service class="Cyclear\GameBundle\Twig\SecurityExtension"
+                 id="cyclear_game.twig.security_extension">
+            <argument id="doctrine.orm.default_entity_manager" type="service"/>
+            <argument id="security.authorization_checker" type="service"/>
+            <argument id="request_stack" type="service"/>
+            <tag name="twig.extension"/>
+        </service>
+
 
     </services>
 

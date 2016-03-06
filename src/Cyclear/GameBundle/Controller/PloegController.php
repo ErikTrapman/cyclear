@@ -19,6 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Ploeg controller.
@@ -35,7 +36,7 @@ class PloegController extends Controller
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
-    public function showAction(Seizoen $seizoen, Ploeg $id)
+    public function showAction(Request $request, Seizoen $seizoen, Ploeg $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -67,6 +68,18 @@ class PloegController extends Controller
         $punten = $uitslagRepo->getPuntenByPloeg($seizoen, $entity);
         $draftRenners = $ploegRepo->getDraftRennersWithPunten($entity, false);
         $draftPunten = $uitslagRepo->getPuntenByPloegForDraftTransfers($seizoen, $entity);
+
+        $form = $this->createFormBuilder($entity)
+            ->add('memo', null, ['attr' => ['placeholder' => '...', 'rows' => 16]])
+            ->add('save', 'submit')
+            ->getForm();
+        if ('POST' === $request->getMethod()) {
+            if ($form->submit($request)->isValid()) {
+                $em->flush($entity);
+                return $this->redirect($this->generateUrl('ploeg_show', ['id' => $entity->getId(), 'seizoen' => $seizoen->getSlug()]));
+            }
+        }
+
         return array(
             'entity' => $entity,
             'renners' => $renners,
@@ -79,7 +92,8 @@ class PloegController extends Controller
             'zeges' => $zeges,
             'punten' => $punten[0]['punten'],
             'draftRenners' => $draftRenners,
-            'draftPunten' => $draftPunten[0]['punten']
+            'draftPunten' => $draftPunten[0]['punten'],
+            'form' => $form->createView()
         );
     }
 }
