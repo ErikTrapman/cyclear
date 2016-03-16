@@ -82,9 +82,9 @@ class RaceCategoryMatcher
             throw new CyclearGameBundleCQException('Unable to lookup refStage for ' . $wedstrijd->getNaam());
         }
         $transliterator = \Transliterator::createFromRules(':: NFD; :: [:Nonspacing Mark:] Remove; :: NFC;', \Transliterator::FORWARD);
-        $stage1 = $transliterator->transliterate($parts[0]);
+        $stage = $transliterator->transliterate($parts[0]);
         $prologue = $transliterator->transliterate($parts[0]);
-        $stage1 = $stage1 . ', Stage 1%';
+        $stage1 = $stage . ', Stage 1%';
         $prologue = $prologue . ', Prologue%';
         $qb = $this->em->getRepository('CyclearGameBundle:Wedstrijd')->createQueryBuilder('w');
         $qb->where('w.seizoen = :seizoen')->andWhere(
@@ -95,7 +95,18 @@ class RaceCategoryMatcher
         $qb->setParameters(['seizoen' => $wedstrijd->getSeizoen(), 'stage1' => $stage1, 'prol' => $prologue]);
         $res = $qb->getQuery()->getResult();
         if (0 === count($res)) {
-            throw new CyclearGameBundleCQException('Unable to lookup refStage for ' . $wedstrijd->getNaam() . '. Have ' . count($res) . ' results');
+            // try again with 'Stage 2' as we do not always register stage 1 if it's a TTT. It's the best we can get.
+            $qb = $this->em->getRepository('CyclearGameBundle:Wedstrijd')->createQueryBuilder('w');
+            $qb->where('w.seizoen = :seizoen')->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('w.naam', ":stage2"))
+            );
+            $qb->setParameters(['seizoen' => $wedstrijd->getSeizoen(), 'stage2' => sprintf('%s, Stage 2%%', $stage)]);
+            $res = $qb->getQuery()->getResult();
+            if (0 === count($res)) {
+                throw new CyclearGameBundleCQException('Unable to lookup refStage for ' . $wedstrijd->getNaam() . '. Have ' . count($res) . ' results');
+            }
+            return $res[0];
         }
         return $res[0];
     }
