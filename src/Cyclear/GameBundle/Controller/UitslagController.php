@@ -12,6 +12,7 @@
 namespace Cyclear\GameBundle\Controller;
 
 use Cyclear\GameBundle\Entity\Periode;
+use Cyclear\GameBundle\Entity\Ploeg;
 use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\Transfer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -47,7 +48,11 @@ class UitslagController extends Controller
         }
         $lostDraftPoints = [];
         foreach ($em->getRepository('CyclearGameBundle:Uitslag')->getLostDraftPuntenByPloeg($seizoen, $periode->getStart(), $periode->getEind()) as $teamResult) {
-            $lostDraftPoints[$teamResult['id']] = $teamResult['punten'];
+            if ($teamResult instanceof Ploeg) {
+                $lostDraftPoints[$teamResult->getId()] = $teamResult->getPunten();
+            } else {
+                $lostDraftPoints[$teamResult['id']] = $teamResult['punten'];
+            }
         }
         $transferSaldo = [];
         foreach ($gainedTransferpoints as $teamId => $gainedPoints) {
@@ -117,7 +122,11 @@ class UitslagController extends Controller
         }
         $lost = array();
         foreach ($this->getDoctrine()->getRepository('CyclearGameBundle:Uitslag')->getLostDraftPuntenByPloeg($seizoen) as $teamResult) {
-            $lost[$teamResult['id']] = $teamResult['punten'];
+            if ($teamResult instanceof Ploeg) {
+                $lost[$teamResult->getId()] = $teamResult->getPunten();
+            } else {
+                $lost[$teamResult['id']] = $teamResult['punten'];
+            }
         }
         $stand = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen);
         $draft = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen);

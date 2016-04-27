@@ -24,10 +24,23 @@ class UitslagRepository extends EntityRepository
     public static function puntenSort(&$values, $fallBackSort = 'afkorting')
     {
         uasort($values, function ($a, $b) use ($fallBackSort) {
-            if ($a['punten'] == $b['punten']) {
-                return $a[$fallBackSort] < $b[$fallBackSort] ? -1 : 1;
+            $aPoints = null;
+            $bPoints = null;
+            if ($a instanceof Ploeg && $b instanceof Ploeg) {
+                $aPoints = $a->getPunten();
+                $bPoints = $b->getPunten();
+            } else {
+                $aPoints = $a['punten'];
+                $bPoints = $b['punten'];
             }
-            return ($a['punten'] < $b['punten']) ? 1 : -1;
+            if ($aPoints == $bPoints) {
+                if ($a instanceof Ploeg && $b instanceof Ploeg) {
+                    return $a->{$fallBackSort}() < $b->{$fallBackSort}() ? -1 : 1;
+                } else {
+                    return $a[$fallBackSort] < $b[$fallBackSort] ? -1 : 1;
+                }
+            }
+            return ($aPoints < $bPoints) ? 1 : -1;
         });
     }
 
@@ -295,41 +308,18 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
-        $startEndWhere = null;
-        if ($start && $end) {
-            $startEndWhere = ' AND (w.datum >= :start AND w.datum <= :end)';
-            $start = clone $start;
-            $start->setTime(0, 0, 0);
-            $end = clone $end;
-            $end->setTime(0, 0, 0);
-        }
-        $subQRiders = $this->_em->getRepository('CyclearGameBundle:Renner')->createQueryBuilder('r');
-        $subQRiders->innerJoin('Cyclear\GameBundle\Entity\Transfer', 't', 'WITH',
-            't.renner = r AND t.transferType = :draft AND t.seizoen = :seizoen')->andWhere('t.ploegNaar = p');
-        $subQRiders->select('DISTINCT r.id');
-
-        $subQbPoints = $this->_em->getRepository('CyclearGameBundle:Uitslag')->createQueryBuilder('u');
-        $subQbPoints
-            ->innerJoin('u.wedstrijd', 'w', 'WITH', sprintf('w.seizoen = :seizoen %s', $startEndWhere))
-            ->where($subQbPoints->expr()->in('u.renner', $subQRiders->getDQL()))
-            ->andWhere('u.ploeg IS NULL OR u.ploeg <> p')
-            ->select('IFNULL(SUM(u.rennerPunten),0)');
-
-        $qb = $this->_em->getRepository('CyclearGameBundle:Ploeg')
-            ->createQueryBuilder('p')
-            ->where('p.seizoen = :seizoen')->andWhere('p = :p')
-            ->select(sprintf('(%s) AS punten', $subQbPoints->getDQL()))
-            ->orderBy('punten', 'DESC')->addOrderBy('p.afkorting', 'ASC');
-        if ($start && $end) {
-            $qb->setParameter('start', $start)->setParameter('end', $end);
-        }
-        $qb->setParameter('seizoen', $seizoen)->setParameter('draft', Transfer::DRAFTTRANSFER);
         $res = [];
         foreach ($this->_em->getRepository('CyclearGameBundle:Ploeg')
                      ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
-                     ->setParameter('seizoen', $seizoen)->getQuery()->getArrayResult() as $ploeg) {
-            $qb->setParameter('p', $ploeg['id']);
-            $ploeg['punten'] = $qb->getQuery()->getSingleScalarResult();
+                     ->setParameter('seizoen', $seizoen)->getQuery()->getResult() as $ploeg) {
+
+            $teamResults = $this->getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen);
+            $teamPoints = 0;
+            /** @var Uitslag $teamResult */
+            foreach ($teamResults->getQuery()->getResult() as $teamResult) {
+                $teamPoints += $teamResult->getRennerPunten();
+            }
+            $ploeg->setPunten($teamPoints);
             $res[] = $ploeg;
         }
         static::puntenSort($res);
@@ -359,7 +349,7 @@ class UitslagRepository extends EntityRepository
                 FROM Uitslag u
                 INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id AND w.seizoen_id = :seizoen_id
                 INNER JOIN draftriders dr ON u.renner_id = dr.renner_id
-                WHERE dr.ploeg_id = p.id AND (u.ploeg_id IS NULL OR u.ploeg_id <> p.id))
+                WHERE dr.ploeg_id = p.id AND (u.ploeg_id IS NULL OR u.ploeg_id <> p.id OR u.ploeg_id = p.id AND u.ploegPunten = 0))
 
                 ) AS punten
 
@@ -410,7 +400,7 @@ class UitslagRepository extends EntityRepository
             }, $draftrenners)), array(0))))
             ->andWhere('u.rennerPunten > 0')
             //->andWhere('1=1')
-            ->andWhere('(u.ploeg != :ploeg OR u.ploeg IS NULL)')
+            ->andWhere('(u.ploeg != :ploeg OR u.ploeg IS NULL) OR (u.ploeg = :ploeg AND u.ploegPunten = 0)')
             ->setParameters($parameters)
             ->orderBy('w.datum DESC, u.id', 'DESC');
         return $qb;

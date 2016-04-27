@@ -10,6 +10,7 @@
 
 namespace Cyclear\GameBundle\Controller;
 
+use Cyclear\GameBundle\Entity\Ploeg;
 use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\Transfer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -65,7 +66,11 @@ class DefaultController extends Controller
         }
         $lostDraftPoints = [];
         foreach ($doctrine->getRepository('CyclearGameBundle:Uitslag')->getLostDraftPuntenByPloeg($seizoen, $periode->getStart(), $periode->getEind()) as $teamResult) {
-            $lostDraftPoints[$teamResult['id']] = $teamResult['punten'];
+            if ($teamResult instanceof Ploeg) {
+                $lostDraftPoints[$teamResult->getId()] = $teamResult->getPunten();
+            } else {
+                $lostDraftPoints[$teamResult['id']] = $teamResult['punten'];
+            }
         }
         $transferSaldo = [];
         foreach ($gainedTransferpoints as $teamId => $gainedPoints) {
