@@ -13,6 +13,7 @@ namespace Cyclear\GameBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class UitslagRepository extends EntityRepository
 {
@@ -35,7 +36,8 @@ class UitslagRepository extends EntityRepository
             }
             if ($aPoints == $bPoints) {
                 if ($a instanceof Ploeg && $b instanceof Ploeg) {
-                    return $a->{$fallBackSort}() < $b->{$fallBackSort}() ? -1 : 1;
+                    $accessor = PropertyAccess::createPropertyAccessor();
+                    return $accessor->getValue($a, $fallBackSort) < $accessor->getValue($b, $fallBackSort) ? -1 : 1;
                 } else {
                     return $a[$fallBackSort] < $b[$fallBackSort] ? -1 : 1;
                 }
