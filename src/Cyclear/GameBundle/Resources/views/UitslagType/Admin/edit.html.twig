@@ -4,7 +4,7 @@
     <h3>Uitslagtype edit</h3>
 
     <form action="{{ path('admin_uitslagtype_update', { 'id': entity.id }) }}"
-          method="post" {{ form_enctype(edit_form) }}>
+          method="post" >
         {{ form_widget(edit_form) }}
         <p>
             <button class="btn btn-default" type="submit">Edit</button>
