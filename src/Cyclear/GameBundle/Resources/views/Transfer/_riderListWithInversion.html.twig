@@ -1,0 +1,48 @@
+{% set includePagination = includePagination is defined ? includePagination : false %}
+{% block content %}
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <th/>
+            <th>IN</th>
+            <th>UIT</th>
+            <th/>
+        </tr>
+
+
+        {%- for transfer in listWithInversion %}
+            <tr>
+                <td>{% if transfer.ploegNaar %}{{ transfer.ploegNaar.afkorting }}
+                    {% else %}
+                        {{ transfer.ploegVan.afkorting }}{% endif %}
+                </td>
+                <td>
+                    {% if transfer.ploegNaar %}
+                        {% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":transfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}
+                    {% else %}
+                        {% if transfer.inversionTransfer %}
+                            {% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":transfer.inversionTransfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>{% if transfer.ploegVan %}
+                        {% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":transfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}
+                    {% else %}
+                        {% if transfer.inversionTransfer %}
+                            {% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {"renner":transfer.inversionTransfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}
+                        {% endif %}
+                    {% endif %}</td>
+                <td>
+                <span data-toggle="tooltip" data-placement="top"
+                      title="{{ transfer.datum|date('H:i') }}">{{ transfer.datum|date('d M') }}</span>
+                </td>
+            </tr>
+        {% endfor -%}
+
+    </table>
+    {% if includePagination %}
+        <div id="navigation">
+            {{ knp_pagination_render(listWithInversion, null, {'seizoen': seizoen.slug}, {'firstPageRoute': firstPageRoute}) }}
+        </div>
+    {% endif %}
+{% endblock %}
