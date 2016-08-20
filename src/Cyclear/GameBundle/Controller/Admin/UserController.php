@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\User;
 use Cyclear\GameBundle\Form\UserType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * User controller.
@@ -63,10 +64,8 @@ class UserController extends Controller
      * @Route("/create", name="admin_user_create")
      * @Method("post")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
-        $request = $this->getRequest();
-
         $form = $this->createForm('admin_user_new');
         $userManager = $this->container->get('fos_user.user_manager');
 
@@ -119,7 +118,7 @@ class UserController extends Controller
      * @Template("CyclearGameBundle:User/Admin:edit.html.twig")
      * @Method("post")
      */
-    public function updateAction($id)
+    public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -129,7 +128,6 @@ class UserController extends Controller
             throw $this->createNotFoundException('Unable to find User entity.');
         }
         $editForm = $this->createForm('admin_user_edit', $entity);
-        $request = $this->getRequest();
 
 
         // http://symfony.com/doc/master/cookbook/form/form_collections.html - Ensuring the database persistence

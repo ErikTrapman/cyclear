@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\Spelregels;
 use Cyclear\GameBundle\Form\SpelregelsType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Spelregels controller.
@@ -36,7 +37,7 @@ class SpelregelsController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('CyclearGameBundle:Spelregels')->findAll();
-        
+
         return array('entities' => $entities);
     }
 
@@ -49,11 +50,11 @@ class SpelregelsController extends Controller
     public function newAction()
     {
         $entity = new Spelregels();
-        $form   = $this->createForm(new SpelregelsType(), $entity);
+        $form = $this->createForm(new SpelregelsType(), $entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         );
     }
 
@@ -63,11 +64,10 @@ class SpelregelsController extends Controller
      * @Route("/create", name="admin_spelregels_create")
      * @Method("post")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
-        $entity  = new Spelregels();
-        $request = $this->getRequest();
-        $form    = $this->createForm(new SpelregelsType(), $entity);
+        $entity = new Spelregels();
+        $form = $this->createForm(new SpelregelsType(), $entity);
         $form->submit($request);
 
         if ($form->isValid()) {
@@ -76,12 +76,12 @@ class SpelregelsController extends Controller
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_spelregels'));
-            
+
         }
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         );
     }
 
@@ -105,8 +105,8 @@ class SpelregelsController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -117,7 +117,7 @@ class SpelregelsController extends Controller
      * @Route("/{id}/update", name="admin_spelregels_update")
      * @Method("post")
      */
-    public function updateAction($id)
+    public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -127,10 +127,8 @@ class SpelregelsController extends Controller
             throw $this->createNotFoundException('Unable to find Spelregels entity.');
         }
 
-        $editForm   = $this->createForm(new SpelregelsType(), $entity);
+        $editForm = $this->createForm(new SpelregelsType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
-
-        $request = $this->getRequest();
 
         $editForm->submit($request);
 
@@ -142,8 +140,8 @@ class SpelregelsController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -154,10 +152,9 @@ class SpelregelsController extends Controller
      * @Route("/{id}/delete", name="admin_spelregels_delete")
      * @Method("post")
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
 
         $form->submit($request);
 
@@ -180,7 +177,6 @@ class SpelregelsController extends Controller
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

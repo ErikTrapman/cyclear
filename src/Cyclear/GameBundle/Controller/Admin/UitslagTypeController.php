@@ -19,6 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\UitslagType;
 use Cyclear\GameBundle\Form\UitslagTypeType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * UitslagType controller.
@@ -38,7 +39,7 @@ class UitslagTypeController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('CyclearGameBundle:UitslagType')->findAll();
-        
+
         return array('entities' => $entities);
     }
 
@@ -52,11 +53,11 @@ class UitslagTypeController extends Controller
     public function newAction()
     {
         $entity = new UitslagType();
-        $form   = $this->createForm(new UitslagTypeType(), $entity);
+        $form = $this->createForm(new UitslagTypeType(), $entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         );
     }
 
@@ -66,11 +67,10 @@ class UitslagTypeController extends Controller
      * @Route("/create", name="admin_uitslagtype_create")
      * @Method("post")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
-        $entity  = new UitslagType();
-        $request = $this->getRequest();
-        $form    = $this->createForm(new UitslagTypeType(), $entity);
+        $entity = new UitslagType();
+        $form = $this->createForm(new UitslagTypeType(), $entity);
         $form->submit($request);
 
         if ($form->isValid()) {
@@ -79,12 +79,12 @@ class UitslagTypeController extends Controller
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_uitslagtype'));
-            
+
         }
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         );
     }
 
@@ -108,8 +108,8 @@ class UitslagTypeController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -120,7 +120,7 @@ class UitslagTypeController extends Controller
      * @Route("/{id}/update", name="admin_uitslagtype_update")
      * @Method("post")
      */
-    public function updateAction($id)
+    public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -130,13 +130,11 @@ class UitslagTypeController extends Controller
             throw $this->createNotFoundException('Unable to find UitslagType entity.');
         }
 
-        $editForm   = $this->createForm(new UitslagTypeType(), $entity);
+        $editForm = $this->createForm(new UitslagTypeType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $request = $this->getRequest();
-
         $editForm->submit($request);
-        
+
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
@@ -145,8 +143,8 @@ class UitslagTypeController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -157,10 +155,9 @@ class UitslagTypeController extends Controller
      * @Route("/{id}/delete", name="admin_uitslagtype_delete")
      * @Method("post")
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
 
         $form->submit($request);
 
@@ -183,7 +180,6 @@ class UitslagTypeController extends Controller
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

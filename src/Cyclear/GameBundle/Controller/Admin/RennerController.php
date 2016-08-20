@@ -11,6 +11,7 @@
 
 namespace Cyclear\GameBundle\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
@@ -37,7 +38,7 @@ class RennerController extends Controller
      * @Route("/", name="admin_renner")
      * @Template("CyclearGameBundle:Renner/Admin:index.html.twig")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -45,8 +46,8 @@ class RennerController extends Controller
         $filter = $this->createForm('renner_filter');
         $config = $em->getConfiguration();
         $config->addFilter("naam", "Cyclear\GameBundle\Filter\RennerNaamFilter");
-        if ($this->getRequest()->getMethod() == 'POST') {
-            $filter->submit($this->getRequest());
+        if ($request->getMethod() == 'POST') {
+            $filter->submit($request);
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
                     $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData(), Type::getType(Type::STRING)->getBindingType());
@@ -67,7 +68,7 @@ class RennerController extends Controller
      * @Route("/{id}/edit", name="admin_renner_edit")
      * @Template("CyclearGameBundle:Renner/Admin:edit.html.twig")
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -78,7 +79,6 @@ class RennerController extends Controller
         }
 
         $editForm = $this->createForm(new RennerType(), $entity);
-        $request = $this->getRequest();
 
         if ($request->getMethod() == 'POST') {
             $editForm->submit($request);
@@ -115,10 +115,9 @@ class RennerController extends Controller
      * @Method("post")
      * @Template("CyclearGameBundle:Renner/Admin:new.html.twig")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $entity = new Renner ();
-        $request = $this->getRequest();
         $form = $this->createForm(new RennerType(), $entity);
         $form->submit($request);
 
@@ -137,9 +136,8 @@ class RennerController extends Controller
      * @Route("/{id}/delete", name="admin_renner_delete")
      * @Method("post")
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
-        $request = $this->getRequest();
         $form = $this->createDeleteForm($id);
         $form->submit($request);
         if ($form->isValid()) {

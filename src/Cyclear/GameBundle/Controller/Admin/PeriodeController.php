@@ -19,6 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\Periode;
 use Cyclear\GameBundle\Form\PeriodeType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Periode controller.
@@ -65,10 +66,9 @@ class PeriodeController extends Controller
      * @Route("/create", name="admin_periode_create")
      * @Method("post")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $entity  = new Periode();
-        $request = $this->getRequest();
         $form    = $this->createForm(new PeriodeType(), $entity);
         $form->submit($request);
 
@@ -119,7 +119,7 @@ class PeriodeController extends Controller
      * @Route("/{id}/update", name="admin_periode_update")
      * @Method("post")
      */
-    public function updateAction($id)
+    public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -131,8 +131,6 @@ class PeriodeController extends Controller
 
         $editForm   = $this->createForm(new PeriodeType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
-
-        $request = $this->getRequest();
 
         $editForm->submit($request);
 
@@ -156,10 +154,9 @@ class PeriodeController extends Controller
      * @Route("/{id}/delete", name="admin_periode_delete")
      * @Method("post")
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
 
         $form->submit($request);
 

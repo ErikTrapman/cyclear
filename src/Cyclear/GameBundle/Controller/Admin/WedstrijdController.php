@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\Wedstrijd,
     Cyclear\GameBundle\Form\WedstrijdType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  *
@@ -66,10 +67,9 @@ class WedstrijdController extends Controller
      * @Route("/create", name="admin_wedstrijd_create")
      * @Method("post")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $entity = new Wedstrijd();
-        $request = $this->getRequest();
         $form = $this->createForm(new WedstrijdType(), $entity);
         $form->submit($request);
 
@@ -119,7 +119,7 @@ class WedstrijdController extends Controller
      * @Route("/{id}/update", name="admin_wedstrijd_update")
      * @Method("post")
      */
-    public function updateAction($id)
+    public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -131,8 +131,6 @@ class WedstrijdController extends Controller
 
         $editForm = $this->createForm(new WedstrijdType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
-
-        $request = $this->getRequest();
 
         $editForm->submit($request);
 
@@ -156,10 +154,9 @@ class WedstrijdController extends Controller
      * @Route("/{id}/delete", name="admin_wedstrijd_delete")
      * @Method("post")
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
 
         $form->submit($request);
 

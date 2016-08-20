@@ -16,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Form\Admin\ContractType;
 use Doctrine\DBAL\Types\Type;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Contract controller.
@@ -31,7 +32,7 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
      * @Route("/", name="admin_contract")
      * @Template("CyclearGameBundle:Contract/Admin:index.html.twig")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -39,8 +40,8 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
         $config = $em->getConfiguration();
         $config->addFilter("renner", "Cyclear\GameBundle\Filter\RennerIdFilter");
         $entities = $em->getRepository('CyclearGameBundle:Contract')->createQueryBuilder('c')->orderBy('c.id', 'DESC');
-        if ($this->getRequest()->getMethod() == 'POST') {
-            $filter->submit($this->getRequest());
+        if ($request->getMethod() == 'POST') {
+            $filter->submit($request);
             if ($filter->isValid()) {
                 if ($filter->get('renner')->getData()) {
                     //$em->getFilters()->enable("renner")->setParameter(
@@ -82,10 +83,9 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
      * @Route("/create", name="admin_contract_create")
      * @Method("post")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $entity = new Contract();
-        $request = $this->getRequest();
         $form = $this->createForm(new ContractType(), $entity);
         $form->submit($request);
 
@@ -134,7 +134,7 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
      * @Route("/{id}/update", name="admin_contract_update")
      * @Method("post")
      */
-    public function updateAction($id)
+    public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -145,8 +145,6 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
         }
 
         $editForm = $this->createForm(new ContractType(), $entity);
-
-        $request = $this->getRequest();
 
         $editForm->submit($request);
 

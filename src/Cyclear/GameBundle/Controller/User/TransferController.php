@@ -25,6 +25,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -44,7 +45,7 @@ class TransferController extends Controller
      * @ParamConverter("renner", class="CyclearGameBundle:Renner", options={"mapping": {"renner": "slug"}});
      * @SecureParam(name="id", permissions="OWNER")
      */
-    public function indexAction(Seizoen $seizoen, Ploeg $id, Renner $renner)
+    public function indexAction(Request $request, Seizoen $seizoen, Ploeg $id, Renner $renner)
     {
         $usermanager = $this->get('cyclear_game.manager.user');
         $em = $this->getDoctrine()->getManager();
@@ -77,8 +78,8 @@ class TransferController extends Controller
         $options['ploeg'] = $ploeg;
         $form = $this->createForm(new TransferUserType(), $transferUser, $options);
         $transferManager = $this->get('cyclear_game.manager.transfer');
-        if ($this->getRequest()->getMethod() == 'POST') {
-            $form->submit($this->getRequest());
+        if ($request->getMethod() == 'POST') {
+            $form->submit($request);
             if ($form->isValid()) {
                 if ($rennerPloeg !== $ploeg) {
                     $transferManager->doUserTransfer($ploeg, $form->get('renner_uit')->getData(), $renner, $seizoen, $form->get('userComment')->getData());

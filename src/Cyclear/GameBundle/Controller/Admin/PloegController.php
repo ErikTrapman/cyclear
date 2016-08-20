@@ -19,6 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -34,7 +35,7 @@ class PloegController extends Controller {
      * @Route("/", name="admin_ploeg")
      * @Template("CyclearGameBundle:Ploeg/Admin:index.html.twig")
      */
-    public function indexAction() {
+    public function indexAction(Request $request) {
         
         $filter = $this->createForm('ploeg_filter');
 
@@ -44,8 +45,8 @@ class PloegController extends Controller {
         $config = $em->getConfiguration();
         $config->addFilter("naam", "Cyclear\GameBundle\Filter\Ploeg\PloegNaamFilter");
 
-        if ($this->getRequest()->getMethod() == 'POST') {
-            $filter->submit($this->getRequest());
+        if ($request->getMethod() == 'POST') {
+            $filter->submit($request);
             //$data = $filter->get('user')->getData();
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
@@ -93,9 +94,8 @@ class PloegController extends Controller {
      * @Route("/create", name="admin_ploeg_create")
      * @Method("post")
      */
-    public function createAction() {
+    public function createAction(Request $request) {
         $entity = new Ploeg();
-        $request = $this->getRequest();
         $form = $this->createForm(new PloegType(), $entity);
         $form->submit($request);
 
@@ -144,7 +144,7 @@ class PloegController extends Controller {
      * @Route("/{id}/update", name="admin_ploeg_update")
      * @Method("post")
      */
-    public function updateAction($id) {
+    public function updateAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Ploeg')->find($id);
@@ -155,8 +155,6 @@ class PloegController extends Controller {
 
         $editForm = $this->createForm(new PloegType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
-
-        $request = $this->getRequest();
 
         $editForm->submit($request);
 
@@ -180,9 +178,8 @@ class PloegController extends Controller {
      * @Route("/{id}/delete", name="admin_ploeg_delete")
      * @Method("post")
      */
-    public function deleteAction($id) {
+    public function deleteAction(Request $request, $id) {
         $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
 
         $form->submit($request);
 

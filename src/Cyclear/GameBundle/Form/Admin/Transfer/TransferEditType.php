@@ -28,7 +28,7 @@ class TransferEditType extends \Symfony\Component\Form\AbstractType
         $choicelist = new ChoiceList($choices, array('draft transfer', 'admin transfer', 'user transfer'));
         $builder
             ->add('renner', 'renner_selector', array('read_only' => true))
-            ->add('transferType', 'choice', array('choice_list' => $choicelist))
+            ->add('transferType', 'choice', array('choices' => $choicelist))
             ->add('datum', 'datetime')
             ->add('seizoen', 'seizoen_selector')
 

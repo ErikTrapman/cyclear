@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\Transfer;
 use Cyclear\GameBundle\Form\Admin\Transfer\TransferType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Transfer controller.
@@ -148,7 +149,7 @@ class TransferController extends Controller
      * @Route("/{id}/update", name="admin_transfer_update")
      * @Method("post")
      */
-    public function updateAction($id)
+    public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -160,8 +161,6 @@ class TransferController extends Controller
 
         $editForm = $this->createForm(new \Cyclear\GameBundle\Form\Admin\Transfer\TransferEditType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
-
-        $request = $this->getRequest();
 
         $editForm->submit($request);
 
@@ -185,10 +184,9 @@ class TransferController extends Controller
      * @Route("/{id}/delete", name="admin_transfer_delete")
      * @Method("post")
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
 
         $form->submit($request);
 

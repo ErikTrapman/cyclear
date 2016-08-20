@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Form\SeizoenType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Seizoen controller.
@@ -65,10 +66,9 @@ class SeizoenController extends Controller
      * @Route("/create", name="admin_seizoen_create")
      * @Method("post")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $entity  = new Seizoen();
-        $request = $this->getRequest();
         $form    = $this->createForm(new SeizoenType(), $entity);
         $form->submit($request);
 
@@ -119,7 +119,7 @@ class SeizoenController extends Controller
      * @Route("/{id}/update", name="admin_seizoen_update")
      * @Method("post")
      */
-    public function updateAction($id)
+    public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -131,8 +131,6 @@ class SeizoenController extends Controller
 
         $editForm   = $this->createForm(new SeizoenType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
-
-        $request = $this->getRequest();
 
         $editForm->submit($request);
 
@@ -156,10 +154,9 @@ class SeizoenController extends Controller
      * @Route("/{id}/delete", name="admin_seizoen_delete")
      * @Method("post")
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
 
         $form->submit($request);
 
