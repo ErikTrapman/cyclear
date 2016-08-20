@@ -14,6 +14,7 @@ namespace Cyclear\GameBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Cyclear\GameBundle\Validator\Constraints as CyclearAssert;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @CyclearAssert\UserTransfer
@@ -51,7 +52,7 @@ class TransferUserType extends AbstractType
         return 'cyclear_gamebundle_transferusertype';
     }
 
-    public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array('renner_in' => null, 'renner_uit' => null, 'ploeg' => null, 'ploegRenners' => array())

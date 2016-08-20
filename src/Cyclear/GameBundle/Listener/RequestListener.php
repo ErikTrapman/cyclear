@@ -13,6 +13,7 @@ namespace Cyclear\GameBundle\Listener;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernel;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class RequestListener
 {
@@ -26,11 +27,15 @@ class RequestListener
      * @var \Symfony\Component\Security\Core\SecurityContext
      */
     private $security;
+    /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
 
-    public function __construct($em, $security)
+    public function __construct($em, TokenStorageInterface $tokenStorage)
     {
         $this->em = $em;
-        $this->security = $security;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function onKernelRequest(\Symfony\Component\HttpKernel\Event\GetResponseEvent $event)
@@ -43,18 +48,18 @@ class RequestListener
         if (null !== $request->get('seizoen')) {
             $seizoen = $this->em->getRepository("CyclearGameBundle:Seizoen")->findBySlug($request->get('seizoen'));
             if (empty($seizoen)) {
-                throw new NotFoundHttpException("Unknown season `".$request->get('seizoen')."`");
+                throw new NotFoundHttpException("Unknown season `" . $request->get('seizoen') . "`");
             }
             $seizoen = $seizoen[0];
         } else {
             $seizoen = $this->em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
-            if(null === $seizoen){
+            if (null === $seizoen) {
                 throw new NotFoundHttpException("No current season configured yet. Please contact your Admin");
             }
         }
         $request->attributes->set('seizoen', $seizoen);
         $request->attributes->set('current-seizoen', $this->em->getRepository("CyclearGameBundle:Seizoen")->getCurrent());
-        if (null !== $token = $this->security->getToken()) {
+        if (null !== $token = $this->tokenStorage->getToken()) {
             $user = $token->getUser();
             if ($user instanceof \Cyclear\GameBundle\Entity\User) {
                 $request->attributes->set('seizoen-ploeg', $user->getPloegBySeizoen($seizoen));

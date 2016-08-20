@@ -40,7 +40,7 @@ class UserTransferValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         if (null === $value->getRennerIn() || null === $value->getRennerUit()) {
-            $this->context->addViolationAt('renner', "Onbekende renner opgegeven");
+            $this->context->addViolation("Onbekende renner opgegeven");
         }
         if ($value->getSeizoen()->getClosed()) {
             $this->context->addViolation("Het seizoen " . $value->getSeizoen() . " is gesloten");

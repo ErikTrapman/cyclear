@@ -19,11 +19,15 @@ use Cyclear\GameBundle\Validator\Constraints\UserTransfer;
 use Cyclear\GameBundle\Validator\Constraints\UserTransferValidator;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 
 class UserTransferValidatorTest extends WebTestCase
 {
 
+    /**
+     * @var ExecutionContextInterface
+     */
     private $context;
 
     /**
@@ -81,7 +85,7 @@ class UserTransferValidatorTest extends WebTestCase
 
     public function testNoRider()
     {
-        $this->context->expects($this->at(0))->method('addViolationAt')->with($this->equalTo('renner'), $this->equalTo('Onbekende renner opgegeven'));
+        $this->context->expects($this->at(0))->method('addViolation')->with($this->equalTo('Onbekende renner opgegeven'));
         $t = $this->getValidTransfer();
         $t->setRennerIn(null);
         $this->validator->validate($t, new UserTransfer());

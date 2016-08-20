@@ -13,6 +13,7 @@ namespace Cyclear\GameBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Context\ExecutionContext;
 
 class UserTransferFixedValidator extends ConstraintValidator
 {
@@ -45,7 +46,7 @@ class UserTransferFixedValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         if (null === $value->getRennerIn() || null === $value->getRennerUit()) {
-            $this->context->addViolationAt('renner', "Onbekende renner opgegeven.");
+            $this->context->addViolation("Onbekende renner opgegeven.");
         }
         if ($value->getSeizoen()->getClosed()) {
             $this->context->addViolation("Het seizoen " . $value->getSeizoen() . " is gesloten.");

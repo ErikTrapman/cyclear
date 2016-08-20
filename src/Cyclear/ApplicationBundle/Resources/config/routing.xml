@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="cyclear_application_homepage" pattern="/hello/{name}">
+    <route id="cyclear_application_homepage">
         <default key="_controller">CyclearApplicationBundle:Default:index</default>
     </route>
 </routes>

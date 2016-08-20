@@ -13,6 +13,7 @@ namespace Cyclear\GameBundle\Form;
 
 use FOS\UserBundle\Form\Type\ProfileFormType as BaseType;
 use Cyclear\GameBundle\Form\EventListener\IsAdminFieldSubscriber;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserEditType extends BaseType
 {
@@ -42,7 +43,7 @@ class UserEditType extends BaseType
         $builder->addEventSubscriber($subscriber);
     }
 
-    public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('user' => null));
     }

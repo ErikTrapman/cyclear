@@ -41,7 +41,7 @@ class IsAdminFieldSubscriber implements EventSubscriberInterface
     {
         return array(
             FormEvents::PRE_SET_DATA => 'preSetData',
-            FormEvents::BIND => 'bind'
+            FormEvents::SUBMIT => 'bind'
         );
     }
 

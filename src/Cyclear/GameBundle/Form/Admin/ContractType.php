@@ -11,6 +11,8 @@
 
 namespace Cyclear\GameBundle\Form\Admin;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 class ContractType extends \Symfony\Component\Form\AbstractType
 {
 
@@ -35,11 +37,11 @@ class ContractType extends \Symfony\Component\Form\AbstractType
         ;
     }
 
-    public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(
                 'seizoen' => null,
-        ));
+            ));
     }
 }

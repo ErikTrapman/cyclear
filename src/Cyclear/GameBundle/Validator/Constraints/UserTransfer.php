@@ -11,26 +11,26 @@
 
 namespace Cyclear\GameBundle\Validator\Constraints;
 
-use Symfony\Component\Validator\ExecutionContext;
 use Symfony\Component\Validator\Constraint;
 
 /**
  * @Annotation
  */
-class UserTransfer extends Constraint {
+class UserTransfer extends Constraint
+{
 
     public $message = "Je zit op het maximaal aantal transfers van %max% voor deze periode";
-    
+
     public $entity;
-    
+
     public $property;
-    
-    public function validatedBy() 
+
+    public function validatedBy()
     {
         return 'user_transfer';
     }
 
-    public function getTargets() 
+    public function getTargets()
     {
         return self::CLASS_CONSTRAINT;
     }

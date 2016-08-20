@@ -12,7 +12,6 @@
 namespace Cyclear\GameBundle\Form\Admin\Transfer;
 
 use Cyclear\GameBundle\Entity\Transfer;
-use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 
 class TransferEditType extends \Symfony\Component\Form\AbstractType
 {
@@ -24,14 +23,14 @@ class TransferEditType extends \Symfony\Component\Form\AbstractType
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-        $choices = array(Transfer::DRAFTTRANSFER, Transfer::ADMINTRANSFER, Transfer::USERTRANSFER);
-        $choicelist = new ChoiceList($choices, array('draft transfer', 'admin transfer', 'user transfer'));
+        $choices = array(
+            Transfer::DRAFTTRANSFER => 'draft transfer',
+            Transfer::ADMINTRANSFER => 'admin transfer',
+            Transfer::USERTRANSFER => 'user transfer');
         $builder
             ->add('renner', 'renner_selector', array('read_only' => true))
-            ->add('transferType', 'choice', array('choices' => $choicelist))
+            ->add('transferType', 'choice', array('choices' => $choices))
             ->add('datum', 'datetime')
-            ->add('seizoen', 'seizoen_selector')
-
-        ;
+            ->add('seizoen', 'seizoen_selector');
     }
 }

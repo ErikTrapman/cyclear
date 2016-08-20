@@ -11,27 +11,29 @@
 
 namespace Cyclear\GameBundle\Form;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
 {
-    
+
     /**
      *
      * @var \Doctrine\ORM\EntityManager
      */
     private $em;
-    
+
     public function __construct($em)
     {
         $this->em = $em;
     }
-    
-    public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver)
+
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(
                 'class' => 'CyclearGameBundle:Seizoen',
                 'preferred_choices' => array($this->em->getRepository("CyclearGameBundle:Seizoen")->getCurrent()),
-                'query_builder' => function(\Doctrine\ORM\EntityRepository $e) {
+                'query_builder' => function (\Doctrine\ORM\EntityRepository $e) {
                     return $e->createQueryBuilder('s')->orderBy('s.id', 'DESC'); //->where('s.current = 1');
                 }));
     }

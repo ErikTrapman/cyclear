@@ -13,6 +13,7 @@ namespace Cyclear\GameBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RennerSelectorType extends AbstractType
 {
@@ -23,7 +24,7 @@ class RennerSelectorType extends AbstractType
     private $em;
 
     private $rennerManager;
-    
+
     private $router;
 
     public function __construct(\Doctrine\ORM\EntityManager $em, $rennerManager, $router)
@@ -40,9 +41,9 @@ class RennerSelectorType extends AbstractType
         $builder->addViewTransformer($transformer);
     }
 
-    public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $url = $this->router->generate('get_riders',array('_format' => 'json'));
+        $url = $this->router->generate('get_riders', array('_format' => 'json'));
         //$url = $this->router->generate('renner_search');
         $resolver->setDefaults(
             array('invalid_message' => 'De ingevulde renner is niet teruggevonden',

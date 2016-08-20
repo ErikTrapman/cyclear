@@ -61,8 +61,10 @@ class CQAutomaticResultsResolverTest extends WebTestCase
             $transformer, $logger);
 
         $seizoen = new Seizoen();
-        $start = new \DateTime('2015-09-27');
-        $end = new \DateTime('2015-10-04');
+        // cqranking parses recent races as per this year (see http://cqranking.com/men/asp/gen/RacesRecent.asp?changed=0)
+        // as there is no indication of what year the race has been held in.
+        $start = new \DateTime(date('Y') . '-09-27');
+        $end = new \DateTime(date('Y') . '-10-04');
         $start->setTime(0, 0, 0);
         $end->setTime(0, 0, 0);
 

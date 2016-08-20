@@ -10,7 +10,7 @@
 
         <service id="cyclear_game.requestlistener" class="Cyclear\GameBundle\Listener\RequestListener">
             <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="security.context"/>
+            <argument type="service" id="security.token_storage"/>
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest"/>
         </service>
 
@@ -80,12 +80,6 @@
 
         <service id="cyclear_game.type.filter.renner_id" class="Cyclear\GameBundle\Form\Filter\RennerIdFilterType">
             <tag name="form.type" alias="renner_id_filter"/>
-        </service>
-
-        <service id="cyclear_game.transfer_repository" class="Cyclear\GameBundle\Entity\TransferRepository"
-                 factory-service="doctrine.orm.entity_manager"
-                 factory-method="getRepository">
-            <argument>Cyclear\GameBundle\Entity\Transfer</argument>
         </service>
 
         <service id="cyclear_game.calculator.punten" class="Cyclear\GameBundle\Calculator\PuntenCalculator">

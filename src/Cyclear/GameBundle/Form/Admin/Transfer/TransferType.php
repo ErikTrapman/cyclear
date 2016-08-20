@@ -14,7 +14,7 @@ namespace Cyclear\GameBundle\Form\Admin\Transfer;
 use Cyclear\GameBundle\Entity\Transfer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TransferType extends AbstractType
 {
@@ -44,7 +44,7 @@ class TransferType extends AbstractType
         ;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(
@@ -53,6 +53,7 @@ class TransferType extends AbstractType
                 'transfertype' => Transfer::DRAFTTRANSFER)
         );
     }
+
 
     public function getName()
     {

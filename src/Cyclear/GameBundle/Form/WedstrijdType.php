@@ -13,7 +13,7 @@ namespace Cyclear\GameBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WedstrijdType extends AbstractType
 {
@@ -32,7 +32,7 @@ class WedstrijdType extends AbstractType
             ->add('seizoen', 'seizoen_selector');
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'Cyclear\GameBundle\Entity\Wedstrijd',
