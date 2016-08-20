@@ -315,7 +315,7 @@ class UitslagRepository extends EntityRepository
                      ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
                      ->setParameter('seizoen', $seizoen)->getQuery()->getResult() as $ploeg) {
 
-            $teamResults = $this->getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen);
+            $teamResults = $this->getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen, $start, $end);
             $teamPoints = 0;
             /** @var Uitslag $teamResult */
             foreach ($teamResults->getQuery()->getResult() as $teamResult) {
@@ -385,7 +385,7 @@ class UitslagRepository extends EntityRepository
         return $qb;
     }
 
-    public function getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen = null)
+    public function getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen = null, \DateTime $start = null, \DateTime $end = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
@@ -405,6 +405,14 @@ class UitslagRepository extends EntityRepository
             ->andWhere('(u.ploeg != :ploeg OR u.ploeg IS NULL) OR (u.ploeg = :ploeg AND u.ploegPunten = 0)')
             ->setParameters($parameters)
             ->orderBy('w.datum DESC, u.id', 'DESC');
+        if ($start && $end) {
+            $startEndWhere = '(w.datum >= :start AND w.datum <= :end)';
+            $start = clone $start;
+            $start->setTime(0, 0, 0);
+            $end = clone $end;
+            $end->setTime(0, 0, 0);
+            $qb->andWhere($startEndWhere)->setParameter('start', $start)->setParameter('end', $end);
+        }
         return $qb;
     }
 
