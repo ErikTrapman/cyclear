@@ -7,37 +7,40 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-        
+
         $bundles = array(
+
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
-            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
+
             new JMS\SerializerBundle\JMSSerializerBundle(),
-            
+            new \Symfony\Bundle\AsseticBundle\AsseticBundle(),
+
             new Cyclear\GameBundle\CyclearGameBundle(),
-            
+
             new FOS\UserBundle\FOSUserBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-            
+
             #new Samson\Bundle\FilterBundle\SamsonFilterBundle(),
             new ErikTrapman\Bundle\CQRankingParserBundle\ErikTrapmanCQRankingParserBundle(),
             new SunCat\MobileDetectBundle\MobileDetectBundle(),
             new Cyclear\ApplicationBundle\CyclearApplicationBundle(),
 
             new \FOS\JsRoutingBundle\FOSJsRoutingBundle(),
-            new \Samson\Bundle\AutocompleteBundle\SamsonAutocompleteBundle(),
+            //new \Samson\Bundle\AutocompleteBundle\SamsonAutocompleteBundle(),
             new \Samson\Bundle\DataViewBundle\SamsonDataViewBundle(),
             new \Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle(),
-            new \Vich\UploaderBundle\VichUploaderBundle()
+            new \Vich\UploaderBundle\VichUploaderBundle(),
+            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -50,8 +53,13 @@ class AppKernel extends Kernel
         return $bundles;
     }
 
+    public function getRootDir()
+    {
+        return __DIR__;
+    }
+
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load(__DIR__ . '/config/config_' . $this->getEnvironment() . '.yml');
     }
 }

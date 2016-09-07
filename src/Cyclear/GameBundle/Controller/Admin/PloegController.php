@@ -62,7 +62,7 @@ class PloegController extends Controller {
         }
         $paginator = $this->get('knp_paginator');
         $entities = $paginator->paginate(
-            $query, $this->get('request')->query->get('page', 1)/* page number */, 20/* limit per page */
+            $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         
         //$entities = $em->getRepository('CyclearGameBundle:Ploeg')->findAll();

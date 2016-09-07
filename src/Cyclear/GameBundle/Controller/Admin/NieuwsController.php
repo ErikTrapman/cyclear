@@ -42,7 +42,7 @@ class NieuwsController extends Controller
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $entities, $this->get('request')->query->get('page', 1), 20
+            $entities, $request->query->get('page', 1), 20
         );
 
         return array('entities' => $pagination);

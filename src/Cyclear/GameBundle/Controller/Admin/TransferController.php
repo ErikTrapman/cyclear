@@ -33,14 +33,14 @@ class TransferController extends Controller
      * @Route("/", name="admin_transfer")
      * @Template("CyclearGameBundle:Transfer/Admin:index.html.twig")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQuery('SELECT t FROM Cyclear\GameBundle\Entity\Transfer t ORDER BY t.id DESC');
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $query, $this->get('request')->query->get('page', 1)/* page number */, 20/* limit per page */
+            $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         //$entities = $query->getResult();
 

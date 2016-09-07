@@ -18,12 +18,12 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: %version%
 
     translator:      { fallback: nl_NL }
     default_locale: %locale%
     session:
-      save_path: ~ 
+      handler_id:  session.handler.native_file
+      save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
 
 # Twig Configuration
 twig:
@@ -33,8 +33,7 @@ twig:
       corresponding_address: %corresponding_address%
     debug:            %kernel.debug%
     strict_variables: true
-    form:
-      resources:
+    form_themes:
         - 'CyclearGameBundle:Form:rennerSelector.html.twig'
         - 'bootstrap_3_layout.html.twig'
 
@@ -110,7 +109,7 @@ swiftmailer:
     password:  %mailer_password%
 
 jms_security_extra:
-    secure_all_services: false
+    #secure_all_services: false
 
 fos_user:
     db_driver: orm

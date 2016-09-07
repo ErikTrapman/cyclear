@@ -65,7 +65,7 @@ class WedstrijdController extends Controller
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $qb, $this->get('request')->query->get('page', 1), 20
+            $qb, $request->query->get('page', 1), 20
         );
         return array('pagination' => $pagination, 'seizoen' => $seizoen);
     }

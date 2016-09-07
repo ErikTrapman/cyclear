@@ -19,6 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -50,18 +51,18 @@ class PloegController extends Controller
         $paginator = $this->get('knp_paginator');
 
         $uitslagen = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegQb($entity, $seizoen)->getQuery()->getResult(), $this->get('request')->query->get('page', 1), 20
+            $uitslagRepo->getUitslagenForPloegQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('page', 1), 20
         );
         $transfers = $paginator->paginate($em->getRepository("CyclearGameBundle:Transfer")->getLatest(
-            $seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 9999, $entity), $this->get('request')->query->get('transferPage', 1), 20, array('pageParameterName' => 'transferPage'));
+            $seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 9999, $entity), $request->query->get('transferPage', 1), 20, array('pageParameterName' => 'transferPage'));
         $transferUitslagen = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen)->getQuery()->getResult(), $this->get('request')->query->get('transferResultsPage', 1), 20, array('pageParameterName' => 'transferResultsPage')
+            $uitslagRepo->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('transferResultsPage', 1), 20, array('pageParameterName' => 'transferResultsPage')
         );
         $lostDrafts = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegForLostDraftsQb($entity, $seizoen)->getQuery()->getResult(), $this->get('request')->query->get('page', 1), 20
+            $uitslagRepo->getUitslagenForPloegForLostDraftsQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('page', 1), 20
         );
         $zeges = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegByPositionQb($entity, 1, $seizoen)->getQuery()->getResult(), $this->get('request')->query->get('zegeResultsPage', 1), 20, array('pageParameterName' => 'zegeResultsPage')
+            $uitslagRepo->getUitslagenForPloegByPositionQb($entity, 1, $seizoen)->getQuery()->getResult(), $request->query->get('zegeResultsPage', 1), 20, array('pageParameterName' => 'zegeResultsPage')
         );
 
         $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");
@@ -71,7 +72,7 @@ class PloegController extends Controller
 
         $form = $this->createFormBuilder($entity)
             ->add('memo', null, ['attr' => ['placeholder' => '...', 'rows' => 16]])
-            ->add('save', 'submit')
+            ->add('save', SubmitType::class)
             ->getForm();
         if ('POST' === $request->getMethod()) {
             if ($form->submit($request)->isValid()) {

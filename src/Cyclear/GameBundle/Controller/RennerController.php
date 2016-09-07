@@ -169,7 +169,7 @@ class RennerController extends Controller
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $entities, $this->get('request')->query->get('page', 1), 10);
+            $entities, $request->query->get('page', 1), 10);
 
         return array(
             'pagination' => $pagination,
@@ -194,7 +194,7 @@ class RennerController extends Controller
         $uitslagen = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenForRenner($renner, $seizoen, true);
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $uitslagen, $this->get('request')->query->get('page', 1), 20
+            $uitslagen, $request->query->get('page', 1), 20
         );
 
         $ploeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen);

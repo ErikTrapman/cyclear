@@ -3,7 +3,7 @@
 #   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
 #   prefix:   /_internal
 _welcome:
-    pattern:  /
+    path:  /
     defaults: { _controller: CyclearGameBundle:Default:index }
 
 CyclearGameBundle:
@@ -33,11 +33,11 @@ fos_user_change_password:
 
 fos_user_security_check:
     prefix: /
-    pattern: /login_check
+    path: /login_check
     
 fos_user_security_logout:
     prefix: /
-    pattern: /logout
+    path: /logout
 
 fos_js_routing:
   resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

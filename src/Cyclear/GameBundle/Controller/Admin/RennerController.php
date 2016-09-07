@@ -58,7 +58,7 @@ class RennerController extends Controller
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $query, $this->get('request')->query->get('page', 1)/* page number */, 20/* limit per page */
+            $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         return array('pagination' => $pagination, 'filter' => $filter->createView());
     }

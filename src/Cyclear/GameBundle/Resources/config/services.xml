@@ -136,10 +136,6 @@
             <argument type="service" id="service_container"/>
         </service>
 
-        <service class="Twig_Extensions_Extension_Text">
-            <tag name="twig.extension"/>
-        </service>
-
         <service class="Cyclear\GameBundle\CQ\RaceCategoryMatcher"
                  id="cyclear_game.cq.race_category_matcher">
             <argument id="doctrine.orm.default_entity_manager" type="service"/>
