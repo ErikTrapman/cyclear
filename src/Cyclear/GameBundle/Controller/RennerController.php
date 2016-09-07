@@ -84,6 +84,7 @@ class RennerController extends Controller
             } else {
                 $qb->where($qb->expr()->orx($qb->expr()->like('r.naam', ":naam")));
                 $qb->setParameter('naam', "%" . $urlQuery . "%");
+                $qb->orWhere($qb->expr()->orx($qb->expr()->like('r.slug', ":naam")));
             }
         }
         $entities = $paginator->paginate(

@@ -114,23 +114,28 @@ class UitslagController extends Controller
      */
     public function overviewAction(Request $request, Seizoen $seizoen)
     {
-        $transfer = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen);
+        $em = $this->get('doctrine.orm.default_entity_manager');
+        $uitslagRepo = $em->getRepository("CyclearGameBundle:Uitslag");
+        $transfer = $uitslagRepo->getPuntenByPloegForUserTransfers($seizoen);
 
         $gained = array();
-        foreach ($this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfersWithoutLoss($seizoen) as $teamResult) {
+        foreach ($uitslagRepo->getPuntenByPloegForUserTransfersWithoutLoss($seizoen) as $teamResult) {
             $gained[$teamResult['id']] = $teamResult['punten'];
         }
         $lost = array();
-        foreach ($this->getDoctrine()->getRepository('CyclearGameBundle:Uitslag')->getLostDraftPuntenByPloeg($seizoen) as $teamResult) {
+        foreach ($uitslagRepo->getLostDraftPuntenByPloeg($seizoen) as $teamResult) {
             if ($teamResult instanceof Ploeg) {
                 $lost[$teamResult->getId()] = $teamResult->getPunten();
             } else {
                 $lost[$teamResult['id']] = $teamResult['punten'];
             }
         }
-        $stand = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen);
-        $draft = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen);
-        $transferRepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
+        $stand = $uitslagRepo->getPuntenByPloeg($seizoen);
+        $draft = $uitslagRepo->getPuntenByPloegForDraftTransfers($seizoen);
+        $transferRepo = $em->getRepository("CyclearGameBundle:Transfer");
+
+        $bestTransfers = array_slice($uitslagRepo->getBestTransfers($seizoen), 0, 50);
+
         return array(
             'seizoen' => $seizoen,
             'transfer' => $transfer,
@@ -138,7 +143,8 @@ class UitslagController extends Controller
             'shadowlost' => $lost,
             'stand' => $stand,
             'draft' => $draft,
-            'transferRepo' => $transferRepo);
+            'transferRepo' => $transferRepo,
+            'bestTransfers' => $bestTransfers);
     }
 
 }
