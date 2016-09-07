@@ -364,7 +364,12 @@ class UitslagRepository extends EntityRepository
         return $stmt->fetchAll(\PDO::FETCH_NAMED);
     }
 
-    public function getUitslagenForPloegForNonDraftTransfersQb($ploeg, $seizoen = null)
+    /**
+     * @param $ploeg
+     * @param null $seizoen
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getUitslagenForPloegForNonDraftTransfersQb($ploeg, $seizoen = null, \DateTime $start = null, \DateTime $end = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
@@ -375,6 +380,7 @@ class UitslagRepository extends EntityRepository
         $qb = $this->createQueryBuilder('u');
         $qb->where('u.ploeg = :ploeg')
             ->join('u.wedstrijd', 'w')
+            ->join('u.renner', 'renner')->addSelect('renner')
             ->andWhere('w.seizoen = :seizoen')
             ->andWhere($qb->expr()->in('u.renner', array_merge(array_unique(array_map(function ($a) {
                 return $a->getRenner()->getId();
@@ -385,6 +391,13 @@ class UitslagRepository extends EntityRepository
         return $qb;
     }
 
+    /**
+     * @param $ploeg
+     * @param null $seizoen
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
+     * @return \Doctrine\ORM\QueryBuilder
+     */
     public function getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen = null, \DateTime $start = null, \DateTime $end = null)
     {
         if (null === $seizoen) {
@@ -446,4 +459,33 @@ class UitslagRepository extends EntityRepository
             ->setParameters($parameters)
             ->orderBy('w.datum DESC, u.id', 'DESC');
     }
+
+    /**
+     * @param Seizoen $seizoen
+     * @return array
+     */
+    public function getBestTransfers(Seizoen $seizoen, \DateTime $start = null, \DateTime $end = null)
+    {
+        $res = [];
+        $ploegen = $this->_em->getRepository('CyclearGameBundle:Ploeg')->findBy(['seizoen' => $seizoen]);
+        foreach ($ploegen as $ploeg) {
+            foreach ($this->getUitslagenForPloegForNonDraftTransfersQb($ploeg, $seizoen)
+                         ->getQuery()->getResult() as $transferResult) {
+                $index = $transferResult->getRenner() . $ploeg->getAfkorting();
+                if (!array_key_exists($index, $res)) {
+                    $res[$index] = [
+                        'rider' => $transferResult->getRenner(),
+                        'team' => $transferResult->getPloeg(),
+                        'points' => 0
+                    ];
+                }
+                $res[$index]['points'] += $transferResult->getPloegPunten();
+            }
+        }
+        uasort($res, function ($a, $b) {
+            return $a['points'] > $b['points'] ? -1 : 1;
+        });
+        return $res;
+    }
+
 }
