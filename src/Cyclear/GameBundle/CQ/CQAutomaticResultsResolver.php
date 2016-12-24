@@ -12,7 +12,6 @@
 namespace Cyclear\GameBundle\CQ;
 
 use Cyclear\GameBundle\CQ\Exception\CyclearGameBundleCQException;
-use Cyclear\GameBundle\CQ\Exception\NotEnoughContentException;
 use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\Uitslag;
 use Cyclear\GameBundle\Entity\Wedstrijd;
@@ -20,10 +19,8 @@ use Cyclear\GameBundle\EntityManager\RennerManager;
 use Cyclear\GameBundle\EntityManager\UitslagManager;
 use Cyclear\GameBundle\Form\DataTransformer\RennerNameToRennerIdTransformer;
 use Doctrine\ORM\EntityManager;
-use ErikTrapman\Bundle\CQRankingParserBundle\DataContainer\RecentRaceDataContainer;
 use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Crawler\CrawlerManager;
-use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Exception\CQParserException;
-use ErikTrapman\Bundle\CQRankingParserBundle\Parser\RecentRaces\RecentRacesParser;
+use Monolog\Logger;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class CQAutomaticResultsResolver
@@ -71,7 +68,7 @@ class CQAutomaticResultsResolver
         UitslagManager $uitslagManager,
         CrawlerManager $crawlerManager,
         RennerNameToRennerIdTransformer $transformer,
-        LoggerInterface $logger)
+        Logger $logger)
     {
         $this->em = $em;
         $this->categoryMatcher = $raceCategoryMatcher;
