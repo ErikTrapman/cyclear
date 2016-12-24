@@ -101,7 +101,7 @@ class CQAutomaticResultsResolver
         foreach ($races as $i => $race) {
 
             // we simply use the url as external identifier
-            $wedstrijd = $repo->findOneByExternalIdentifier($race->url);
+            $wedstrijd = $repo->findOneBy(['externalIdentifier' => $race->url]);
             if ($wedstrijd) {
                 continue;
             }
