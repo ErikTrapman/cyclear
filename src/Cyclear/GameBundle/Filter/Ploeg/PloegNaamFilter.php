@@ -14,17 +14,19 @@ use Doctrine\ORM\EntityManager,
     Doctrine\ORM\Mapping\ClassMetaData,
     Doctrine\ORM\Query\ParameterTypeInferer;
 
-class PloegNaamFilter extends \Doctrine\ORM\Query\Filter\SQLFilter {
+class PloegNaamFilter extends \Doctrine\ORM\Query\Filter\SQLFilter
+{
 
-    
-    public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias, $targetTable = '') {
 
-        
+    public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias, $targetTable = '')
+    {
+
+
         //if ($targetEntity->name != "Doctrine\Tests\Models\Company\CompanyPerson") {
         if ($targetEntity->name != "Cyclear\GameBundle\Entity\Ploeg") {
             return "";
         }
-        return $targetTableAlias . '.naam LIKE \'%' . trim($this->getParameter('naam'),"'" ) .'%\'';
+        return $targetTableAlias . '.naam LIKE \'%' . trim($this->getParameter('naam'), "'") . '%\'';
     }
 
 }

@@ -11,6 +11,8 @@
 
 namespace Cyclear\GameBundle\Controller\Admin;
 
+use Cyclear\GameBundle\Form\Filter\RennerFilterType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -43,11 +45,11 @@ class RennerController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQuery('SELECT r FROM CyclearGameBundle:Renner r ORDER BY r.id DESC');
-        $filter = $this->createForm('renner_filter');
+        $filter = $this->createForm(RennerFilterType::class);
         $config = $em->getConfiguration();
         $config->addFilter("naam", "Cyclear\GameBundle\Filter\RennerNaamFilter");
         if ($request->getMethod() == 'POST') {
-            $filter->submit($request);
+            $filter->handleRequest($request);
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
                     $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData(), Type::getType(Type::STRING)->getBindingType());
@@ -78,10 +80,10 @@ class RennerController extends Controller
             throw $this->createNotFoundException('Unable to find Renner entity.');
         }
 
-        $editForm = $this->createForm(new RennerType(), $entity);
+        $editForm = $this->createForm(RennerType::class, $entity);
 
         if ($request->getMethod() == 'POST') {
-            $editForm->submit($request);
+            $editForm->handleRequest($request);
             $em->persist($entity);
             $em->flush();
         }
@@ -93,7 +95,7 @@ class RennerController extends Controller
 
     public function createDeleteForm($id)
     {
-        return $this->createFormBuilder(array('id' => $id))->add('id', 'hidden')->getForm();
+        return $this->createFormBuilder(array('id' => $id))->add('id', HiddenType::class)->getForm();
     }
 
     /**
@@ -104,7 +106,7 @@ class RennerController extends Controller
     public function newAction()
     {
         $entity = new Renner ();
-        $form = $this->createForm(new RennerType(), $entity);
+        $form = $this->createForm(RennerType::class, $entity);
 
         return array('entity' => $entity, 'form' => $form->createView());
     }
@@ -118,8 +120,8 @@ class RennerController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Renner ();
-        $form = $this->createForm(new RennerType(), $entity);
-        $form->submit($request);
+        $form = $this->createForm(RennerType::class, $entity);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -139,10 +141,10 @@ class RennerController extends Controller
     public function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
-        $form->submit($request);
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $renner = $em->getRepository("CyclearGameBundle:Renner")->find($id);
+            $renner = $em->getRepository("CyclearGameBundle:Renner")->findOneByCQId($id);
             $em->remove($renner);
             $em->flush();
 

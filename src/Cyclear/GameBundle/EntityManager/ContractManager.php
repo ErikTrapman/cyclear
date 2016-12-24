@@ -27,7 +27,7 @@ class ContractManager
     public function releaseRenner($renner, $seizoen, $einddatum)
     {
         $currentContract = $this->em->getRepository("CyclearGameBundle:Contract")->getCurrentContract($renner, $seizoen);
-        if(null === $currentContract){
+        if (null === $currentContract) {
             return true;
         }
         $currentContract->setEind($einddatum);

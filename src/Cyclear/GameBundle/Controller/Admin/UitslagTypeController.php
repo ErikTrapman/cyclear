@@ -19,6 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\UitslagType;
 use Cyclear\GameBundle\Form\UitslagTypeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -53,7 +54,7 @@ class UitslagTypeController extends Controller
     public function newAction()
     {
         $entity = new UitslagType();
-        $form = $this->createForm(new UitslagTypeType(), $entity);
+        $form = $this->createForm(UitslagTypeType::class, $entity);
 
         return array(
             'entity' => $entity,
@@ -70,8 +71,8 @@ class UitslagTypeController extends Controller
     public function createAction(Request $request)
     {
         $entity = new UitslagType();
-        $form = $this->createForm(new UitslagTypeType(), $entity);
-        $form->submit($request);
+        $form = $this->createForm(UitslagTypeType::class, $entity);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -104,7 +105,7 @@ class UitslagTypeController extends Controller
             throw $this->createNotFoundException('Unable to find UitslagType entity.');
         }
 
-        $editForm = $this->createForm(new UitslagTypeType(), $entity);
+        $editForm = $this->createForm(UitslagTypeType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -130,10 +131,10 @@ class UitslagTypeController extends Controller
             throw $this->createNotFoundException('Unable to find UitslagType entity.');
         }
 
-        $editForm = $this->createForm(new UitslagTypeType(), $entity);
+        $editForm = $this->createForm(UitslagTypeType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $editForm->submit($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -159,7 +160,7 @@ class UitslagTypeController extends Controller
     {
         $form = $this->createDeleteForm($id);
 
-        $form->submit($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -179,7 +180,7 @@ class UitslagTypeController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
+            ->add('id', HiddenType::class)
             ->getForm();
     }
 }

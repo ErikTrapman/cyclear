@@ -12,6 +12,10 @@
 namespace Cyclear\GameBundle\Form\Admin\Transfer;
 
 use Cyclear\GameBundle\Entity\Transfer;
+use Cyclear\GameBundle\Form\RennerSelectorType;
+use Cyclear\GameBundle\Form\SeizoenSelectorType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class TransferEditType extends \Symfony\Component\Form\AbstractType
 {
@@ -28,9 +32,9 @@ class TransferEditType extends \Symfony\Component\Form\AbstractType
             Transfer::ADMINTRANSFER => 'admin transfer',
             Transfer::USERTRANSFER => 'user transfer');
         $builder
-            ->add('renner', 'renner_selector', array('read_only' => true))
-            ->add('transferType', 'choice', array('choices' => $choices))
-            ->add('datum', 'datetime')
-            ->add('seizoen', 'seizoen_selector');
+            ->add('renner', RennerSelectorType::class, array('attr' => array('read_only' => true)))
+            ->add('transferType', ChoiceType::class, array('choices' => array_flip($choices)))
+            ->add('datum', DateTimeType::class)
+            ->add('seizoen', SeizoenSelectorType::class);
     }
 }

@@ -15,17 +15,19 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\DataTransformerInterface;
 use Doctrine\ORM\EntityManager;
 
-class RennerNameToRennerIdTransformer implements DataTransformerInterface {
+class RennerNameToRennerIdTransformer implements DataTransformerInterface
+{
 
     /**
-     * 
+     *
      * @var Symfony\Bundle\DoctrineBundle\Registry
      */
     private $em;
-    
+
     private $rennerManager;
 
-    public function __construct(EntityManager $em, $rennerManager) {
+    public function __construct(EntityManager $em, $rennerManager)
+    {
         $this->em = $em;
         $this->rennerManager = $rennerManager;
     }
@@ -36,7 +38,8 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface {
      * @param Renner $value
      */
 
-    public function transform($value) {
+    public function transform($value)
+    {
         if ($value === null) {
             return '';
         }
@@ -51,7 +54,8 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface {
      * 
      */
 
-    public function reverseTransform($value) {
+    public function reverseTransform($value)
+    {
         if ($value === null) {
             return "";
         }

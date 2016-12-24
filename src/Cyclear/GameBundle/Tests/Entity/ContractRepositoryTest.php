@@ -17,8 +17,7 @@ class ContractRepositoryTest extends \Cyclear\GameBundle\Tests\BaseFunctional
     public function testGetLastContract()
     {
         $this->doLoadFixtures();
-        
-        
-        
+
+
     }
 }

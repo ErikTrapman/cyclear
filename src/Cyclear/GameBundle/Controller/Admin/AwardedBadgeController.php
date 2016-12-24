@@ -2,6 +2,7 @@
 
 namespace Cyclear\GameBundle\Controller\Admin;
 
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -35,6 +36,7 @@ class AwardedBadgeController extends Controller
             'entities' => $entities,
         );
     }
+
     /**
      * Creates a new AwardedBadge entity.
      *
@@ -58,7 +60,7 @@ class AwardedBadgeController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -71,12 +73,12 @@ class AwardedBadgeController extends Controller
      */
     private function createCreateForm(AwardedBadge $entity)
     {
-        $form = $this->createForm(new AwardedBadgeType(), $entity, array(
+        $form = $this->createForm(AwardedBadgeType::class, $entity, array(
             'action' => $this->generateUrl('admin_awardedbadge_create'),
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', SubmitType::class, array('label' => 'Create'));
 
         return $form;
     }
@@ -91,11 +93,11 @@ class AwardedBadgeController extends Controller
     public function newAction()
     {
         $entity = new AwardedBadge();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -119,7 +121,7 @@ class AwardedBadgeController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -145,30 +147,31 @@ class AwardedBadgeController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
-    * Creates a form to edit a AwardedBadge entity.
-    *
-    * @param AwardedBadge $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a AwardedBadge entity.
+     *
+     * @param AwardedBadge $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(AwardedBadge $entity)
     {
-        $form = $this->createForm(new AwardedBadgeType(), $entity, array(
+        $form = $this->createForm(AwardedBadgeType::class, $entity, array(
             'action' => $this->generateUrl('admin_awardedbadge_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', SubmitType::class, array('label' => 'Update'));
 
         return $form;
     }
+
     /**
      * Edits an existing AwardedBadge entity.
      *
@@ -197,11 +200,12 @@ class AwardedBadgeController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
+
     /**
      * Deletes a AwardedBadge entity.
      *
@@ -240,8 +244,7 @@ class AwardedBadgeController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('admin_awardedbadge_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->add('submit', SubmitType::class, array('label' => 'Delete'))
+            ->getForm();
     }
 }

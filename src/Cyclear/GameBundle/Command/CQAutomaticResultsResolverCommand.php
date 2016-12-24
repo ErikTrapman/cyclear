@@ -15,6 +15,7 @@ use Cyclear\GameBundle\Entity\Seizoen;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\LockHandler;
 
 class CQAutomaticResultsResolverCommand extends ContainerAwareCommand
 {
@@ -25,6 +26,11 @@ class CQAutomaticResultsResolverCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $lockHandler = new LockHandler($this->getName());
+        if (!$lockHandler->lock()) {
+            return 0;
+        }
+
         $resolver = $this->getContainer()->get('cyclear_game.cq.cqautomatic_results_resolver');
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
         /** @var Seizoen $seizoen */

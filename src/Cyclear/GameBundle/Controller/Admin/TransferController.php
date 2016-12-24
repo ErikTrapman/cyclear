@@ -11,12 +11,14 @@
 
 namespace Cyclear\GameBundle\Controller\Admin;
 
+use Cyclear\GameBundle\Form\Admin\Transfer\TransferEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\Transfer;
 use Cyclear\GameBundle\Form\Admin\Transfer\TransferType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -71,7 +73,7 @@ class TransferController extends Controller
         $entity->setDatum(new \DateTime());
         $form = $this->getTransferForm($entity);
         if ('POST' === $request->getMethod()) {
-            $form->submit($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 $form->get('datum')->getData()->setTime(date('H'), date('i'), date('s'));
                 $transferManager = $this->get('cyclear_game.manager.transfer');
@@ -97,7 +99,7 @@ class TransferController extends Controller
         //$entity->setSeizoen($seizoen);
         $form = $this->getTransferForm($entity);
         if ('POST' === $request->getMethod()) {
-            $form->submit($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 $form->get('datum')->getData()->setTime(date('H'), date('i'), date('s'));
                 $transferManager = $this->get('cyclear_game.manager.transfer');
@@ -113,8 +115,7 @@ class TransferController extends Controller
     private function getTransferForm($entity)
     {
         $seizoen = $this->getDoctrine()->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
-        $formtype = new TransferType();
-        $form = $this->createForm($formtype, $entity, array('transfertype' => $entity->getTransferType(), 'seizoen' => $seizoen));
+        $form = $this->createForm(TransferType::class, $entity, array('transfertype' => $entity->getTransferType(), 'seizoen' => $seizoen));
         return $form;
     }
 
@@ -134,7 +135,7 @@ class TransferController extends Controller
             throw $this->createNotFoundException('Unable to find Transfer entity.');
         }
 
-        $editForm = $this->createForm(new \Cyclear\GameBundle\Form\Admin\Transfer\TransferEditType(), $entity);
+        $editForm = $this->createForm(TransferEditType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
         return array(
             'entity' => $entity,
@@ -159,10 +160,10 @@ class TransferController extends Controller
             throw $this->createNotFoundException('Unable to find Transfer entity.');
         }
 
-        $editForm = $this->createForm(new \Cyclear\GameBundle\Form\Admin\Transfer\TransferEditType(), $entity);
+        $editForm = $this->createForm(TransferEditType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $editForm->submit($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -188,7 +189,7 @@ class TransferController extends Controller
     {
         $form = $this->createDeleteForm($id);
 
-        $form->submit($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -197,13 +198,13 @@ class TransferController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Transfer entity.');
             }
-            
+
             $transferManager = $this->get('cyclear_game.manager.transfer');
             $res = $transferManager->revertTransfer($entity);
-            if(!$res){
+            if (!$res) {
                 $this->get('session')->getFlashBag()->add('error', 'Transfer kon niet verwijderd worden');
             }
-            
+
             $em->flush();
         }
 
@@ -213,8 +214,7 @@ class TransferController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
-                ->add('id', 'hidden')
-                ->getForm()
-        ;
+            ->add('id', HiddenType::class)
+            ->getForm();
     }
 }

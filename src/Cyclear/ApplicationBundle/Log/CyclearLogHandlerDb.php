@@ -16,7 +16,7 @@ use Monolog\Handler\AbstractHandler;
 class CyclearLogHandlerDb extends AbstractHandler
 {
     /**
-     * 
+     *
      * @var PDO
      */
     private $pdo;

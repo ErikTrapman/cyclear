@@ -85,7 +85,7 @@ class TransferManagerTest extends BaseFunctional
     }
 
     /**
-     * 
+     *
      * @dataProvider testRevertExchangeTransfersDataProvider
      */
     public function testRevertExchangeTransfer($revertId1, $revertId2)
@@ -292,11 +292,11 @@ class TransferManagerTest extends BaseFunctional
 
     public function testReleaseTransfersAreCreated()
     {
-        
+
     }
 
     public function testInversionTransfersAreAsExpected()
     {
-        
+
     }
 }

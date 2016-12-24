@@ -49,11 +49,11 @@ class CyclearLogHandlerMail extends AbstractHandler
     private function handleMail($record)
     {
         $message = \Swift_Message::newInstance()
-            ->setSubject('[Cyclear] Error from '.$_SERVER['REQUEST_URI'])
+            ->setSubject('[Cyclear] Error from ' . $_SERVER['REQUEST_URI'])
             ->setFrom('error@cyclear.nl')
             // TODO FIXME emailadres uit config halen
             ->setTo($this->mailTo)
-            ->setBody('Holy crap, een foutmelding:'."\n".$record['message']);
+            ->setBody('Holy crap, een foutmelding:' . "\n" . $record['message']);
         $this->mailer->send($message);
     }
 }

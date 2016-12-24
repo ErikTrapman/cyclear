@@ -33,10 +33,10 @@ class SpelregelsController extends Controller
     public function indexAction(Request $request, Seizoen $seizoen)
     {
         $spelregels = $this->getDoctrine()->getRepository("CyclearGameBundle:Spelregels")->createQueryBuilder("s")
-            ->where('s.seizoen = :seizoen')->orderBy('s.id','DESC')->setMaxResults(1)
-            ->setParameter('seizoen', $seizoen )
+            ->where('s.seizoen = :seizoen')->orderBy('s.id', 'DESC')->setMaxResults(1)
+            ->setParameter('seizoen', $seizoen)
             ->getQuery()->getResult();
-        if(array_key_exists(0,$spelregels)){
+        if (array_key_exists(0, $spelregels)) {
             $spelregels = $spelregels[0];
         } else {
             $spelregels = null;

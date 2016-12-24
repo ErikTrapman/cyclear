@@ -67,7 +67,7 @@ class UserManager
             return $acl->isGranted(array(MaskBuilder::MASK_OWNER), array($securityIdentity));
         } catch (AclNotFoundException $e) {
             return false;
-        } catch(\Symfony\Component\Security\Acl\Exception\NoAceFoundException $e){
+        } catch (\Symfony\Component\Security\Acl\Exception\NoAceFoundException $e) {
             return false;
         }
         return false;

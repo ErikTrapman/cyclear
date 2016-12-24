@@ -12,7 +12,9 @@
 namespace Cyclear\GameBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,22 +26,23 @@ class UitslagType extends AbstractType
         $seizoen = $options['seizoen'];
         // array( 'allow_add' => true, 'type' => $w)
         $builder
-            ->add('positie', 'hidden')
+            ->add('positie', HiddenType::class)
             ->add('ploegPunten')
+            ->add('positie')
             ->add('rennerPunten');
         if ($options['use_wedstrijd']) {
-            $builder->add('wedstrijd', 'entity', array('class' => 'Cyclear\GameBundle\Entity\Wedstrijd', 'query_builder' =>
+            $builder->add('wedstrijd', EntityType::class, array('class' => 'Cyclear\GameBundle\Entity\Wedstrijd', 'query_builder' =>
                 function (EntityRepository $e) use ($seizoen) {
                     return $e->createQueryBuilder('w')->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->orderBy('w.id', 'DESC');
                 }));
         }
         $builder
-            ->add('ploeg', 'entity', array('required' => false,
+            ->add('ploeg', EntityType::class, array('required' => false,
                 'class' => 'CyclearGameBundle:Ploeg',
                 'query_builder' => function (EntityRepository $e) use ($seizoen) {
                     return $e->createQueryBuilder('p')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->orderBy('p.afkorting');
                 }))
-            ->add('renner', 'renner_selector');
+            ->add('renner', RennerSelectorType::class);
     }
 
     public function getName()

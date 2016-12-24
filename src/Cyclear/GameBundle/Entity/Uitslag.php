@@ -76,7 +76,7 @@ class Uitslag
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -96,7 +96,7 @@ class Uitslag
     /**
      * Get wedstrijd
      *
-     * @return object 
+     * @return object
      */
     public function getWedstrijd()
     {
@@ -116,7 +116,7 @@ class Uitslag
     /**
      * Get renner
      *
-     * @return object 
+     * @return object
      */
     public function getRenner()
     {
@@ -136,7 +136,7 @@ class Uitslag
     /**
      * Get ploeg
      *
-     * @return object 
+     * @return object
      */
     public function getPloeg()
     {
@@ -156,7 +156,7 @@ class Uitslag
     /**
      * Get positie
      *
-     * @return smallint 
+     * @return smallint
      */
     public function getPositie()
     {
@@ -176,7 +176,7 @@ class Uitslag
     /**
      * Get punten
      *
-     * @return float 
+     * @return float
      */
     public function getPloegPunten()
     {
@@ -195,6 +195,6 @@ class Uitslag
 
     public function __toString()
     {
-        return 'uitslag nr '.$this->getId();
+        return 'uitslag nr ' . $this->getId();
     }
 }

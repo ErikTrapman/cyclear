@@ -12,6 +12,7 @@
 namespace Cyclear\GameBundle\Form\EventListener;
 
 use Symfony\Component\Form\Event\DataEvent;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvents;
@@ -61,11 +62,11 @@ class IsAdminFieldSubscriber implements EventSubscriberInterface
 
         $checked = $data->hasRole('ROLE_ADMIN');
 
-        $form->add($this->factory->createNamed('is_admin', 'checkbox', $checked, array(
-                'mapped' => false,
-                'required' => false,
-                'auto_initialize' => false
-            )));
+        $form->add($this->factory->createNamed('is_admin', CheckboxType::class, $checked, array(
+            'mapped' => false,
+            'required' => false,
+            'auto_initialize' => false
+        )));
     }
 
     /**

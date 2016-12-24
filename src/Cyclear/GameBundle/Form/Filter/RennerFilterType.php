@@ -11,14 +11,16 @@
 
 namespace Cyclear\GameBundle\Form\Filter;
 
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 class RennerFilterType extends \Symfony\Component\Form\AbstractType
 {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-        $builder->add('naam', 'text', array(
+        $builder->add('naam', TextType::class, array(
             'required' => false,
-            'label'=>'Naam / CQ-id'));
+            'label' => 'Naam / CQ-id'));
     }
 
     public function getName()

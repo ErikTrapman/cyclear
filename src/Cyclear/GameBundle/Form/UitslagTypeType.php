@@ -11,6 +11,9 @@
 
 namespace Cyclear\GameBundle\Form;
 
+use ErikTrapman\Bundle\CQRankingParserBundle\Form\Type\StrategySelectorType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+
 class UitslagTypeType extends \Symfony\Component\Form\AbstractType
 {
 
@@ -18,9 +21,9 @@ class UitslagTypeType extends \Symfony\Component\Form\AbstractType
     {
         $builder
             ->add('naam')
-            ->add('maxResults', 'integer')
+            ->add('maxResults', IntegerType::class)
             ->add('isGeneralClassification', null, array('required' => false))
-            ->add('cqParsingStrategy', 'eriktrapman_cqparser_strategy', array('property_path' => 'cqParsingStrategy'))
+            ->add('cqParsingStrategy', StrategySelectorType::class, array('property_path' => 'cqParsingStrategy'))
             ->add('automaticResolvingCategories');
     }
 

@@ -11,6 +11,7 @@
 
 namespace Cyclear\GameBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -22,7 +23,7 @@ class RennerType extends AbstractType
         $builder
             ->add('naam')
             ->add('cqranking_id', null, array('required' => true, 'label' => 'CQ-id'))
-            ->add('country', 'entity', array(
+            ->add('country', EntityType::class, array(
                 'class' => 'CyclearGameBundle:Country',
                 'query_builder' => function (\Doctrine\ORM\EntityRepository $e) {
                     return $e->createQueryBuilder('c')->orderBy('c.name');

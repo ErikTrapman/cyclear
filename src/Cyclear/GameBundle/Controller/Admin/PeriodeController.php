@@ -19,6 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\Periode;
 use Cyclear\GameBundle\Form\PeriodeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -34,12 +35,17 @@ class PeriodeController extends Controller
      * @Route("/", name="admin_periode")
      * @Template("CyclearGameBundle:Periode/Admin:index.html.twig")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('CyclearGameBundle:Periode')->findAll();
-        
+        $entities = $em->getRepository('CyclearGameBundle:Periode')->createQueryBuilder('p')->orderBy('p.eind', 'DESC');
+
+        $paginator = $this->get('knp_paginator');
+        $entities = $paginator->paginate(
+            $entities, $request->query->get('page', 1)/* page number */, 20/* limit per page */
+        );
+
         return array('entities' => $entities);
     }
 
@@ -52,11 +58,11 @@ class PeriodeController extends Controller
     public function newAction()
     {
         $entity = new Periode();
-        $form   = $this->createForm(new PeriodeType(), $entity);
+        $form = $this->createForm(PeriodeType::class, $entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         );
     }
 
@@ -68,9 +74,9 @@ class PeriodeController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity  = new Periode();
-        $form    = $this->createForm(new PeriodeType(), $entity);
-        $form->submit($request);
+        $entity = new Periode();
+        $form = $this->createForm(PeriodeType::class, $entity);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -78,12 +84,12 @@ class PeriodeController extends Controller
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_periode'));
-            
+
         }
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         );
     }
 
@@ -103,12 +109,12 @@ class PeriodeController extends Controller
             throw $this->createNotFoundException('Unable to find Periode entity.');
         }
 
-        $editForm = $this->createForm(new PeriodeType(), $entity);
+        $editForm = $this->createForm(PeriodeType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -129,10 +135,10 @@ class PeriodeController extends Controller
             throw $this->createNotFoundException('Unable to find Periode entity.');
         }
 
-        $editForm   = $this->createForm(new PeriodeType(), $entity);
+        $editForm = $this->createForm(PeriodeType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $editForm->submit($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -142,8 +148,8 @@ class PeriodeController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -158,7 +164,7 @@ class PeriodeController extends Controller
     {
         $form = $this->createDeleteForm($id);
 
-        $form->submit($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -178,8 +184,7 @@ class PeriodeController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
-        ;
+            ->add('id', HiddenType::class)
+            ->getForm();
     }
 }

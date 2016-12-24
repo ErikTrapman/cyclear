@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\Spelregels;
 use Cyclear\GameBundle\Form\SpelregelsType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -50,7 +51,7 @@ class SpelregelsController extends Controller
     public function newAction()
     {
         $entity = new Spelregels();
-        $form = $this->createForm(new SpelregelsType(), $entity);
+        $form = $this->createForm(SpelregelsType::class, $entity);
 
         return array(
             'entity' => $entity,
@@ -67,8 +68,8 @@ class SpelregelsController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Spelregels();
-        $form = $this->createForm(new SpelregelsType(), $entity);
-        $form->submit($request);
+        $form = $this->createForm(SpelregelsType::class, $entity);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -101,7 +102,7 @@ class SpelregelsController extends Controller
             throw $this->createNotFoundException('Unable to find Spelregels entity.');
         }
 
-        $editForm = $this->createForm(new SpelregelsType(), $entity);
+        $editForm = $this->createForm(SpelregelsType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -127,10 +128,10 @@ class SpelregelsController extends Controller
             throw $this->createNotFoundException('Unable to find Spelregels entity.');
         }
 
-        $editForm = $this->createForm(new SpelregelsType(), $entity);
+        $editForm = $this->createForm(SpelregelsType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $editForm->submit($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -156,7 +157,7 @@ class SpelregelsController extends Controller
     {
         $form = $this->createDeleteForm($id);
 
-        $form->submit($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -176,7 +177,7 @@ class SpelregelsController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
+            ->add('id', HiddenType::class)
             ->getForm();
     }
 }

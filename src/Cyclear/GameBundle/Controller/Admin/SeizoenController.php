@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Form\SeizoenType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -38,7 +39,7 @@ class SeizoenController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('CyclearGameBundle:Seizoen')->findAll();
-        
+
         return array('entities' => $entities);
     }
 
@@ -52,11 +53,11 @@ class SeizoenController extends Controller
     public function newAction()
     {
         $entity = new Seizoen();
-        $form   = $this->createForm(new SeizoenType(), $entity);
+        $form = $this->createForm(SeizoenType::class, $entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         );
     }
 
@@ -68,9 +69,9 @@ class SeizoenController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity  = new Seizoen();
-        $form    = $this->createForm(new SeizoenType(), $entity);
-        $form->submit($request);
+        $entity = new Seizoen();
+        $form = $this->createForm(SeizoenType::class, $entity);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -78,12 +79,12 @@ class SeizoenController extends Controller
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_seizoen'));
-            
+
         }
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         );
     }
 
@@ -103,12 +104,12 @@ class SeizoenController extends Controller
             throw $this->createNotFoundException('Unable to find entity.');
         }
 
-        $editForm = $this->createForm(new SeizoenType(), $entity);
+        $editForm = $this->createForm(SeizoenType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -129,10 +130,10 @@ class SeizoenController extends Controller
             throw $this->createNotFoundException('Unable to find entity.');
         }
 
-        $editForm   = $this->createForm(new SeizoenType(), $entity);
+        $editForm = $this->createForm(SeizoenType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $editForm->submit($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -142,8 +143,8 @@ class SeizoenController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -158,7 +159,7 @@ class SeizoenController extends Controller
     {
         $form = $this->createDeleteForm($id);
 
-        $form->submit($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -178,8 +179,7 @@ class SeizoenController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
-        ;
+            ->add('id', HiddenType::class)
+            ->getForm();
     }
 }

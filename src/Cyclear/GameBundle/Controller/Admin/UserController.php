@@ -11,6 +11,7 @@
 
 namespace Cyclear\GameBundle\Controller\Admin;
 
+use Cyclear\GameBundle\Form\UserEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -50,8 +51,7 @@ class UserController extends Controller
      */
     public function newAction()
     {
-        //$form = $this->get('fos_user.registration.form.type');
-        $form = $this->createForm('admin_user_new');
+        $form = $this->createForm(UserType::class);
 
         return array(
             'form' => $form->createView()
@@ -66,7 +66,7 @@ class UserController extends Controller
      */
     public function createAction(Request $request)
     {
-        $form = $this->createForm('admin_user_new');
+        $form = $this->createForm(UserType::class);
         $userManager = $this->container->get('fos_user.user_manager');
 
         $user = $userManager->createUser();
@@ -75,7 +75,7 @@ class UserController extends Controller
         $form->setData($user);
         // IMPORTANT. We vragen niet om een password in het formulier. Zet hier dus tenminste een wachtwoord!
         $user->setPlainPassword(uniqid());
-        $form->submit($request);
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $userManager->updateUser($user);
             return $this->redirect($this->generateUrl('admin_user_edit', array('id' => $user->getId())));
@@ -102,12 +102,11 @@ class UserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-        $editForm = $this->createForm('admin_user_edit', $entity, array('user' => $entity));
+        $editForm = $this->createForm(UserEditType::class, $entity, array('user' => $entity));
 
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView()
-            //'delete_form' => $deleteForm->createView(),
         );
     }
 
@@ -127,7 +126,7 @@ class UserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-        $editForm = $this->createForm('admin_user_edit', $entity);
+        $editForm = $this->createForm(UserEditType::class, $entity);
 
 
         // http://symfony.com/doc/master/cookbook/form/form_collections.html - Ensuring the database persistence
@@ -137,7 +136,7 @@ class UserController extends Controller
             $originalPloegen[] = $ploeg;
         }
 
-        $editForm->submit($request);
+        $editForm->handleRequest($request);
         if ($editForm->isValid()) {
 
             $usermanager = $this->get('cyclear_game.manager.user');

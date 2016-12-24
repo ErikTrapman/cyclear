@@ -11,9 +11,12 @@
 
 namespace Cyclear\GameBundle\Form;
 
+use Cyclear\GameBundle\EntityManager\RennerManager;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\RouterInterface;
 
 class RennerSelectorType extends AbstractType
 {
@@ -23,10 +26,21 @@ class RennerSelectorType extends AbstractType
      */
     private $em;
 
+    /**
+     * @var RennerManager
+     */
     private $rennerManager;
 
+    /**
+     * @var RouterInterface
+     */
     private $router;
 
+    /**
+     * @param \Doctrine\ORM\EntityManager $em
+     * @param RennerManager $rennerManager
+     * @param RouterInterface $router
+     */
     public function __construct(\Doctrine\ORM\EntityManager $em, $rennerManager, $router)
     {
         $this->em = $em;
@@ -37,14 +51,12 @@ class RennerSelectorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $transformer = new DataTransformer\RennerNameToRennerIdTransformer($this->em, $this->rennerManager);
-        //$builder->add('renner','text');
         $builder->addViewTransformer($transformer);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $url = $this->router->generate('get_riders', array('_format' => 'json'));
-        //$url = $this->router->generate('renner_search');
         $resolver->setDefaults(
             array('invalid_message' => 'De ingevulde renner is niet teruggevonden',
                 'attr' => array(
@@ -55,7 +67,12 @@ class RennerSelectorType extends AbstractType
 
     public function getParent()
     {
-        return 'text';
+        return TextType::class;
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'renner_selector';
     }
 
     public function getName()

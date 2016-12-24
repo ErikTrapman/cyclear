@@ -34,6 +34,10 @@
 
     </table>
 
+    <div id="navigation">
+        {{ knp_pagination_render(entities, null, {}, {'firstPageRoute': 'admin_contract'}) }}
+    </div>
+
     <ul>
         <li>
             <a href="{{ path('admin_periode_new') }}">

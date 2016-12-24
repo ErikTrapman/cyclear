@@ -16,7 +16,7 @@ class BaseFunctional extends \Liip\FunctionalTestBundle\Test\WebTestCase
 
     public function setUp()
     {
-        
+
     }
 
     public function doLoadFixtures()

@@ -10,7 +10,7 @@
 {% block content %}
     <h3>Spelregels creation</h3>
 
-    <form action="{{ path('admin_spelregels_create') }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('admin_spelregels_create') }}" method="post">
         {{ form_widget(form) }}
         <p>
             <button class="btn btn-default" type="submit">Create</button>

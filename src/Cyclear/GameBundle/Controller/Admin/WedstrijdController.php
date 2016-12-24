@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\Wedstrijd,
     Cyclear\GameBundle\Form\WedstrijdType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -53,7 +54,7 @@ class WedstrijdController extends Controller
     public function newAction()
     {
         $entity = new Wedstrijd();
-        $form = $this->createForm(new WedstrijdType(), $entity);
+        $form = $this->createForm(WedstrijdType::class, $entity);
 
         return array(
             'entity' => $entity,
@@ -70,8 +71,8 @@ class WedstrijdController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Wedstrijd();
-        $form = $this->createForm(new WedstrijdType(), $entity);
-        $form->submit($request);
+        $form = $this->createForm(WedstrijdType::class, $entity);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -103,7 +104,7 @@ class WedstrijdController extends Controller
             throw $this->createNotFoundException('Unable to find Wedstrijd entity.');
         }
 
-        $editForm = $this->createForm(new WedstrijdType(), $entity);
+        $editForm = $this->createForm(WedstrijdType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -129,10 +130,10 @@ class WedstrijdController extends Controller
             throw $this->createNotFoundException('Unable to find Wedstrijd entity.');
         }
 
-        $editForm = $this->createForm(new WedstrijdType(), $entity);
+        $editForm = $this->createForm(WedstrijdType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $editForm->submit($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -158,7 +159,7 @@ class WedstrijdController extends Controller
     {
         $form = $this->createDeleteForm($id);
 
-        $form->submit($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -178,7 +179,7 @@ class WedstrijdController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
+            ->add('id', HiddenType::class)
             ->getForm();
     }
 

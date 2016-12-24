@@ -5,6 +5,7 @@ namespace Cyclear\GameBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class BadgeType extends AbstractType
 {
@@ -16,7 +17,7 @@ class BadgeType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('imageFile', 'vich_file', ['required' => false]);
+            ->add('imageFile', VichFileType::class, ['required' => false]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

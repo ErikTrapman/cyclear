@@ -12,6 +12,7 @@
 namespace Cyclear\GameBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class PeriodeType extends AbstractType
@@ -19,11 +20,10 @@ class PeriodeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('start','date')
-            ->add('eind','date')
-            ->add('transfers',null, array('label'=>'Aantal transfers'))
-            ->add('seizoen','seizoen_selector')
-        ;
+            ->add('start', DateType::class)
+            ->add('eind', DateType::class)
+            ->add('transfers', null, array('label' => 'Aantal transfers'))
+            ->add('seizoen', SeizoenSelectorType::class);
     }
 
     public function getName()

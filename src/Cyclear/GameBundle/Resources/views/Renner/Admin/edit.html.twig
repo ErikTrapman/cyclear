@@ -22,7 +22,7 @@
         </li>
         <li>
             <form action="{{ path('admin_renner_delete', { 'id': entity.cqranking_id }) }}"
-                  method="post" {{ form_enctype(delete_form) }}>
+                  method="post">
                 {{ form_widget(delete_form) }}
                 <button class="btn btn-default" type="submit">Delete</button>
             </form>

@@ -29,7 +29,7 @@ class Spelregels
     private $id;
 
     /**
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
      */
     private $seizoen;

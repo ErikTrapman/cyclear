@@ -11,6 +11,8 @@
 
 namespace Cyclear\GameBundle\Controller\Admin;
 
+use Cyclear\GameBundle\Entity\Contract;
+use Cyclear\GameBundle\Form\Filter\RennerIdFilterType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -36,12 +38,12 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
     {
         $em = $this->getDoctrine()->getManager();
 
-        $filter = $this->createForm('renner_id_filter');
+        $filter = $this->createForm(RennerIdFilterType::class);
         $config = $em->getConfiguration();
         $config->addFilter("renner", "Cyclear\GameBundle\Filter\RennerIdFilter");
         $entities = $em->getRepository('CyclearGameBundle:Contract')->createQueryBuilder('c')->orderBy('c.id', 'DESC');
         if ($request->getMethod() == 'POST') {
-            $filter->submit($request);
+            $filter->handleRequest($request);
             if ($filter->isValid()) {
                 if ($filter->get('renner')->getData()) {
                     //$em->getFilters()->enable("renner")->setParameter(
@@ -69,7 +71,7 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
     public function newAction()
     {
         $entity = new Contract();
-        $form = $this->createForm(new ContractType(), $entity);
+        $form = $this->createForm(ContractType::class, $entity);
 
         return array(
             'entity' => $entity,
@@ -86,8 +88,8 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
     public function createAction(Request $request)
     {
         $entity = new Contract();
-        $form = $this->createForm(new ContractType(), $entity);
-        $form->submit($request);
+        $form = $this->createForm(ContractType::class, $entity);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -120,7 +122,7 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
         }
 
         $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
-        $editForm = $this->createForm(new ContractType(), $entity, array('seizoen' => $seizoen));
+        $editForm = $this->createForm(ContractType::class, $entity, array('seizoen' => $seizoen));
 
         return array(
             'entity' => $entity,
@@ -144,9 +146,9 @@ class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
             throw $this->createNotFoundException('Unable to find entity.');
         }
 
-        $editForm = $this->createForm(new ContractType(), $entity);
+        $editForm = $this->createForm(ContractType::class, $entity);
 
-        $editForm->submit($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);

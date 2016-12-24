@@ -5,7 +5,7 @@
 {% block content %}
     <h3>Renner creation</h3>
 
-    <form action="{{ path('admin_renner_create') }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('admin_renner_create') }}" method="post">
         {{ form_widget(form) }}
         <p>
             <button class="btn btn-default" type="submit">Create</button>

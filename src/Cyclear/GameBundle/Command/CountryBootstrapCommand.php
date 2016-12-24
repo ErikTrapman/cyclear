@@ -23,8 +23,7 @@ class CountryBootstrapCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('cyclear:country-bootstrap')
-            ->setDescription('Add countries in locales nl_NL and en_GB')
-        ;
+            ->setDescription('Add countries in locales nl_NL and en_GB');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -32,7 +31,7 @@ class CountryBootstrapCommand extends ContainerAwareCommand
         // add ISO-list of countries
         $kernel = $this->getContainer()->get('kernel');
         $yaml = Yaml::parse(file_get_contents(
-                    $kernel->getRootDir().DIRECTORY_SEPARATOR.'Resources/files/umpirsky/country-list/cldr.country.nl_NL.yaml'));
+            $kernel->getRootDir() . DIRECTORY_SEPARATOR . 'Resources/files/umpirsky/country-list/cldr.country.nl_NL.yaml'));
 
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $cRepo = $em->getRepository("CyclearGameBundle:Country");
@@ -50,7 +49,7 @@ class CountryBootstrapCommand extends ContainerAwareCommand
         $em->flush();
 
         $yamlEN = Yaml::parse(file_get_contents(
-                    $kernel->getRootDir().DIRECTORY_SEPARATOR.'Resources/files/umpirsky/country-list/cldr.country.en_GB.yaml'));
+            $kernel->getRootDir() . DIRECTORY_SEPARATOR . 'Resources/files/umpirsky/country-list/cldr.country.en_GB.yaml'));
         foreach ($yamlEN as $iso => $name) {
             $country = $cRepo->findOneByIso2($iso);
             if (null !== $country) {

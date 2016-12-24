@@ -2,6 +2,7 @@
 
 namespace Cyclear\GameBundle\Controller\Admin;
 
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -72,12 +73,12 @@ class BadgeController extends Controller
      */
     private function createCreateForm(Badge $entity)
     {
-        $form = $this->createForm(new BadgeType(), $entity, array(
+        $form = $this->createForm(BadgeType::class, $entity, array(
             'action' => $this->generateUrl('badge_create'),
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', SubmitType::class, array('label' => 'Create'));
 
         return $form;
     }
@@ -161,12 +162,12 @@ class BadgeController extends Controller
      */
     private function createEditForm(Badge $entity)
     {
-        $form = $this->createForm(new BadgeType(), $entity, array(
+        $form = $this->createForm(BadgeType::class, $entity, array(
             'action' => $this->generateUrl('badge_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', SubmitType::class, array('label' => 'Update'));
 
         return $form;
     }
@@ -243,7 +244,7 @@ class BadgeController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('badge_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', SubmitType::class, array('label' => 'Delete'))
             ->getForm();
     }
 }

@@ -11,7 +11,9 @@
 
 namespace Cyclear\GameBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -26,10 +28,10 @@ class WedstrijdType extends AbstractType
             $dateOptions['data'] = $options['default_date'];
         }
         $builder
-            ->add('datum', 'date', $dateOptions)
+            ->add('datum', DateType::class, $dateOptions)
             ->add('naam')
-            ->add('uitslagtype', 'entity', array('class' => 'CyclearGameBundle:UitslagType', 'mapped' => false))
-            ->add('seizoen', 'seizoen_selector');
+            ->add('uitslagtype', EntityType::class, array('class' => 'CyclearGameBundle:UitslagType', 'mapped' => false))
+            ->add('seizoen', SeizoenSelectorType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

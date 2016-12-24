@@ -11,12 +11,13 @@
 
 namespace Cyclear\GameBundle\Form\Filter;
 
+use Cyclear\GameBundle\Form\RennerSelectorType;
+
 class RennerIdFilterType extends \Symfony\Component\Form\AbstractType
 {
-
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-        $builder->add('renner', 'renner_selector', array(
+        $builder->add('renner', RennerSelectorType::class, array(
             'required' => false,
             'label' => 'Naam / CQ-id'));
     }

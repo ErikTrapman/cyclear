@@ -61,7 +61,7 @@ class AppLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -81,7 +81,7 @@ class AppLog
     /**
      * Get time
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getTime()
     {
@@ -101,7 +101,7 @@ class AppLog
     /**
      * Get ip
      *
-     * @return string 
+     * @return string
      */
     public function getIp()
     {
@@ -121,7 +121,7 @@ class AppLog
     /**
      * Get source
      *
-     * @return string 
+     * @return string
      */
     public function getSource()
     {
@@ -141,7 +141,7 @@ class AppLog
     /**
      * Get message
      *
-     * @return text 
+     * @return text
      */
     public function getMessage()
     {

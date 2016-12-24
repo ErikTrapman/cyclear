@@ -11,6 +11,7 @@
 
 namespace Cyclear\GameBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
@@ -40,7 +41,7 @@ class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
 
     public function getParent()
     {
-        return 'entity';
+        return EntityType::class;
     }
 
     public function getName()

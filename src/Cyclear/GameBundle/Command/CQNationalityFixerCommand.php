@@ -26,14 +26,13 @@ class CQNationalityFixerCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('cyclear:fixer:nationality')
-            ->setDescription('Nationaliteit toevoegen obv CQ-nationaliteit code')
-        ;
+            ->setDescription('Nationaliteit toevoegen obv CQ-nationaliteit code');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $kernel = $this->getContainer()->get('kernel');
-        $file = new SplFileObject( $kernel->getRootDir().DIRECTORY_SEPARATOR.'/Resources/files/cq/CQRiders.csv');
+        $file = new SplFileObject($kernel->getRootDir() . DIRECTORY_SEPARATOR . '/Resources/files/cq/CQRiders.csv');
 
         $r = new CsvReader($file, ";");
         $r->setHeaderRowNumber(0);
@@ -45,14 +44,14 @@ class CQNationalityFixerCommand extends ContainerAwareCommand
 
         $resolver = new NationalityResolver();
         $transRepo = $em->getRepository('Gedmo\\Translatable\\Entity\\Translation');
-        
+
         foreach ($r as $i => $row) {
             $cqId = $row['RiderID'];
             $rider = $riderRepo->findOneByCQId($cqId);
-            if(null === $rider){
+            if (null === $rider) {
                 continue;
             }
-            if(null !== $rider->getCountry()){
+            if (null !== $rider->getCountry()) {
                 continue;
             }
             $country = null;
@@ -61,14 +60,14 @@ class CQNationalityFixerCommand extends ContainerAwareCommand
             }
             $countryName = $resolver->getFullNameFromCode($row['Nationality']);
             if (!strlen($countryName)) {
-                $output->writeln("Skipped row ".$cqId);
+                $output->writeln("Skipped row " . $cqId);
                 continue;
             }
             if (null === $countryName) {
-                $output->writeln($row['Nationality']." not found in NationalityResolver");
+                $output->writeln($row['Nationality'] . " not found in NationalityResolver");
                 break;
             }
-             
+
             $rider->setNaam($row["Name"]);
             $trans = $transRepo->findOneBy(array('content' => $countryName, 'locale' => 'en_GB'));
             if (null === $trans) {
@@ -76,13 +75,13 @@ class CQNationalityFixerCommand extends ContainerAwareCommand
             } else {
                 $country = $countryRepo->find($trans->getForeignKey());
             }
-            if(null === $country){
-                $output->writeln("Unable to resolve $countryName from abbreviation ".$row['Nationality']);
+            if (null === $country) {
+                $output->writeln("Unable to resolve $countryName from abbreviation " . $row['Nationality']);
                 break;
             }
             $rider->setCountry($country);
             $em->persist($rider);
-            if($i % 250 == 0 && $i != 0){
+            if ($i % 250 == 0 && $i != 0) {
                 $output->writeln("$i; have to flush");
                 $em->flush();
                 $em->clear();

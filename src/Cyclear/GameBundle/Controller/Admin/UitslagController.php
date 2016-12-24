@@ -16,6 +16,7 @@ use Cyclear\GameBundle\Entity\Wedstrijd;
 use Cyclear\GameBundle\EntityManager\RennerManager;
 use Cyclear\GameBundle\EntityManager\UitslagManager;
 use Cyclear\GameBundle\Form\UitslagConfirmType;
+use Cyclear\GameBundle\Form\UitslagCreateType;
 use Cyclear\GameBundle\Form\UitslagNewType;
 use Cyclear\GameBundle\Form\UitslagType;
 use Cyclear\GameBundle\Form\WedstrijdType;
@@ -64,9 +65,9 @@ class UitslagController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $seizoen = $uitslag->getWedstrijd()->getSeizoen();
-        $form = $this->createForm(new UitslagType(), $uitslag, array('seizoen' => $seizoen));
+        $form = $this->createForm(UitslagType::class, $uitslag, array('seizoen' => $seizoen));
         if ('POST' === $request->getMethod()) {
-            $form->submit($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 $em->flush();
                 return $this->redirect($this->generateUrl('admin_uitslag_edit', array('uitslag' => $uitslag->getId())));
@@ -86,9 +87,9 @@ class UitslagController extends Controller
         $em = $this->getDoctrine()->getManager();
         $seizoen = $em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new UitslagType(), $uitslag, array('seizoen' => $seizoen));
+        $form = $this->createForm(UitslagType::class, $uitslag, array('seizoen' => $seizoen));
         if ('POST' === $request->getMethod()) {
-            $form->submit($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 $em->persist($uitslag);
                 $em->flush();
@@ -119,9 +120,9 @@ class UitslagController extends Controller
         $options['seizoen'] = $em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         $options['renner_manager'] = $rennerManager;
         $options['default_date'] = new DateTime();
-        $form = $this->createForm(new \Cyclear\GameBundle\Form\UitslagCreateType(), null, $options);
+        $form = $this->createForm(UitslagCreateType::class, null, $options);
         if ($request->isXmlHttpRequest()) {
-            $form->submit($request);
+            $form->handleRequest($request);
 
             $twig = $this->get('twig');
             $templateFile = "CyclearGameBundle:Uitslag/Admin:_ajaxTemplate.html.twig";
@@ -132,7 +133,7 @@ class UitslagController extends Controller
             return new Response($body);
         }
         if ($request->getMethod() == 'POST') {
-            $form->submit($request);
+            $form->handleRequest($request);
             /** @var Wedstrijd $wedstrijd */
             $wedstrijd = $form->get('wedstrijd')->getData();
             $uitslagType = $form->get('wedstrijd')->get('uitslagtype')->getData();

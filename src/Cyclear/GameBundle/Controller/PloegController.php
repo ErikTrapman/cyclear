@@ -75,7 +75,7 @@ class PloegController extends Controller
             ->add('save', SubmitType::class)
             ->getForm();
         if ('POST' === $request->getMethod()) {
-            if ($form->submit($request)->isValid()) {
+            if ($form->handleRequest($request)->isValid()) {
                 $em->flush($entity);
                 return $this->redirect($this->generateUrl('ploeg_show', ['id' => $entity->getId(), 'seizoen' => $seizoen->getSlug()]));
             }

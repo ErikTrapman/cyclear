@@ -11,6 +11,7 @@
 
 namespace Cyclear\GameBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Cyclear\GameBundle\Validator\Constraints as CyclearAssert;
@@ -27,13 +28,13 @@ class TransferUserType extends AbstractType
     {
         if (null !== $options['renner_uit']) {
             $builder
-                ->add('renner_in', 'renner_selector', array('label' => 'Renner in', 'mapped' => 'rennerIn'));
+                ->add('renner_in', RennerSelectorType::class, array('label' => 'Renner in', 'mapped' => 'rennerIn'));
         }
         if (null !== $options['renner_in']) {
             $ploeg = $options['ploeg'];
             $ploegRenners = array_merge(array(0), $options['ploegRenners']);
             $builder
-                ->add('renner_uit', 'entity', array(
+                ->add('renner_uit', EntityType::class, array(
                     'mapped' => 'rennerUit',
                     'label' => 'Renner uit',
                     'class' => 'CyclearGameBundle:Renner',

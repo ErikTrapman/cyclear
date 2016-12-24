@@ -19,6 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cyclear\GameBundle\Entity\Nieuws;
 use Cyclear\GameBundle\Form\NieuwsType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -34,7 +35,7 @@ class NieuwsController extends Controller
      * @Route("/", name="admin_nieuws")
      * @Template("CyclearGameBundle:Nieuws/Admin:index.html.twig")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->get('doctrine.orm.default_entity_manager');
 
@@ -57,7 +58,7 @@ class NieuwsController extends Controller
     public function newAction()
     {
         $entity = new Nieuws();
-        $form = $this->createForm(new NieuwsType(), $entity);
+        $form = $this->createForm(NieuwsType::class, $entity);
 
         return array(
             'entity' => $entity,
@@ -74,8 +75,8 @@ class NieuwsController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Nieuws();
-        $form = $this->createForm(new NieuwsType(), $entity);
-        $form->submit($request);
+        $form = $this->createForm(NieuwsType::class, $entity);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -108,7 +109,7 @@ class NieuwsController extends Controller
             throw $this->createNotFoundException('Unable to find Nieuws entity.');
         }
 
-        $editForm = $this->createForm(new NieuwsType(), $entity);
+        $editForm = $this->createForm(NieuwsType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -134,10 +135,10 @@ class NieuwsController extends Controller
             throw $this->createNotFoundException('Unable to find Nieuws entity.');
         }
 
-        $editForm = $this->createForm(new NieuwsType(), $entity);
+        $editForm = $this->createForm(NieuwsType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $editForm->submit($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -163,7 +164,7 @@ class NieuwsController extends Controller
     {
         $form = $this->createDeleteForm($id);
 
-        $form->submit($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -183,7 +184,7 @@ class NieuwsController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
+            ->add('id', HiddenType::class)
             ->getForm();
     }
 }

@@ -76,10 +76,10 @@ class TransferController extends Controller
         }
         $options['ploegRenners'] = $this->getDoctrine()->getRepository("CyclearGameBundle:Ploeg")->getRenners($ploeg);
         $options['ploeg'] = $ploeg;
-        $form = $this->createForm(new TransferUserType(), $transferUser, $options);
+        $form = $this->createForm(TransferUserType::class, $transferUser, $options);
         $transferManager = $this->get('cyclear_game.manager.transfer');
         if ($request->getMethod() == 'POST') {
-            $form->submit($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 if ($rennerPloeg !== $ploeg) {
                     $transferManager->doUserTransfer($ploeg, $form->get('renner_uit')->getData(), $renner, $seizoen, $form->get('userComment')->getData());

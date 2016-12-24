@@ -13,7 +13,10 @@ namespace Cyclear\GameBundle\Form;
 
 use Cyclear\GameBundle\Form\Helper\PreBindValueTransformer;
 use Doctrine\ORM\EntityRepository;
+use ErikTrapman\Bundle\CQRankingParserBundle\Form\Type\MatchSelectorType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -31,16 +34,16 @@ class UitslagCreateType extends AbstractType
         $seizoen = $options['seizoen'];
         $rennerManager = $options['renner_manager'];
         $builder
-            ->add('url', 'eriktrapman_cqrankingmatchselector_type', array('mapped' => false, 'required' => false, 'label' => 'CQ-wedstrijd'))
+            ->add('url', MatchSelectorType::class, array('mapped' => false, 'required' => false, 'label' => 'CQ-wedstrijd'))
             ->add('url_manual', null, array('mapped' => false, 'required' => false, 'label' => 'URL', 'attr' => array('size' => 80)))
-            ->add('referentiewedstrijd', 'entity', array('required' => false, 'mapped' => false, 'class' => 'CyclearGameBundle:Wedstrijd',
+            ->add('referentiewedstrijd', EntityType::class, array('required' => false, 'mapped' => false, 'class' => 'CyclearGameBundle:Wedstrijd',
                 'query_builder' => function (EntityRepository $r) {
                     return $r->createQueryBuilder('w')
                         ->where('w.generalClassification = 0')
                         ->add('orderBy', 'w.id DESC')
                         ->setMaxResults(90);
                 }))
-            ->add('wedstrijd', new WedstrijdType(), array('default_date' => $options['default_date']));
+            ->add('wedstrijd', WedstrijdType::class, array('default_date' => $options['default_date']));
 
 
         $factory = $builder->getFormFactory();
@@ -62,11 +65,11 @@ class UitslagCreateType extends AbstractType
             $uitslagType = $helper->transformPostedValue($data['wedstrijd']['uitslagtype'], $form->get('wedstrijd')->get('uitslagtype'));
             $referentieWedstrijd = $helper->transformPostedValue($data['referentiewedstrijd'], $form->get('referentiewedstrijd'));
             $datum = $helper->transformPostedValue($data['wedstrijd']['datum'], $form->get('wedstrijd')->get('datum'));
-            $form->add($factory->createNamed('uitslag', 'collection', null, array('type' => new UitslagType(),
+            $form->add($factory->createNamed('uitslag', CollectionType::class, null, array('entry_type' => UitslagType::class,
                 'allow_add' => true,
                 'auto_initialize' => false,
                 'by_reference' => false,
-                'options' => array(
+                'entry_options' => array(
                     'use_wedstrijd' => false,
                     'seizoen' => $seizoen))));
             if ($request->isXmlHttpRequest()) {

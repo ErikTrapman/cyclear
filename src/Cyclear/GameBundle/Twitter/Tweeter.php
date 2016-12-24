@@ -18,7 +18,7 @@ class Tweeter
 {
     /**
      *
-     * @var Twitter 
+     * @var Twitter
      */
     private $helper;
 

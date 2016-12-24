@@ -28,34 +28,34 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('cyclear_game');
-        
+
         $rootNode->children()
             ->booleanNode('enable_twitter')->defaultFalse()->end()
-			->scalarNode('max_transfers')->defaultNull()->end()
+            ->scalarNode('max_transfers')->defaultNull()->end()
             ->end();
-        
-		/*
+
+        /*
         $rootNode->children()
-        	->arrayNode('cyclear_logger')
-        		->children()
-        			->arrayNode('handler')
-        				->children()
-        					->arrayNode('db')
-        						->children()
-	        						->booleanNode('enabled')->end()
-        							->scalarNode('level')->end()
-        						->end()
-        					->end()
-        					->arrayNode('mail')
-        						->children()
-        							->booleanNode('enabled')->end()
-        							->scalarNode('level')->end()
-        						->end()
-        					->end()
-        				->end()
-        			->end()
-        		->end()
-        	->end()
+            ->arrayNode('cyclear_logger')
+                ->children()
+                    ->arrayNode('handler')
+                        ->children()
+                            ->arrayNode('db')
+                                ->children()
+                                    ->booleanNode('enabled')->end()
+                                    ->scalarNode('level')->end()
+                                ->end()
+                            ->end()
+                            ->arrayNode('mail')
+                                ->children()
+                                    ->booleanNode('enabled')->end()
+                                    ->scalarNode('level')->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
         
         
         

@@ -21,11 +21,6 @@ class UserType extends BaseType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        /*
-        $builder
-            ->add('username', null, array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle'))
-            ->add('email', 'email', array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'))
-        ;*/
         $builder->remove('plainPassword');
     }
 
@@ -33,9 +28,4 @@ class UserType extends BaseType
     {
         return 'admin_user_new';
     }
-    /*
-    public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array('data_class' => 'Cyclear\GameBundle\Entity\User'));
-    }*/
 }

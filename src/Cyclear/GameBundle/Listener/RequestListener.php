@@ -44,7 +44,12 @@ class RequestListener
             // don't do anything if it's not the master request
             return;
         }
+
+
         $request = $event->getRequest();
+        if ('POST' === $request->getMethod()) {
+            return;
+        }
         if (null !== $request->get('seizoen')) {
             $seizoen = $this->em->getRepository("CyclearGameBundle:Seizoen")->findBySlug($request->get('seizoen'));
             if (empty($seizoen)) {

@@ -12,12 +12,14 @@
 namespace Cyclear\GameBundle\Controller\Admin;
 
 use Cyclear\GameBundle\Entity\Ploeg;
+use Cyclear\GameBundle\Form\Filter\PloegFilterType;
 use Cyclear\GameBundle\Form\PloegType;
 use Doctrine\DBAL\Types\Type;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -27,7 +29,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  *
  * @Route("/admin/ploeg")
  */
-class PloegController extends Controller {
+class PloegController extends Controller
+{
 
     /**
      * Lists all Ploeg entities.
@@ -35,9 +38,10 @@ class PloegController extends Controller {
      * @Route("/", name="admin_ploeg")
      * @Template("CyclearGameBundle:Ploeg/Admin:index.html.twig")
      */
-    public function indexAction(Request $request) {
-        
-        $filter = $this->createForm('ploeg_filter');
+    public function indexAction(Request $request)
+    {
+
+        $filter = $this->createForm(PloegFilterType::class);
 
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQuery("SELECT p FROM Cyclear\GameBundle\Entity\Ploeg p ORDER BY p.id DESC");
@@ -46,17 +50,11 @@ class PloegController extends Controller {
         $config->addFilter("naam", "Cyclear\GameBundle\Filter\Ploeg\PloegNaamFilter");
 
         if ($request->getMethod() == 'POST') {
-            $filter->submit($request);
+            $filter->handleRequest($request);
             //$data = $filter->get('user')->getData();
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
                     $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData(), Type::getType(Type::STRING)->getBindingType());
-                }
-                if ($filter->get('user')->getData()) {
-                    $em->getFilters()->enable("user")->setParameter("user", $filter->get('user')->getData(), Type::getType(Type::STRING)->getBindingType());
-                }
-                if ($filter->get('seizoen')->getData()) {
-                    $em->getFilters()->enable("seizoen")->setParameter("seizoen", $filter->get('seizoen')->getData(), Type::getType(Type::STRING)->getBindingType());
                 }
             }
         }
@@ -64,10 +62,6 @@ class PloegController extends Controller {
         $entities = $paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
-        
-        //$entities = $em->getRepository('CyclearGameBundle:Ploeg')->findAll();
-        //$entities = $query->getResult();
-
         return array('entities' => $entities, 'filter' => $filter->createView());
     }
 
@@ -78,9 +72,10 @@ class PloegController extends Controller {
      * @Route("/new", name="admin_ploeg_new")
      * @Template("CyclearGameBundle:Ploeg/Admin:new.html.twig")
      */
-    public function newAction() {
+    public function newAction()
+    {
         $entity = new Ploeg();
-        $form = $this->createForm(new PloegType(), $entity);
+        $form = $this->createForm(PloegType::class, $entity);
 
         return array(
             'entity' => $entity,
@@ -94,10 +89,11 @@ class PloegController extends Controller {
      * @Route("/create", name="admin_ploeg_create")
      * @Method("post")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request)
+    {
         $entity = new Ploeg();
-        $form = $this->createForm(new PloegType(), $entity);
-        $form->submit($request);
+        $form = $this->createForm(PloegType::class, $entity);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -119,7 +115,8 @@ class PloegController extends Controller {
      * @Route("/{id}/edit", name="admin_ploeg_edit")
      * @Template("CyclearGameBundle:Ploeg/Admin:edit.html.twig")
      */
-    public function editAction($id) {
+    public function editAction($id)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Ploeg')->find($id);
@@ -128,7 +125,7 @@ class PloegController extends Controller {
             throw $this->createNotFoundException('Unable to find Ploeg entity.');
         }
 
-        $editForm = $this->createForm(new PloegType(), $entity);
+        $editForm = $this->createForm(PloegType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -144,7 +141,8 @@ class PloegController extends Controller {
      * @Route("/{id}/update", name="admin_ploeg_update")
      * @Method("post")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('CyclearGameBundle:Ploeg')->find($id);
@@ -153,10 +151,10 @@ class PloegController extends Controller {
             throw $this->createNotFoundException('Unable to find Ploeg entity.');
         }
 
-        $editForm = $this->createForm(new PloegType(), $entity);
+        $editForm = $this->createForm(PloegType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $editForm->submit($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -178,10 +176,11 @@ class PloegController extends Controller {
      * @Route("/{id}/delete", name="admin_ploeg_delete")
      * @Method("post")
      */
-    public function deleteAction(Request $request, $id) {
+    public function deleteAction(Request $request, $id)
+    {
         $form = $this->createDeleteForm($id);
 
-        $form->submit($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -198,11 +197,11 @@ class PloegController extends Controller {
         return $this->redirect($this->generateUrl('admin_ploeg'));
     }
 
-    private function createDeleteForm($id) {
+    private function createDeleteForm($id)
+    {
         return $this->createFormBuilder(array('id' => $id))
-                        ->add('id', 'hidden')
-                        ->getForm()
-        ;
+            ->add('id', HiddenType::class)
+            ->getForm();
     }
 
 }

@@ -18,6 +18,7 @@ use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\Transfer;
 use Cyclear\GameBundle\EntityManager\RennerManager;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\QueryBuilder;
 use JMS\Serializer\SerializationContext;
 use PDO;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -50,7 +51,8 @@ class RennerController extends Controller
         $renners = $em->getRepository("CyclearGameBundle:Renner")->getRennersWithPunten($seizoen, $exclude);
         $paginator = $this->get('knp_paginator');
 
-        $this->get('samson.autocomplete.results_fetcher')->getResultsByArray($this->assertArray($request->query->get('filter'), "/\s+/"), $request->query->get('page', 1), $renners, array('r.naam'));
+        $this->appendQuery($renners, $this->assertArray($request->query->get('filter'), "/\s+/"), array('r.naam'));
+
         $pagination = $paginator->paginate($renners, $request->query->get('page', 1), 20);
 
         $ret = array();
@@ -66,6 +68,25 @@ class RennerController extends Controller
         }
 
         return array('seizoen' => $seizoen);
+    }
+
+    /**
+     * Copied from https://github.com/SamsonIT/AutocompleteBundle/blob/master/Query/ResultsFetcher.php
+     *
+     * @param QueryBuilder $qb
+     * @param array $searchWords
+     * @param array $searchFields
+     */
+    private function appendQuery(QueryBuilder $qb, array $searchWords, array $searchFields)
+    {
+        foreach ($searchWords as $key => $searchWord) {
+            $expressions = array();
+            foreach ($searchFields as $key2 => $field) {
+                $expressions[] = $qb->expr()->like($qb->expr()->lower($field), ':query' . $key . $key2);
+                $qb->setParameter('query' . $key . $key2, '%' . strtolower($searchWord) . '%');
+            }
+            $qb->andWhere("(" . call_user_func_array(array($qb->expr(), 'orx'), $expressions) . ")");
+        }
     }
 
     /**
@@ -150,7 +171,7 @@ class RennerController extends Controller
         $config = $em->getConfiguration();
         $config->addFilter("naam", "Cyclear\GameBundle\Filter\RennerNaamFilter");
         if ($request->getMethod() == 'POST') {
-            $filter->submit($request);
+            $filter->handleRequest($request);
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
                     $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData());
@@ -188,7 +209,7 @@ class RennerController extends Controller
      * @ParamConverter("renner", class="CyclearGameBundle:Renner", options={"mapping": {"renner": "slug"}});
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      */
-    public function showAction(Seizoen $seizoen, Renner $renner)
+    public function showAction(Request $request, Seizoen $seizoen, Renner $renner)
     {
         $transferrepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
         $transfers = $transferrepo->findByRenner($renner, $seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER));

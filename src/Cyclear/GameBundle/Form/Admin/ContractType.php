@@ -11,6 +11,7 @@
 
 namespace Cyclear\GameBundle\Form\Admin;
 
+use Cyclear\GameBundle\Form\RennerSelectorType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContractType extends \Symfony\Component\Form\AbstractType
@@ -27,14 +28,13 @@ class ContractType extends \Symfony\Component\Form\AbstractType
         $timeoptions = array('widget' => 'single_text', 'format' => 'd-M-yyyy k:m');
         $builder
             //->add('ploeg')
-            ->add('renner', 'renner_selector')
-            ->add('ploeg', null, array('label' => 'Ploeg naar', 'required' => true, 'query_builder' => function($e) use ($seizoen) {
-                    return $e->createQueryBuilder('p')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen);
-                }))
+            ->add('renner', RennerSelectorType::class)
+            ->add('ploeg', null, array('label' => 'Ploeg naar', 'required' => true, 'query_builder' => function ($e) use ($seizoen) {
+                return $e->createQueryBuilder('p')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen);
+            }))
             ->add('start', null, $timeoptions)
             ->add('eind', null, $timeoptions)
-            ->add('seizoen')
-        ;
+            ->add('seizoen');
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -24,7 +24,7 @@ class RennerManager
     /**
      *
      * @param type $rennerString
-     * @return Renner 
+     * @return Renner
      */
     public function createRennerFromRennerSelectorTypeString($rennerString)
     {
@@ -34,7 +34,7 @@ class RennerManager
         $renner->setCqRanking_id($cqId);
         return $renner;
     }
-    
+
     public function getRennerSelectorTypeStringFromRenner(Renner $renner)
     {
         return sprintf($this->pattern, $renner->getCqRankingId(), $renner->getNaam());

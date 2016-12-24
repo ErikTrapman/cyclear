@@ -30,14 +30,14 @@ class Country implements Translatable
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * 
+     *
      * @Serializer\Expose
      */
     private $id;
 
     /**
      *
-     * @ORM\Column(type="string", length=2) 
+     * @ORM\Column(type="string", length=2)
      */
     private $iso2; // varchar(2) NOT NULL default '',
 
