@@ -11,8 +11,10 @@
 
 namespace Cyclear\GameBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class PloegType extends AbstractType
 {
@@ -21,7 +23,13 @@ class PloegType extends AbstractType
         $builder
             ->add('naam')
             ->add('afkorting')
-            ->add('seizoen', SeizoenSelectorType::class);
+            ->add('seizoen', SeizoenSelectorType::class)
+            ->add('user', null, [
+                'required' => true, 'constraints' => [new NotNull()],
+                'query_builder' => function (EntityRepository $e) {
+                    return $e->createQueryBuilder('u')->orderBy('u.email', 'ASC');
+                }
+            ]);
     }
 
     public function getName()

@@ -86,33 +86,36 @@
     {% endif %}
 
 
-    <div id="periodes" class="subheader">
-        <h2 style="margin-bottom: 0px;">Periode
-            <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a></h2>
+    {% if periode %}
+        <div id="periodes" class="subheader">
+            <h2 style="margin-bottom: 0px;">Periode
+                <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a>
+            </h2>
 
-        <p class="text-center">{{ periode.start|date('d M') }} - {{ periode.eind|date('d M') }}</p>
-    </div>
-
-
-    <div class="container">
-
-        <div class="row">
-
-            <div class="col-lg-12">
-                {% include "CyclearGameBundle:Uitslag:viewByPeriode.html.twig" with {
-                "list": periodestand,
-                'transferpoints': transferpuntenPeriode,
-                'transferRepo':transferRepo,
-                'positionCount' : zegesInPeriode } %}
-                <p class="text-center">
-                    <a
-                            href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode':periode.id} ) }}">Alle
-                        periodes</a>
-                </p>
-            </div>
+            <p class="text-center">{{ periode.start|date('d M') }} - {{ periode.eind|date('d M') }}</p>
         </div>
 
-    </div>
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-lg-12">
+                    {% include "CyclearGameBundle:Uitslag:viewByPeriode.html.twig" with {
+                    "list": periodestand,
+                    'transferpoints': transferpuntenPeriode,
+                    'transferRepo':transferRepo,
+                    'positionCount' : zegesInPeriode } %}
+                    <p class="text-center">
+                        <a
+                                href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode':periode.id} ) }}">Alle
+                            periodes</a>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    {% endif %}
 
 
     <div id="zeges" class="subheader">

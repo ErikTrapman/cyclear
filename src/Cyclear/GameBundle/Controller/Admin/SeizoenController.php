@@ -76,12 +76,19 @@ class SeizoenController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
+            if ($entity->isCurrent()) {
+                // find other seasons that are also current
+                foreach ($em->getRepository('CyclearGameBundle:Seizoen')->findBy(['current' => true]) as $otherSeason) {
+                    if ($otherSeason === $entity) {
+                        continue;
+                    }
+                    $otherSeason->setCurrent(false);
+                    $otherSeason->setClosed(true);
+                }
+            }
             $em->flush();
-
             return $this->redirect($this->generateUrl('admin_seizoen'));
-
         }
-
         return array(
             'entity' => $entity,
             'form' => $form->createView()
@@ -164,6 +171,11 @@ class SeizoenController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('CyclearGameBundle:Seizoen')->find($id);
+
+            if ($entity->isCurrent()) {
+                $this->addFlash('error', 'Je kunt niet een `huidig` seizoen verwijderen.');
+                return $this->redirect($this->generateUrl('admin_seizoen'));
+            }
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find entity.');

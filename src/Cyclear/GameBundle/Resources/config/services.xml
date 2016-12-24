@@ -167,6 +167,12 @@
             <tag name="twig.extension"/>
         </service>
 
+        <service class="Cyclear\GameBundle\Twig\TemplateExtension"
+                 id="cyclear_game.twig.template_extension">
+            <argument id="doctrine.orm.default_entity_manager" type="service"/>
+            <tag name="twig.extension"/>
+        </service>
+
 
     </services>
 

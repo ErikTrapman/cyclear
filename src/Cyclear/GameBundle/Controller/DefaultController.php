@@ -33,16 +33,15 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request, Seizoen $seizoen)
     {
+        $doctrine = $this->getDoctrine();
         $periode = $this->getDoctrine()->getRepository("CyclearGameBundle:Periode")->getCurrentPeriode($seizoen);
-
         $nieuws = $this->getDoctrine()->getRepository("CyclearGameBundle:Nieuws")->findBy(array('seizoen' => $seizoen), array('id' => 'DESC'), 1);
+        $stand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen);
         if (!array_key_exists(0, $nieuws)) {
             $nieuws = null;
         } else {
             $nieuws = $nieuws[0];
         }
-        $doctrine = $this->getDoctrine();
-        $stand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloeg($seizoen);
         $shadowStandingsById = array();
         if (null !== $periode) {
             $refdate = $periode->getStart();
@@ -53,23 +52,26 @@ class DefaultController extends Controller
             $value['position'] = $key + 1;
             $shadowStandingsById[$value[0]->getId()] = $value;
         }
-        // TODO: dit naar repository-class
         $wedstrijden = $doctrine->getRepository("CyclearGameBundle:Wedstrijd")->createQueryBuilder('w')
             ->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
             ->orderBy('w.datum DESC, w.id', 'DESC')
             ->setMaxResults(20)->getQuery()->getResult();
-        $periodestand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen);
+        $periodestand = $periode ? $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForPeriode($periode, $seizoen) : [];
         $gainedTransferpoints = [];
-        foreach ($doctrine->getRepository('CyclearGameBundle:Uitslag')
-                     ->getPuntenByPloegForUserTransfersWithoutLoss($seizoen, $periode->getStart(), $periode->getEind()) as $teamResult) {
-            $gainedTransferpoints[$teamResult['id']] = $teamResult['punten'];
+        if ($periode) {
+            foreach ($doctrine->getRepository('CyclearGameBundle:Uitslag')
+                         ->getPuntenByPloegForUserTransfersWithoutLoss($seizoen, $periode->getStart(), $periode->getEind()) as $teamResult) {
+                $gainedTransferpoints[$teamResult['id']] = $teamResult['punten'];
+            }
         }
         $lostDraftPoints = [];
-        foreach ($doctrine->getRepository('CyclearGameBundle:Uitslag')->getLostDraftPuntenByPloeg($seizoen, $periode->getStart(), $periode->getEind()) as $teamResult) {
-            if ($teamResult instanceof Ploeg) {
-                $lostDraftPoints[$teamResult->getId()] = $teamResult->getPunten();
-            } else {
-                $lostDraftPoints[$teamResult['id']] = $teamResult['punten'];
+        if ($periode) {
+            foreach ($doctrine->getRepository('CyclearGameBundle:Uitslag')->getLostDraftPuntenByPloeg($seizoen, $periode->getStart(), $periode->getEind()) as $teamResult) {
+                if ($teamResult instanceof Ploeg) {
+                    $lostDraftPoints[$teamResult->getId()] = $teamResult->getPunten();
+                } else {
+                    $lostDraftPoints[$teamResult['id']] = $teamResult['punten'];
+                }
             }
         }
         $transferSaldo = [];
@@ -78,11 +80,12 @@ class DefaultController extends Controller
         }
         $zeges = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getCountForPosition($seizoen, 1);
         $zegesInPeriode = [];
-        foreach ($doctrine->getRepository('CyclearGameBundle:Uitslag')->getCountForPosition($seizoen, 1, $periode->getStart(), $periode->getEind()) as $teamResult) {
-            $zegesInPeriode[$teamResult[0]->getId()] = $teamResult['freqByPos'];
+        if ($periode) {
+            foreach ($doctrine->getRepository('CyclearGameBundle:Uitslag')->getCountForPosition($seizoen, 1, $periode->getStart(), $periode->getEind()) as $teamResult) {
+                $zegesInPeriode[$teamResult[0]->getId()] = $teamResult['freqByPos'];
+            }
         }
         $draft = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForDraftTransfers($seizoen);
-        //$transferstand = $doctrine->getRepository("CyclearGameBundle:Uitslag")->getPuntenByPloegForUserTransfers($seizoen);
         $transfers = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer")
             ->getLatest($seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 20);
         $transferRepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
@@ -98,7 +101,6 @@ class DefaultController extends Controller
             'zegestand' => $zeges,
             'zegesInPeriode' => $zegesInPeriode,
             'drafts' => $draft,
-            //'transferstand' => $transferstand,
             'transfers' => $transfers,
             'transferRepo' => $transferRepo
         );

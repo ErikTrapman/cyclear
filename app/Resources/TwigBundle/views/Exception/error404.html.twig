@@ -12,6 +12,10 @@
                 en uitleggen waarom deze pagina zeker zou moeten bestaan.</p>
         </div>
 
+        {% if null == getCurrentSeason() %}
+            <div class="alert alert-danger" role="alert">
+                <p>Het lijkt er op alsof er geen huidig seizoen is geconfigureerd.</p>
+            </div>
+        {% endif %}
     </div>
-
 {% endblock %}

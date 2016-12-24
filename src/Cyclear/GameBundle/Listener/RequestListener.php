@@ -45,7 +45,6 @@ class RequestListener
             return;
         }
 
-
         $request = $event->getRequest();
         if ('POST' === $request->getMethod()) {
             return;
@@ -59,7 +58,7 @@ class RequestListener
         } else {
             $seizoen = $this->em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
             if (null === $seizoen) {
-                throw new NotFoundHttpException("No current season configured yet. Please contact your Admin");
+                return;
             }
         }
         $request->attributes->set('seizoen', $seizoen);

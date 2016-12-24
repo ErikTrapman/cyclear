@@ -35,6 +35,7 @@ class PeriodeRepository extends EntityRepository
         } catch (NoResultException $e) {
             $now = new DateTime();
             $now->setTime(0, 0, 0);
+            $period = null;
             $periods = $this->createQueryBuilder('p')->orderBy('p.start', 'ASC')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen);
             foreach ($periods->getQuery()->getResult() as $period) {
                 if ($period->getEnd() < $now) {
