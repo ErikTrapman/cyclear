@@ -104,7 +104,11 @@
                     </li>
                 {% endif %}
                 <li><a href="{{ path('archief_index') }}">Archief</a></li>
-                {%- if app.request.attributes.get('seizoen') and app.request.attributes.get('seizoen').id != app.request.attributes.get('current-seizoen').id %}
+
+
+                {% set seizoen = app.request.attributes.get('seizoen') %}
+                {% set curSeizoen = getCurrentSeason() %}
+                {%- if seizoen and curSeizoen and seizoen.id != curSeizoen.id %}
                     <li><a style="color: #860087"
                            href="{{ path("game",{"seizoen":app.request.attributes.get('seizoen').slug}) }}">{{ app.request.attributes.get('seizoen') }}</a>
                     </li>
@@ -167,7 +171,10 @@
                     </li>
                 {% endif %}
                 <li><a href="{{ path('archief_index') }}">Archief</a></li>
-                {%- if app.request.attributes.get('seizoen') and app.request.attributes.get('seizoen').id != app.request.attributes.get('current-seizoen').id %}
+
+                {% set seizoen = app.request.attributes.get('seizoen') %}
+                {% set curSeizoen = getCurrentSeason() %}
+                {%- if seizoen and curSeizoen and seizoen.id != curSeizoen.id %}
                     <li><a style="color: #860087"
                            href="{{ path("game",{"seizoen":app.request.attributes.get('seizoen').slug}) }}">{{ app.request.attributes.get('seizoen') }}</a>
                     </li>
