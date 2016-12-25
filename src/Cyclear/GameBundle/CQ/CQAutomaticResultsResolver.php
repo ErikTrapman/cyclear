@@ -21,7 +21,6 @@ use Cyclear\GameBundle\Form\DataTransformer\RennerNameToRennerIdTransformer;
 use Doctrine\ORM\EntityManager;
 use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Crawler\CrawlerManager;
 use Monolog\Logger;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class CQAutomaticResultsResolver
 {

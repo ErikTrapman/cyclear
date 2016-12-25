@@ -48,7 +48,7 @@ class UserTransferValidatorTest extends WebTestCase
 
     public function setUp()
     {
-        $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
+        $this->context = $this->getMock(ExecutionContextInterface::class, array(), array(), '', false);
         $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
         $this->validator = new UserTransferValidator($this->em);
         $this->validator->initialize($this->context);

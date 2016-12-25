@@ -17,6 +17,7 @@ use Cyclear\GameBundle\Entity\Ploeg;
 use Cyclear\GameBundle\Entity\Renner;
 use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\UitslagType;
+use Monolog\Logger;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CQAutomaticResultsResolverTest extends WebTestCase
@@ -52,7 +53,7 @@ class CQAutomaticResultsResolverTest extends WebTestCase
         $uitslagManager = $this->getMockBuilder('Cyclear\GameBundle\EntityManager\UitslagManager')->disableOriginalConstructor()->getMock();
         $uitslagManager->method('prepareUitslagen')->willReturn($uitslagen);
         $crawlerManager = $this->getMockBuilder('ErikTrapman\Bundle\CQRankingParserBundle\Parser\Crawler\CrawlerManager')->disableOriginalConstructor()->getMock();
-        $logger = $this->getMock('Symfony\Component\HttpKernel\Log\LoggerInterface');
+        $logger = $this->getMockBuilder(Logger::class)->disableOriginalConstructor()->getMock();
 
         $renner = new Renner();
         $transformer = $this->getMockBuilder('Cyclear\GameBundle\Form\DataTransformer\RennerNameToRennerIdTransformer')->disableOriginalConstructor()->getMock();
