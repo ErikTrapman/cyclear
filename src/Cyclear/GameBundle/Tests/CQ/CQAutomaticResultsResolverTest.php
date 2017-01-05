@@ -28,7 +28,8 @@ class CQAutomaticResultsResolverTest extends WebTestCase
         $client = static::createClient();
         $parser = $client->getContainer()->get('eriktrapman_cqparser.recentracesparser');
 
-        $races = $parser->getRecentRaces(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'recentraces-20151029.html'));
+        $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'recentraces-20151029.html');
+        $races = $parser->getRecentRaces($content, new \DateTime(date('Y') . '-12-31'));
 
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
         $wedstrijdRepo = $this->getMockBuilder('Doctrine\ORM\EntityRepository')->disableOriginalConstructor()->getMock();
