@@ -24,16 +24,38 @@
                 </td>
             </tr>
 
-            {% for uitslag in wedstrijd.uitslagen %}
-                <tr class="results_match_{{ wedstrijd.id }}" style="display: none;">
-                    <td class="hidden-xs hidden-sm">{{ "%02d"|format(loop.index) }}</td>
-                    <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
-                    <td>{% include '@CyclearGame/Uitslag/_singlePoints.html.twig' with {uitslag: uitslag} %}</td>
-                    <td nowrap>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {renner:uitslag.renner,seizoen:uitslag.wedstrijd.seizoen } %}</td>
+            <tr class="results_match_{{ wedstrijd.id }}" style="display: none;">
+                <td colspan="6" style="padding-left:0; margin-left:1px">
+                    <div class="row">
+                        <div class="col-lg-6" style="padding-left: 0px;">
+                            <table class="table table-bordered table-striped">
+                                {% for uitslag in wedstrijd.uitslagen %}
+                                    <tr>
+                                        <td class="hidden-xs hidden-sm">{{ "%02d"|format(loop.index) }}</td>
+                                        <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
+                                        <td>{% include '@CyclearGame/Uitslag/_singlePoints.html.twig' with {uitslag: uitslag} %}</td>
+                                        <td nowrap>{% include "CyclearGameBundle:Renner:_singleRow.html.twig" with {renner:uitslag.renner,seizoen:uitslag.wedstrijd.seizoen } %}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <div class="col-lg-6" style="padding-left: 0px;">
+                            <table class="table table-bordered table-striped">
+                                {% for uitslag in wedstrijd.getUitslagenGrouped %}
+                                    <tr>
+                                        <td class="hidden-xs hidden-sm">{{ "%02d"|format(loop.index) }}</td>
+                                        <td>{{ uitslag.ploeg }}</td>
+                                        <td>{{ uitslag.total }}</td>
+                                        <td class="hidden-xs hidden-sm">{{ uitslag.hits }}x</td>
+                                        <td class="hidden-md hidden-lg" style="width:98%">{{ uitslag.hits }}x</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
 
-                </tr>
-            {% endfor %}
-
+                    </div>
+                </td>
+            </tr>
         {% endfor %}
 
     </table>

@@ -60,7 +60,7 @@ $(document).ready(function () {
     });
 
 
-    $('#main-navbar').scrollToFixed();
+    //$('#main-navbar').scrollToFixed();
 
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()

@@ -13,6 +13,7 @@ namespace Cyclear\GameBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Zicht\Itertools;
 
 /**
  * Cyclear\GameBundle\Entity\Wedstrijd
@@ -33,7 +34,7 @@ class Wedstrijd
     private $id;
 
     /**
-     * @var datetime $datum
+     * @var \DateTime $datum
      *
      * @ORM\Column(name="datum", type="datetime")
      */
@@ -47,6 +48,7 @@ class Wedstrijd
     private $naam;
 
     /**
+     * @var Uitslag[]
      *
      * @ORM\OneToMany(targetEntity="Cyclear\GameBundle\Entity\Uitslag", mappedBy="wedstrijd", cascade={"all"})
      * @ORM\OrderBy({"positie" = "ASC"})
@@ -54,22 +56,29 @@ class Wedstrijd
     private $uitslagen;
 
     /**
+     * @var Seizoen
      *
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Seizoen")
      */
     private $seizoen;
 
     /**
+     * @var bool
+     *
      * @ORM\Column(type="boolean")
      */
     private $generalClassification = false;
 
     /**
+     * @var string
+     *
      * @ORM\Column(nullable=true)
      */
     private $externalIdentifier;
 
     /**
+     * @var bool
+     *
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $fullyProcessed;
@@ -138,12 +147,6 @@ class Wedstrijd
     }
 
 
-    public function __toString()
-    {
-        return $this->getNaam();
-    }
-
-
     public function getSeizoen()
     {
         return $this->seizoen;
@@ -207,6 +210,42 @@ class Wedstrijd
         if (!$this->uitslagen->contains($uitslag)) {
             $this->uitslagen->add($uitslag);
         }
+    }
+
+    /**
+     * Fetch the Uitslagen, grouped and totalled per team.
+     */
+    public function getUitslagenGrouped()
+    {
+        $group = [];
+        foreach ($this->uitslagen as $uitslag) {
+            $ploeg = $uitslag->getPloeg();
+            if ($ploeg) {
+                if (!array_key_exists($ploeg->getId(), $group)) {
+                    $group[$ploeg->getId()] = [];
+                }
+                $group[$ploeg->getId()][] = $uitslag;
+            }
+        }
+        $ret = [];
+        foreach ($group as $ploegId => $uitslagen) {
+            $reduce = array_reduce($uitslagen, function ($index, $uitslag) {
+                return $index + $uitslag->getPloegPunten();
+            }, 0);
+            $ret[$ploegId] = ['total' => $reduce, 'hits' => count($uitslagen), 'ploeg' => $uitslagen[0]->getPloeg()];
+        }
+        uasort($ret, function ($a, $b) {
+            if ($a['total'] == $b['total']) {
+                return 0;
+            }
+            return $a['total'] < $b['total'] ? 1 : -1;
+        });
+        return $ret;
+    }
+
+    public function __toString()
+    {
+        return $this->getNaam();
     }
 
 }
