@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -104,5 +105,67 @@ class DefaultController extends Controller
             'transfers' => $transfers,
             'transferRepo' => $transferRepo
         );
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @Route("/startlists")
+     * @Template
+     */
+    public function startlistsAction(Request $request)
+    {
+        $riders = [
+            139446,
+            139652,
+            134807,
+            139811,
+            168776,
+            138849,
+            135000,
+            140704,
+            140149,
+            137768,
+            140466,
+            140245,
+            140332
+        ];
+        $baseUrl = 'http://www.procyclingstats.com/rider.php?id=%d';
+        $ret = [];
+        foreach ($riders as $rider) {
+
+            $crawler = new Crawler();
+            $crawler->addContent(file_get_contents(sprintf($baseUrl, $rider)), 'text/html');
+
+            $riderValues = [];
+
+            $name = $crawler->filter('.entryHeader')->filter('h1')->getNode(0)->nodeValue;
+            $riderValues['name'] = $name;
+            $riderValues['courses'] = [];
+
+            try {
+                $interestingNodes = $crawler->filter('.section')->first()->siblings();
+                $interestingNodes->last()->children()->filter('a')->each(
+                    function (Crawler $node, $i) use (&$riderValues) {
+                        foreach ($node->getIterator() as $item) {
+                            if ('more' !== $item->nodeValue) {
+                                $riderValues['courses'][] = $item->nodeValue;
+                            }
+                        }
+                    });
+
+            } catch (\InvalidArgumentException $e) {
+
+            }
+            $ret[$rider] = $riderValues;
+        }
+
+        uasort($ret, function ($a, $b) {
+            return $a['name'] > $b['name'] ? 1 : -1;
+        });
+
+        return [
+            'riders' => $ret
+        ];
     }
 }

@@ -1,0 +1,41 @@
+{% extends '::base.html.twig' %}
+
+{% block content %}
+
+    <div class="big-header" style="margin-bottom: 0;">
+        <h2>Shortlist</h2>
+    </div>
+
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div id="filters">
+                </div>
+
+                <div class="tab-content">
+                    <div class="tab-pane active">
+
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Renner</th>
+                                <th>Program</th>
+                            </tr>
+                            {% for row in riders %}
+                                <tr>
+                                    <td>{{ row.name }}</td>
+                                    <td>{{ row.courses|join('<br>')|raw }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
