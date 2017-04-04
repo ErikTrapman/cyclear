@@ -9,9 +9,8 @@
         <tr>
             <td nowrap>
                 {{ "%02d"|format(loop.index) }}
-                {% if rennerRepo.isDraftTransfer(renner[0], entity) %}
-                    &nbsp;<i data-toggle="tooltip" title="Draft" class="fa fa-heart-o"></i>
-                {% else %}
+                {% if not rennerRepo.isDraftTransfer(renner[0], entity) %}
+                    &nbsp;<i data-toggle="tooltip" title="Draft" class="fa fa-euro"></i>
                 {% endif %}
             </td>
             {% if showActions is defined and showActions %}
