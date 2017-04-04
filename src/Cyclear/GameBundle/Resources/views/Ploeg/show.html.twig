@@ -38,7 +38,10 @@
 
                 <div class="tab-content">
                     <div class="tab-pane active" id="ploeg">
-                        {% include "CyclearGameBundle:Ploeg:_singleRenners.html.twig" with {'renners':renners,'showTotal':false,'showContract':true, 'showActions':true } %}
+                        {% include "CyclearGameBundle:Ploeg:_singleRenners.html.twig"
+                        with {
+                        'renners':renners,'showTotal':false,'showContract':true, 'showActions':true
+                        } %}
 
                         {% if isMyTeam(entity) %}
                             <form method="post" action="{{ path('ploeg_show',{id: entity.id,seizoen: seizoen.slug}) }}">

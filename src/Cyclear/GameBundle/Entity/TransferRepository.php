@@ -184,7 +184,19 @@ class TransferRepository extends EntityRepository
                 GROUP BY t.renner_id, t.ploegNaar_id
                 ORDER BY t.ploegNaar_id";
         $conn->executeQuery("INSERT INTO $tableName (" . $a . ")");
+    }
 
+    /**
+     * @param Renner $renner
+     * @param Ploeg $ploeg
+     * @return Transfer|null
+     */
+    public function hasDraftTransfer(Renner $renner, Ploeg $ploeg)
+    {
+        return $this->createQueryBuilder('t')->where('t.renner = :rider')->
+        andWhere('t.ploegNaar = :team')->andWhere('t.transferType = :type')
+            ->setParameters(['rider' => $renner, 'team' => $ploeg, 'type' => Transfer::DRAFTTRANSFER])
+            ->getQuery()->getOneOrNullResult();
     }
 
 }

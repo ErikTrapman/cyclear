@@ -38,81 +38,63 @@
         <div class="row">
             <div class="col-lg-12">
 
-                <div id="filters">
-                    <ul id="tabs" class="list-group list-inline">
-                        <li class="active"><a href="#uitslagen" data-toggle="tab"><h5>Uitslagen</h5></a></li>
-                        <li><a href="#transfers" data-toggle="tab"><h5>Transfers</h5></a></li>
-                        <li>
-                            <a href="http://www.procyclingstats.com/search.php?term={{ renner.naam }}">
-                                <h5><img src="/bundles/cycleargame/icons/pcs-icon.png" width="16" height="16"></h5></a>
-                        </li>
-                        <li>
-                            <a href="http://cqranking.com/men/asp/gen/rider.asp?riderid={{ renner.cqranking_id }}">
-                                <h5><img src="/bundles/cycleargame/icons/cqlogo.jpg" width="16" height="16"></h5></a>
-                        </li>
-                        {% if renner.twitter %}
-                            <li><a href="https://www.twitter.com/{{ renner.twitter }}" target="_blank">
-                                    <h5><i class="fa fa-twitter"></i></h5></a></li>
-                        {% endif %}
-
-                    </ul>
-                </div>
-
                 <div class="tab-content">
                     <div class="tab-pane active" id="uitslagen">
-                        <div>
 
-                            <table class="table table-bordered table-striped">
-                                <tr>
-                                    <th>Ploeg</th>
-                                    <th>Punten</th>
-                                    <th>#</th>
-                                    <th>Wedstrijd</th>
-                                    <th>Datum</th>
-                                </tr>
-                                {% for uitslag in uitslagen %}
-                                    <tr>
-                                        <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
-                                        <td>
-                                            {% include 'CyclearGameBundle:Uitslag:_singlePoints.html.twig' with {uitslag: uitslag} %}
-                                        </td>
-                                        <td>{{ uitslag.positie }}</td>
-                                        <td>
-                                            {% include "CyclearGameBundle:Wedstrijd:_singleRow.html.twig" with {wedstrijd:uitslag.wedstrijd, seizoen:uitslag.wedstrijd.seizoen } %}
-                                        </td>
-                                        <td>{{ uitslag.wedstrijd.datum|date('d M') }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </table>
-                            <div id="navigation">
-                                {{ knp_pagination_render(uitslagen, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'renner_show'}) }}
-                            </div>
+                        <div id="filters">
+                            <ul id="tabs" class="list-group list-inline">
+                                <li>
+                                    <a href="http://www.procyclingstats.com/search.php?term={{ renner.naam }}">
+                                        <h5><img src="/bundles/cycleargame/icons/pcs-icon.png" width="16"
+                                                 height="16"></h5></a>
+                                </li>
+                                <li>
+                                    <a href="http://cqranking.com/men/asp/gen/rider.asp?riderid={{ renner.cqranking_id }}">
+                                        <h5><img src="/bundles/cycleargame/icons/cqlogo.jpg" width="16" height="16">
+                                        </h5></a>
+                                </li>
+                                {% if renner.twitter %}
+                                    <li><a href="https://www.twitter.com/{{ renner.twitter }}" target="_blank">
+                                            <h5><i class="fa fa-twitter"></i></h5></a></li>
+                                {% endif %}
 
+                            </ul>
                         </div>
-                    </div>
-                    <div class="tab-pane" id="transfers">
+
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Ploeg</th>
+                                <th>Punten</th>
+                                <th>#</th>
+                                <th>Wedstrijd</th>
+                                <th>Datum</th>
+                            </tr>
+                            {% for uitslag in uitslagen %}
+                                <tr>
+                                    <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
+                                    <td>
+                                        {% include 'CyclearGameBundle:Uitslag:_singlePoints.html.twig' with {uitslag: uitslag} %}
+                                    </td>
+                                    <td>{{ uitslag.positie }}</td>
+                                    <td>
+                                        {% include "CyclearGameBundle:Wedstrijd:_singleRow.html.twig" with {wedstrijd:uitslag.wedstrijd, seizoen:uitslag.wedstrijd.seizoen } %}
+                                    </td>
+                                    <td>{{ uitslag.wedstrijd.datum|date('d M') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        <div id="navigation">
+                            {{ knp_pagination_render(uitslagen, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'renner_show'}) }}
+                        </div>
+
                         {% include "CyclearGameBundle:Transfer:_riderListWithInversion.html.twig" with {'listWithInversion':transfers} %}
+
                     </div>
+
+
                 </div>
 
             </div>
         </div>
     </div>
-
-    {#
-    <div class="span12">
-        <h3>
-            <div>
-            <span>
-            {% include "CyclearGameBundle:Country:_image.html.twig" with {'size':32,'country':renner.country } %}{{ renner.naam }}
-                {% if ploeg is not null %} - <a
-                    href="{{ path('ploeg_show',{'id':ploeg.id,'seizoen':seizoen.slug}) }}">{{ ploeg.afkorting }}</a>{% else %} - vrij{% endif %}
-
-            </span>
-            </div>
-        </h3>
-
-
-    </div>
-    #}
 {% endblock %}

@@ -60,6 +60,16 @@ class RennerRepository extends EntityRepository
         return $contract->getPloeg();
     }
 
+    /**
+     * @param Renner $renner
+     * @param Ploeg $ploeg
+     * @return bool
+     */
+    public function isDraftTransfer(Renner $renner, Ploeg $ploeg)
+    {
+        return (bool)$this->_em->getRepository(Transfer::class)->hasDraftTransfer($renner, $ploeg);
+    }
+
     public function getRennersWithPloeg($seizoen = null)
     {
         if (null === $seizoen) {
