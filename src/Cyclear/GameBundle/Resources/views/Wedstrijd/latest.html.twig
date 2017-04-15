@@ -22,6 +22,11 @@
                        onclick="toggleResults(event, {{ wedstrijd.id }})">{{ wedstrijd.naam }}</a>
 
                 </td>
+                <td>
+                    {% if wedstrijd.generalClassification %}
+                        <a href="{{ path('wedstrijd_show', {seizoen: seizoen.slug, wedstrijd: wedstrijd.id}) }}">Meer</a>
+                    {% endif %}
+                </td>
             </tr>
 
             <tr class="results_match_{{ wedstrijd.id }}" style="display: none;">

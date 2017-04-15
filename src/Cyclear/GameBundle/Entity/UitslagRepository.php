@@ -22,17 +22,17 @@ class UitslagRepository extends EntityRepository
      * @param $values
      * @param string $fallBackSort
      */
-    public static function puntenSort(&$values, $fallBackSort = 'afkorting')
+    public static function puntenSort(&$values, $fallBackSort = 'afkorting', $sortKey = 'punten')
     {
-        uasort($values, function ($a, $b) use ($fallBackSort) {
+        uasort($values, function ($a, $b) use ($fallBackSort, $sortKey) {
             $aPoints = null;
             $bPoints = null;
             if ($a instanceof Ploeg && $b instanceof Ploeg) {
                 $aPoints = $a->getPunten();
                 $bPoints = $b->getPunten();
             } else {
-                $aPoints = $a['punten'];
-                $bPoints = $b['punten'];
+                $aPoints = $a[$sortKey];
+                $bPoints = $b[$sortKey];
             }
             if ($aPoints == $bPoints) {
                 if ($a instanceof Ploeg && $b instanceof Ploeg) {

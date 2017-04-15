@@ -12,6 +12,7 @@
 namespace Cyclear\GameBundle\Controller;
 
 use Cyclear\GameBundle\Entity\Seizoen;
+use Cyclear\GameBundle\Entity\UitslagRepository;
 use Cyclear\GameBundle\Entity\Wedstrijd;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -47,7 +48,28 @@ class WedstrijdController extends Controller
      */
     public function showAction(Request $request, Wedstrijd $wedstrijd)
     {
-        return array('wedstrijd' => $wedstrijd);
+        $em = $this->getDoctrine()->getManager();
+        $refStages = $em->getRepository(Wedstrijd::class)->getRefStages($wedstrijd, $wedstrijd);
+        $allStages = [];
+        /** @var Wedstrijd $refStage */
+        foreach (array_merge($refStages, [$wedstrijd]) as $refStage) {
+            foreach ($refStage->getUitslagenGrouped(true) as $team => $resultInfo) {
+                if (array_key_exists($team, $allStages)) {
+                    $allStages[$team]['total'] += $resultInfo['total'];
+                    $allStages[$team]['hits'] += $resultInfo['hits'];
+                    $allStages[$team]['renners'] = array_merge($allStages[$team]['renners'], $resultInfo['renners']);
+                } else {
+                    $allStages[$team] = $resultInfo;
+                }
+            }
+        }
+        UitslagRepository::puntenSort($allStages, 'hits', 'total');
+
+        return [
+            'wedstrijd' => $wedstrijd,
+            'uitslagen' => array_merge($refStages, [$wedstrijd]),
+            'allstages' => $allStages
+        ];
     }
 
     /**

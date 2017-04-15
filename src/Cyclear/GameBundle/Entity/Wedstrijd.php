@@ -19,7 +19,7 @@ use Zicht\Itertools;
  * Cyclear\GameBundle\Entity\Wedstrijd
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Cyclear\GameBundle\Entity\WedstrijdRepository")
  */
 class Wedstrijd
 {
@@ -215,7 +215,7 @@ class Wedstrijd
     /**
      * Fetch the Uitslagen, grouped and totalled per team.
      */
-    public function getUitslagenGrouped()
+    public function getUitslagenGrouped($keepRiders = false)
     {
         $group = [];
         foreach ($this->uitslagen as $uitslag) {
@@ -229,10 +229,27 @@ class Wedstrijd
         }
         $ret = [];
         foreach ($group as $ploegId => $uitslagen) {
-            $reduce = array_reduce($uitslagen, function ($index, $uitslag) {
-                return $index + $uitslag->getPloegPunten();
+            $reduce = array_reduce($uitslagen, function ($init, Uitslag $uitslag) {
+                return $init + $uitslag->getPloegPunten();
             }, 0);
-            $ret[$ploegId] = ['total' => $reduce, 'hits' => count($uitslagen), 'ploeg' => $uitslagen[0]->getPloeg()];
+            $ret[$ploegId] = [
+                'total' => $reduce,
+                'hits' => count($uitslagen),
+                'ploeg' => $uitslagen[0]->getPloeg(),
+                'renners' => []
+            ];
+            if ($keepRiders) {
+                foreach ($uitslagen as $uitslag) {
+                    $renner = $uitslag->getRenner();
+                    $index = $renner->getId();
+                    if (!array_key_exists($index, $ret[$ploegId]['renners'])) {
+                        $ret[$ploegId]['renners'][$index] = ['renner' => $renner, 'hits' => 0, 'total' => 0];
+                    }
+                    $ret[$ploegId]['renners'][$index]['hits'] += 1;
+                    $ret[$ploegId]['renners'][$index]['total'] += $uitslag->getPloegPunten();
+                    $ret[$ploegId]['renners'][$index]['result'] = $uitslag;
+                }
+            }
         }
         uasort($ret, function ($a, $b) {
             if ($a['total'] == $b['total']) {

@@ -39,7 +39,7 @@ class Uitslag
     private $wedstrijd;
 
     /**
-     * @var object $renner
+     * @var Renner $renner
      *
      * @ORM\ManyToOne(targetEntity="Cyclear\GameBundle\Entity\Renner")
      */
@@ -116,7 +116,7 @@ class Uitslag
     /**
      * Get renner
      *
-     * @return object
+     * @return Renner
      */
     public function getRenner()
     {
