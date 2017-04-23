@@ -3,7 +3,7 @@ imports:
     - { resource: security.yml }
 
 parameters:
-    version: 2.0.1
+    version: 2.0.11
     cq_ranking-wedstrijdurl: 'http://cqranking.com/men/asp/gen/race.asp?raceid='
 
 framework:
@@ -24,6 +24,8 @@ framework:
     session:
       handler_id:  session.handler.native_file
       save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+    assets:
+      version: %version%
 
 # Twig Configuration
 twig:
