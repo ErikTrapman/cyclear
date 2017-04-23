@@ -22,9 +22,6 @@
         'bundles/bmatznerfontawesome/css/font-awesome.min.css' %}
         <link rel="stylesheet" href="{{ asset_url }}" media="all"/>
         {% endstylesheets %}
-        {% if is_mobile_view() %}
-            <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/mobile-tweaks.css') }}" media="all"/>
-        {% endif %}
         {% if app.environment == 'dev' %}
             <link rel="stylesheet" href="{{ asset('bundles/cycleargame/css/development.css') }}" media="all"/>
         {% endif %}

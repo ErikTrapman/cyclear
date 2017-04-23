@@ -32,7 +32,6 @@ class AppKernel extends Kernel
 
             #new Samson\Bundle\FilterBundle\SamsonFilterBundle(),
             new ErikTrapman\Bundle\CQRankingParserBundle\ErikTrapmanCQRankingParserBundle(),
-            new SunCat\MobileDetectBundle\MobileDetectBundle(),
             new Cyclear\ApplicationBundle\CyclearApplicationBundle(),
 
             new \FOS\JsRoutingBundle\FOSJsRoutingBundle(),
