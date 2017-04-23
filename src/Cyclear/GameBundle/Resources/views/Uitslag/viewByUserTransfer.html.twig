@@ -9,6 +9,7 @@
             <th colspan="3">Punten</th>
             {% if transferRepo is defined %}
                 <th>#T</th>
+                <th>Per T</th>
             {% endif %}
         </tr>
 
@@ -31,9 +32,11 @@
                     -{{ shadowlost[id] }}</td>
                 {% if transferRepo is defined %}
                     {% if seizoen.start and seizoen.end %}
-                        <td>{{ transferRepo.getTransferCountForUserTransfer(id, seizoen.start, seizoen.end) }}</td>
+                        {% set transferCount = transferRepo.getTransferCountForUserTransfer(id, seizoen.start, seizoen.end) %}
+                        <td>{{ transferCount }}</td>
+                        <td>{% if transferCount > 0 %}{{ (ploeg.punten / transferCount)|round(2) }}{% endif %}</td>
                     {% else %}
-                        <td>~</td>
+                        <td colspan="2">~</td>
                     {% endif %}
                 {% endif %}
             </tr>
