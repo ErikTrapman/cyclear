@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7b8fa4f773f6738053e1ead33692ce83",
-    "content-hash": "d5eb6e7ccea4d29c678dca0b037418a2",
+    "hash": "0086c779fd1483aa6fb7e4dd00ccdcf0",
+    "content-hash": "4c66071276c1c9f45f240cf242762243",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -2257,58 +2257,6 @@
             "time": "2015-11-12 13:51:40"
         },
         {
-            "name": "mobiledetect/mobiledetectlib",
-            "version": "2.8.25",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "f0896b5c7274d1450023b0b376240be902c3251c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/f0896b5c7274d1450023b0b376240be902c3251c",
-                "reference": "f0896b5c7274d1450023b0b376240be902c3251c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "Mobile_Detect.php"
-                ],
-                "psr-0": {
-                    "Detection": "namespaced/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Serban Ghita",
-                    "email": "serbanghita@gmail.com",
-                    "homepage": "http://mobiledetect.net",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Mobile_Detect is a lightweight PHP class for detecting mobile devices. It uses the User-Agent string combined with specific HTTP headers to detect the mobile environment.",
-            "homepage": "https://github.com/serbanghita/Mobile-Detect",
-            "keywords": [
-                "detect mobile devices",
-                "mobile",
-                "mobile detect",
-                "mobile detector",
-                "php mobile detect"
-            ],
-            "time": "2017-03-29 13:59:30"
-        },
-        {
             "name": "monolog/monolog",
             "version": "1.22.1",
             "source": {
@@ -3063,67 +3011,6 @@
                 "tree"
             ],
             "time": "2017-01-13 18:32:32"
-        },
-        {
-            "name": "suncat/mobile-detect-bundle",
-            "version": "v1.0.5",
-            "target-dir": "SunCat/MobileDetectBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/suncat2000/MobileDetectBundle.git",
-                "reference": "87d694542b16b67645cb59c349c3da9c6ae6676c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/suncat2000/MobileDetectBundle/zipball/87d694542b16b67645cb59c349c3da9c6ae6676c",
-                "reference": "87d694542b16b67645cb59c349c3da9c6ae6676c",
-                "shasum": ""
-            },
-            "require": {
-                "mobiledetect/mobiledetectlib": "~2.8",
-                "php": ">=5.5.0",
-                "symfony/framework-bundle": "~2.4|~3.0",
-                "twig/twig": "~1.23|~2.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.1",
-                "satooshi/php-coveralls": "dev-master",
-                "symfony/phpunit-bridge": "~2.7|~3.0"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "SunCat\\MobileDetectBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nikolay Ivlev",
-                    "email": "nikolay.kotovsky@gmail.com"
-                },
-                {
-                    "name": "Henri Vesala",
-                    "email": "henri.vesala@gmail.com"
-                },
-                {
-                    "name": "netmikey",
-                    "homepage": "https://github.com/netmikey"
-                }
-            ],
-            "description": "Symfony2/3 bundle for detect mobile devices, managing mobile view types, redirect to mobile version.",
-            "homepage": "https://github.com/suncat2000/MobileDetectBundle",
-            "keywords": [
-                "mobile",
-                "mobile detect",
-                "mobile redirect",
-                "mobile view managing",
-                "symfony mobile"
-            ],
-            "time": "2017-01-25 15:53:57"
         },
         {
             "name": "swiftmailer/swiftmailer",
