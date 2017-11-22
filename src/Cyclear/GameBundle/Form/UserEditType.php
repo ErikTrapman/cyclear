@@ -21,22 +21,8 @@ class UserEditType extends BaseType
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-        $user = $options['user'];
         $this->buildUserForm($builder, $options);
         $builder
-            ->add('ploeg', EntityType::class, array(
-                'required' => false,
-                'class' => 'CyclearGameBundle:Ploeg',
-                'choice_label' => 'naamWithSeizoen',
-                'query_builder' => function (\Doctrine\ORM\EntityRepository $e) use ($user) {
-                    return $e->createQueryBuilder("p")
-                        //->where("p.user IS NULL OR p.user = :user")
-                        //->setParameter("user", $user)
-                        ->orderBy("p.seizoen ASC, p.afkorting");
-                },
-                'multiple' => true,
-                'expanded' => false
-            ))
             ->add('enabled', null, array('required' => false));
         $subscriber = new IsAdminFieldSubscriber($builder->getFormFactory());
         $builder->addEventSubscriber($subscriber);

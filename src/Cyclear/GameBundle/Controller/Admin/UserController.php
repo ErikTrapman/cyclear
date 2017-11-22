@@ -102,7 +102,7 @@ class UserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-        $editForm = $this->createForm(UserEditType::class, $entity, array('user' => $entity));
+        $editForm = $this->createForm(UserEditType::class, $entity);
 
         return array(
             'entity' => $entity,
