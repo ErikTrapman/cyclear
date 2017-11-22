@@ -133,6 +133,12 @@ class UitslagRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @param Renner $renner
+     * @param null|Seizoen $seizoen
+     * @param bool $excludeZeros
+     * @return array
+     */
     public function getPuntenForRenner($renner, $seizoen = null, $excludeZeros = false)
     {
         if (null === $seizoen) {
@@ -147,6 +153,11 @@ class UitslagRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @param Renner $renner
+     * @param null $seizoen
+     * @return int
+     */
     public function getTotalPuntenForRenner($renner, $seizoen = null)
     {
         if (null === $seizoen) {
@@ -238,6 +249,7 @@ class UitslagRepository extends EntityRepository
         $subQ->select('DISTINCT r.id');
         $subQPoints = $this->_em->getRepository('CyclearGameBundle:Uitslag')->createQueryBuilder('u');
         $subQPoints->select('IFNULL(SUM(u.rennerPunten),0)')
+            ->groupBy('u.renner')
             ->innerJoin('u.wedstrijd', 'w')
             ->where('w.seizoen = :seizoen')
             ->andWhere($subQ->expr()->in('u.renner', $subQ->getDQL()));
@@ -245,15 +257,23 @@ class UitslagRepository extends EntityRepository
         if ($ploeg) {
             $retPloeg = $this->_em->getRepository('CyclearGameBundle:Ploeg')
                 ->createQueryBuilder('p')->where($subQ->expr()->eq('p', $ploeg->getId()))->getQuery()->getArrayResult();
-            $retPloeg['punten'] = $subQPoints->setParameter('p', $ploeg)->getQuery()->getSingleScalarResult();
+            $subRes = $subQPoints->setParameter('p', $ploeg)->getQuery()->getScalarResult();
+            $retPloeg['punten'] = array_sum(array_map(function ($item) {
+                return (int)reset($item);
+            }, $subRes));
             return [$retPloeg];
         }
         $res = [];
+        $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : 8 ^ 8;
         foreach ($this->_em->getRepository('CyclearGameBundle:Ploeg')
                      ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
                      ->setParameter('seizoen', $seizoen)->getQuery()->getArrayResult() as $ploeg) {
             $subQPoints->setParameter('p', $ploeg['id']);
-            $ploeg['punten'] = $subQPoints->getQuery()->getSingleScalarResult();
+            $subRes = $subQPoints->getQuery()->getArrayResult();
+            // results are grouped by rider. all riders can score the max amounts of maxPointsPerRider.
+            $ploeg['punten'] = array_sum(array_map(function ($item) use ($maxPointsPerRider) {
+                return (int)min($maxPointsPerRider, reset($item));
+            }, $subRes));
             $res[] = $ploeg;
         }
         static::puntenSort($res, 'afkorting');
@@ -305,23 +325,37 @@ class UitslagRepository extends EntityRepository
         return $stmt->fetchAll(\PDO::FETCH_NAMED);
     }
 
+    /**
+     * @param null|Seizoen $seizoen
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
+     * @return array
+     */
     public function getLostDraftPuntenByPloeg($seizoen = null, \DateTime $start = null, \DateTime $end = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         $res = [];
+        $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : 8 ^ 8;
         foreach ($this->_em->getRepository('CyclearGameBundle:Ploeg')
                      ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
                      ->setParameter('seizoen', $seizoen)->getQuery()->getResult() as $ploeg) {
 
             $teamResults = $this->getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen, $start, $end);
-            $teamPoints = 0;
+            $teamPointsPerRider = [];
             /** @var Uitslag $teamResult */
             foreach ($teamResults->getQuery()->getResult() as $teamResult) {
-                $teamPoints += $teamResult->getRennerPunten();
+                $riderId = $teamResult->getRenner()->getId();
+                if (!array_key_exists($riderId, $teamPointsPerRider)) {
+                    $teamPointsPerRider[$riderId] = 0;
+                }
+                $teamPointsPerRider[$riderId] += $teamResult->getRennerPunten();
             }
-            $ploeg->setPunten($teamPoints);
+            // make sure the lost draftpoints are never more than the max points a rider can get.
+            $ploeg->setPunten(array_sum(array_map(function ($item) use ($maxPointsPerRider) {
+                return (int)min($maxPointsPerRider, $item);
+            }, $teamPointsPerRider)));
             $res[] = $ploeg;
         }
         static::puntenSort($res);

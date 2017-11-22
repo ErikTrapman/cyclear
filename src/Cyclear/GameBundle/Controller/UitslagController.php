@@ -15,6 +15,7 @@ use Cyclear\GameBundle\Entity\Periode;
 use Cyclear\GameBundle\Entity\Ploeg;
 use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\Transfer;
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -114,6 +115,7 @@ class UitslagController extends Controller
      */
     public function overviewAction(Request $request, Seizoen $seizoen)
     {
+        /** @var EntityManager $em */
         $em = $this->get('doctrine.orm.default_entity_manager');
         $uitslagRepo = $em->getRepository("CyclearGameBundle:Uitslag");
         $transfer = $uitslagRepo->getPuntenByPloegForUserTransfers($seizoen);

@@ -101,7 +101,7 @@ class Wedstrijd
     /**
      * Set datum
      *
-     * @param datetime $datum
+     * @param \DateTime $datum
      */
     public function setDatum($datum)
     {
@@ -111,7 +111,7 @@ class Wedstrijd
     /**
      * Get datum
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getDatum()
     {

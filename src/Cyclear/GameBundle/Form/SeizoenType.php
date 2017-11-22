@@ -25,7 +25,8 @@ class SeizoenType extends AbstractType
             ->add('current', null, array('required' => false))
             ->add('closed', null, array('required' => false))
             ->add('start')
-            ->add('end');
+            ->add('end')
+            ->add('maxPointsPerRider');
     }
 
     public function getName()

@@ -13,7 +13,10 @@ namespace Cyclear\GameBundle\Tests\Calculator;
 
 use Cyclear\GameBundle\Calculator\PuntenCalculator;
 use Cyclear\GameBundle\Entity\Renner;
+use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\Transfer;
+use Cyclear\GameBundle\Entity\Uitslag;
+use Cyclear\GameBundle\Entity\UitslagRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -24,7 +27,7 @@ class PuntenCalculatorTest extends WebTestCase
     {
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
         $repo = $this->getMockBuilder('Cyclear\GameBundle\Entity\TransferRepository')->disableOriginalConstructor()->getMock();
-        $em->expects($this->any())->method('getRepository')->will($this->returnValue($repo));
+        $em->expects($this->at(0))->method('getRepository')->will($this->returnValue($repo));
 
         return array($em, $repo);
     }
@@ -46,24 +49,45 @@ class PuntenCalculatorTest extends WebTestCase
         $t->setDatum(new DateTime('2013-04-30 23:59:59'));
         $repo->expects($this->any())->method('findLastTransferForDate')->will($this->returnValue($t));
 
+        $uitslagRepo = $this->getMockBuilder(UitslagRepository::class)->disableOriginalConstructor()->getMock();
+        $em->expects($this->at(1))->method('getRepository')->with(Uitslag::class)->willReturn($uitslagRepo);
+        $seizoen = new Seizoen();
+
         $c = new PuntenCalculator($em);
-        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'), null);
+        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'), $seizoen);
         $this->assertEquals(true, $res);
     }
 
-    public function testTransferOnAndAfterCourse()
+    public function testTransferOnCourse()
     {
         list($em, $repo) = $this->getMocks();
         $t = new Transfer();
         $t->setDatum(new DateTime('2013-05-01 09:38'));
         $repo->expects($this->any())->method('findLastTransferForDate')->will($this->returnValue($t));
 
-        $c = new PuntenCalculator($em);
-        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'), null);
-        $this->assertEquals(false, $res);
+        $uitslagRepo = $this->getMockBuilder(UitslagRepository::class)->disableOriginalConstructor()->getMock();
+        $em->expects($this->at(1))->method('getRepository')->with(Uitslag::class)->willReturn($uitslagRepo);
 
+        $seizoen = new Seizoen();
+        $c = new PuntenCalculator($em);
+        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'), $seizoen);
+        $this->assertEquals(false, $res);
+    }
+
+    public function testTransferAfterCourse()
+    {
+        list($em, $repo) = $this->getMocks();
+        $t = new Transfer();
+        $t->setDatum(new DateTime('2013-05-01 09:38'));
+        $repo->expects($this->any())->method('findLastTransferForDate')->will($this->returnValue($t));
+
+        $uitslagRepo = $this->getMockBuilder(UitslagRepository::class)->disableOriginalConstructor()->getMock();
+        $em->expects($this->at(1))->method('getRepository')->with(Uitslag::class)->willReturn($uitslagRepo);
+
+        $seizoen = new Seizoen();
+        $c = new PuntenCalculator($em);
         $t->setDatum(clone $t->getDatum()->modify("+12 hours"));
-        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'), null);
+        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'), $seizoen);
         $this->assertEquals(false, $res);
     }
 
@@ -107,5 +131,24 @@ class PuntenCalculatorTest extends WebTestCase
         $c = new PuntenCalculator($em);
         $res = $c->canGetTeamPoints(new Renner(), new DateTime('2016-02-21 00:00:00'), null, new DateTime('2013-02-16 00:00:00'));
         $this->assertEquals(false, $res);
+    }
+
+    public function testRiderPassedMaxSeasonalPoints()
+    {
+        list($em, $repo) = $this->getMocks();
+
+        $uitslagRepo = $this->getMockBuilder(UitslagRepository::class)->disableOriginalConstructor()->getMock();
+        $uitslagRepo->method('getTotalPuntenForRenner')->willReturn(100);
+        $em->expects($this->at(1))->method('getRepository')->with(Uitslag::class)->willReturn($uitslagRepo);
+
+        // setup a valid transfer so it will get us points
+        $t = new Transfer();
+        $t->setDatum(new \DateTime('2013-04-30 23:59:59'));
+        $repo->expects($this->any())->method('findLastTransferForDate')->will($this->returnValue($t));
+
+        $c = new PuntenCalculator($em);
+        $seizoen = new Seizoen();
+        $seizoen->setMaxPointsPerRider(100);
+        $this->assertFalse($c->canGetTeamPoints(new Renner(), new \DateTime('2013-05-01 11:00:00'), $seizoen));
     }
 }

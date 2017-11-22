@@ -12,21 +12,37 @@
 namespace Cyclear\GameBundle\Calculator;
 
 use Cyclear\GameBundle\Entity\Renner;
+use Cyclear\GameBundle\Entity\Seizoen;
+use Cyclear\GameBundle\Entity\Transfer;
+use Cyclear\GameBundle\Entity\Uitslag;
+use Doctrine\ORM\EntityManager;
 
 /**
- * Description of PuntenCalculator
- *
- * @author Erik
+ * Calculate points for a team.
  */
 class PuntenCalculator
 {
+    /**
+     * @var EntityManager
+     */
     private $em;
 
-    public function __construct($em)
+    /**
+     * PuntenCalculator constructor.
+     * @param EntityManager $em
+     */
+    public function __construct(EntityManager $em)
     {
         $this->em = $em;
     }
 
+    /**
+     * @param Renner $renner
+     * @param $wedstrijdDatum
+     * @param Seizoen $seizoen
+     * @param null $referentieDatum
+     * @return bool
+     */
     public function canGetTeamPoints(Renner $renner, $wedstrijdDatum, $seizoen, $referentieDatum = null)
     {
         $transferRepo = $this->em->getRepository('CyclearGameBundle:Transfer');
@@ -47,10 +63,20 @@ class PuntenCalculator
             if (!$lastTransfer) {
                 return false;
             }
-            return $this->validateTransfer($lastTransfer, $wedstrijdDatum);
         }
+        // can the rider still get points, or passed the max of this season?
+        $currentSeasonalRiderPoints = $this->em->getRepository(Uitslag::class)->getTotalPuntenForRenner($renner, $seizoen);
+        if (null !== $seizoen->getMaxPointsPerRider() && $currentSeasonalRiderPoints >= $seizoen->getMaxPointsPerRider()) {
+            return false;
+        }
+        return $this->validateTransfer($lastTransfer, $wedstrijdDatum);
     }
 
+    /**
+     * @param Transfer $transfer
+     * @param \DateTime $validationDatum
+     * @return bool
+     */
     private function validateTransfer($transfer, $validationDatum)
     {
         $transferDatum = clone $transfer->getDatum();

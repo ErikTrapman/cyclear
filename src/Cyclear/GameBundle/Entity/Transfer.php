@@ -61,7 +61,7 @@ class Transfer
     private $ploegNaar;
 
     /**
-     * @var date $datum
+     * @var \DateTime $datum
      *
      * @ORM\Column(name="datum", type="datetime")
      */
@@ -164,7 +164,7 @@ class Transfer
     /**
      * Set datum
      *
-     * @param date $datum
+     * @param \DateTime $datum
      */
     public function setDatum($datum)
     {
@@ -174,7 +174,7 @@ class Transfer
     /**
      * Get datum
      *
-     * @return date
+     * @return \DateTime
      */
     public function getDatum()
     {

@@ -12,6 +12,7 @@
 namespace Cyclear\GameBundle\EntityManager;
 
 use Cyclear\GameBundle\Calculator\PuntenCalculator;
+use Cyclear\GameBundle\Entity\Seizoen;
 use Cyclear\GameBundle\Entity\Uitslag;
 use Cyclear\GameBundle\Entity\Wedstrijd;
 use Cyclear\GameBundle\Entity\UitslagType;
@@ -38,6 +39,9 @@ class UitslagManager
      */
     private $cqParser;
 
+    /**
+     * @var string
+     */
     private $cqRankingWedstrijdUrl;
 
     /**
@@ -55,6 +59,16 @@ class UitslagManager
      */
     private $twitterParser;
 
+    /**
+     * UitslagManager constructor.
+     * @param EntityManager $em
+     * @param CQParser $parser
+     * @param PuntenCalculator $puntenCalculator
+     * @param $cqRankingWedstrijdUrl
+     * @param RennerManager $rennerManager
+     * @param NationalityResolver $cqNationalityResolver
+     * @param TwitterParser $twitterParser
+     */
     public function __construct(EntityManager $em,
                                 CQParser $parser,
                                 PuntenCalculator $puntenCalculator,
@@ -73,12 +87,12 @@ class UitslagManager
     }
 
     /**
-     *
      * @param UitslagType $uitslagType
-     * @param type $crawler
+     * @param $crawler
      * @param Wedstrijd $wedstrijd
-     * @param type $puntenReferentieDatum
-     * @return Uitslag[]
+     * @param Seizoen $seizoen
+     * @param null $puntenReferentieDatum
+     * @return array
      */
     public function prepareUitslagen(UitslagType $uitslagType, $crawler, Wedstrijd $wedstrijd, $seizoen, $puntenReferentieDatum = null)
     {
