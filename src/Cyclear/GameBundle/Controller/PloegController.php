@@ -67,8 +67,7 @@ class PloegController extends Controller
 
         $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");
         $punten = $uitslagRepo->getPuntenByPloeg($seizoen, $entity);
-        $draftRenners = $ploegRepo->getDraftRennersWithPunten($entity, false);
-        $draftPunten = $uitslagRepo->getPuntenByPloegForDraftTransfers($seizoen, $entity);
+        $draftRenners = $ploegRepo->getDraftRennersWithPunten($entity, $seizoen, false);
 
         $form = $this->createFormBuilder($entity)
             ->add('memo', null, ['attr' => ['placeholder' => '...', 'rows' => 16]])
@@ -93,7 +92,9 @@ class PloegController extends Controller
             'zeges' => $zeges,
             'punten' => $punten[0]['punten'],
             'draftRenners' => $draftRenners,
-            'draftPunten' => $draftPunten[0]['punten'],
+            'draftPunten' => array_sum(array_map(function ($el) {
+                return $el['punten'];
+            }, $draftRenners)),
             'form' => $form->createView()
         );
     }
