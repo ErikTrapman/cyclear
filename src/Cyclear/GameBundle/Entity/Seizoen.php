@@ -19,7 +19,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Seizoen
 {
-
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -59,6 +58,13 @@ class Seizoen
      * @ORM\Column(type="date", nullable=true)
      */
     private $end;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $maxPointsPerRider;
 
     public function getId()
     {
@@ -100,11 +106,6 @@ class Seizoen
         $this->current = $current;
     }
 
-    public function __toString()
-    {
-        return $this->identifier;
-    }
-
     /**
      * @return \DateTime
      */
@@ -137,5 +138,24 @@ class Seizoen
         $this->end = $end;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getMaxPointsPerRider()
+    {
+        return $this->maxPointsPerRider;
+    }
 
+    /**
+     * @param mixed $maxPointsPerRider
+     */
+    public function setMaxPointsPerRider($maxPointsPerRider)
+    {
+        $this->maxPointsPerRider = $maxPointsPerRider;
+    }
+
+    public function __toString()
+    {
+        return $this->identifier;
+    }
 }

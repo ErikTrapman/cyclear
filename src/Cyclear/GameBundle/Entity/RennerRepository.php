@@ -30,6 +30,10 @@ class RennerRepository extends EntityRepository
         return $this->findOneBy(array('naam' => $naam));
     }
 
+    /**
+     * @param $id
+     * @return null|object|Renner
+     */
     public function findOneByCQId($id)
     {
         return $this->findOneBy(array('cqranking_id' => $id));

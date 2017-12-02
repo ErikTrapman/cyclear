@@ -60,10 +60,21 @@ class PloegRepository extends EntityRepository
     public function getDraftRennersWithPunten(Ploeg $ploeg, $sort = true)
     {
         $ret = array();
+        $seizoen = $ploeg->getSeizoen();
         $renners = $this->getDraftRenners($ploeg);
         $uitslagRepo = $this->_em->getRepository("CyclearGameBundle:Uitslag");
         foreach ($renners as $index => $renner) {
-            $ret[] = array(0 => $renner, 'punten' => $uitslagRepo->getTotalPuntenForRenner($renner, $ploeg->getSeizoen()), 'index' => $index);
+            $rennerPunten = $uitslagRepo->getTotalPuntenForRenner($renner, $ploeg->getSeizoen());
+            $punten = $rennerPunten;
+            if (null !== $seizoen->getMaxPointsPerRider()) {
+                $punten = min($seizoen->getMaxPointsPerRider(), $punten);
+            }
+
+            $ret[] = array(
+                0 => $renner,
+                'punten' => $punten,
+                'rennerPunten' => $rennerPunten,
+                'index' => $index);
         }
         if ($sort) {
             $this->puntenSort($ret);
