@@ -96,5 +96,15 @@
 
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="btn-group btn-group-justified">
+                    {% for p in puntenPerSeizoen %}
+                        <a class="btn btn-default" href={{ path('renner_show', {seizoen: p.seizoen.slug, renner: renner.slug}) }}>{{ p.seizoen }} - {{ p.punten|default(0) }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

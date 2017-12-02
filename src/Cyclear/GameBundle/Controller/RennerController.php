@@ -98,17 +98,32 @@ class RennerController extends Controller
      */
     public function showAction(Request $request, Seizoen $seizoen, Renner $renner)
     {
-        $transferrepo = $this->getDoctrine()->getRepository("CyclearGameBundle:Transfer");
+        $doctrine = $this->getDoctrine();
+        $transferrepo = $doctrine->getRepository("CyclearGameBundle:Transfer");
+        $uitslagRepo = $doctrine->getRepository("CyclearGameBundle:Uitslag");
+        $seizoenRepo = $doctrine->getRepository('CyclearGameBundle:Seizoen');
+
         $transfers = $transferrepo->findByRenner($renner, $seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER));
-        $uitslagen = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getPuntenForRenner($renner, $seizoen, true);
+        $uitslagen = $uitslagRepo->getPuntenForRenner($renner, $seizoen, true);
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $uitslagen, $request->query->get('page', 1), 20
         );
 
-        $ploeg = $this->getDoctrine()->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen);
+        $ploeg = $doctrine->getRepository("CyclearGameBundle:Renner")->getPloeg($renner, $seizoen);
 
-        $punten = $this->getDoctrine()->getRepository("CyclearGameBundle:Uitslag")->getTotalPuntenForRenner($renner, $seizoen);
+        $punten = $uitslagRepo->getTotalPuntenForRenner($renner, $seizoen);
+        // create archive links
+        $puntenPerSeizoen = [];
+        foreach ($seizoenRepo->findBy([], ['id' => 'ASC']) as $archivedSeizoen) {
+            if ($archivedSeizoen === $seizoen) {
+                continue;
+            }
+            $puntenPerSeizoen[] = [
+                'seizoen' => $archivedSeizoen,
+                'punten' => $uitslagRepo->getTotalPuntenForRenner($renner, $archivedSeizoen)
+            ];
+        }
 
         return array(
             'seizoen' => $seizoen,
@@ -117,7 +132,9 @@ class RennerController extends Controller
             'uitslagen' => $pagination,
             'transferrepo' => $transferrepo,
             'ploeg' => $ploeg,
-            'rennerPunten' => intval($punten));
+            'rennerPunten' => intval($punten),
+            'puntenPerSeizoen' => $puntenPerSeizoen
+        );
     }
 
     /**
