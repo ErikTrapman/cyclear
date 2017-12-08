@@ -1,5 +1,7 @@
-{% extends "::admin.base.html.twig" %}
+{% extends '::admin.base_normal.twig' %}
 
 {% block content %}
-    <p>Hallo admin!</p>
+
+    <h1>Admin {{ app.user }}</h1>
+
 {% endblock %}
