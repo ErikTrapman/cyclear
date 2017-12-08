@@ -238,6 +238,11 @@ class UitslagRepository extends EntityRepository
         return $ret;
     }
 
+    /**
+     * @param null $seizoen
+     * @param Ploeg|null $ploeg
+     * @return array
+     */
     public function getPuntenByPloegForDraftTransfers($seizoen = null, Ploeg $ploeg = null)
     {
         if (null === $seizoen) {
@@ -264,7 +269,7 @@ class UitslagRepository extends EntityRepository
             return [$retPloeg];
         }
         $res = [];
-        $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : 8 ^ 8;
+        $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : pow(8, 8);
         foreach ($this->_em->getRepository('CyclearGameBundle:Ploeg')
                      ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
                      ->setParameter('seizoen', $seizoen)->getQuery()->getArrayResult() as $ploeg) {
@@ -337,7 +342,7 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         $res = [];
-        $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : 8 ^ 8;
+        $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : pow(8, 8);
         foreach ($this->_em->getRepository('CyclearGameBundle:Ploeg')
                      ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
                      ->setParameter('seizoen', $seizoen)->getQuery()->getResult() as $ploeg) {
