@@ -67,7 +67,7 @@ class PloegController extends Controller
 
         $rennerRepo = $em->getRepository("CyclearGameBundle:Renner");
         $punten = $uitslagRepo->getPuntenByPloeg($seizoen, $entity);
-        $draftRenners = $ploegRepo->getDraftRennersWithPunten($entity, $seizoen, false);
+        $draftRenners = $ploegRepo->getDraftRennersWithPunten($entity, false);
 
         $form = $this->createFormBuilder($entity)
             ->add('memo', null, ['attr' => ['placeholder' => '...', 'rows' => 16]])
