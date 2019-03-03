@@ -100,6 +100,8 @@ class PloegController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $this->handleUserManagement($entity, $form->get('user')->getData());
+
             return $this->redirect($this->generateUrl('admin_ploeg'));
         }
 
@@ -160,6 +162,8 @@ class PloegController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $this->handleUserManagement($entity, $editForm->get('user')->getData());
+
             return $this->redirect($this->generateUrl('admin_ploeg'));
         }
 
@@ -204,4 +208,15 @@ class PloegController extends Controller
             ->getForm();
     }
 
+    private function handleUserManagement($ploeg, $user = null)
+    {
+        if (!$user) {
+            return;
+        }
+        $usermanager = $this->get('cyclear_game.manager.user');
+        $usermanager->setOwnerAcl($user, $ploeg);
+        $ploeg->setUser($user);
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+    }
 }

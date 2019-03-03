@@ -128,43 +128,43 @@ class UserController extends Controller
         }
         $editForm = $this->createForm(UserEditType::class, $entity);
 
-
-        // http://symfony.com/doc/master/cookbook/form/form_collections.html - Ensuring the database persistence
-        $originalPloegen = array();
-        // Create an array of the current Tag objects in the database
-        foreach ($entity->getPloeg() as $ploeg) {
-            $originalPloegen[] = $ploeg;
-        }
+//        // http://symfony.com/doc/master/cookbook/form/form_collections.html - Ensuring the database persistence
+//        $originalPloegen = array();
+//        // Create an array of the current Tag objects in the database
+//        foreach ($entity->getPloeg() as $ploeg) {
+//            $originalPloegen[] = $ploeg;
+//        }
 
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
 
-            $usermanager = $this->get('cyclear_game.manager.user');
-            //$usermanager->updatePloegen($editForm, $entity);
-            foreach ($entity->getPloeg() as $ploeg) {
-                foreach ($originalPloegen as $key => $toDel) {
-                    if ($toDel->getId() === $ploeg->getId()) {
-                        unset($originalPloegen[$key]);
-                    }
-                }
-                $usermanager->setOwnerAcl($entity, $ploeg);
-                $ploeg->setUser($entity);
-            }
-
-            // remove the relationship between the tag and the Task
-            foreach ($originalPloegen as $ploeg) {
-                // remove the Task from the Tag
-                $ploeg->setUser(null);
-                $usermanager->unsetOwnerAcl($entity, $ploeg);
-
-                // if it were a ManyToOne relationship, remove the relationship like this
-                // $tag->setTask(null);
-
-                $em->persist($ploeg);
-
-                // if you wanted to delete the Tag entirely, you can also do that
-                // $em->remove($tag);
-            }
+//            this is now done in PloegController
+//            $usermanager = $this->get('cyclear_game.manager.user');
+//            //$usermanager->updatePloegen($editForm, $entity);
+//            foreach ($entity->getPloeg() as $ploeg) {
+//                foreach ($originalPloegen as $key => $toDel) {
+//                    if ($toDel->getId() === $ploeg->getId()) {
+//                        unset($originalPloegen[$key]);
+//                    }
+//                }
+//                $usermanager->setOwnerAcl($entity, $ploeg);
+//                $ploeg->setUser($entity);
+//            }
+//
+//            // remove the relationship between the tag and the Task
+//            foreach ($originalPloegen as $ploeg) {
+//                // remove the Task from the Tag
+//                $ploeg->setUser(null);
+//                $usermanager->unsetOwnerAcl($entity, $ploeg);
+//
+//                // if it were a ManyToOne relationship, remove the relationship like this
+//                // $tag->setTask(null);
+//
+//                $em->persist($ploeg);
+//
+//                // if you wanted to delete the Tag entirely, you can also do that
+//                // $em->remove($tag);
+//            }
 
             $em->persist($entity);
             $em->flush();
