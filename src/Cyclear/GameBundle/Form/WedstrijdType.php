@@ -30,7 +30,6 @@ class WedstrijdType extends AbstractType
         $builder
             ->add('datum', DateType::class, $dateOptions)
             ->add('naam')
-            ->add('uitslagtype', EntityType::class, array('class' => 'CyclearGameBundle:UitslagType', 'mapped' => false))
             ->add('seizoen', SeizoenSelectorType::class);
     }
 
