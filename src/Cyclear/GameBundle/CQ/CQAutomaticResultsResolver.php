@@ -132,14 +132,19 @@ class CQAutomaticResultsResolver
                 $wedstrijdRefDate = $refStage->getDatum();
             }
             // TODO parametrize CQ-urls!
-            $uitslagen = $this->uitslagManager->prepareUitslagen(
-                $type,
-                $this->crawlerManager->getCrawler('http://cqranking.com/men/asp/gen/' . $race->url),
-                $wedstrijd,
-                $seizoen,
-                $wedstrijdRefDate);
-            if (count($uitslagen) < $type->getMaxResults()) {
-                $this->logger->notice($race->url . ' has not enough content yet');
+            try {
+                $uitslagen = $this->uitslagManager->prepareUitslagen(
+                    $type,
+                    $this->crawlerManager->getCrawler('http://cqranking.com/men/asp/gen/' . $race->url),
+                    $wedstrijd,
+                    $seizoen,
+                    $wedstrijdRefDate);
+                if (count($uitslagen) < $type->getMaxResults()) {
+                    $this->logger->notice($race->url . ' has not enough content yet');
+                    continue;
+                }
+            } catch (\Throwable $throwable) {
+                $this->logger->error($race->url . ' / ' . $race->name . ' has error: ' . $throwable->getMessage());
                 continue;
             }
             foreach ($uitslagen as $uitslagRow) {
