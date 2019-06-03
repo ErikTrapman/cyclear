@@ -126,13 +126,14 @@ class CQAutomaticResultsResolver
             }
             $wedstrijd->setGeneralClassification($type->isGeneralClassification());
             $wedstrijdRefDate = null;
-            $needsRefStage = $this->categoryMatcher->needsRefStage($wedstrijd);
-            if ($needsRefStage) {
-                $refStage = $this->categoryMatcher->getRefStage($wedstrijd);
-                $wedstrijdRefDate = $refStage->getDatum();
-            }
+
             // TODO parametrize CQ-urls!
             try {
+                $needsRefStage = $this->categoryMatcher->needsRefStage($wedstrijd);
+                if ($needsRefStage) {
+                    $refStage = $this->categoryMatcher->getRefStage($wedstrijd);
+                    $wedstrijdRefDate = $refStage->getDatum();
+                }
                 $uitslagen = $this->uitslagManager->prepareUitslagen(
                     $type,
                     $this->crawlerManager->getCrawler('http://cqranking.com/men/asp/gen/' . $race->url),
@@ -145,6 +146,9 @@ class CQAutomaticResultsResolver
                 }
             } catch (\Throwable $throwable) {
                 $this->logger->error($race->url . ' / ' . $race->name . ' has error: ' . $throwable->getMessage());
+                continue;
+            } catch (\Exception $e){
+                $this->logger->error($race->url . ' / ' . $race->name . ' has error: ' . $e->getMessage());
                 continue;
             }
             foreach ($uitslagen as $uitslagRow) {
