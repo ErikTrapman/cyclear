@@ -10,6 +10,7 @@ parameters:
     mailer_host: 
     mailer_user :
     mailer_password :
+    mailer_port:
     logging_address : 
     corresponding_address:
 
