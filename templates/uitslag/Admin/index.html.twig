@@ -1,0 +1,54 @@
+{% extends '::admin.base_normal.twig' %}
+
+{% block title %}Uitslagen{% endblock %}
+
+{% block content %}
+    <h3>Uitslagen</h3>
+
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <th/>
+            <th>Wedstrijd</th>
+            <th>Renner</th>
+            <th>Renner punten</th>
+            <th>Ploeg</th>
+            <th>Ploeg punten</th>
+            <th>Datum</th>
+            <th>&nbsp;</th>
+        </tr>
+
+
+        {% for entity in pagination %}
+            <tr>
+                <td><a href="{{ path('admin_uitslag_edit',{uitslag:entity.id}) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.wedstrijd.naam }}</td>
+                <td>{{ entity.renner.naam }}</td>
+                <td>{{ entity.rennerPunten }}</td>
+                <td>{% if entity.ploeg %}{{ entity.ploeg.afkorting }}{% endif %}</td>
+                <td>{{ entity.ploegPunten }}</td>
+                <td>{{ entity.wedstrijd.datum|date('d-m-Y') }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_uitslag_edit', { 'uitslag': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination, null, {}, {'firstPageRoute': 'admin_uitslag'}) }}
+    </div>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_uitslag_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+{% endblock %}

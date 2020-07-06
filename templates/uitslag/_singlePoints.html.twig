@@ -1,0 +1,5 @@
+{% if 0 == uitslag.ploegPunten and uitslag.rennerPunten > 0 and uitslag.ploeg %}
+    <s>{{ uitslag.rennerPunten }}</s>
+{% else %}
+    {{ uitslag.rennerPunten }}
+{% endif %}

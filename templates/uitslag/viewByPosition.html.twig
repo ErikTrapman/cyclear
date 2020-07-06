@@ -1,0 +1,20 @@
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th class="hidden-xs hidden-sm" colspan="3">Ploeg</th>
+            <th class="hidden-lg hidden-md" colspan="2">Ploeg</th>
+            <th>Zeges</th>
+        </tr>
+        {% for uitslag in list %}
+            <tr>
+                <td>{{ "%02d"|format(loop.index) }}</td>
+                <td class="hidden-xs hidden-sm">{{ uitslag.0.naam }}</td>
+                <td class="hidden-sm hidden-xs">{{ uitslag.0.afkorting }}</td>
+                <td class="hidden-lg hidden-md"><a
+                            href="{{ path('ploeg_show', { "seizoen": seizoen.slug, id:uitslag.0.id}) }}#!ploeg">{{ uitslag.0.afkorting }}</a>
+                </td>
+                <td>{{ uitslag.freqByPos }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,332 @@
+/*
+Author URI: http://webthemez.com/
+Note: 
+Licence under Creative Commons Attribution 3.0 
+Do not remove the back-link in this web template 
+-------------------------------------------------------*/
+
+@charset "utf-8";
+/*
+@import url(http://fonts.googleapis.com/css?family=Raleway:800,700,400);
+@import url(http://fonts.googleapis.com/css?family=Droid+Serif:400);*/
+
+body {
+    font-family: 'Droid Sans', sans-serif;
+    color: #2f2f2f;
+}
+
+h2 {
+    font-size: 38px;
+    color: whitesmoke;
+    font-family: 'Raleway', serif;
+    font-weight: normal;
+    margin: 0px 0 0px 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+h3 {
+    font-family: 'Raleway';
+}
+
+th {
+    font-family: 'Raleway';
+}
+
+h2 a {
+    color: whitesmoke;
+}
+
+h2 a:hover {
+    color: whitesmoke;
+    text-decoration: none;
+}
+
+a {
+    color: #df0031;
+    color: #860087;
+    color: #680069;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding:0;
+}
+
+ul.clearfix li.active {
+    color: #df0031;
+    color: #860087;
+    color: #2e002f;
+}
+
+a:hover {
+    color: black;
+}
+
+a:active {
+    color: #df0031;
+    color: #860087;
+    color: #2e002f;
+}
+
+#main-navbar {
+    margin-bottom: 0;
+}
+
+.big-header {
+    background: #A400A5;
+    background: #860087;
+    background: #720073;
+    background: #2e002f;
+    padding: 52px 0;
+    margin: 0px;
+    margin-bottom: 30px;
+}
+
+.subheader {
+    border-top: 2px solid #720073;
+    border-top: 2px solid #2e002f;
+    padding: 52px 0;
+    margin: 0px;
+}
+.subheader h2 {
+    color: #2f2f2f;
+}
+.subheader h2 a {
+    color: lightgrey;
+}
+
+.news {
+    background: whitesmoke;
+    font-size: 16px;
+    padding-bottom: 40px;
+}
+
+
+
+#filters ul li a h5 {
+    background: none repeat scroll 0 0 #f7f7f7;
+    border-radius: 4px;
+    display: inline-block;
+
+    font-size: 12px;
+
+    margin-bottom: 5px;
+    padding: 10px 22px;
+    text-transform: uppercase;
+    transition: all 0.3s ease-in-out 0s;
+    background: #fff;
+    border: #C2C2C2 solid 1px;
+    color: #2f2f2f;
+}
+
+#filters ul li a:hover h5, #filters ul li a.active h5 {
+    background: #fff;
+    color: #df0031;
+    color: #860087;
+    color: #2e002f;
+    text-decoration: none;
+    border: #df0031 solid 1px;
+    border: #860087 solid 1px;
+    border: #2e002f solid 1px;
+}
+
+/* for desktops */
+@media (min-width: 769px) {
+
+    #filters {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        display: block;
+        float: none;
+        z-index: 2;
+        position: relative;
+    }
+
+    #filters ul li {
+        display: inline-block;
+        margin: 0 5px;
+    }
+
+    #filters ul li a {
+        display: block;
+    }
+
+    #filters ul li a h5 {
+        line-height: 20px;
+    }
+}
+
+a.read_more {
+    display: block;
+    font-size: 16px;
+    width: 178px;
+    height: 46px;
+    line-height: 46px;
+    border-radius: 3px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -webkit-transition: all 0.2s ease-in-out;
+    background: transparent;
+    color: #860087;
+    color: #2e002f;
+    border: 1px solid #860087;
+    border: 1px solid #2e002f;
+}
+
+a.read_more:hover {
+    /*background: #fff;
+    color: #df0031;
+    color: #860087;
+    border: 1px solid #fff;*/
+    text-decoration: none;
+}
+
+.tab-content {
+    margin-bottom: 80px;
+}
+
+.adminfilter {
+    margin-bottom: 20px;
+}
+
+#footer {
+    background-color: #2f2f2f;
+    color: whitesmoke;
+    margin-top: 22px;
+    padding-top: 42px;
+    padding-bottom: 22px;
+}
+
+#footer ul {
+    list-style: none;
+}
+
+#footer a {
+    color: whitesmoke;
+    height: 100%;
+}
+
+.big-header-ext, .big-header-dashboard {
+    background-color: #2f2f2f;
+    color: whitesmoke;
+    padding: 10px;
+    text-align: center;
+}
+
+.big-header-ext .list-inline {
+    font-size: 24px;
+    margin: 0;
+}
+
+.big-header-ext .list-inline a {
+    vertical-align: middle;
+    color: whitesmoke;
+    text-decoration: underline;
+}
+
+.big-header-dashboard {
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+.big-header-dashboard a {
+    color: whitesmoke;
+    text-decoration: underline;
+}
+
+/** font awesome additions **/
+.fa-euro {
+    color: #2e002f;
+    opacity: 0.66;
+}
+
+/** bootstrap override **/
+.navbar-default .navbar-brand, .navbar-default .navbar-nav > li > a {
+    color: #2f2f2f;
+}
+ul.pagination a {
+    color: #860087;
+    color: #2e002f;
+}
+.pagination>.active>span, .pagination>.active>span:hover {
+    background-color: #860087;
+    background-color: #2e002f;
+    border: 1px solid #860087;
+    border: 1px solid #2e002f;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
+    background-color: #860087;
+    background-color: #2e002f;
+    border-color: #860087;
+    border-color: #2e002f;
+}
+/** prevent horizontal scrollbar
+http://stackoverflow.com/questions/23768152/using-container-fluid-within-bootstrap-cause-horizontal-scrollbar
+ */
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+body {
+    overflow-x: hidden;
+}
+.panel-default {
+    margin-top: 20px;
+}
+
+/** typeahead - copied from https://twitter.github.io/typeahead.js/examples/ **/
+.typeahead {
+    background-color: #fff;
+}
+
+.typeahead:focus {
+    border: 2px solid #860087;
+    border: 2px solid #2e002f;
+}
+
+.tt-query {
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+    color: #999
+}
+
+.tt-menu {
+    width: 422px;
+    margin: 0px 0;
+    padding: 8px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+.tt-suggestion {
+    padding: 3px 20px;
+    line-height: 24px;
+}
+
+.tt-suggestion:hover {
+    cursor: pointer;
+    color: #fff;
+    background-color: #860087;
+    background-color: #2e002f;
+}
+
+.tt-suggestion.tt-cursor {
+    color: #fff;
+    background-color: #860087;
+    background-color: #2e002f;
+
+}
+
+.tt-suggestion p {
+    margin: 0;
+}

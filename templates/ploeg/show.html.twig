@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ entity.naam }}
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="big-header" style="margin-bottom: 0;">
+        <h2>{{ entity.naam }}</h2>
+    </div>
+    <div class="big-header-ext">
+        <ul class="list-inline">
+            <li>{{ punten }} punten</li>
+        </ul>
+    </div>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div id="filters">
+
+                    <ul id="tabs" class="list-group list-inline">
+                        <li class="active"><a href="#ploeg" data-toggle="tab"><h5>Ploeg</h5></a></li>
+                        <li><a href="#punten" data-toggle="tab"><h5>Gescoorde punten</h5></a></li>
+                        <li><a href="#transfers" data-toggle="tab"><h5>Transfers</h5></a></li>
+                        <li><a href="#transferpunten" data-toggle="tab"><h5>Transfer punten</h5></a></li>
+                        <li><a href="#zeges" data-toggle="tab"><h5>Zeges</h5></a></li>
+                        <li><a href="#draft" data-toggle="tab"><h5>Draftploeg</h5></a></li>
+                        <li><a href="#lostdrafts" data-toggle="tab"><h5>Draft-</h5></a></li>
+                    </ul>
+
+                </div>
+
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="ploeg">
+                        {% include "ploeg/_singleRenners.html.twig"
+                        with {
+                        'renners':renners,'showTotal':false,'showContract':true, 'showActions':true
+                        } %}
+
+                        {% if isMyTeam(entity) %}
+                            <form method="post" action="{{ path('ploeg_show',{id: entity.id,seizoen: seizoen.slug}) }}">
+                                {{ form_widget(form) }}
+                            </form>
+                        {% endif %}
+
+                    </div>
+                    <div class="tab-pane" id="punten">
+                        <div class="table-responsive">
+                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen':uitslagen} %}
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="transfers">
+                        {% include "transfer/_listWithInversion.html.twig" with {'fromTeamPage': true, 'listWithInversion':transfers, 'firstPageRoute' : 'ploeg_show','includePagination': true} %}
+                    </div>
+                    <div class="tab-pane" id="transferpunten">
+                        <div class="table-responsive">
+                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen':transferUitslagen} %}
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="zeges">
+                        <div class="table-responsive">
+                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen':zeges} %}
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="draft">
+                        {% include "ploeg/_singleRenners.html.twig" with {'renners':draftRenners,'showTotal': true,'total': draftPunten, 'showContract': false,'showActions':false } %}
+                    </div>
+                    <div class="tab-pane" id="lostdrafts">
+                        <div class="table-responsive">
+                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen':lostDrafts,'show':'rennerPunten' } %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="big-header-ext" style="background-color: white; color:black;">
+        <ul class="list-inline">
+            {% if entity.user %}
+                {% for b in entity.user.awardedBadges %}
+                    <li style="vertical-align: top;">
+                        <img src="{{ vich_uploader_asset(b.badge, 'imageFile') }}" alt="{{ b.badge.name }}"/>
+                        {% if b.recurringAmount %}
+                            <br>{{ b.recurringAmount }}x
+                        {% endif %}
+                    </li>
+
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+
+
+{% endblock %}

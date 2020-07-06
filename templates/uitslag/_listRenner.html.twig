@@ -1,0 +1,40 @@
+{% block content %}
+    {% set show_rider = show_rider is defined ? show_rider : true %}
+
+    <table class="table table-bordered table-striped">
+        <tr>
+
+            {% if show_rider %}
+                <th>Renner</th>
+            {% endif %}
+            <th>Ploeg</th>
+            <th>Punten</th>
+            {% if show_rider %}
+                <th>Punten renner</th>
+            {% endif %}
+            <th>#</th>
+            <th>Wedstrijd</th>
+            <th>Datum</th>
+        </tr>
+        {% for uitslag in uitslagen %}
+            <tr>
+                {% if show_rider %}
+                    <td>{{ uitslag.renner.naam }}</td>
+                {% endif %}
+                <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
+                <td>{{ uitslag.ploegPunten }}</td>
+                {% if show_rider %}
+                    <td>{{ uitslag.rennerPunten }}</td>
+                {% endif %}
+                <td>{{ uitslag.positie }}</td>
+                <td>
+                    {% include "wedstrijd/_singleRow.html.twig" with {wedstrijd:uitslag.wedstrijd, seizoen:uitslag.wedstrijd.seizoen } %}
+                </td>
+                <td>{{ uitslag.wedstrijd.datum|date('d M') }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <div id="navigation">
+        {{ knp_pagination_render(uitslagen, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'renner_show'}) }}
+    </div>
+{% endblock %}

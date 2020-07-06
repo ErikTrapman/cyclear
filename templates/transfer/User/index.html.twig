@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form _self %}
+
+{% block _cyclear_gamebundle_transferusertype_renner_renner_uit_widget %}
+    <label class="control-label">Renner uit</label>
+    <div class="controls">{{ form_widget(form) }}</div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="big-header">
+        <h2>{% include "country/_image.html.twig" with {'size':32,'country':renner.country } %}{{ renner.naam }}</h2>
+    </div>
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-lg-12">
+
+                {% if transferInfo['left'] <= 0 %}
+                    <div class="alert alert-danger" role="alert">Geen transfers meer mogelijk, {{ transferInfo['count'] }} gedaan.</div>
+                {% else %}
+                    <div class="alert alert-info" role="alert">
+                        <p>{{ transferInfo['count'] }} transfers gedaan, nog
+                            <strong>{{ transferInfo['left'] }}</strong> transfers mogelijk</p>
+                    </div>
+                {% endif %}
+
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Transfer</h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <form action="{{ path('user_transfer', { seizoen:seizoen.slug, id:ploeg.id, renner:renner.slug }) }}"
+                              method="post">
+
+
+                            {{ form_widget(form) }}
+                            {% if transferInfo['left'] > 0 %}
+                                <button type="submit" class="btn btn-danger">Transfer</button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

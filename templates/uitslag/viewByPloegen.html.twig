@@ -1,0 +1,52 @@
+{% block content %}
+
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th colspan="3" class="hidden-sm hidden-xs">Ploeg</th>
+            <th colspan="2" class="hidden-lg hidden-md">Ploeg</th>
+            <th>Punten</th>
+            <th>Periode</th>
+        </tr>
+        {% for ploeg in list %}
+            <tr>
+                {% set curpos = "%02d"|format(loop.index) %}
+                {% set tdclass = loop.index == 1 ? 'success' : null %}
+                {% if shadowlist %}
+                    {% set prevpos =  shadowlist[ploeg[0].id].position %}
+                    {% set posdiff = prevpos - curpos %}
+                    <td>
+                        {% spaceless %}
+                            {{ curpos }}
+                            {% if posdiff > 0 %}
+                                <img title=" + {{ posdiff }} "
+                                     src="/icons/famfamfam/bullet_green.png"/>
+                            {% elseif posdiff < 0 %}
+                                <img title=" {{ posdiff }} "
+                                     src="/icons/famfamfam/bullet_red.png"/>
+                            {% endif %}
+
+                        {% endspaceless %}
+                    </td>
+                {% else %}
+                    <td>{{ curpos }}</td>
+                {% endif %}
+
+
+                <td class="hidden-xs hidden-sm">
+                    <a href="{{ path('ploeg_show', { "seizoen": seizoen.slug, id:ploeg[0].id}) }}#!ploeg">{{ ploeg[0].naam }}</a>
+                </td>
+                <td class="hidden-sm hidden-xs">{{ ploeg[0].afkorting }}</td>
+                <td class="hidden-lg hidden-md">
+                    <a href="{{ path('ploeg_show', { "seizoen": seizoen.slug, id:ploeg[0].id}) }}#!ploeg">{{ ploeg[0].afkorting }}</a>
+                </td>
+                {% if shadowlist %}
+                    <td>{{ ploeg.punten }}</td>
+                    <td>+{{ ploeg.punten - shadowlist[ploeg[0].id].punten }}</td>
+                {% else %}
+                    <td>{{ ploeg.punten }}</td>
+                {% endif %}
+
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

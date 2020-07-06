@@ -1,0 +1,24 @@
+{% block content %}
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <th class="hidden-xs hidden-sm" colspan="3">Ploeg</th>
+            <th class="hidden-md hidden-lg" colspan="2">Ploeg</th>
+            <th>Punten</th>
+        </tr>
+
+
+        {% for ploeg in list %}
+            <tr>
+                <td>{{ "%02d"|format(loop.index) }}</td>
+                <td class="hidden-xs hidden-sm">
+                    <a href="{{ path('ploeg_show',{id:ploeg.id,seizoen:seizoen.slug}) }}">{{ ploeg.naam }}</a></td>
+                <td>
+                    <a href="{{ path('ploeg_show', {id: ploeg.id, seizoen:seizoen.slug}) }}">{{ ploeg.afkorting }}</a>
+                </td>
+                <td>{{ ploeg.punten }}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+{% endblock %}

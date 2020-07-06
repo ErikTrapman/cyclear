@@ -1,0 +1,32 @@
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th colspan="3" class="hidden-xs hidden-sm">Ploeg</th>
+            <th colspan="2" class="hidden-md hidden-lg">Ploeg</th>
+            <th>Punten</th>
+            {% if transferRepo is defined %}
+                <th>#T</th>
+            {% endif %}
+            {% if positionCount is defined %}
+                <th>#Z</th>
+            {% endif %}
+        </tr>
+        {% for ploeg in list %}
+            <tr>
+                <td>{{ "%02d"|format(loop.index) }}</td>
+                <td class="hidden-xs hidden-sm">{{ ploeg.naam }}</td>
+                <td class="hidden-sm hidden-xs">{{ ploeg.afkorting }}</td>
+                <td class="hidden-lg hidden-md"><a href="{{ path('ploeg_show', { "seizoen": seizoen.slug, id:ploeg.id}) }}#!ploeg">{{ ploeg.afkorting }}</a></td>
+                <td>{{ ploeg.punten }} [{% if transferpoints[ploeg.id] > 0 %}+{% endif %}{{ transferpoints[ploeg.id] }}]</td>
+                {% if transferRepo is defined %}
+                    <td>
+                        {{ transferRepo.getTransferCountForUserTransfer(ploeg.id, periode.start, periode.eind) }}
+                    </td>
+                {% endif %}
+                {% if positionCount is defined %}
+                    <td>{{ positionCount[ploeg.id] }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

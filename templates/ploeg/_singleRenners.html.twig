@@ -1,0 +1,42 @@
+<table class="table table-bordered table-striped">
+
+    <tr>
+        <th colspan="99">{{ entity }}</th>
+    </tr>
+
+
+    {%- for renner in renners -%}
+        <tr>
+            <td nowrap>
+                {{ "%02d"|format(loop.index) }}
+                {% if not rennerRepo.isDraftTransfer(renner[0], entity) %}
+                    &nbsp;EURO</i>
+                {% endif %}
+            </td>
+            {% if showActions is defined and showActions %}
+                {% include "renner/_singleRowActions.html.twig"
+                with {"ploeg":entity, "renner":renner[0],"seizoen":seizoen, "rennerPloeg":entity } %}
+            {% endif %}
+            <td>
+                {% include "renner/_singleRow.html.twig" with {"renner":renner[0],"seizoen":seizoen } %}
+            </td>
+            <td style="text-align:right;">{{ renner.punten }}</td>
+            {% if showContract is defined and showContract and renner[0].latestContract is not null %}
+                <td class="hidden-xs hidden-sm">
+                    <span data-toggle="tooltip"
+                          title="In de ploeg sinds {{ renner[0].latestContract.start|date('d M Y') }} ">{{ renner[0].latestContract.start|date('d M') }}</span>
+                </td>
+            {% endif %}
+        </tr>
+
+    {%- endfor -%}
+
+    {% if showTotal is defined and showTotal and total is defined %}
+        <tr>
+            <td style="text-align:right;" colspan="3">{{ total }}</td>
+            {% if showContract is defined and showContract %}
+                <td colspan="2"></td>
+            {% endif %}
+        </tr>
+    {% endif %}
+</table>

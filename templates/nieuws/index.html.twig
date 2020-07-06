@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nieuws {{ seizoen }}{% endblock %}
+
+{% block content %}
+
+    <div class="big-header" style="margin-bottom: 0;">
+        <h2>Nieuws {{ seizoen }}</h2>
+    </div>
+    <div class="container" style="margin-top:20px;">
+
+        <div class="row">
+            <div class="col-lg-12">
+
+                <table class="table table-bordered table-striped">
+
+                    <tr>
+                        <th>Titel</th>
+                        <th>Inhoud</th>
+                    </tr>
+
+
+                    {% for entity in pagination %}
+                        <tr>
+                            <td class="col-md-2">{{ entity.titel }}</td>
+                            <td>{{ entity.content|nl2br }}</td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+                <div id="navigation">
+                    {{ knp_pagination_render(pagination, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'nieuws'}) }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <div class="big-header" style="margin-bottom: 0px">
+        <h2>{{ seizoen }}</h2>
+    </div>
+    <div class="big-header-dashboard">
+        <ul class="list-inline">
+            <li><a href="#transfers">Transfers</a></li>
+            <li><a href="#uitslagen">Uitslagen</a></li>
+        </ul>
+    </div>
+
+    <div id="stand" class="container">
+
+        <div class="row">
+            <div class="col-lg-12">
+                {% include "uitslag/viewByPloegen.html.twig" with {"list": stand,'shadowlist': shadowstandingsById } %}
+                <p class="text-center">
+                    <a href="{{ path('uitslag_overview',{seizoen: seizoen.slug}) }}">Meer standen</a>
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div id="transfers" class="subheader">
+        <h2 style="margin-bottom: 0px;">Transfers
+            <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a></h2>
+    </div>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-12">
+                {% include 'transfer/_listWithInversion.html.twig' with {"listWithInversion":transfers, 'firstPageRoute':'homepage', 'includePagination': false } %}
+                <p class="text-center">
+                    <a href="{{ path('transfer_list',{seizoen: seizoen.slug}) }}">Alle transfers</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <div id="uitslagen" class="subheader">
+        <h2 style="margin-bottom: 0px;">Uitslagen
+            <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a></h2>
+    </div>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-12">
+                {% include "wedstrijd/latest.html.twig" with {"wedstrijden": wedstrijden } %}
+                <p class="text-center">
+                    <a href="{{ path('wedstrijd_list',{seizoen: seizoen.slug}) }}">Alle uitslagen</a>
+                </p>
+
+
+            </div>
+        </div>
+    </div>
+
+    {% if nieuws is not null %}
+        <div class="subheader" style="background-color: whitesmoke">
+            <h2 style="margin-bottom: 0px;">{{ nieuws.titel }}
+                <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a>
+            </h2>
+        </div>
+        <div class="news" style="">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p>{{ nieuws.content|nl2br }}</p>
+
+                        <p class="text-center">
+                            <a href="{{ path('nieuws',{seizoen: seizoen.slug}) }}">Al het nieuws</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
+    {% if periode %}
+        <div id="periodes" class="subheader">
+            <h2 style="margin-bottom: 0px;">Periode
+                <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a>
+            </h2>
+
+            <p class="text-center">{{ periode.start|date('d M') }} - {{ periode.eind|date('d M') }}</p>
+        </div>
+
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-lg-12">
+                    {% include "uitslag/viewByPeriode.html.twig" with {
+                    "list": periodestand,
+                    'transferpoints': transferpuntenPeriode,
+                    'transferRepo':transferRepo,
+                    'positionCount' : zegesInPeriode } %}
+                    <p class="text-center">
+                        <a
+                                href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode':periode.id} ) }}">Alle
+                            periodes</a>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    {% endif %}
+
+
+    <div id="zeges" class="subheader">
+        <h2 style="margin-bottom: 0px;">Zeges
+            <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a></h2>
+    </div>
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-lg-12">
+                {% include "uitslag/viewByPosition.html.twig" with {"list": zegestand } %}
+                <p class="text-center"><a
+                            href="{{ path('uitslag_posities', {'seizoen':seizoen.slug,'positie':1} ) }}">Alle
+                        posities</a></p>
+            </div>
+            <h2>
+                <a style="color: #2f2f2f" href="#cyclear"><span style="vertical-align: bottom"
+                                                                class="glyphicon glyphicon-chevron-up"/></a>
+            </h2>
+        </div>
+    </div>
+
+{% endblock %}

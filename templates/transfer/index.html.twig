@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Transfers {{ seizoen }}{% endblock %}
+
+{% block content %}
+
+    <div class="big-header" style="margin-bottom: 0;">
+        <h2>Transfers {{ seizoen }}</h2>
+    </div>
+    <div class="container" style="margin-top:20px;">
+
+        <div class="row">
+            <div class="col-lg-12">
+
+
+                <div id="navigation">
+                    {{ knp_pagination_render(pagination, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'transfer_list'}) }}
+                </div>
+
+                {% include 'transfer/_listWithInversion.html.twig' with {"listWithInversion":pagination, 'firstPageRoute':'transfer_list', 'includePagination': false } %}
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}

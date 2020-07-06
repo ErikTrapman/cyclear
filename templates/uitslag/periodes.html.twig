@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title "Perioden" %}
+
+{% block content %}
+
+    <div class="big-header hidden-xs hidden-sm">
+        <h2>Periodes {{ seizoen }}</h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <ul class="nav nav-pills" style="margin-bottom: 10px;">
+                    {% for p in periodes %}
+                        <li {% if p.id == periode.id %} class="active" {% endif %}><a
+                                    href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode':p.id}) }}">Periode {{ "%02d"|format(loop.index) }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="well">van {{ periode.start|date('d-m-Y') }} t/m {{ periode.eind|date('d-m-Y') }}</div>
+                {% include "uitslag/viewByPeriode.html.twig" %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

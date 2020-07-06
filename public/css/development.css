@@ -1,0 +1,5 @@
+.navbar-inverse .nav > li > a:before, .navbar .nav > li > a:before {
+    color: lightskyblue;
+    font-weight: bold;
+    content: 'DEV ';
+}

@@ -1,0 +1,50 @@
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: false
+    filters:
+        cssrewrite: ~
+    assets:
+        style:
+            inputs:
+                - '%kernel.project_dir%/vendor/twbs/bootstrap/dist/css/bootstrap.min.css'
+                - '%kernel.project_dir%/public/css/lib/unique/style.css'
+                - '%kernel.project_dir%/public/css/lib/unique/animate.css'
+                - '%kernel.project_dir%/public/css/select2.css'
+                - '%kernel.project_dir%/public/css/select2-bootstrap.css'
+            filters:
+                - cssrewrite
+            output: css/style.css
+        js:
+            inputs:
+                - '%kernel.project_dir%/public/js/lib/jquery/jquery-1.11.3.min.js'
+                - '%kernel.project_dir%/public/js/lib/angular/angularjs.1.1.5.min.js'
+                - '%kernel.project_dir%/public/js/lib/angular/angular-locale_nl-nl.js'
+                - '%kernel.project_dir%/public/js/lib/select2/select2.min.js'
+                - '%kernel.project_dir%/vendor/twbs/bootstrap/dist/js/bootstrap.min.js'
+                - '%kernel.project_dir%/public/js/lib/unique/jquery-scrolltofixed.js'
+                - '%kernel.project_dir%/vendor/twitter/typeahead.js/dist/typeahead.jquery.min.js'
+                - '%kernel.project_dir%/vendor/twitter/typeahead.js/dist/bloodhound.min.js'
+                - '%kernel.project_dir%/public/js/lib/app.js'
+                - '%kernel.project_dir%/public/js/lib/typeahead.js'
+                - '%kernel.project_dir%/public/js/Controller/Renner/riderlistCtrl.js'
+            output: js/cyclear.js
+        fonts_glyphicons_eot:
+            inputs:
+                - "%kernel.project_dir%/vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.eot"
+            output: "fonts/glyphicons-halflings-regular.eot"
+        fonts_glyphicons_svg:
+            inputs:
+                - "%kernel.project_dir%/vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.svg"
+            output: "fonts/glyphicons-halflings-regular.svg"
+        fonts_glyphicons_ttf:
+            inputs:
+                - "%kernel.project_dir%/vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.ttf"
+            output: "fonts/glyphicons-halflings-regular.ttf"
+        fonts_glyphicons_woff:
+            inputs:
+                - "%kernel.project_dir%/vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.woff"
+            output: "fonts/glyphicons-halflings-regular.woff"
+        fonts_glyphicons_woff2:
+            inputs:
+                - "%kernel.project_dir%/vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.woff2"
+            output: "fonts/glyphicons-halflings-regular.woff2"

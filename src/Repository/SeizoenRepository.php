@@ -1,0 +1,26 @@
+<?php
+
+/*
+ * This file is part of the Cyclear-game package.
+ *
+ * (c) Erik Trapman <veggatron@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace App\Repository;
+
+use Doctrine\ORM\EntityRepository;
+
+class SeizoenRepository extends EntityRepository
+{
+
+    /**
+     * @return Seizoen
+     */
+    public function getCurrent()
+    {
+        return $this->createQueryBuilder("s")->where("s.current = 1")->getQuery()->getOneOrNullResult();
+    }
+}

@@ -2,3 +2,11 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    form_themes:
+        - 'form/rennerSelector.html.twig'
+        - 'bootstrap_3_layout.html.twig'
+    globals:
+        version: '%version%'
+        logging_address: '%logging_address%'
+        corresponding_address: '%corresponding_address%'
+        project_dir: '%kernel.project_dir%'
