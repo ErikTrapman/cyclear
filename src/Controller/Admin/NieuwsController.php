@@ -13,6 +13,7 @@ namespace App\Controller\Admin;
 
 use Monolog\Logger;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("/admin/nieuws")
  */
-class NieuwsController extends Controller
+class NieuwsController extends AbstractController
 {
     /**
      * Lists all Nieuws entities.

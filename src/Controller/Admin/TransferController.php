@@ -13,6 +13,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Seizoen;
 use App\Form\Admin\Transfer\TransferEditType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("/admin/transfer")
  */
-class TransferController extends Controller
+class TransferController extends AbstractController
 {
 
     /**

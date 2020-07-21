@@ -12,6 +12,7 @@ namespace App\Repository;
 
 use App\CQ\Exception\CyclearGameBundleCQException;
 use Doctrine\ORM\EntityRepository;
+use App\Entity\Wedstrijd;
 
 class WedstrijdRepository extends EntityRepository
 {

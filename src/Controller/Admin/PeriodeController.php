@@ -13,6 +13,7 @@ namespace App\Controller\Admin;
 
 use Monolog\Logger;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("/admin/periode")
  */
-class PeriodeController extends Controller
+class PeriodeController extends AbstractController
 {
     /**
      * Lists all Periode entities.

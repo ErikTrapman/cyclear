@@ -11,6 +11,7 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -26,7 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("/admin/seizoen")
  */
-class SeizoenController extends Controller
+class SeizoenController extends AbstractController
 {
     /**
      * Lists all Seizoen entities.

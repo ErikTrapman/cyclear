@@ -12,6 +12,7 @@
 namespace App\Controller\Admin;
 
 use App\Form\Filter\RennerFilterType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Exception\ValidatorException;
@@ -31,7 +32,7 @@ use App\Entity\Renner,
  *
  * @Route("/admin/renner")
  */
-class RennerController extends Controller
+class RennerController extends AbstractController
 {
 
     /**

@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table(name="AwardedBadge")
  */
 class AwardedBadge
 {
@@ -39,7 +40,7 @@ class AwardedBadge
     private $user;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", nullable=true, name="recurringAmount")
      */
     private $recurringAmount;
 

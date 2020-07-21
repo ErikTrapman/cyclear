@@ -12,6 +12,7 @@
 namespace App\Controller\Admin;
 
 use App\Form\UserEditType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -25,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("/admin/user")
  */
-class UserController extends Controller
+class UserController extends AbstractController
 {
 
     /**

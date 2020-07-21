@@ -12,6 +12,7 @@ namespace App\Controller;
 
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -23,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @Route("/{seizoen}/transfer")
  */
-class TransferController extends Controller
+class TransferController extends AbstractController
 {
 
     /**

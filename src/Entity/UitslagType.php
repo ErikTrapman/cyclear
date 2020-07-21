@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * App\Entity\UitslagType
  *
- * @ORM\Table()
+ * @ORM\Table(name="UitslagType")
  * @ORM\Entity
  */
 class UitslagType
@@ -53,7 +53,7 @@ class UitslagType
     private $cqParsingStrategy;
 
     /**
-     * @ORM\Column(nullable=true)
+     * @ORM\Column(nullable=true, name="automaticResolvingCategories")
      */
     private $automaticResolvingCategories;
 

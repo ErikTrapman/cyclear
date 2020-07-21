@@ -13,6 +13,7 @@ namespace App\Controller;
 
 use App\Entity\Nieuws;
 use App\Entity\Seizoen;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,7 +25,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 /**
  * @Route("/{seizoen}/nieuws")
  */
-class NieuwsController extends Controller
+class NieuwsController extends AbstractController
 {
 
     /**

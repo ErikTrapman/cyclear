@@ -51,6 +51,12 @@ class RennerController extends AbstractController
      */
     private SerializerInterface $serializer;
 
+    public static function getSubscribedServices()
+    {
+        return array_merge(['knp_paginator' => PaginatorInterface::class],
+            parent::getSubscribedServices());
+    }
+
     public function __construct(PaginatorInterface $knpPaginator, SerializerInterface $serializer)
     {
         $this->knpPaginator = $knpPaginator;

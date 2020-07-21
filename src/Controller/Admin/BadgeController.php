@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,7 @@ use App\Form\BadgeType;
  *
  * @Route("/admin/badge")
  */
-class BadgeController extends Controller
+class BadgeController extends AbstractController
 {
 
     /**

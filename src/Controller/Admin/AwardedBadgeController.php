@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,7 +17,7 @@ use App\Form\AwardedBadgeType;
  *
  * @Route("/admin/awardedbadge")
  */
-class AwardedBadgeController extends Controller
+class AwardedBadgeController extends AbstractController
 {
 
     /**

@@ -51,7 +51,7 @@ class Badge
     private $image;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true, name="updatedat")
      */
     private $updatedAt;
 

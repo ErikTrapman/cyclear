@@ -12,19 +12,20 @@
 namespace App\Controller;
 
 use App\Entity\Seizoen;
-use App\Entity\UitslagRepository;
 use App\Entity\Wedstrijd;
+use App\Repository\UitslagRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/{seizoen}/wedstrijd")
  */
-class WedstrijdController extends Controller
+class WedstrijdController extends AbstractController
 {
 
     /**
