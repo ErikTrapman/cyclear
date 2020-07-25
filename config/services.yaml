@@ -11,6 +11,9 @@ parameters:
     max_transfers: 50
     fos_user.model.user.class: App\Entity\User
 
+imports:
+    -   resource: services.xml
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -27,7 +30,7 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{Entity,Controller,Form,Twig,Kernel.php}'
+        exclude: '../src/{Entity,EntityManager,Controller,Form,Twig,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class

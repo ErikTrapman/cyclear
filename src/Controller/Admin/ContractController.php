@@ -14,11 +14,13 @@ namespace App\Controller\Admin;
 use App\Entity\Contract;
 use App\Entity\Seizoen;
 use App\Form\Filter\RennerIdFilterType;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use App\Form\Admin\ContractType;
 use Doctrine\DBAL\Types\Type;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -26,9 +28,13 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("/admin/contract")
  */
-class ContractController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
+class ContractController extends AbstractController
 {
-
+    public static function getSubscribedServices()
+    {
+        return array_merge(['knp_paginator' => PaginatorInterface::class],
+            parent::getSubscribedServices());
+    }
     /**
      * Lists all Contract entities.
      *

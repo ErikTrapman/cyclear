@@ -1,0 +1,20 @@
+{% extends 'admin.base_normal.twig' %}
+
+{% block content %}
+    <h3>Contract edit</h3>
+
+    <form action="{{ path('admin_contract_update', { 'id': entity.id }) }}" method="post" >
+        {{ form_widget(edit_form) }}
+        <p>
+            <button class="btn btn-default" type="submit">Edit</button>
+        </p>
+    </form>
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('admin_contract') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+{% endblock %}

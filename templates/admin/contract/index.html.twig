@@ -1,0 +1,52 @@
+{% extends 'admin.base_normal.twig' %}
+
+{% block content %}
+    <h3>Contracten</h3>
+
+    <form class="adminfilter" action="{{ path('admin_contract') }}" method="post">
+        {{ form_widget(filter) }}
+        <button class="btn btn-default" type="submit">Zoek</button>
+    </form>
+
+
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <th>Id</th>
+            <th>Renner</th>
+            <th>Van</th>
+            <th>T/M</th>
+            <th>Seizoen</th>
+            <th/>
+        </tr>
+
+
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('admin_contract_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.renner }}</td>
+                <td>{{ entity.start | date('d-m-Y H:i:s') }}</td>
+                <td>{% if entity.eind %}{{ entity.eind | date('d-m-Y H:i:s') }}{% endif %}</td>
+                <td>{{ entity.seizoen }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_contract_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+    <div id="navigation">
+        {{ knp_pagination_render(entities, null, {}, {'firstPageRoute': 'admin_contract'}) }}
+    </div>
+    <ul>
+        <li>
+            <a href="{{ path('admin_contract_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+{% endblock %}

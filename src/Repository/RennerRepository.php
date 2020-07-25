@@ -122,11 +122,13 @@ class RennerRepository extends EntityRepository
             ->andWhere('c.renner = r')//->setParameter('seizoen', $seizoen)
         ;
         $qb = $this->createQueryBuilder('r')
-            ->addSelect('IFNULL((' . $puntenQb->getDQL() . '), 0) AS punten', 'IFNULL((' . $teamQb->getDQL() . '), -1) AS team')
+            ->addSelect('IFNULL((' . $puntenQb->getDQL() . '), 0) AS punten')
             ->leftJoin('r.country', 'cty')->addSelect('cty')
             ->orderBy('punten', 'DESC, r.naam ASC');
         if (true === $excludeWithTeam) {
-            $qb->having("team < 0");
+            $qb->andHaving('IFNULL((' . $teamQb->getDQL() . '), -1) < 0');
+        } else {
+            $qb->addSelect('(' . $teamQb->getDQL() . ') AS team');
         }
         return $qb->setParameter('seizoen', $seizoen); //->setMaxResults(20)->getQuery()->getResult();
     }

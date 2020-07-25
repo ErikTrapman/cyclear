@@ -11,6 +11,8 @@
 
 namespace App\Controller\Admin;
 
+use App\EntityManager\UserManager;
+use Knp\Component\Pager\PaginatorInterface;
 use Monolog\Logger;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,6 +32,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class NieuwsController extends AbstractController
 {
+    public static function getSubscribedServices()
+    {
+        return array_merge(['knp_paginator' => PaginatorInterface::class],
+            parent::getSubscribedServices());
+    }
     /**
      * Lists all Nieuws entities.
      *
@@ -38,7 +45,7 @@ class NieuwsController extends AbstractController
      */
     public function indexAction(Request $request)
     {
-        $em = $this->get('doctrine.orm.default_entity_manager');
+        $em = $this->get('doctrine');
 
         $entities = $em->getRepository(Nieuws::class)->createQueryBuilder('n')->orderBy('n.id', 'DESC');
 

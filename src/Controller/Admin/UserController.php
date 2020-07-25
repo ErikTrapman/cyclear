@@ -12,6 +12,8 @@
 namespace App\Controller\Admin;
 
 use App\Form\UserEditType;
+use FOS\UserBundle\Model\UserManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -28,6 +30,14 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class UserController extends AbstractController
 {
+    public static function getSubscribedServices()
+    {
+        return array_merge([
+            'knp_paginator' => PaginatorInterface::class,
+            'fos_user.user_manager' => UserManagerInterface::class
+        ],
+            parent::getSubscribedServices());
+    }
 
     /**
      * Lists all User entities.

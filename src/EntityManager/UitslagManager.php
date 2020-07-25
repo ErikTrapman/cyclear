@@ -20,6 +20,7 @@ use App\Entity\Uitslag;
 use App\Entity\Wedstrijd;
 use App\Entity\UitslagType;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use ErikTrapman\Bundle\CQRankingParserBundle\Nationality\NationalityResolver;
 use ErikTrapman\Bundle\CQRankingParserBundle\Parser\CQParser;
 use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Twitter\TwitterParser;
@@ -72,7 +73,7 @@ class UitslagManager
      * @param NationalityResolver $cqNationalityResolver
      * @param TwitterParser $twitterParser
      */
-    public function __construct(EntityManager $em,
+    public function __construct(EntityManagerInterface $em,
                                 CQParser $parser,
                                 PuntenCalculator $puntenCalculator,
                                 $cqRankingWedstrijdUrl,

@@ -7,7 +7,6 @@
     		http://symfony.com/schema/dic/monolog http://symfony.com/schema/dic/monolog/monolog-1.0.xsd">
 
     <services>
-
         <service id="cyclear_game.requestlistener" class="App\Listener\RequestListener">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="security.token_storage"/>
@@ -21,39 +20,39 @@
             <argument type="service" id="translator"/>
         </service>
 
-        <service id="cyclear_game.manager.transfer" class="App\EntityManager\TransferManager">
+        <service id="App\EntityManager\TransferManager">
             <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="cyclear_game.manager.contract"/>
+            <argument type="service" id="App\EntityManager\ContractManager"/>
             <argument>50</argument>
         </service>
 
-        <service id="cyclear_game.manager.wedstrijd" class="App\EntityManager\WedstrijdManager">
+        <service id="App\EntityManager\WedstrijdManager">
             <argument type="service" id="eriktrapman_cqparser.parser"/>
         </service>
 
-        <service id="cyclear_game.manager.uitslag" class="App\EntityManager\UitslagManager">
+        <service id="App\EntityManager\UitslagManager">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="eriktrapman_cqparser.parser"/>
             <argument type="service" id="cyclear_game.calculator.punten"/>
             <argument>%cq_ranking-wedstrijdurl%</argument>
-            <argument type="service" id="cyclear_game.manager.renner"/>
+            <argument type="service" id="App\EntityManager\RennerManager"/>
             <argument type="service" id="eriktrapman_cqparser.nationality_resolver"/>
             <argument type="service" id="eriktrapman_cqparser.twitterparser"/>
         </service>
 
-        <service id="cyclear_game.manager.renner" class="App\EntityManager\RennerManager"/>
+        <service id="App\EntityManager\RennerManager"/>
 
-        <service id="cyclear_game.manager.user" class="App\EntityManager\UserManager">
-            <argument type="service" id="security.acl.provider"/>
+        <service id="App\EntityManager\UserManager">
+            <argument key="$aclprovider" type="service" id="security.acl.provider"/>
         </service>
 
-        <service id="cyclear_game.manager.contract" class="App\EntityManager\ContractManager">
+        <service id="App\EntityManager\ContractManager">
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
 
         <service id="cyclear_game.type.renner_selector" class="App\Form\RennerSelectorType">
             <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="cyclear_game.manager.renner"/>
+            <argument type="service" id="App\EntityManager\RennerManager"/>
             <argument type="service" id="router"/>
             <tag name="form.type" alias="renner_selector"/>
         </service>
@@ -141,8 +140,8 @@
                  id="cyclear_game.cq.cqautomatic_results_resolver">
             <argument id="doctrine.orm.default_entity_manager" type="service"/>
             <argument id="cyclear_game.cq.race_category_matcher" type="service"/>
-            <argument id="cyclear_game.manager.uitslag" type="service"/>
-            <argument id="eriktrapman_cqparser.crawler_manager" type="service"/>
+            <argument id="App\EntityManager\UitslagManager" type="service"/>
+            <argument id="ErikTrapman\Bundle\CQRankingParserBundle\Parser\Crawler\CrawlerManager" type="service"/>
             <argument id="cyclear_game.transformer.rennername_rennerid" type="service"/>
             <argument id="logger" type="service"/>
         </service>
@@ -151,7 +150,7 @@
                 class="App\Form\DataTransformer\RennerNameToRennerIdTransformer"
                 id="cyclear_game.transformer.rennername_rennerid">
             <argument id="doctrine.orm.default_entity_manager" type="service"/>
-            <argument type="service" id="cyclear_game.manager.renner"/>
+            <argument type="service" id="App\EntityManager\RennerManager"/>
         </service>
 
         <service class="App\Twig\SecurityExtension"
@@ -167,8 +166,6 @@
             <argument id="doctrine.orm.default_entity_manager" type="service"/>
             <tag name="twig.extension"/>
         </service>
-
-
     </services>
 
     <!-- <parameters> <parameter key="cyclear_game.example.class">App\Example</parameter> 

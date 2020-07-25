@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +20,11 @@ use App\Form\AwardedBadgeType;
  */
 class AwardedBadgeController extends AbstractController
 {
-
+    public static function getSubscribedServices()
+    {
+        return array_merge(['knp_paginator' => PaginatorInterface::class],
+            parent::getSubscribedServices());
+    }
     /**
      * Lists all AwardedBadge entities.
      *

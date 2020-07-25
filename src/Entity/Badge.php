@@ -17,6 +17,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table(name="Badge")
  * @Vich\Uploadable
  */
 class Badge

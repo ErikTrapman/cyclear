@@ -1,0 +1,27 @@
+{% extends 'admin.base_normal.twig' %}
+
+
+{% form_theme form _self %}
+
+{% block _cyclear_gamebundle_nieuwstype_content_widget %}
+    {{ form_widget(form, { 'attr': {'class': 'field span5'} } ) }}
+{% endblock %}
+
+{% block content %}
+    <h3>Nieuws creation</h3>
+
+    <form action="{{ path('admin_nieuws_create') }}" method="post">
+        {{ form_widget(form) }}
+        <p>
+            <button class="btn btn-default" type="submit">Create</button>
+        </p>
+    </form>
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('admin_nieuws') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+{% endblock %}

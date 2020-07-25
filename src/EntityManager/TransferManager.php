@@ -18,6 +18,7 @@ use Doctrine\ORM\EntityManager;
 use App\Entity\Transfer;
 use App\Entity\Renner;
 use App\Entity\Ploeg;
+use Doctrine\ORM\EntityManagerInterface;
 
 class TransferManager
 {
@@ -42,7 +43,7 @@ class TransferManager
      * @param EntityManager $em
      * @param Transfer $entity
      */
-    public function __construct(EntityManager $em, ContractManager $contractManager, $maxTransferAmount = null)
+    public function __construct(EntityManagerInterface $em, ContractManager $contractManager, $maxTransferAmount = null)
     {
         $this->em = $em;
         $this->contractManager = $contractManager;

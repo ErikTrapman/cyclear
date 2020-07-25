@@ -118,7 +118,7 @@ class UitslagController extends AbstractController
     public function overviewAction(Request $request, Seizoen $seizoen)
     {
         /** @var EntityManager $em */
-        $em = $this->get('doctrine.orm.default_entity_manager');
+        $em = $this->get('doctrine');
         $uitslagRepo = $em->getRepository(Uitslag::class);
         $transfer = $uitslagRepo->getPuntenByPloegForUserTransfers($seizoen);
 

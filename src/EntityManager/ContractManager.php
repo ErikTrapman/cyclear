@@ -12,6 +12,7 @@
 namespace App\EntityManager;
 
 use App\Entity\Contract;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ContractManager
 {
@@ -21,7 +22,7 @@ class ContractManager
      */
     private $em;
 
-    public function __construct($em)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }

@@ -12,7 +12,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Seizoen;
+use App\EntityManager\TransferManager;
 use App\Form\Admin\Transfer\TransferEditType;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -30,7 +32,14 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TransferController extends AbstractController
 {
-
+    public static function getSubscribedServices()
+    {
+        return array_merge([
+            'knp_paginator' => PaginatorInterface::class,
+            'cyclear_game.manager.transfer' => TransferManager::class
+        ],
+            parent::getSubscribedServices());
+    }
     /**
      * Lists all Transfer entities.
      *
@@ -66,7 +75,7 @@ class TransferController extends AbstractController
      * Displays a form to create a new Transfer entity.
      *
      * @Route("/new-draft", name="admin_transfer_new_draft")
-     * @Template()
+     * @Template("admin/transfer/newDraft.html.twig")
      */
     public function newDraftAction(\Symfony\Component\HttpFoundation\Request $request)
     {
@@ -91,7 +100,7 @@ class TransferController extends AbstractController
      * Displays a form to create a new Transfer entity.
      *
      * @Route("/new-exchange", name="admin_transfer_new_exchange")
-     * @Template()
+     * @Template("admin/transfer/newExchange.html.twig")
      */
     public function newExchangeAction(\Symfony\Component\HttpFoundation\Request $request)
     {

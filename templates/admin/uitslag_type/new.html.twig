@@ -1,0 +1,20 @@
+{% extends 'admin.base_normal.twig' %}
+
+{% block content %}
+    <h3>UitslagType creation</h3>
+
+    <form action="{{ path('admin_uitslagtype_create') }}" method="post">
+        {{ form_widget(form) }}
+        <p>
+            <button class="btn btn-default" type="submit">Create</button>
+        </p>
+    </form>
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('admin_uitslagtype') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+{% endblock %}

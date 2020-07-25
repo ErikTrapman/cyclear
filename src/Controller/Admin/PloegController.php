@@ -12,9 +12,11 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Ploeg;
+use App\EntityManager\UserManager;
 use App\Form\Filter\PloegFilterType;
 use App\Form\PloegType;
 use Doctrine\DBAL\Types\Type;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -32,7 +34,13 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  */
 class PloegController extends AbstractController
 {
-
+    public static function getSubscribedServices()
+    {
+        return array_merge([
+            'knp_paginator' => PaginatorInterface::class,
+            'cyclear_game.manager.user' => UserManager::class],
+            parent::getSubscribedServices());
+    }
     /**
      * Lists all Ploeg entities.
      *

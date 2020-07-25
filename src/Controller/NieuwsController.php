@@ -35,7 +35,7 @@ class NieuwsController extends AbstractController
      */
     public function indexAction(Request $request, Seizoen $seizoen)
     {
-        $em = $this->get('doctrine.orm.default_entity_manager');
+        $em = $this->get('doctrine');
 
         $qb = $em->getRepository(Nieuws::class)->createQueryBuilder('n')
             ->where('n.seizoen = :seizoen')->setParameter('seizoen', $seizoen)

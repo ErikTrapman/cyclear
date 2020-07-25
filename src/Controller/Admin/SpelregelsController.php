@@ -11,6 +11,7 @@
 
 namespace App\Controller\Admin;
 
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -28,6 +29,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SpelregelsController extends AbstractController
 {
+    public static function getSubscribedServices()
+    {
+        return array_merge(['knp_paginator' => PaginatorInterface::class],
+            parent::getSubscribedServices());
+    }
     /**
      * Lists all Spelregels entities.
      *

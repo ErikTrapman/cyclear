@@ -53,7 +53,7 @@ class RennerController extends AbstractController
 
     public static function getSubscribedServices()
     {
-        return array_merge(['knp_paginator' => PaginatorInterface::class],
+        return array_merge(['knp_paginator' => PaginatorInterface::class, 'jms_serializer' => SerializerInterface::class],
             parent::getSubscribedServices());
     }
 
@@ -172,7 +172,7 @@ class RennerController extends AbstractController
             INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE u.renner_id = r.id AND w.seizoen_id = %d ) AS pts
             FROM Renner r HAVING pts > 0 ORDER BY pts DESC, r.naam', $seizoen->getId());
 
-        $em = $this->get('doctrine.orm.default_entity_manager');
+        $em = $this->get('doctrine');
         $delimiter = ';';
         $response = new StreamedResponse(function () use ($em, $q, $delimiter) {
             $stmt = $em->getConnection()->executeQuery($q);

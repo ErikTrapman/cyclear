@@ -16,12 +16,15 @@ use App\Entity\Uitslag;
 use App\Entity\Wedstrijd;
 use App\EntityManager\RennerManager;
 use App\EntityManager\UitslagManager;
+use App\EntityManager\WedstrijdManager;
 use App\Form\UitslagConfirmType;
 use App\Form\UitslagCreateType;
 use App\Form\UitslagNewType;
 use App\Form\UitslagType;
 use App\Form\WedstrijdType;
 use DateTime;
+use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Crawler\CrawlerManager;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -39,7 +42,16 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UitslagController extends AbstractController
 {
-
+    public static function getSubscribedServices()
+    {
+        return array_merge(['knp_paginator' => PaginatorInterface::class,
+            'cyclear_game.manager.uitslag' => UitslagManager::class,
+            'cyclear_game.manager.wedstrijd' => WedstrijdManager::class,
+            'cyclear_game.manager.renner' => RennerManager::class,
+            'eriktrapman_cqparser.crawler_manager' => CrawlerManager::class
+            ],
+            parent::getSubscribedServices());
+    }
     /**
      * @Route("/", name="admin_uitslag")
      * @Template()
@@ -127,7 +139,7 @@ class UitslagController extends AbstractController
             $form->handleRequest($request);
 
             $twig = $this->get('twig');
-            $templateFile = "uitslag/Admin:_ajaxTemplate.html.twig";
+            $templateFile = "admin/uitslag/_ajaxTemplate.html.twig";
             $templateContent = $twig->loadTemplate($templateFile);
 
             // Render the whole template including any layouts etc

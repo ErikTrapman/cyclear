@@ -21,7 +21,7 @@ class WedstrijdManager
      */
     private $cqParser;
 
-    public function __construct($cqParser)
+    public function __construct(CQParser $cqParser)
     {
         $this->cqParser = $cqParser;
     }

@@ -1,0 +1,48 @@
+{% extends 'admin.base_normal.twig' %}
+
+{% block title %}Renner index{% endblock %}
+
+{% block content %}
+    <h3>Renners</h3>
+
+    <form class="adminfilter" action="{{ path('admin_renner') }}" method="post">
+        {{ form_widget(filter) }}
+        <button class="btn btn-default" type="submit">Zoek</button>
+    </form>
+
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <th>CQ-id</th>
+            <th>Naam</th>
+            <th>&nbsp;</th>
+        </tr>
+
+
+        {% for entity in pagination %}
+            <tr>
+                <td><a href="{{ path('admin_renner_edit', { 'id': entity.cqrankingid }) }}">{{ entity.cqrankingid }}</a>
+                </td>
+                <td>{{ entity.naam }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_renner_edit', { 'id': entity.cqrankingid }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+    <div id="navigation">
+        {{ knp_pagination_render(pagination, null, {}, {'firstPageRoute': 'admin_renner'}) }}
+    </div>
+    <ul>
+        <li>
+            <a href="{{ path('admin_renner_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+{% endblock %}

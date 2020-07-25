@@ -11,6 +11,7 @@
 
 namespace App\Controller\Admin;
 
+use Knp\Component\Pager\PaginatorInterface;
 use Monolog\Logger;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,6 +31,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class PeriodeController extends AbstractController
 {
+    public static function getSubscribedServices()
+    {
+        return array_merge(['knp_paginator' => PaginatorInterface::class],
+            parent::getSubscribedServices());
+    }
     /**
      * Lists all Periode entities.
      *

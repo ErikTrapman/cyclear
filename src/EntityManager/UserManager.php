@@ -15,6 +15,7 @@ use Symfony\Component\Security\Acl\Dbal\MutableAclProvider;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Exception\AclNotFoundException;
+use Symfony\Component\Security\Acl\Model\AclProviderInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class UserManager
@@ -25,7 +26,7 @@ class UserManager
      */
     private $aclprovider;
 
-    public function __construct($aclprovider)
+    public function __construct(AclProviderInterface $aclprovider)
     {
         $this->aclprovider = $aclprovider;
     }

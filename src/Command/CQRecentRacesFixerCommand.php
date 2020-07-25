@@ -29,7 +29,7 @@ class CQRecentRacesFixerCommand extends ContainerAwareCommand
     {
         // sets race-identifiers for all races on the recentraces page that can be found in the DB
         $parser = $this->getContainer()->get('eriktrapman_cqparser.recentracesparser');
-        $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+        $em = $this->getContainer()->get('doctrine');
         /** @var Seizoen $seizoen */
         $seizoen = $em->getRepository(Seizoen::class)->getCurrent();
         $repo = $em->getRepository(Wedstrijd::class)->createQueryBuilder('w');

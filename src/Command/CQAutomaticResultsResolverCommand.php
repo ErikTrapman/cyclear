@@ -32,7 +32,7 @@ class CQAutomaticResultsResolverCommand extends ContainerAwareCommand
         }
 
         $resolver = $this->getContainer()->get('cyclear_game.cq.cqautomatic_results_resolver');
-        $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+        $em = $this->getContainer()->get('doctrine');
         /** @var Seizoen $seizoen */
         $seizoen = $em->getRepository(Seizoen::class)->getCurrent();
         if (!$seizoen) {

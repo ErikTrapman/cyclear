@@ -17,10 +17,6 @@ class RennerManager
 {
     private $pattern = '[%d] %s';
 
-    public function __construct()
-    {
-    }
-
     /**
      *
      * @param type $rennerString
