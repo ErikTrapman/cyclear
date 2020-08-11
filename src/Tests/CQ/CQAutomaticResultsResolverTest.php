@@ -23,7 +23,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CQAutomaticResultsResolverTest extends WebTestCase
 {
-
     public function testResolvingBetweenDates()
     {
         $client = static::createClient();
@@ -33,9 +32,9 @@ class CQAutomaticResultsResolverTest extends WebTestCase
         $races = $parser->getRecentRaces($content, new \DateTime(date('Y') . '-12-31'));
 
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
-        $wedstrijdRepo = $this->getMockBuilder('Doctrine\ORM\EntityRepository')->disableOriginalConstructor()->getMock();
+        $wedstrijdRepo = $this->getMockBuilder('App\Repository\WedstrijdRepository')->disableOriginalConstructor()->getMock();
         $em->expects($this->at(0))->method('getRepository')->with(Wedstrijd::class)->willReturn($wedstrijdRepo);
-        $wedstrijdRepo->method('findOneByExternalIdentifier')->willReturn(null);
+        //$wedstrijdRepo->method('findOneByExternalIdentifier')->willReturn(null);
 
         $ploegRepo = $this->getMockBuilder('Doctrine\ORM\EntityRepository')->disableOriginalConstructor()->getMock();
         $em->expects($this->at(1))->method('getRepository')->with(Ploeg::class)->willReturn($ploegRepo);
@@ -60,9 +59,7 @@ class CQAutomaticResultsResolverTest extends WebTestCase
         $renner = new Renner();
         $transformer = $this->getMockBuilder('App\Form\DataTransformer\RennerNameToRennerIdTransformer')->disableOriginalConstructor()->getMock();
         $transformer->method('reverseTransform')->willReturn($renner);
-        $resolver = new CQAutomaticResultsResolver($em, $categoryMatcher, $uitslagManager, $crawlerManager,
-            $transformer, $logger);
-
+        $resolver = new CQAutomaticResultsResolver($em, $categoryMatcher, $uitslagManager, $crawlerManager, $transformer, $logger);
         $seizoen = new Seizoen();
         // cqranking parses recent races as per this year (see http://cqranking.com/men/asp/gen/RacesRecent.asp?changed=0)
         // as there is no indication of what year the race has been held in.

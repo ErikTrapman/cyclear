@@ -14,7 +14,7 @@ namespace App\Tests\Fixtures;
 class LoadSeizoenData implements \Doctrine\Common\DataFixtures\FixtureInterface
 {
 
-    public function load(\Doctrine\Common\Persistence\ObjectManager $manager)
+    public function load(\Doctrine\Persistence\ObjectManager $manager)
     {
         $s = new \App\Entity\Seizoen();
         $s->setIdentifier("Seizoen 1");

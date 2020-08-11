@@ -27,3 +27,8 @@ public/uploads/
 !.elasticbeanstalk/*.global.yml
 
 .php-version
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###

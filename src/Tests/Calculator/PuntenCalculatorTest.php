@@ -16,7 +16,7 @@ use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
-use App\Entity\UitslagRepository;
+use App\Repository\UitslagRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -26,7 +26,7 @@ class PuntenCalculatorTest extends WebTestCase
     private function getMocks()
     {
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
-        $repo = $this->getMockBuilder('App\Entity\TransferRepository')->disableOriginalConstructor()->getMock();
+        $repo = $this->getMockBuilder('App\Repository\TransferRepository')->disableOriginalConstructor()->getMock();
         $em->expects($this->at(0))->method('getRepository')->will($this->returnValue($repo));
 
         return array($em, $repo);

@@ -20,7 +20,7 @@
             <argument type="service" id="translator"/>
         </service>
 
-        <service id="App\EntityManager\TransferManager">
+        <service id="App\EntityManager\TransferManager" public="true">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="App\EntityManager\ContractManager"/>
             <argument>50</argument>

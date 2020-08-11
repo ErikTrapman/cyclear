@@ -13,7 +13,7 @@ namespace App\Tests\Fixtures;
 
 use App\Entity\Renner;
 use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 
 class LoadRennerData implements FixtureInterface

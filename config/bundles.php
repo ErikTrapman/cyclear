@@ -29,4 +29,5 @@ return [
     FOS\UserBundle\FOSUserBundle::class => ['all' => true],
     Symfony\Bundle\AsseticBundle\AsseticBundle::class => ['all' => true],
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
+    Liip\FunctionalTestBundle\LiipFunctionalTestBundle::class => ['all' => true],
 ];

@@ -46,7 +46,7 @@ class UserTransferValidatorTest extends WebTestCase
      */
     private $periode;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMock(ExecutionContextInterface::class, array(), array(), '', false);
         $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();

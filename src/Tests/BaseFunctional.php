@@ -14,7 +14,7 @@ namespace App\Tests;
 class BaseFunctional extends \Liip\FunctionalTestBundle\Test\WebTestCase
 {
 
-    public function setUp()
+    protected function setUp(): void
     {
 
     }

@@ -16,6 +16,7 @@ use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
+use App\EntityManager\TransferManager;
 use App\Tests\BaseFunctional;
 use DateTime;
 
@@ -41,10 +42,10 @@ class TransferManagerTest extends BaseFunctional
 
     private $transferRepo;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->em = $this->getContainer()->get('doctrine')->getManager();
-        $this->transferManager = $this->getContainer()->get('cyclear_game.manager.transfer');
+        $this->transferManager = $this->getContainer()->get(TransferManager::class);
         $this->ploegRepo = $this->em->getRepository(Ploeg::class);
         $this->rennerRepo = $this->em->getRepository(Renner::class);
         $this->contractRepo = $this->em->getRepository(Contract::class);
@@ -82,7 +83,7 @@ class TransferManagerTest extends BaseFunctional
 
         $em->flush();
 
-        $c = $this->contractRepo->find(1);
+        $c = $this->contractRepo->findAll()[0];
         $this->assertEquals($t->getDatum()->format('dmyhi'), $c->getStart()->format('dmyhi'));
         $this->assertEquals($c->getRenner(), $r1);
         $this->assertEquals(null, $c->getEind());
@@ -96,11 +97,11 @@ class TransferManagerTest extends BaseFunctional
     {
         $this->doLoadFixtures();
 
-        $p1 = $this->ploegRepo->find(1);
-        $r1 = $this->rennerRepo->find(1);
+        $p1 = $this->ploegRepo->findOneByAfkorting('pl1');
+        $r1 = $this->rennerRepo->findOneByNaam('RENNER Voornaam');
 
-        $p2 = $this->ploegRepo->find(2);
-        $r2 = $this->rennerRepo->find(2);
+        $p2 = $this->ploegRepo->findOneByAfkorting('pl2');
+        $r2 = $this->rennerRepo->findOneByNaam('RENNER2 Voornaam');
 
         $seizoen = $this->getSeizoen();
 
@@ -117,8 +118,8 @@ class TransferManagerTest extends BaseFunctional
         $this->transferManager->doExchangeTransfer($r1, $r2, new DateTime(), $seizoen);
         $this->em->flush();
 
-        $renner1PloegAfterExchange = $this->rennerRepo->getPloeg($r1, $seizoen);
-        $renner2PloegAfterExchange = $this->rennerRepo->getPloeg($r2, $seizoen);
+        var_dump(array_map(function($el){return $el->getId();},$this->transferRepo->findAll()));
+        die;
 
         // find the last transfer for rider 1
         $renner1PloegNaarTransfer = $this->transferRepo->find($revertId1);
@@ -128,6 +129,8 @@ class TransferManagerTest extends BaseFunctional
         $renner2PloegNaarTransfer = $this->transferRepo->find($revertId2);
         $this->transferManager->revertTransfer($renner2PloegNaarTransfer);
         $this->em->flush();
+
+
 
         $contracts = $this->contractRepo->findAll();
         $transfers = $this->transferRepo->findAll();

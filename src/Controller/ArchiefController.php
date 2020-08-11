@@ -15,12 +15,13 @@ use App\Entity\Seizoen;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  *
  * @Route("/archief")
  */
-class ArchiefController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
+class ArchiefController extends AbstractController
 {
 
     /**

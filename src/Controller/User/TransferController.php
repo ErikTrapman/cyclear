@@ -15,6 +15,7 @@ use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
+use App\EntityManager\TransferManager;
 use App\EntityManager\UserManager;
 use App\Form\Entity\UserTransfer;
 use App\Form\TransferUserType;
@@ -40,7 +41,8 @@ class TransferController extends AbstractController
     public static function getSubscribedServices()
     {
         return array_merge([
-            'cyclear_game.manager.user' => UserManager::class
+            'cyclear_game.manager.user' => UserManager::class,
+            'cyclear_game.manager.transfer' => TransferManager::class
         ], parent::getSubscribedServices());
     }
 
