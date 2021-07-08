@@ -22,9 +22,9 @@
         </service>
 
         <service id="pdo" class="PDO">
-            <argument key="$dsn" type="string">mysql:dbname=%database_name%;host=%database_host%</argument>
-            <argument key="$username" type="string">%database_user%</argument>
-            <argument key="$passwd" type="string">%database_password%</argument>
+            <argument key="dsn">mysql:dbname=%database_name%;host=%database_host%</argument>
+            <argument key="user">%database_user%</argument>
+            <argument key="pass">%database_password%</argument>
         </service>
 
         <service id="cyclear_game.manager.transfer" class="Cyclear\GameBundle\EntityManager\TransferManager">

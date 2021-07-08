@@ -19,8 +19,8 @@
         </service>
 
         <service id="cyclear.logger.handler.db" class="Cyclear\ApplicationBundle\Log\CyclearLogHandlerDb">
-            <argument key="$level">100</argument>
-            <argument key="$bubble">false</argument>
+            <argument key="level">100</argument>
+            <argument key="bubble">false</argument>
             <argument type="service" id="pdo"/>
         </service>
 
