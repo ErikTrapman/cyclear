@@ -342,10 +342,19 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository("CyclearGameBundle:Seizoen")->getCurrent();
         }
         $res = [];
+
+	$ploegRepository = $this->_em->getRepository('CyclearGameBundle:Ploeg');
+
         $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : pow(8, 8);
         foreach ($this->_em->getRepository('CyclearGameBundle:Ploeg')
                      ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
                      ->setParameter('seizoen', $seizoen)->getQuery()->getResult() as $ploeg) {
+
+	    $ploegDraftRenners = [];
+            foreach ($ploegRepository->getDraftRennersWithPunten($ploeg) as $draftRenner) {
+               $ploegDraftRenners[$draftRenner[0]->getId()] = (int)$draftRenner['punten'];
+            }
+
 
             $teamResults = $this->getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen, $start, $end);
             $teamPointsPerRider = [];
@@ -355,12 +364,15 @@ class UitslagRepository extends EntityRepository
                 if (!array_key_exists($riderId, $teamPointsPerRider)) {
                     $teamPointsPerRider[$riderId] = 0;
                 }
+                // If a drafted rider has > maxPoints we do not calculate the points as "lost"
+                // This rider has a valid reason to be transferred and should not be taken into account.
+                // This might not be a waterproof solution because a rider can be transferred early and get maxPoints at another team.
+                if (array_key_exists($riderId, $ploegDraftRenners) && $ploegDraftRenners[$riderId] >= $maxPointsPerRider) {
+                    continue;
+                }
                 $teamPointsPerRider[$riderId] += $teamResult->getRennerPunten();
             }
-            // make sure the lost draftpoints are never more than the max points a rider can get.
-            $ploeg->setPunten(array_sum(array_map(function ($item) use ($maxPointsPerRider) {
-                return (int)min($maxPointsPerRider, $item);
-            }, $teamPointsPerRider)));
+            $ploeg->setPunten(array_sum($teamPointsPerRider));
             $res[] = $ploeg;
         }
         static::puntenSort($res);
