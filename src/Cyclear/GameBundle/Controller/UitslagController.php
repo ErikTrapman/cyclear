@@ -132,6 +132,16 @@ class UitslagController extends Controller
                 $lost[$teamResult['id']] = $teamResult['punten'];
             }
         }
+        // postprocess $transfer
+        foreach ($transfer as &$item) {
+            $ploegId = (int)$item['id'];
+            $lostPoints = array_key_exists($ploegId, $lost) ? $lost[$ploegId] : 0;
+            $item['punten_calculated'] = $item['punten'] - $lostPoints;
+        }
+        uasort($transfer, function ($a, $b) {
+            return $b['punten_calculated'] <=> $a['punten_calculated'];
+        });
+
         $stand = $uitslagRepo->getPuntenByPloeg($seizoen);
         $draft = $uitslagRepo->getPuntenByPloegForDraftTransfers($seizoen);
         $transferRepo = $em->getRepository("CyclearGameBundle:Transfer");

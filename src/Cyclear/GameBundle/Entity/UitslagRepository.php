@@ -395,15 +395,6 @@ class UitslagRepository extends EntityRepository
                 FROM Uitslag u
                 INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id
                 WHERE w.seizoen_id = :seizoen_id AND u.ploeg_id = p.id AND u.renner_id IN (%s))
-
-                -
-
-                (SELECT IFNULL(SUM(u.rennerPunten),0)
-                FROM Uitslag u
-                INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id AND w.seizoen_id = :seizoen_id
-                INNER JOIN draftriders dr ON u.renner_id = dr.renner_id
-                WHERE dr.ploeg_id = p.id AND (u.ploeg_id IS NULL OR u.ploeg_id <> p.id OR u.ploeg_id = p.id AND u.ploegPunten = 0))
-
                 ) AS punten
 
                 FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
