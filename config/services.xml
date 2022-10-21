@@ -130,18 +130,18 @@
             <argument key="$enableTwitter">%env(ENABLE_TWITTER)%</argument>
         </service>
 
-        <service class="App\CQ\RaceCategoryMatcher"
+        <service class="App\CQRanking\RaceCategoryMatcher"
                  id="cyclear_game.cq.race_category_matcher">
             <argument id="doctrine.orm.default_entity_manager" type="service"/>
         </service>
 
 
-        <service class="App\CQ\CQAutomaticResultsResolver"
+        <service class="App\CQRanking\CQAutomaticResultsResolver"
                  id="cyclear_game.cq.cqautomatic_results_resolver">
             <argument id="doctrine.orm.default_entity_manager" type="service"/>
             <argument id="cyclear_game.cq.race_category_matcher" type="service"/>
             <argument id="App\EntityManager\UitslagManager" type="service"/>
-            <argument id="ErikTrapman\Bundle\CQRankingParserBundle\Parser\Crawler\CrawlerManager" type="service"/>
+            <argument id="App\CQRanking\Parser\Crawler\CrawlerManager" type="service"/>
             <argument id="cyclear_game.transformer.rennername_rennerid" type="service"/>
             <argument id="logger" type="service"/>
         </service>

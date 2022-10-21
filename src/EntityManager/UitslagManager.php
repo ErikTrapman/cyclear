@@ -12,6 +12,9 @@
 namespace App\EntityManager;
 
 use App\Calculator\PuntenCalculator;
+use App\CQRanking\Nationality\NationalityResolver;
+use App\CQRanking\Parser\CQParser;
+use App\CQRanking\Parser\Twitter\TwitterParser;
 use App\Entity\Country;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
@@ -21,9 +24,6 @@ use App\Entity\Wedstrijd;
 use App\Entity\UitslagType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use ErikTrapman\Bundle\CQRankingParserBundle\Nationality\NationalityResolver;
-use ErikTrapman\Bundle\CQRankingParserBundle\Parser\CQParser;
-use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Twitter\TwitterParser;
 
 class UitslagManager
 {

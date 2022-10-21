@@ -20,7 +20,7 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  *
  * @ORM\Entity()
- * @ORM\Table(name="Country")
+ * @ORM\Table(name="country")
  * @Serializer\ExclusionPolicy("all")
  */
 class Country implements Translatable

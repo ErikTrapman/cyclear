@@ -1,1 +1,5 @@
-doctrine_migrations: ~
+doctrine_migrations:
+    migrations_paths:
+        'DoctrineMigrations': '%kernel.project_dir%/migrations'
+    enable_profiler: false
+    organize_migrations: BY_YEAR

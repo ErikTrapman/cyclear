@@ -1,3 +1,6 @@
+/.idea
+/*.sql*
+/data
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -32,3 +35,9 @@ public/uploads/
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+docker-compose.yml
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###

@@ -10,7 +10,7 @@
 
 namespace App\Repository;
 
-use App\CQ\Exception\CyclearGameBundleCQException;
+use App\CQRanking\Exception\CyclearGameBundleCQException;
 use Doctrine\ORM\EntityRepository;
 use App\Entity\Wedstrijd;
 

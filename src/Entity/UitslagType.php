@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * App\Entity\UitslagType
  *
- * @ORM\Table(name="UitslagType")
+ * @ORM\Table(name="uitslag_type")
  * @ORM\Entity
  */
 class UitslagType

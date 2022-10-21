@@ -93,7 +93,7 @@ class TransferRepository extends EntityRepository
         $cloneStart = clone $start;
         $cloneStart->setTime(0, 0, 0);
         $query = $this->getEntityManager()
-            ->createQuery("SELECT COUNT(t.id) AS freq FROM App\Entity\Transfer t 
+            ->createQuery("SELECT COUNT(t.id) AS freq FROM App\\Entity\\Transfer t
                 WHERE t.ploegNaar = :ploeg AND t.datum BETWEEN :start AND :end AND t.transferType IN( :type )")
             ->setParameters(array("type" => $type, "ploeg" => $ploeg, "start" => $cloneStart, "end" => $cloneEnd));
         $res = $query->getSingleResult();
@@ -169,7 +169,7 @@ class TransferRepository extends EntityRepository
         $conn = $this->_em->getConnection();
         $conn->executeQuery("DROP TABLE IF EXISTS $tableName; CREATE TEMPORARY TABLE " . $tableName . " (ploeg_id int, renner_id int) ENGINE=MEMORY");
         $conn->executeQuery("INSERT INTO " . $tableName . "
-          ( SELECT ploegNaar_id, renner_id FROM Transfer t
+          ( SELECT ploegNaar_id, renner_id FROM transfer t
           WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.seizoen_id = " . $seizoen->getId() . " )");
     }
 
@@ -182,7 +182,7 @@ class TransferRepository extends EntityRepository
         $seizoenId = $seizoen->getId();
 
         $a = "SELECT t.renner_id, t.ploegNaar_id
-                FROM Transfer t
+                FROM transfer t
                 WHERE t.renner_id NOT IN ( SELECT dr.renner_id FROM draftriders dr WHERE dr.ploeg_id = t.ploegNaar_id )
                 AND t.seizoen_id = $seizoenId AND t.ploegNaar_id IS NOT NULL AND t.transferType <> " . Transfer::DRAFTTRANSFER . "
                 GROUP BY t.renner_id, t.ploegNaar_id

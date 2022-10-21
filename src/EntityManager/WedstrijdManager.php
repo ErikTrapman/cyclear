@@ -11,7 +11,8 @@
 
 namespace App\EntityManager;
 
-use ErikTrapman\Bundle\CQRankingParserBundle\Parser\CQParser;
+
+use App\CQRanking\Parser\CQParser;
 
 class WedstrijdManager
 {

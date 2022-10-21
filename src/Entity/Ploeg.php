@@ -18,7 +18,7 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  * App\Entity\Ploeg
  *
- * @ORM\Table(name="Ploeg")
+ * @ORM\Table(name="ploeg")
  * @ORM\Entity(repositoryClass="App\Repository\PloegRepository")
  * @Serializer\ExclusionPolicy("all")
  */

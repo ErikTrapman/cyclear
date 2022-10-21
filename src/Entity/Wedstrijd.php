@@ -18,7 +18,7 @@ use Zicht\Itertools;
 /**
  * App\Entity\Wedstrijd
  *
- * @ORM\Table(name="Wedstrijd")
+ * @ORM\Table(name="wedstrijd")
  * @ORM\Entity(repositoryClass="App\Repository\WedstrijdRepository")
  */
 class Wedstrijd

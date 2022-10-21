@@ -14,7 +14,6 @@ namespace App\Form;
 use App\Entity\Wedstrijd;
 use App\Form\Helper\PreBindValueTransformer;
 use Doctrine\ORM\EntityRepository;
-use ErikTrapman\Bundle\CQRankingParserBundle\Form\Type\MatchSelectorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;

@@ -9,3 +9,6 @@ fos_user:
     from_email:
         address:        noreply@cyclear.nl
         sender_name:    Cyclear
+
+    service:
+        mailer: 'fos_user.mailer.noop'

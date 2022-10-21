@@ -11,7 +11,6 @@
 
 namespace App\Form;
 
-use ErikTrapman\Bundle\CQRankingParserBundle\Form\Type\StrategySelectorType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class UitslagTypeType extends \Symfony\Component\Form\AbstractType

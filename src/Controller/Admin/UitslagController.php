@@ -11,6 +11,7 @@
 
 namespace App\Controller\Admin;
 
+use App\CQRanking\Parser\Crawler\CrawlerManager;
 use App\Entity\Seizoen;
 use App\Entity\Uitslag;
 use App\Entity\Wedstrijd;
@@ -23,7 +24,6 @@ use App\Form\UitslagNewType;
 use App\Form\UitslagType;
 use App\Form\WedstrijdType;
 use DateTime;
-use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Crawler\CrawlerManager;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;

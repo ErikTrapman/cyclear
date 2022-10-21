@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  *
  * @ORM\Entity
- * @ORM\Table(name="Nieuws")
+ * @ORM\Table(name="nieuws")
  */
 class Nieuws
 {

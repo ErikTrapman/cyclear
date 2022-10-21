@@ -54,7 +54,7 @@ class TransferController extends AbstractController
      * @Template("transfer/User:index.html.twig")
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @ParamConverter("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
-     * @SecureParam(name="id", permissions="OWNER")
+     * SecureParam(name="id", permissions="OWNER")
      */
     public function indexAction(Request $request, Seizoen $seizoen, Ploeg $id, Renner $renner)
     {

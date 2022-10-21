@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * App\Entity\Uitslag
  *
- * @ORM\Table(name="Uitslag")
+ * @ORM\Table(name="uitslag")
  * @ORM\Entity(repositoryClass="App\Repository\UitslagRepository")
  */
 class Uitslag

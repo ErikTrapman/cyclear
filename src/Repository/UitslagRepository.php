@@ -17,6 +17,7 @@ use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
+use Doctrine\DBAL\FetchMode;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -308,10 +309,10 @@ class UitslagRepository extends EntityRepository
             $params['end'] = $end->format('Y-m-d H:i:s');
         }
         // TODO DQL'en net als getCountForPosition
-        $transfers = "SELECT DISTINCT t.renner_id FROM Transfer t
+        $transfers = "SELECT DISTINCT t.renner_id FROM transfer t
             WHERE t.transferType != " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
                 AND t.renner_id NOT IN
-                (SELECT t.renner_id FROM Transfer t
+                (SELECT t.renner_id FROM transfer t
                 WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id
                 AND t.seizoen_id = :seizoen_id)";
 
@@ -321,19 +322,18 @@ class UitslagRepository extends EntityRepository
                 (
 
                 (SELECT IFNULL(SUM(u.ploegPunten),0)
-                FROM Uitslag u
-                INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id
+                FROM uitslag u
+                INNER JOIN wedstrijd w ON u.wedstrijd_id = w.id
                 WHERE w.seizoen_id = :seizoen_id %s AND u.ploeg_id = p.id AND u.renner_id IN (%s))
 
                 ) AS punten
 
-                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
+                FROM ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
                 ", $startEndWhere, $transfers);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchAll(\PDO::FETCH_NAMED);
+        return $stmt->executeQuery($params)->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -381,32 +381,31 @@ class UitslagRepository extends EntityRepository
         $this->_em->getRepository(Transfer::class)->generateTempTableWithDraftRiders($seizoen);
 
         // TODO DQL'en net als getCountForPosition
-        $transfers = "SELECT DISTINCT t.renner_id FROM Transfer t 
+        $transfers = "SELECT DISTINCT t.renner_id FROM transfer t 
             WHERE t.transferType != " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
-                AND t.renner_id NOT IN ( SELECT t.renner_id FROM Transfer t WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id )";
+                AND t.renner_id NOT IN ( SELECT t.renner_id FROM transfer t WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id )";
         $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 400 as d,
                 ((SELECT IFNULL(SUM(u.ploegPunten),0)
-                FROM Uitslag u
-                INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id
+                FROM uitslag u
+                INNER JOIN wedstrijd w ON u.wedstrijd_id = w.id
                 WHERE w.seizoen_id = :seizoen_id AND u.ploeg_id = p.id AND u.renner_id IN (%s))
 
                 -
 
                 (SELECT IFNULL(SUM(u.rennerPunten),0)
-                FROM Uitslag u
-                INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id AND w.seizoen_id = :seizoen_id
+                FROM uitslag u
+                INNER JOIN wedstrijd w ON u.wedstrijd_id = w.id AND w.seizoen_id = :seizoen_id
                 INNER JOIN draftriders dr ON u.renner_id = dr.renner_id
                 WHERE dr.ploeg_id = p.id AND (u.ploeg_id IS NULL OR u.ploeg_id <> p.id OR u.ploeg_id = p.id AND u.ploegPunten = 0))
 
                 ) AS punten
 
-                FROM Ploeg p WHERE p.seizoen_id = :seizoen_id
+                FROM ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
                 ", $transfers);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
-        $stmt->execute(array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER));
-        return $stmt->fetchAll(\PDO::FETCH_NAMED);
+        return $stmt->executeQuery(array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER))->fetchAll(\PDO::FETCH_NAMED);
     }
 
     /**

@@ -14,7 +14,7 @@ namespace App\Command;
 use App\Entity\Country;
 use App\Entity\Renner;
 use Ddeboer\DataImport\Reader\CsvReader;
-use ErikTrapman\Bundle\CQRankingParserBundle\Nationality\NationalityResolver;
+use App\CQRanking\Nationality\NationalityResolver;
 use SplFileObject;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;

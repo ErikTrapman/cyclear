@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="User")
+ * @ORM\Table(name="user")
  * @ORM\Entity()
  */
 class User extends \FOS\UserBundle\Model\User implements \Serializable
@@ -37,16 +37,11 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable
      */
     private $ploeg;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\AwardedBadge", mappedBy="user")
-     */
-    private $awardedBadges;
 
     public function __construct()
     {
         parent::__construct();
         $this->ploeg = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->awardedBadges = new ArrayCollection();
     }
 
     /**
@@ -57,20 +52,6 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable
     public function getId()
     {
         return $this->id;
-    }
-
-    public function serialize()
-    {
-        return serialize(array(
-            $this->id,
-        ));
-    }
-
-    public function unserialize($data)
-    {
-        list(
-            $this->id
-            ) = unserialize($data);
     }
 
     public function getPloeg()
@@ -93,12 +74,5 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable
         return null;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getAwardedBadges()
-    {
-        return $this->awardedBadges;
-    }
 
 }

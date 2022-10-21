@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  * @ORM\Entity(repositoryClass="App\Repository\ContractRepository")
- * @ORM\Table(name="Contract")
+ * @ORM\Table(name="contract")
  */
 class Contract
 {

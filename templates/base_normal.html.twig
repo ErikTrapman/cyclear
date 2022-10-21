@@ -88,10 +88,10 @@
                     </li>
                 {% endif -%}
                 {% if is_granted("ROLE_USER") %}
-                    {% include 'default/User/inc_menu.html.twig' %}
+                    {% include 'default/user/inc_menu.html.twig' %}
                 {% endif %}
                 {% if is_granted("ROLE_ADMIN") %}
-                    {% include 'default/Admin/inc_menu.html.twig' %}
+                    {% include 'default/admin/inc_menu.html.twig' %}
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -154,7 +154,7 @@
                     </li>
                 {% endif -%}
                 {% if is_granted("ROLE_USER") %}
-                    {% include 'default/User/inc_menu.html.twig' %}
+                    {% include 'default/user/inc_menu.html.twig' %}
                 {% endif %}
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                     <li class="active">

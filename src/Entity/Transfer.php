@@ -18,7 +18,7 @@ use App\Form\Validator\Constraints as CyclearAssert;
 /**
  * App\Entity\Transfer
  *
- * @ORM\Table(name="Transfer")
+ * @ORM\Table(name="transfer")
  * @ORM\Entity(repositoryClass="App\Repository\TransferRepository")
  */
 class Transfer

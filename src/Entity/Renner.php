@@ -19,7 +19,7 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  * App\Entity\Renner
  *
- * @ORM\Table(name="Renner")
+ * @ORM\Table(name="renner")
  * @ORM\Entity(repositoryClass="App\Repository\RennerRepository")
  * @Serializer\ExclusionPolicy("all")
  */

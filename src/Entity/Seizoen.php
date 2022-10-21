@@ -16,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SeizoenRepository")
- * @ORM\Table(name="Seizoen")
+ * @ORM\Table(name="seizoen")
  */
 class Seizoen
 {
