@@ -11,7 +11,9 @@
 
 namespace App\Tests\Fixtures;
 
-class LoadSeizoenData implements \Doctrine\Common\DataFixtures\FixtureInterface
+use Doctrine\Bundle\FixturesBundle\Fixture;
+
+class LoadSeizoenData extends Fixture
 {
 
     public function load(\Doctrine\Persistence\ObjectManager $manager)

@@ -1,9 +1,10 @@
 <?php
 
-namespace ErikTrapman\Bundle\CQRankingParserBundle\Tests\CQRanking\Parser\RecentRaces;
+namespace App\Tests\CQRanking\Parser\RecentRaces;
 
 
-use ErikTrapman\Bundle\CQRankingParserBundle\Parser\RecentRaces\RecentRacesParser;
+use App\CQRanking\Parser\Crawler\CrawlerManager;
+use App\CQRanking\Parser\RecentRaces\RecentRacesParser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RecentRacesParserTest extends WebTestCase
@@ -12,7 +13,7 @@ class RecentRacesParserTest extends WebTestCase
     public function testRecentRacesParsesCorrect()
     {
         $client = static::createClient();
-        $parser = $client->getContainer()->get('eriktrapman_cqparser.recentracesparser');
+        $parser = new RecentRacesParser(new CrawlerManager());
 
         $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'recentraces-20151029.html');
         $ret = $parser->getRecentRaces($content);

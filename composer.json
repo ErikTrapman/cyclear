@@ -49,6 +49,7 @@
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "friendsofphp/php-cs-fixer": "^3",
         "liip/functional-test-bundle": "^4.5",
+        "liip/test-fixtures-bundle": "^2.4",
         "phpunit/phpunit": "^9.5",
         "roave/security-advisories": "dev-latest",
         "symfony/browser-kit": "4.4.*",

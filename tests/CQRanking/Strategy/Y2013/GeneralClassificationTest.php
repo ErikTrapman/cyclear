@@ -9,11 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace ErikTrapman\Bundle\CQRankingParserBundle\Tests\CQRanking\Strategy\Y2013;
+namespace App\Tests\CQRanking\Strategy\Y2013;
 
-use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Strategy\Y2013\GeneralClassification;
+use App\CQRanking\Parser\Strategy\Y2013\GeneralClassification;
+use App\Tests\CQRanking\Strategy\StrategyTest;
 
-class GeneralClassificationTest extends \ErikTrapman\Bundle\CQRankingParserBundle\Tests\CQRanking\Strategy\StrategyTest
+class GeneralClassificationTest extends StrategyTest
 {
 
     public function testResultsParseCorrect()
@@ -23,7 +24,7 @@ class GeneralClassificationTest extends \ErikTrapman\Bundle\CQRankingParserBundl
         $results = $strategy->parseResults($this->getCrawler($url));
 
         $this->assertEquals(111, count($results));
-        
+
         $first = $results[0];
         $this->assertEquals(array(1, 7225, 160), array($first['pos'], $first['cqranking_id'], $first['points']));
         // cq-ranking has results in different tables

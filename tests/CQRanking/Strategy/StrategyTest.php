@@ -9,15 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace ErikTrapman\Bundle\CQRankingParserBundle\Tests\CQRanking\Strategy;
+namespace App\Tests\CQRanking\Strategy;
 
-use Symfony\Bundle\FrameworkBundle\Tests\Functional\WebTestCase;
-use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Crawler\CrawlerManager;
+use App\CQRanking\Parser\Crawler\CrawlerManager;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DomCrawler\Crawler;
 
-abstract class StrategyTest extends WebTestCase
+abstract class StrategyTest extends TestCase
 {
-
     public function getCrawler($url)
     {
         $manager = new CrawlerManager(new Crawler());

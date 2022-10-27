@@ -29,14 +29,14 @@
 
         <service
                 id="eriktrapman_cqparser.matchparser"
-                class="App\CQRanking\Parser\Match\MatchParser">
+                class="App\CQRanking\Parser\Match\MatchParser" public="true">
             <argument type="service" id="eriktrapman_cqparser.crawler_manager"/>
             <argument>http://cqranking.com/men/asp/gen/RacesRecent.asp?changed=0</argument>
         </service>
 
         <service
                 id="eriktrapman_cqparser.twitterparser"
-                class="App\CQRanking\Parser\Twitter\TwitterParser">
+                class="App\CQRanking\Parser\Twitter\TwitterParser" public="true">
             <argument type="service" id="eriktrapman_cqparser.crawler_manager"/>
             <argument>http://cqranking.com/men/asp/gen/rider.asp?riderid=</argument>
         </service>

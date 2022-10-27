@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\CQ;
+namespace App\Tests\CQRanking;
 
 
 use App\CQRanking\RaceCategoryMatcher;

@@ -9,9 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace ErikTrapman\Bundle\CQRankingParserBundle\Tests\PCS;
+namespace App\Tests\PCS;
 
-use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Crawler\CrawlerManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -20,7 +19,6 @@ class PCSParserTest extends WebTestCase
 
     public function testResultsParseCorrect()
     {
-
         $this->markTestSkipped('PCS has updated its layout. Need to refine filter-stmt');
 
         $uri = 'http://www.procyclingstats.com/race.php?id=116935';

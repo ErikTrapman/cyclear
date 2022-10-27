@@ -9,10 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\CQ;
+namespace App\Tests\CQRanking;
 
 
 use App\CQRanking\CQAutomaticResultsResolver;
+use App\CQRanking\Parser\Crawler\CrawlerManager;
+use App\CQRanking\Parser\RecentRaces\RecentRacesParser;
 use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
@@ -26,7 +28,7 @@ class CQAutomaticResultsResolverTest extends WebTestCase
     public function testResolvingBetweenDates()
     {
         $client = static::createClient();
-        $parser = $client->getContainer()->get('eriktrapman_cqparser.recentracesparser');
+        $parser = new RecentRacesParser(new CrawlerManager());
 
         $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'recentraces-20151029.html');
         $races = $parser->getRecentRaces($content, new \DateTime(date('Y') . '-12-31'));
@@ -53,13 +55,12 @@ class CQAutomaticResultsResolverTest extends WebTestCase
         ];
         $uitslagManager = $this->getMockBuilder('App\EntityManager\UitslagManager')->disableOriginalConstructor()->getMock();
         $uitslagManager->method('prepareUitslagen')->willReturn($uitslagen);
-        $crawlerManager = $this->getMockBuilder('ErikTrapman\Bundle\CQRankingParserBundle\Parser\Crawler\CrawlerManager')->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(Logger::class)->disableOriginalConstructor()->getMock();
 
         $renner = new Renner();
         $transformer = $this->getMockBuilder('App\Form\DataTransformer\RennerNameToRennerIdTransformer')->disableOriginalConstructor()->getMock();
         $transformer->method('reverseTransform')->willReturn($renner);
-        $resolver = new CQAutomaticResultsResolver($em, $categoryMatcher, $uitslagManager, $crawlerManager, $transformer, $logger);
+        $resolver = new CQAutomaticResultsResolver($em, $categoryMatcher, $uitslagManager, new CrawlerManager(), $transformer, $logger);
         $seizoen = new Seizoen();
         // cqranking parses recent races as per this year (see http://cqranking.com/men/asp/gen/RacesRecent.asp?changed=0)
         // as there is no indication of what year the race has been held in.

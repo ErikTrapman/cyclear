@@ -9,11 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace ErikTrapman\Bundle\CQRankingParserBundle\Tests\CQRanking\Strategy\Y2012;
+namespace App\Tests\CQRanking\Strategy\Y2012;
 
-use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Strategy\Y2012\GeneralClassification;
 
-class GeneralClassificationTest extends \ErikTrapman\Bundle\CQRankingParserBundle\Tests\CQRanking\Strategy\StrategyTest
+use App\CQRanking\Parser\Strategy\Y2012\GeneralClassification;
+use App\Tests\CQRanking\Strategy\StrategyTest;
+
+class GeneralClassificationTest extends StrategyTest
 {
 
     public function testResultsParseCorrect()
@@ -23,7 +25,7 @@ class GeneralClassificationTest extends \ErikTrapman\Bundle\CQRankingParserBundl
         $results = $strategy->parseResults($this->getCrawler($url));
 
         $this->assertEquals(153, count($results));
-        
+
         $wiggins = $results[0];
         $this->assertEquals(array("1", "990", "600"), array($wiggins['pos'], $wiggins['cqranking_id'], $wiggins['points']));
         // cq-ranking has results in different tables
@@ -35,6 +37,6 @@ class GeneralClassificationTest extends \ErikTrapman\Bundle\CQRankingParserBundl
         // cq-ranking has results in different tables
         $engoulvent = $results[152];
         $this->assertEquals(array("153", "261", "20"), array($engoulvent['pos'], $engoulvent['cqranking_id'], $engoulvent['points']));
-        
+
     }
 }

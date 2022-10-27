@@ -15,6 +15,7 @@ use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
+use App\Repository\UitslagRepository;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -22,18 +23,8 @@ use Doctrine\ORM\EntityManager;
  */
 class PuntenCalculator
 {
-    /**
-     * @var EntityManager
-     */
-    private $em;
-
-    /**
-     * PuntenCalculator constructor.
-     * @param EntityManager $em
-     */
-    public function __construct(EntityManager $em)
+    public function __construct(private EntityManager $em)
     {
-        $this->em = $em;
     }
 
     /**
@@ -52,7 +43,7 @@ class PuntenCalculator
                 return false;
             }
             $transferFromWedstrijd = $transferRepo->findLastTransferForDate($renner, $wedstrijdDatum, $seizoen);
-            // als de transfer vanaf de wedstrijd-datum niet dezelfde is als vanaf de ref-datum, dan is er sprake van 
+            // als de transfer vanaf de wedstrijd-datum niet dezelfde is als vanaf de ref-datum, dan is er sprake van
             //  een of meerdere transfers gedurende deze periode. dan geen punten
             if ($transferFromWedstrijd !== $transferFromRefDatum) {
                 return false;

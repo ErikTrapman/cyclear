@@ -12,11 +12,12 @@
 namespace App\Tests\Fixtures;
 
 use App\Entity\Renner;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 
-class LoadRennerData implements FixtureInterface
+class LoadRennerData extends Fixture
 {
     public function load(ObjectManager $manager)
     {

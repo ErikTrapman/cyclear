@@ -38,8 +38,13 @@ class TwitterParser
     public function getTwitterHandle($cqId)
     {
         $crawler = $this->crawlerManager->getCrawler($this->baseUrl . $cqId);
-        foreach ($crawler->filter('table.borderNoOpac')->filterXPath('table[1]')->filter('td.textwhite')
-                     ->filterXpath('//td[position() = 10]') as $child) {
+
+        return $crawler->filter('table.borderNoOpac')->filterXPath('table[1]')->filter('a')->first()->getNode(0)?->nodeValue;
+
+        foreach ($crawler->filter('table.borderNoOpac')
+                     ->filterXPath('table[1]')
+                     ->filter('td.textwhite')
+                     ->filterXpath('//td[position() = 11]') as $child) {
             return trim($child->nodeValue);
         }
         return null;

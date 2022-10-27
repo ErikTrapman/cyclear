@@ -19,9 +19,15 @@ use App\Entity\Transfer;
 use App\EntityManager\TransferManager;
 use App\Tests\BaseFunctional;
 use DateTime;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class TransferManagerTest extends BaseFunctional
+class TransferManagerTest extends WebTestCase
 {
+    /** @var AbstractDatabaseTool */
+    protected $databaseTool;
+
     /**
      *
      * @var \Doctrine\ORM\EntityManager
@@ -44,8 +50,18 @@ class TransferManagerTest extends BaseFunctional
 
     protected function setUp(): void
     {
-        $this->em = $this->getContainer()->get('doctrine')->getManager();
-        $this->transferManager = $this->getContainer()->get(TransferManager::class);
+        static::bootKernel();
+        $this->databaseTool = self::$container->get(DatabaseToolCollection::class)->get();
+
+        $this->databaseTool->loadFixtures([
+            'App\Tests\Fixtures\LoadPloegData',
+            'App\Tests\Fixtures\LoadRennerData',
+            'App\Tests\Fixtures\LoadSeizoenData',
+        ]);
+
+
+        $this->em = self::$container->get('doctrine')->getManager();
+        $this->transferManager = self::$container->get(TransferManager::class);
         $this->ploegRepo = $this->em->getRepository(Ploeg::class);
         $this->rennerRepo = $this->em->getRepository(Renner::class);
         $this->contractRepo = $this->em->getRepository(Contract::class);
@@ -70,7 +86,7 @@ class TransferManagerTest extends BaseFunctional
 
     public function testDraftTransferAndContractCreation()
     {
-        $this->doLoadFixtures();
+
         $em = $this->em;
 
         $p1 = $this->ploegRepo->find(1);
@@ -95,7 +111,6 @@ class TransferManagerTest extends BaseFunctional
      */
     public function testRevertExchangeTransfer($revertId1, $revertId2)
     {
-        $this->doLoadFixtures();
 
         $p1 = $this->ploegRepo->findOneByAfkorting('pl1');
         $r1 = $this->rennerRepo->findOneByNaam('RENNER Voornaam');
@@ -118,8 +133,6 @@ class TransferManagerTest extends BaseFunctional
         $this->transferManager->doExchangeTransfer($r1, $r2, new DateTime(), $seizoen);
         $this->em->flush();
 
-        var_dump(array_map(function($el){return $el->getId();},$this->transferRepo->findAll()));
-        die;
 
         // find the last transfer for rider 1
         $renner1PloegNaarTransfer = $this->transferRepo->find($revertId1);
@@ -129,7 +142,6 @@ class TransferManagerTest extends BaseFunctional
         $renner2PloegNaarTransfer = $this->transferRepo->find($revertId2);
         $this->transferManager->revertTransfer($renner2PloegNaarTransfer);
         $this->em->flush();
-
 
 
         $contracts = $this->contractRepo->findAll();
@@ -159,7 +171,6 @@ class TransferManagerTest extends BaseFunctional
      */
     public function testRevertUserTransfer($transferIdToRevert)
     {
-        $this->doLoadFixtures();
 
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
@@ -203,7 +214,6 @@ class TransferManagerTest extends BaseFunctional
 
     public function testRevertDraftTransfer()
     {
-        $this->doLoadFixtures();
 
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
@@ -224,7 +234,6 @@ class TransferManagerTest extends BaseFunctional
 
     public function testDraftTransfer()
     {
-        $this->doLoadFixtures();
 
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
@@ -240,7 +249,6 @@ class TransferManagerTest extends BaseFunctional
 
     public function testUserTransfer()
     {
-        $this->doLoadFixtures();
 
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
@@ -267,7 +275,6 @@ class TransferManagerTest extends BaseFunctional
 
     public function testExchangeTransfer()
     {
-        $this->doLoadFixtures();
 
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
@@ -297,13 +304,13 @@ class TransferManagerTest extends BaseFunctional
         $this->assertEquals($p1, $this->rennerRepo->getPloeg($r2, $seizoen));
     }
 
-    public function testReleaseTransfersAreCreated()
-    {
-
-    }
-
-    public function testInversionTransfersAreAsExpected()
-    {
-
-    }
+//    public function testReleaseTransfersAreCreated()
+//    {
+//
+//    }
+//
+//    public function testInversionTransfersAreAsExpected()
+//    {
+//
+//    }
 }

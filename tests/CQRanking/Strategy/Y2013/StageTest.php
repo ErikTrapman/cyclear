@@ -9,10 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace ErikTrapman\Bundle\CQRankingParserBundle\Tests\CQRanking\Strategy\Y2013;
+namespace App\Tests\CQRanking\Strategy\Y2013;
 
-use ErikTrapman\Bundle\CQRankingParserBundle\Parser\Strategy\Y2013\Stage;
-use ErikTrapman\Bundle\CQRankingParserBundle\Tests\CQRanking\Strategy\StrategyTest;
+
+use App\CQRanking\Parser\Strategy\Y2013\Stage;
+use App\Tests\CQRanking\Strategy\StrategyTest;
 
 class StageTest extends StrategyTest
 {
@@ -39,7 +40,7 @@ class StageTest extends StrategyTest
         $strategy = new Stage();
         $results = $strategy->parseResults($this->getCrawler($url));
         $this->assertEquals(21, count($results));
-        
+
         $leader = $results[0];
         $this->assertEquals(array('leader', 12335, 8), array($leader['pos'], $leader['cqranking_id'], $leader['points']));
         $first = $results[1];
@@ -47,14 +48,14 @@ class StageTest extends StrategyTest
         $last = $results[20];
         $this->assertEquals(array(20, 8768, 0), array($last['pos'], $last['cqranking_id'], $last['points']));
     }
-    
+
     public function testResultsFrom21ParseCorrect()
     {
         $url = 'http://cqranking.com/men/asp/gen/race.asp?raceid=24460';
         $strategy = new Stage();
         $results = $strategy->parseResults($this->getCrawler($url));
         $this->assertEquals(21, count($results));
-        
+
         $leader = $results[0];
         $this->assertEquals(array('leader', 1058, 6), array($leader['pos'], $leader['cqranking_id'], $leader['points']));
         $first = $results[1];
@@ -62,13 +63,13 @@ class StageTest extends StrategyTest
         $last = $results[20];
         $this->assertEquals(array(20, 9828, 0), array($last['pos'], $last['cqranking_id'], $last['points']));
     }
-    
+
     public function testResultsFromWTParseCorrect(){
         $url = 'http://cqranking.com/men/asp/gen/race.asp?raceid=23853';
         $strategy = new Stage();
         $results = $strategy->parseResults($this->getCrawler($url));
         $this->assertEquals(133, count($results));
-        
+
         $leader = $results[0];
         $this->assertEquals(array('leader', 2086, 9), array($leader['pos'], $leader['cqranking_id'], $leader['points']));
         $first = $results[1];

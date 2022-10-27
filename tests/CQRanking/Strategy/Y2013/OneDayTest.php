@@ -9,19 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace ErikTrapman\Bundle\CQRankingParserBundle\Tests\CQRanking\Strategy\Y2013;
+namespace App\Tests\CQRanking\Strategy\Y2013;
 
-class OneDayTest extends \ErikTrapman\Bundle\CQRankingParserBundle\Tests\CQRanking\Strategy\StrategyTest
+use App\CQRanking\Parser\Strategy\Y2013\OneDay;
+use App\Tests\CQRanking\Strategy\StrategyTest;
+
+class OneDayTest extends StrategyTest
 {
-    
+
     public function testResultsParseCorrect()
     {
         $url = 'http://cqranking.com/men/asp/gen/race.asp?raceid=23598';
-        $strategy = new \ErikTrapman\Bundle\CQRankingParserBundle\Parser\Strategy\Y2013\OneDay();
+        $strategy = new OneDay();
         $results = $strategy->parseResults($this->getCrawler($url));
 
         $this->assertEquals(115, count($results));
-        
+
         $first = $results[0];
         $this->assertEquals(array(1, 73, 280), array($first['pos'], $first['cqranking_id'], $first['points']));
         // cq-ranking has results in different tables
@@ -33,7 +36,7 @@ class OneDayTest extends \ErikTrapman\Bundle\CQRankingParserBundle\Tests\CQRanki
         // cq-ranking has results in different tables
         $last = $results[114];
         $this->assertEquals(array(115, 7731, 5), array($last['pos'], $last['cqranking_id'], $last['points']));
-        
+
     }
-    
+
 }

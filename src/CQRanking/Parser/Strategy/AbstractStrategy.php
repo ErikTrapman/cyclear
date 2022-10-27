@@ -28,14 +28,6 @@ abstract class AbstractStrategy implements ParserStrategyInterface
         return get_class($this);
     }
 
-    /**
-     *
-     * @param Crawler $crawler
-     * @param type $url
-     * @param type $expr
-     * @return type
-     * @throws CQParserException
-     */
     protected function parseResultsFromExpression(Crawler $crawler, $expr)
     {
         $data = $crawler->filter($expr)->filter('tr')->each(function ($node, $i) {
@@ -73,6 +65,6 @@ abstract class AbstractStrategy implements ParserStrategyInterface
             return $returnValues;
         });
         //array_values to generate new keys, starting from 0
-        return array_values(array_filter($data, create_function('$a', 'return !empty($a);')));
+        return array_values(array_filter($data, fn($a) => !empty($a)));
     }
 }
