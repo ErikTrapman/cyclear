@@ -25,21 +25,6 @@
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}"/>
     <script type="text/javascript">
-
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-38459440-1']);
-        _gaq.push(['_setDomainName', 'cyclear.nl']);
-        _gaq.push(['_trackPageview']);
-
-        (function () {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ga, s);
-        })();
-
         var seizoenSlug = {% if app.request.attributes.has('seizoen') %}'{{ app.request.attributes.get('seizoen').slug }}'
         {% else %}'null'{% endif %};
 

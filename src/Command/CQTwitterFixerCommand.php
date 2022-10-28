@@ -2,7 +2,6 @@
 namespace App\Command;
 
 use App\Entity\Renner;
-use Ddeboer\DataImport\Reader\CsvReader;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -19,11 +18,12 @@ class CQTwitterFixerCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // RiderID;UCICode;Name;Twitter
-        $reader = new CsvReader(new \SplFileObject($input->getOption('file')), ';');
-        $reader->setHeaderRowNumber(0);
+        // TODO replace with Symfony CSV
+//        $reader = new CsvReader(new \SplFileObject($input->getOption('file')), ';');
+//        $reader->setHeaderRowNumber(0);
 
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-
+        $reader = [];
         $riderRepo = $em->getRepository(Renner::class);
         foreach ($reader as $i => $row) {
             $cqId = $row['RiderID'];

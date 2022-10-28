@@ -15,6 +15,9 @@ use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
+use App\Repository\PeriodeRepository;
+use App\Repository\RennerRepository;
+use App\Repository\TransferRepository;
 use App\Validator\Constraints\UserTransfer;
 use App\Validator\Constraints\UserTransferValidator;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -64,7 +67,7 @@ class UserTransferValidatorTest extends WebTestCase
         $datum = new \DateTime("2013-05-01");
         $datum->setTime(12, 0, 0);
         $t->setDatum($datum);
-        $repo = $this->getMockBuilder('App\Entity\PeriodeRepository')->disableOriginalConstructor()->getMock();
+        $repo = $this->getMockBuilder(PeriodeRepository::class)->disableOriginalConstructor()->getMock();
         $this->em->expects($this->at(0))->method("getRepository")->with(Periode::class)->will($this->returnValue($repo));
         $this->periode = new Periode();
         $this->periode->setStart(new \DateTime("2013-05-01"));
@@ -76,9 +79,9 @@ class UserTransferValidatorTest extends WebTestCase
 
     private function initRepos()
     {
-        $this->transferRepo = $this->getMockBuilder('App\Entity\TransferRepository')->disableOriginalConstructor()->getMock();
+        $this->transferRepo = $this->getMockBuilder(TransferRepository::class)->disableOriginalConstructor()->getMock();
         $this->em->expects($this->at(1))->method("getRepository")->with(Transfer::class)->will($this->returnValue($this->transferRepo));
-        $this->rennerRepo = $this->getMockBuilder('App\Entity\RennerRepository')->disableOriginalConstructor()->getMock();
+        $this->rennerRepo = $this->getMockBuilder(RennerRepository::class)->disableOriginalConstructor()->getMock();
         $this->em->expects($this->at(2))->method("getRepository")->with(Renner::class)->will($this->returnValue($this->rennerRepo));
         $this->rennerRepo->expects($this->once())->method("getPloeg")->will($this->returnValue(null));
     }

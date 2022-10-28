@@ -107,11 +107,10 @@ class TransferManagerTest extends WebTestCase
 
     /**
      *
-     * @dataProvider testRevertExchangeTransfersDataProvider
+     * @dataProvider revertExchangeTransfersDataProvider
      */
     public function testRevertExchangeTransfer($revertId1, $revertId2)
     {
-
         $p1 = $this->ploegRepo->findOneByAfkorting('pl1');
         $r1 = $this->rennerRepo->findOneByNaam('RENNER Voornaam');
 
@@ -156,7 +155,7 @@ class TransferManagerTest extends WebTestCase
         $this->assertEquals(2, $transfers[1]->getId());
     }
 
-    public function testRevertExchangeTransfersDataProvider()
+    public function revertExchangeTransfersDataProvider()
     {
         return array(
             array(6, 4),

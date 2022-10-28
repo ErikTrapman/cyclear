@@ -13,7 +13,6 @@ namespace App\Command;
 
 use App\Entity\Country;
 use App\Entity\Renner;
-use Ddeboer\DataImport\Reader\CsvReader;
 use App\CQRanking\Nationality\NationalityResolver;
 use SplFileObject;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -35,9 +34,10 @@ class CQNationalityFixerCommand extends ContainerAwareCommand
     {
         $kernel = $this->getContainer()->get('kernel');
         $file = new SplFileObject($kernel->getRootDir() . DIRECTORY_SEPARATOR . '/Resources/files/cq/CQRiders.csv');
-
-        $r = new CsvReader($file, ";");
-        $r->setHeaderRowNumber(0);
+        // TODO replace with Symfony CSV
+//        $r = new CsvReader($file, ";");
+//        $r->setHeaderRowNumber(0);
+        $r = [];
 
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 

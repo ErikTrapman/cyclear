@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- 100 => 'DEBUG', 200 => 'INFO', 300 => 'WARNING', 400 => 'ERROR', 500 
+<!-- 100 => 'DEBUG', 200 => 'INFO', 300 => 'WARNING', 400 => 'ERROR', 500
 => 'CRITICAL', 550 => 'ALERT', -->
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:monolog="http://symfony.com/schema/dic/monolog"
@@ -114,7 +114,7 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
-        <service id="cyclear_game.twitter.helper" class="TijsVerkoyen\Twitter\Twitter">
+        <service id="cyclear_game.twitter.helper" class="App\Twitter\Twitter">
             <argument>%env(TWITTER_CONSUMER_KEY)%</argument>
             <argument>%env(TWITTER_CONSUMER_SECRET)%</argument>
             <call method="setOAuthToken">
@@ -168,8 +168,8 @@
         </service>
     </services>
 
-    <!-- <parameters> <parameter key="cyclear_game.example.class">App\Example</parameter> 
-  		</parameters> <services> <service id="cyclear_game.example" class="%cyclear_game.example.class%"> 
-  		<argument type="service" id="service_id" /> <argument>plain_value</argument> 
+    <!-- <parameters> <parameter key="cyclear_game.example.class">App\Example</parameter>
+  		</parameters> <services> <service id="cyclear_game.example" class="%cyclear_game.example.class%">
+  		<argument type="service" id="service_id" /> <argument>plain_value</argument>
   		<argument>%parameter_name%</argument> </service> </services> -->
 </container>

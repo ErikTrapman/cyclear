@@ -11,9 +11,6 @@
 
 namespace App\Twitter;
 
-use Symfony\Component\DependencyInjection\Container;
-use TijsVerkoyen\Twitter\Twitter;
-
 class Tweeter
 {
     /**
