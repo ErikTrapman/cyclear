@@ -10,3 +10,4 @@ twig:
         logging_address: '%logging_address%'
         corresponding_address: '%corresponding_address%'
         project_dir: '%kernel.project_dir%'
+    exception_controller: null
