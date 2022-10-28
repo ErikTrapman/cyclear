@@ -22,7 +22,8 @@ security:
                 login_path:  /login-user/login
                 csrf_token_generator: security.csrf.token_manager
             logout:       true
-            anonymous:    true
+            anonymous:    lazy
+            provider: fos_userbundle
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
