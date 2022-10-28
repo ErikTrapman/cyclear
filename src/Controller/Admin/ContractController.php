@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -13,13 +13,13 @@ namespace App\Controller\Admin;
 
 use App\Entity\Contract;
 use App\Entity\Seizoen;
+use App\Form\Admin\ContractType;
 use App\Form\Filter\RennerIdFilterType;
+use Doctrine\DBAL\Types\Type;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use App\Form\Admin\ContractType;
-use Doctrine\DBAL\Types\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -35,6 +35,7 @@ class ContractController extends AbstractController
         return array_merge(['knp_paginator' => PaginatorInterface::class],
             parent::getSubscribedServices());
     }
+
     /**
      * Lists all Contract entities.
      *
@@ -47,7 +48,7 @@ class ContractController extends AbstractController
 
         $filter = $this->createForm(RennerIdFilterType::class);
         $config = $em->getConfiguration();
-        $config->addFilter("renner", "App\Filter\RennerIdFilter");
+        $config->addFilter('renner', "App\Filter\RennerIdFilter");
         $entities = $em->getRepository(Contract::class)->createQueryBuilder('c')->orderBy('c.id', 'DESC');
         if ($request->getMethod() == 'POST') {
             $filter->handleRequest($request);
@@ -66,7 +67,7 @@ class ContractController extends AbstractController
             $entities, $request->query->get('page', 1), 20
         );
 
-        return array('entities' => $pagination, 'filter' => $filter->createView());
+        return ['entities' => $pagination, 'filter' => $filter->createView()];
     }
 
     /**
@@ -80,10 +81,10 @@ class ContractController extends AbstractController
         $entity = new Contract();
         $form = $this->createForm(ContractType::class, $entity);
 
-        return array(
+        return [
             'entity' => $entity,
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -106,10 +107,10 @@ class ContractController extends AbstractController
             return $this->redirect($this->generateUrl('admin_contract'));
         }
 
-        return array(
+        return [
             'entity' => $entity,
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -117,6 +118,7 @@ class ContractController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_contract_edit")
      * @Template()
+     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -129,12 +131,12 @@ class ContractController extends AbstractController
         }
 
         $seizoen = $em->getRepository(Seizoen::class)->getCurrent();
-        $editForm = $this->createForm(ContractType::class, $entity, array('seizoen' => $seizoen));
+        $editForm = $this->createForm(ContractType::class, $entity, ['seizoen' => $seizoen]);
 
-        return array(
+        return [
             'entity' => $entity,
-            'edit_form' => $editForm->createView()
-        );
+            'edit_form' => $editForm->createView(),
+        ];
     }
 
     /**
@@ -142,6 +144,7 @@ class ContractController extends AbstractController
      *
      * @Route("/{id}/update", name="admin_contract_update")
      * @Method("post")
+     * @param mixed $id
      */
     public function updateAction(Request $request, $id)
     {
@@ -161,12 +164,12 @@ class ContractController extends AbstractController
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_contract_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_contract_edit', ['id' => $id]));
         }
 
-        return array(
+        return [
             'entity' => $entity,
-            'edit_form' => $editForm->createView()
-        );
+            'edit_form' => $editForm->createView(),
+        ];
     }
 }

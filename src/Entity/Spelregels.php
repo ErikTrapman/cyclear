@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -14,14 +14,13 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- *
  * @ORM\Entity
  * @ORM\Table(name="spelregels")
  */
 class Spelregels
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -30,13 +29,11 @@ class Spelregels
     private $id;
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Seizoen")
      */
     private $seizoen;
 
     /**
-     *
      * @ORM\Column(type="text")
      */
     private $content;

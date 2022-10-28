@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace App\Twig;
 
 use App\Entity\Ploeg;
@@ -7,12 +8,10 @@ use App\Entity\Seizoen;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class SecurityExtension extends \Twig_Extension
 {
-
     /**
      * @var AuthorizationCheckerInterface
      */
@@ -37,14 +36,13 @@ class SecurityExtension extends \Twig_Extension
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('isMyTeam', array($this, 'isMyTeam')),
-            new \Twig_SimpleFunction('isMyRider', array($this, 'isMyRider'))
-        );
+        return [
+            new \Twig_SimpleFunction('isMyTeam', [$this, 'isMyTeam']),
+            new \Twig_SimpleFunction('isMyRider', [$this, 'isMyRider']),
+        ];
     }
 
     /**
-     * @param Ploeg $ploeg
      * @return bool
      */
     public function isMyTeam(Ploeg $ploeg)
@@ -72,15 +70,12 @@ class SecurityExtension extends \Twig_Extension
         return $this->requestStack->getMasterRequest()->attributes->get('seizoen-ploeg');
     }
 
-
     /**
      * {% set ingelogdPloeg = app.request.attributes.get('seizoen-ploeg') %}
      *
      * {% set rennerPloeg = ( rennerPloeg is defined ) ? rennerPloeg : null %}
      *
      * {% if rennerPloeg and is_granted("ROLE_USER") and is_granted('OWNER', ploeg) and rennerPloeg == ingelogdPloeg %}
-     *
-     * @param Renner $renner
      */
     public function isMyRider(Renner $renner)
     {
@@ -94,6 +89,4 @@ class SecurityExtension extends \Twig_Extension
     {
         return 'cycleargame_security';
     }
-
-
 }

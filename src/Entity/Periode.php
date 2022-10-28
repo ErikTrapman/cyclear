@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Periode
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -32,28 +32,27 @@ class Periode
     private $id;
 
     /**
-     * @var datetime $start
+     * @var datetime
      *
      * @ORM\Column(name="start", type="date")
      */
     private $start;
 
     /**
-     * @var datetime $eind
+     * @var datetime
      *
      * @ORM\Column(name="eind", type="date")
      */
     private $eind;
 
     /**
-     * @var smallint $transfers
+     * @var smallint
      *
      * @ORM\Column(name="transfers", type="smallint", nullable=true)
      */
     private $transfers;
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Seizoen")
      */
     private $seizoen;
@@ -61,7 +60,7 @@ class Periode
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of the Cyclear-game package.
  *
@@ -24,10 +24,10 @@ class RequestListener
     private $em;
 
     /**
-     *
      * @var \Symfony\Component\Security\Core\SecurityContext
      */
     private $security;
+
     /**
      * @var TokenStorageInterface
      */
@@ -53,7 +53,7 @@ class RequestListener
         if (null !== $request->get('seizoen')) {
             $seizoen = $this->em->getRepository(Seizoen::class)->findBySlug($request->get('seizoen'));
             if (empty($seizoen)) {
-                throw new NotFoundHttpException("Unknown season `" . $request->get('seizoen') . "`");
+                throw new NotFoundHttpException('Unknown season `' . $request->get('seizoen') . '`');
             }
             $seizoen = $seizoen[0];
         } else {

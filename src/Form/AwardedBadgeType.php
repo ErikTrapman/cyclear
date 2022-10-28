@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Form;
 
@@ -9,10 +9,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AwardedBadgeType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -25,11 +21,10 @@ class AwardedBadgeType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\AwardedBadge'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'App\Entity\AwardedBadge',
+        ]);
     }
-
 
     /**
      * @return string

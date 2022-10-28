@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -22,7 +22,7 @@ class PeriodeType extends AbstractType
         $builder
             ->add('start', DateType::class)
             ->add('eind', DateType::class)
-            ->add('transfers', null, array('label' => 'Aantal transfers'))
+            ->add('transfers', null, ['label' => 'Aantal transfers'])
             ->add('seizoen', SeizoenSelectorType::class);
     }
 

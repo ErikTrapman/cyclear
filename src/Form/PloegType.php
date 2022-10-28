@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -28,7 +28,7 @@ class PloegType extends AbstractType
                 'required' => true, 'constraints' => [new NotNull()],
                 'query_builder' => function (EntityRepository $e) {
                     return $e->createQueryBuilder('u')->orderBy('u.email', 'ASC');
-                }
+                },
             ]);
     }
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,19 +11,17 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Wedstrijd;
+use App\Form\WedstrijdType;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use App\Entity\Wedstrijd,
-    App\Form\WedstrijdType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- *
  * @Route("/admin/wedstrijd")
  */
 class WedstrijdController extends AbstractController
@@ -33,6 +31,7 @@ class WedstrijdController extends AbstractController
         return array_merge(['knp_paginator' => PaginatorInterface::class],
             parent::getSubscribedServices());
     }
+
     /**
      * @Route("/", name="admin_wedstrijd")
      * @Template()
@@ -47,9 +46,8 @@ class WedstrijdController extends AbstractController
         $pagination = $paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
-        return array('pagination' => $pagination);
+        return ['pagination' => $pagination];
     }
-
 
     /**
      * Displays a form to create a new Periode entity.
@@ -62,10 +60,10 @@ class WedstrijdController extends AbstractController
         $entity = new Wedstrijd();
         $form = $this->createForm(WedstrijdType::class, $entity);
 
-        return array(
+        return [
             'entity' => $entity,
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -88,10 +86,10 @@ class WedstrijdController extends AbstractController
             return $this->redirect($this->generateUrl('admin_wedstrijd'));
         }
 
-        return array(
+        return [
             'entity' => $entity,
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -99,6 +97,7 @@ class WedstrijdController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_wedstrijd_edit")
      * @Template()
+     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -113,11 +112,11 @@ class WedstrijdController extends AbstractController
         $editForm = $this->createForm(WedstrijdType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return array(
+        return [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ];
     }
 
     /**
@@ -125,6 +124,7 @@ class WedstrijdController extends AbstractController
      *
      * @Route("/{id}/update", name="admin_wedstrijd_update")
      * @Method("post")
+     * @param mixed $id
      */
     public function updateAction(Request $request, $id)
     {
@@ -145,14 +145,14 @@ class WedstrijdController extends AbstractController
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_wedstrijd_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_wedstrijd_edit', ['id' => $id]));
         }
 
-        return array(
+        return [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ];
     }
 
     /**
@@ -160,6 +160,7 @@ class WedstrijdController extends AbstractController
      *
      * @Route("/{id}/delete", name="admin_wedstrijd_delete")
      * @Method("post")
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id)
     {
@@ -184,9 +185,8 @@ class WedstrijdController extends AbstractController
 
     private function createDeleteForm($id)
     {
-        return $this->createFormBuilder(array('id' => $id))
+        return $this->createFormBuilder(['id' => $id])
             ->add('id', HiddenType::class)
             ->getForm();
     }
-
 }

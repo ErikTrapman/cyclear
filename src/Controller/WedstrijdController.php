@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -14,12 +14,10 @@ namespace App\Controller;
 use App\Entity\Seizoen;
 use App\Entity\Wedstrijd;
 use App\Repository\UitslagRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -27,7 +25,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class WedstrijdController extends AbstractController
 {
-
     /**
      * @Route("/latest", name="wedstrijd_latest")
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
@@ -40,7 +37,7 @@ class WedstrijdController extends AbstractController
             ->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
             ->orderBy('w.datum', 'DESC')
             ->setMaxResults(20);
-        return array('wedstrijden' => $uitslagenQb->getQuery()->getResult(), 'seizoen' => $seizoen);
+        return ['wedstrijden' => $uitslagenQb->getQuery()->getResult(), 'seizoen' => $seizoen];
     }
 
     /**
@@ -69,7 +66,7 @@ class WedstrijdController extends AbstractController
         return [
             'wedstrijd' => $wedstrijd,
             'uitslagen' => array_merge($refStages, [$wedstrijd]),
-            'allstages' => $allStages
+            'allstages' => $allStages,
         ];
     }
 
@@ -90,6 +87,6 @@ class WedstrijdController extends AbstractController
         $pagination = $paginator->paginate(
             $qb, $request->query->get('page', 1), 20
         );
-        return array('pagination' => $pagination, 'seizoen' => $seizoen);
+        return ['pagination' => $pagination, 'seizoen' => $seizoen];
     }
 }

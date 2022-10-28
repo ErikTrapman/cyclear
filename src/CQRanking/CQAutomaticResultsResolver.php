@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -12,6 +12,7 @@
 namespace App\CQRanking;
 
 use App\CQRanking\Exception\CyclearGameBundleCQException;
+use App\CQRanking\Parser\Crawler\CrawlerManager;
 use App\Entity\Ploeg;
 use App\Entity\Seizoen;
 use App\Entity\Uitslag;
@@ -20,12 +21,10 @@ use App\EntityManager\RennerManager;
 use App\EntityManager\UitslagManager;
 use App\Form\DataTransformer\RennerNameToRennerIdTransformer;
 use Doctrine\ORM\EntityManager;
-use App\CQRanking\Parser\Crawler\CrawlerManager;
 use Monolog\Logger;
 
 class CQAutomaticResultsResolver
 {
-
     /**
      * @var EntityManager
      */
@@ -61,7 +60,6 @@ class CQAutomaticResultsResolver
      */
     private $transformer;
 
-
     public function __construct(
         EntityManager $em,
         RaceCategoryMatcher $raceCategoryMatcher,
@@ -79,12 +77,7 @@ class CQAutomaticResultsResolver
         $this->transformer = $transformer;
     }
 
-
     /**
-     * @param array $races
-     * @param Seizoen $seizoen
-     * @param \DateTime $start
-     * @param \DateTime $end
      * @param int $max
      * @return Wedstrijd[]
      * @throws CyclearGameBundleCQException
@@ -99,7 +92,6 @@ class CQAutomaticResultsResolver
         $ploegRepo = $this->em->getRepository(Ploeg::class);
         $ret = [];
         foreach ($races as $i => $race) {
-
             // we simply use the url as external identifier
             $wedstrijd = $repo->findOneBy(['externalIdentifier' => $race->url]);
             if ($wedstrijd) {
@@ -148,7 +140,7 @@ class CQAutomaticResultsResolver
             } catch (\Throwable $throwable) {
                 $this->logger->error($race->url . ' / ' . $race->name . ' has error: ' . $throwable->getMessage());
                 continue;
-            } catch (\Exception $e){
+            } catch (\Exception $e) {
                 $this->logger->error($race->url . ' / ' . $race->name . ' has error: ' . $e->getMessage());
                 continue;
             }
@@ -169,5 +161,4 @@ class CQAutomaticResultsResolver
         }
         return $ret;
     }
-
 }

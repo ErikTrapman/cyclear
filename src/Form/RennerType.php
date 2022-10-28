@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -18,17 +18,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class RennerType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('naam')
-            ->add('cqranking_id', null, array('required' => true, 'label' => 'CQ-id'))
-            ->add('country', EntityType::class, array(
+            ->add('cqranking_id', null, ['required' => true, 'label' => 'CQ-id'])
+            ->add('country', EntityType::class, [
                 'class' => Country::class,
                 'query_builder' => function (\Doctrine\ORM\EntityRepository $e) {
                     return $e->createQueryBuilder('c')->orderBy('c.name');
-                }))
+                }, ])
             ->add('twitter', null, ['required' => false]);
     }
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -12,15 +12,13 @@
 namespace App\Form\DataTransformer;
 
 use App\Entity\Renner;
-use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\Form\DataTransformerInterface;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class RennerNameToRennerIdTransformer implements DataTransformerInterface
 {
-
     /**
-     *
      * @var Symfony\Bundle\DoctrineBundle\Registry
      */
     private $em;
@@ -52,13 +50,13 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface
 
     /* (non-PHPdoc)
      * @see Symfony\Component\Form.DataTransformerInterface::reverseTransform()
-     * 
+     *
      */
 
     public function reverseTransform($value)
     {
         if ($value === null) {
-            return "";
+            return '';
         }
         if (is_numeric($value)) {
             $cqId = $value;
@@ -68,9 +66,8 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface
         $em = $this->em;
         $renner = $em->getRepository(Renner::class)->findOneByCQId($cqId);
         if ($renner === null) {
-            throw new TransformationFailedException("Renner " . $value . " niet gevonden");
+            throw new TransformationFailedException('Renner ' . $value . ' niet gevonden');
         }
         return $renner;
     }
-
 }

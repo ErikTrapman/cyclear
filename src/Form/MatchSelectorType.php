@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the CQ-ranking parser package.
@@ -18,9 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MatchSelectorType extends AbstractType
 {
-
     /**
-     *
      * @var MatchParser
      */
     private $matchParser;
@@ -32,7 +30,7 @@ class MatchSelectorType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $options = array();
+        $options = [];
         $options['empty_value'] = 'Maak keuze';
         $options['choices'] = array_flip($this->matchParser->getMatches());
         $resolver->setDefaults($options);

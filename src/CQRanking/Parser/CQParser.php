@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the CQ-ranking parser package.
@@ -12,29 +12,23 @@
 namespace App\CQRanking\Parser;
 
 use Symfony\Component\DomCrawler\Crawler;
-use App\CQRanking\Parser\Exception\CQParserException;
-use App\CQRanking\Parser\Strategy\ParserStrategyInterface;
 
 class CQParser
 {
-
     /**
-     *
      * Enter description here ...
      */
     public function __construct()
     {
-        
     }
 
     /**
      * Naam van de uitslag.
-     *  
      */
     public function getName(Crawler $crawler)
     {
         $headers = $crawler->filter('table.borderNoOpac th.raceheader b');
-        $values = $headers->extract(array('_text', 'b'));
+        $values = $headers->extract(['_text', 'b']);
         $name = @$values[0][0];
         if ($name === false) {
             return 'Naam kon niet worden opgehaald. Vul zelf in.';
@@ -44,7 +38,7 @@ class CQParser
 
     /**
      * Parse de resultaatregels
-     * @param string $parsingStrategyClassname
+     * @param mixed $strategyClassname
      * @return array
      */
     public function getResultRows(Crawler $crawler, $strategyClassname)

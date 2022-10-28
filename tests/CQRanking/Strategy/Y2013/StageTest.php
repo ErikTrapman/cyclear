@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the CQ-ranking parser package.
@@ -11,13 +11,11 @@
 
 namespace App\Tests\CQRanking\Strategy\Y2013;
 
-
 use App\CQRanking\Parser\Strategy\Y2013\Stage;
 use App\Tests\CQRanking\Strategy\StrategyTest;
 
 class StageTest extends StrategyTest
 {
-
     public function testResultsFromGTParseCorrect()
     {
         $url = 'http://cqranking.com/men/asp/gen/race.asp?raceid=24019';
@@ -27,11 +25,11 @@ class StageTest extends StrategyTest
         $this->assertEquals(179, count($results));
 
         $leader = $results[0];
-        $this->assertEquals(array('leader', 1994, 18), array($leader['pos'], $leader['cqranking_id'], $leader['points']));
+        $this->assertEquals(['leader', 1994, 18], [$leader['pos'], $leader['cqranking_id'], $leader['points']]);
         $first = $results[1];
-        $this->assertEquals(array(1, 1992, 70), array($first['pos'], $first['cqranking_id'], $first['points']));
+        $this->assertEquals([1, 1992, 70], [$first['pos'], $first['cqranking_id'], $first['points']]);
         $last = $results[178];
-        $this->assertEquals(array(178, 13228, 0), array($last['pos'], $last['cqranking_id'], $last['points']));
+        $this->assertEquals([178, 13228, 0], [$last['pos'], $last['cqranking_id'], $last['points']]);
     }
 
     public function testResultsFrom2HCParseCorrect()
@@ -42,11 +40,11 @@ class StageTest extends StrategyTest
         $this->assertEquals(21, count($results));
 
         $leader = $results[0];
-        $this->assertEquals(array('leader', 12335, 8), array($leader['pos'], $leader['cqranking_id'], $leader['points']));
+        $this->assertEquals(['leader', 12335, 8], [$leader['pos'], $leader['cqranking_id'], $leader['points']]);
         $first = $results[1];
-        $this->assertEquals(array(1, 12335, 25), array($first['pos'], $first['cqranking_id'], $first['points']));
+        $this->assertEquals([1, 12335, 25], [$first['pos'], $first['cqranking_id'], $first['points']]);
         $last = $results[20];
-        $this->assertEquals(array(20, 8768, 0), array($last['pos'], $last['cqranking_id'], $last['points']));
+        $this->assertEquals([20, 8768, 0], [$last['pos'], $last['cqranking_id'], $last['points']]);
     }
 
     public function testResultsFrom21ParseCorrect()
@@ -57,24 +55,25 @@ class StageTest extends StrategyTest
         $this->assertEquals(21, count($results));
 
         $leader = $results[0];
-        $this->assertEquals(array('leader', 1058, 6), array($leader['pos'], $leader['cqranking_id'], $leader['points']));
+        $this->assertEquals(['leader', 1058, 6], [$leader['pos'], $leader['cqranking_id'], $leader['points']]);
         $first = $results[1];
-        $this->assertEquals(array(1, 1058, 20), array($first['pos'], $first['cqranking_id'], $first['points']));
+        $this->assertEquals([1, 1058, 20], [$first['pos'], $first['cqranking_id'], $first['points']]);
         $last = $results[20];
-        $this->assertEquals(array(20, 9828, 0), array($last['pos'], $last['cqranking_id'], $last['points']));
+        $this->assertEquals([20, 9828, 0], [$last['pos'], $last['cqranking_id'], $last['points']]);
     }
 
-    public function testResultsFromWTParseCorrect(){
+    public function testResultsFromWTParseCorrect()
+    {
         $url = 'http://cqranking.com/men/asp/gen/race.asp?raceid=23853';
         $strategy = new Stage();
         $results = $strategy->parseResults($this->getCrawler($url));
         $this->assertEquals(133, count($results));
 
         $leader = $results[0];
-        $this->assertEquals(array('leader', 2086, 9), array($leader['pos'], $leader['cqranking_id'], $leader['points']));
+        $this->assertEquals(['leader', 2086, 9], [$leader['pos'], $leader['cqranking_id'], $leader['points']]);
         $first = $results[1];
-        $this->assertEquals(array(1, 2086, 35), array($first['pos'], $first['cqranking_id'], $first['points']));
+        $this->assertEquals([1, 2086, 35], [$first['pos'], $first['cqranking_id'], $first['points']]);
         $last = $results[132];
-        $this->assertEquals(array(132, 18238, 0), array($last['pos'], $last['cqranking_id'], $last['points']));
+        $this->assertEquals([132, 18238, 0], [$last['pos'], $last['cqranking_id'], $last['points']]);
     }
 }

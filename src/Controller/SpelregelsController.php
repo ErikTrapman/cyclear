@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -13,12 +13,10 @@ namespace App\Controller;
 
 use App\Entity\Seizoen;
 use App\Entity\Spelregels;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -26,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SpelregelsController extends AbstractController
 {
-
     /**
      * @Route("/", name="spelregels_index")
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
@@ -34,7 +31,7 @@ class SpelregelsController extends AbstractController
      */
     public function indexAction(Request $request, Seizoen $seizoen)
     {
-        $spelregels = $this->getDoctrine()->getRepository(Spelregels::class)->createQueryBuilder("s")
+        $spelregels = $this->getDoctrine()->getRepository(Spelregels::class)->createQueryBuilder('s')
             ->where('s.seizoen = :seizoen')->orderBy('s.id', 'DESC')->setMaxResults(1)
             ->setParameter('seizoen', $seizoen)
             ->getQuery()->getResult();
@@ -43,7 +40,6 @@ class SpelregelsController extends AbstractController
         } else {
             $spelregels = null;
         }
-        return array('spelregels' => $spelregels, 'seizoen' => $seizoen);
+        return ['spelregels' => $spelregels, 'seizoen' => $seizoen];
     }
-
 }

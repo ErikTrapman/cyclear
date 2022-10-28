@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of the Cyclear-game package.
  *
@@ -17,20 +17,17 @@ use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
 use App\Entity\Wedstrijd;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- *
  * @Route("/{seizoen}")
  */
 class DefaultController extends AbstractController
 {
-
     /**
      * @Route("/", name="game")
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
@@ -40,18 +37,18 @@ class DefaultController extends AbstractController
     {
         $doctrine = $this->getDoctrine();
         $periode = $this->getDoctrine()->getRepository(Periode::class)->getCurrentPeriode($seizoen);
-        $nieuws = $this->getDoctrine()->getRepository(Nieuws::class)->findBy(array('seizoen' => $seizoen), array('id' => 'DESC'), 1);
+        $nieuws = $this->getDoctrine()->getRepository(Nieuws::class)->findBy(['seizoen' => $seizoen], ['id' => 'DESC'], 1);
         $stand = $doctrine->getRepository(Uitslag::class)->getPuntenByPloeg($seizoen);
         if (!array_key_exists(0, $nieuws)) {
             $nieuws = null;
         } else {
             $nieuws = $nieuws[0];
         }
-        $shadowStandingsById = array();
+        $shadowStandingsById = [];
         if (null !== $periode) {
             $refdate = $periode->getStart();
         } else {
-            $refdate = new \DateTime;
+            $refdate = new \DateTime();
         }
         foreach ($doctrine->getRepository(Uitslag::class)->getPuntenByPloeg($seizoen, null, $refdate) as $key => $value) {
             $value['position'] = $key + 1;
@@ -92,10 +89,10 @@ class DefaultController extends AbstractController
         }
         $draft = $doctrine->getRepository(Uitslag::class)->getPuntenByPloegForDraftTransfers($seizoen);
         $transfers = $this->getDoctrine()->getRepository(Transfer::class)
-            ->getLatest($seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 20);
+            ->getLatest($seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER], 20);
         $transferRepo = $this->getDoctrine()->getRepository(Transfer::class);
 
-        return array(
+        return [
             'periode' => $periode,
             'seizoen' => $seizoen,
             'nieuws' => $nieuws,
@@ -108,7 +105,7 @@ class DefaultController extends AbstractController
             'zegesInPeriode' => $zegesInPeriode,
             'drafts' => $draft,
             'transfers' => $transfers,
-            'transferRepo' => $transferRepo
-        );
+            'transferRepo' => $transferRepo,
+        ];
     }
 }

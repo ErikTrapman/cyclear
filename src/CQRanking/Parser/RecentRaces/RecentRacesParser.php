@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the CQ-ranking parser package.
@@ -23,7 +23,6 @@ class RecentRacesParser
     private $crawlerManager;
 
     /**
-     * @param CrawlerManager $crawlermanager
      * @param $matchesFeed
      */
     public function __construct(CrawlerManager $crawlermanager)
@@ -33,6 +32,7 @@ class RecentRacesParser
 
     /**
      * @param null $content
+     * @param mixed|null $refDate
      * @return RecentRaceDataContainer[]
      */
     public function getRecentRaces($content = null, $refDate = null)

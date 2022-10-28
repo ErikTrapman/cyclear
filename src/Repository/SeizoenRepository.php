@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -15,12 +15,11 @@ use Doctrine\ORM\EntityRepository;
 
 class SeizoenRepository extends EntityRepository
 {
-
     /**
      * @return Seizoen
      */
     public function getCurrent()
     {
-        return $this->createQueryBuilder("s")->where("s.current = 1")->getQuery()->getOneOrNullResult();
+        return $this->createQueryBuilder('s')->where('s.current = 1')->getQuery()->getOneOrNullResult();
     }
 }

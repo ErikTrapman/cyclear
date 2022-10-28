@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -19,15 +19,14 @@ use App\Entity\Transfer;
 use App\Entity\Uitslag;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class UitslagRepository extends EntityRepository
 {
-
     /**
      * @param $values
      * @param string $fallBackSort
+     * @param mixed $sortKey
      */
     public static function puntenSort(&$values, $fallBackSort = 'afkorting', $sortKey = 'punten')
     {
@@ -58,11 +57,11 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $params = array('seizoen' => $seizoen);
+        $params = ['seizoen' => $seizoen];
         $subQuery = $this->createQueryBuilder('u')
             ->select('ifnull(sum(u.ploegPunten),0)')
             ->innerJoin('u.wedstrijd', 'w')->where('w.seizoen = :seizoen')
-            ->andWhere('u.ploeg = p')->setParameters(array('seizoen' => $seizoen));
+            ->andWhere('u.ploeg = p')->setParameters(['seizoen' => $seizoen]);
         if (null !== $maxDate) {
             $subQuery->andWhere('w.datum < :maxdate');
             $maxDate->setTime(0, 0, 0);
@@ -88,9 +87,9 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
         $start = clone $periode->getStart();
-        $start->setTime('00', '00', '00');
+        $start->setTime(0,0,0);
         $end = clone $periode->getEind();
-        $end->setTime('23', '59', '59');
+        $end->setTime(23,59,59);
         $qb = $this->_em->getRepository(Ploeg::class)->createQueryBuilder('p');
         $subQ = $this->_em->getRepository(Uitslag::class)->createQueryBuilder('u')
             ->innerJoin('u.wedstrijd', 'w')
@@ -114,7 +113,7 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $parameters = array('seizoen' => $seizoen, 'pos' => $pos);
+        $parameters = ['seizoen' => $seizoen, 'pos' => $pos];
         $qb2 = $this->createQueryBuilder('u')
             ->select('SUM(IF(u.positie = :pos,1,0))')
             ->join('u.wedstrijd', 'w')
@@ -136,13 +135,13 @@ class UitslagRepository extends EntityRepository
             ->addSelect(sprintf('IFNULL((%s),0) as freqByPos', $qb2->getDql()))
             ->groupBy('p.id')
             ->orderBy('freqByPos DESC, p.afkorting', 'ASC')
-            ->setParameters($parameters);;
+            ->setParameters($parameters);
         return $qb->getQuery()->getResult();
     }
 
     /**
      * @param Renner $renner
-     * @param null|Seizoen $seizoen
+     * @param Seizoen|null $seizoen
      * @param bool $excludeZeros
      * @return array
      */
@@ -152,11 +151,11 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
         $qb = $this->getPuntenForRennerQb($renner);
-        $qb->andWhere("w.seizoen = :seizoen");
+        $qb->andWhere('w.seizoen = :seizoen');
         if ($excludeZeros) {
             $qb->andWhere('u.rennerPunten > 0');
         }
-        $qb->setParameters(array('seizoen' => $seizoen, 'renner' => $renner));
+        $qb->setParameters(['seizoen' => $seizoen, 'renner' => $renner]);
         return $qb->getQuery()->getResult();
     }
 
@@ -171,8 +170,8 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
         $qb = $this->getPuntenForRennerQb($renner);
-        $qb->andWhere("w.seizoen = :seizoen");
-        $qb->setParameters(array('seizoen' => $seizoen, 'renner' => $renner));
+        $qb->andWhere('w.seizoen = :seizoen');
+        $qb->setParameters(['seizoen' => $seizoen, 'renner' => $renner]);
         $qb->add('select', 'SUM(u.rennerPunten)');
         return $qb->getQuery()->getSingleScalarResult();
     }
@@ -183,18 +182,18 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
         $qb = $this->getPuntenForRennerQb($renner);
-        $qb->andWhere("w.seizoen = :seizoen")->andWhere('u.ploeg = :ploeg');
-        $qb->setParameters(array('seizoen' => $seizoen, 'ploeg' => $ploeg, 'renner' => $renner));
+        $qb->andWhere('w.seizoen = :seizoen')->andWhere('u.ploeg = :ploeg');
+        $qb->setParameters(['seizoen' => $seizoen, 'ploeg' => $ploeg, 'renner' => $renner]);
         $qb->add('select', 'SUM(u.ploegPunten)');
         return $qb->getQuery()->getSingleScalarResult();
     }
 
     private function getPuntenForRennerQb()
     {
-        $qb = $this->createQueryBuilder("u")
+        $qb = $this->createQueryBuilder('u')
             ->join('u.wedstrijd', 'w')
-            ->where("u.renner = :renner")
-            ->orderBy("u.id", "DESC");
+            ->where('u.renner = :renner')
+            ->orderBy('u.id', 'DESC');
         return $qb;
     }
 
@@ -209,11 +208,11 @@ class UitslagRepository extends EntityRepository
             ->leftJoin('u.renner', 'r')
             ->groupBy('u.renner')->add('select', 'IFNULL(SUM(u.rennerPunten),0) AS punten', true)
             ->setMaxResults($limit)
-            ->setParameters(array('seizoen' => $seizoen))
+            ->setParameters(['seizoen' => $seizoen])
             ->orderBy('punten DESC, r.naam', 'ASC');
-        $ret = array();
+        $ret = [];
         foreach ($qb->getQuery()->getResult() as $result) {
-            $ret[] = array(0 => $result[0]->getRenner(), 'punten' => $result['punten']);
+            $ret[] = [0 => $result[0]->getRenner(), 'punten' => $result['punten']];
         }
         return $ret;
     }
@@ -223,9 +222,9 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $rennersWithPloeg = array();
+        $rennersWithPloeg = [];
         foreach ($this->_em->getRepository(Renner::class)->getRennersWithPloeg() as $renner) {
-            $rennersWithPloeg [] = $renner->getId();
+            $rennersWithPloeg[] = $renner->getId();
         }
         $qb = $this->createQueryBuilder('u')
             ->join('u.wedstrijd', 'w')
@@ -233,21 +232,20 @@ class UitslagRepository extends EntityRepository
             ->leftJoin('u.renner', 'r')
             ->groupBy('u.renner')->add('select', 'IFNULL(SUM(u.rennerPunten),0) AS punten', true)
             ->setMaxResults($limit)
-            ->setParameters(array('seizoen' => $seizoen))
+            ->setParameters(['seizoen' => $seizoen])
             ->orderBy('punten DESC, r.naam', 'ASC');
         if (!empty($rennersWithPloeg)) {
             $qb->andWhere($qb->expr()->notIn('u.renner', $rennersWithPloeg));
         }
-        $ret = array();
+        $ret = [];
         foreach ($qb->getQuery()->getResult() as $result) {
-            $ret[] = array(0 => $result[0]->getRenner(), 'punten' => $result['punten']);
+            $ret[] = [0 => $result[0]->getRenner(), 'punten' => $result['punten']];
         }
         return $ret;
     }
 
     /**
      * @param null $seizoen
-     * @param Ploeg|null $ploeg
      * @return array
      */
     public function getPuntenByPloegForDraftTransfers($seizoen = null, Ploeg $ploeg = null)
@@ -297,7 +295,7 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $params = array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER);
+        $params = [':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER];
         $startEndWhere = null;
         if ($start && $end) {
             $startEndWhere = ' AND (w.datum >= :start AND w.datum <= :end)';
@@ -309,15 +307,14 @@ class UitslagRepository extends EntityRepository
             $params['end'] = $end->format('Y-m-d H:i:s');
         }
         // TODO DQL'en net als getCountForPosition
-        $transfers = "SELECT DISTINCT t.renner_id FROM transfer t
-            WHERE t.transferType != " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
+        $transfers = 'SELECT DISTINCT t.renner_id FROM transfer t
+            WHERE t.transferType != ' . Transfer::DRAFTTRANSFER . ' AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
                 AND t.renner_id NOT IN
                 (SELECT t.renner_id FROM transfer t
-                WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id
-                AND t.seizoen_id = :seizoen_id)";
+                WHERE t.transferType = ' . Transfer::DRAFTTRANSFER . ' AND t.ploegNaar_id = p.id
+                AND t.seizoen_id = :seizoen_id)';
 
-
-        $sql = sprintf("
+        $sql = sprintf('
                 SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 100 AS b,
                 (
 
@@ -330,16 +327,14 @@ class UitslagRepository extends EntityRepository
 
                 FROM ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
-                ", $startEndWhere, $transfers);
+                ', $startEndWhere, $transfers);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
         return $stmt->executeQuery($params)->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
-     * @param null|Seizoen $seizoen
-     * @param \DateTime|null $start
-     * @param \DateTime|null $end
+     * @param Seizoen|null $seizoen
      * @return array
      */
     public function getLostDraftPuntenByPloeg($seizoen = null, \DateTime $start = null, \DateTime $end = null)
@@ -352,7 +347,6 @@ class UitslagRepository extends EntityRepository
         foreach ($this->_em->getRepository(Ploeg::class)
                      ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
                      ->setParameter('seizoen', $seizoen)->getQuery()->getResult() as $ploeg) {
-
             $teamResults = $this->getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen, $start, $end);
             $teamPointsPerRider = [];
             /** @var Uitslag $teamResult */
@@ -381,10 +375,10 @@ class UitslagRepository extends EntityRepository
         $this->_em->getRepository(Transfer::class)->generateTempTableWithDraftRiders($seizoen);
 
         // TODO DQL'en net als getCountForPosition
-        $transfers = "SELECT DISTINCT t.renner_id FROM transfer t 
-            WHERE t.transferType != " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
-                AND t.renner_id NOT IN ( SELECT t.renner_id FROM transfer t WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id )";
-        $sql = sprintf("SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 400 as d,
+        $transfers = 'SELECT DISTINCT t.renner_id FROM transfer t
+            WHERE t.transferType != ' . Transfer::DRAFTTRANSFER . ' AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
+                AND t.renner_id NOT IN ( SELECT t.renner_id FROM transfer t WHERE t.transferType = ' . Transfer::DRAFTTRANSFER . ' AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id )';
+        $sql = sprintf('SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 400 as d,
                 ((SELECT IFNULL(SUM(u.ploegPunten),0)
                 FROM uitslag u
                 INNER JOIN wedstrijd w ON u.wedstrijd_id = w.id
@@ -402,10 +396,10 @@ class UitslagRepository extends EntityRepository
 
                 FROM ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
-                ", $transfers);
+                ', $transfers);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
-        return $stmt->executeQuery(array(":seizoen_id" => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER))->fetchAll(\PDO::FETCH_NAMED);
+        return $stmt->executeQuery([':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER])->fetchAll(\PDO::FETCH_NAMED);
     }
 
     /**
@@ -418,7 +412,7 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $parameters = array('ploeg' => $ploeg, 'seizoen' => $seizoen);
+        $parameters = ['ploeg' => $ploeg, 'seizoen' => $seizoen];
         $transfers = $this->_em->getRepository(Transfer::class)->getTransferredInNonDraftRenners($ploeg, $seizoen);
 
         $qb = $this->createQueryBuilder('u');
@@ -428,7 +422,7 @@ class UitslagRepository extends EntityRepository
             ->andWhere('w.seizoen = :seizoen')
             ->andWhere($qb->expr()->in('u.renner', array_merge(array_unique(array_map(function ($a) {
                 return $a->getRenner()->getId();
-            }, $transfers)), array(0))))
+            }, $transfers)), [0])))
             ->andWhere('u.ploegPunten > 0')
             ->setParameters($parameters)
             ->orderBy('w.datum DESC, u.id', 'DESC');
@@ -438,8 +432,6 @@ class UitslagRepository extends EntityRepository
     /**
      * @param $ploeg
      * @param null $seizoen
-     * @param \DateTime|null $start
-     * @param \DateTime|null $end
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen = null, \DateTime $start = null, \DateTime $end = null)
@@ -447,7 +439,7 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $parameters = array('ploeg' => $ploeg, 'seizoen' => $seizoen);
+        $parameters = ['ploeg' => $ploeg, 'seizoen' => $seizoen];
         $draftrenners = $this->_em->getRepository(Ploeg::class)->getDraftRenners($ploeg);
         $qb = $this->createQueryBuilder('u');
         $qb
@@ -456,7 +448,7 @@ class UitslagRepository extends EntityRepository
             ->andWhere('w.seizoen = :seizoen')
             ->andWhere($qb->expr()->in('u.renner', array_merge(array_unique(array_map(function ($r) {
                 return $r->getId();
-            }, $draftrenners)), array(0))))
+            }, $draftrenners)), [0])))
             ->andWhere('u.rennerPunten > 0')
             //->andWhere('1=1')
             ->andWhere('(u.ploeg != :ploeg OR u.ploeg IS NULL) OR (u.ploeg = :ploeg AND u.ploegPunten = 0)')
@@ -478,7 +470,7 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $parameters = array('ploeg' => $ploeg, 'seizoen' => $seizoen);
+        $parameters = ['ploeg' => $ploeg, 'seizoen' => $seizoen];
         return $this->createQueryBuilder('u')
             ->join('u.wedstrijd', 'w')
             ->where('u.ploeg = :ploeg')
@@ -493,7 +485,7 @@ class UitslagRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $parameters = array('ploeg' => $ploeg, 'seizoen' => $seizoen, 'position' => $position);
+        $parameters = ['ploeg' => $ploeg, 'seizoen' => $seizoen, 'position' => $position];
         return $this->createQueryBuilder('u')
             ->join('u.wedstrijd', 'w')
             ->where('u.ploeg = :ploeg')
@@ -505,7 +497,6 @@ class UitslagRepository extends EntityRepository
     }
 
     /**
-     * @param Seizoen $seizoen
      * @return array
      */
     public function getBestTransfers(Seizoen $seizoen, \DateTime $start = null, \DateTime $end = null)
@@ -520,7 +511,7 @@ class UitslagRepository extends EntityRepository
                     $res[$index] = [
                         'rider' => $transferResult->getRenner(),
                         'team' => $transferResult->getPloeg(),
-                        'points' => 0
+                        'points' => 0,
                     ];
                 }
                 $res[$index]['points'] += $transferResult->getPloegPunten();
@@ -531,5 +522,4 @@ class UitslagRepository extends EntityRepository
         });
         return $res;
     }
-
 }

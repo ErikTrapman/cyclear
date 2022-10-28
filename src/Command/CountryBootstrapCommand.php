@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -19,7 +19,6 @@ use Symfony\Component\Yaml\Yaml;
 
 class CountryBootstrapCommand extends ContainerAwareCommand
 {
-
     protected function configure()
     {
         $this->setName('cyclear:country-bootstrap')

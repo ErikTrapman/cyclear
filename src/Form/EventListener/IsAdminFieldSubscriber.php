@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,11 +11,11 @@
 
 namespace App\Form\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Event\DataEvent;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormFactoryInterface;
 
 /**
  * @see http://marvelley.com/2012/11/10/symfony2-managing-a-user-entity-role-with-a-form-subscriber/
@@ -27,9 +27,6 @@ class IsAdminFieldSubscriber implements EventSubscriberInterface
      */
     private $factory;
 
-    /**
-     * @param FormFactoryInterface $factory
-     */
     public function __construct(FormFactoryInterface $factory)
     {
         $this->factory = $factory;
@@ -40,10 +37,10 @@ class IsAdminFieldSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             FormEvents::PRE_SET_DATA => 'preSetData',
-            FormEvents::SUBMIT => 'bind'
-        );
+            FormEvents::SUBMIT => 'bind',
+        ];
     }
 
     /**
@@ -62,11 +59,11 @@ class IsAdminFieldSubscriber implements EventSubscriberInterface
 
         $checked = $data->hasRole('ROLE_ADMIN');
 
-        $form->add($this->factory->createNamed('is_admin', CheckboxType::class, $checked, array(
+        $form->add($this->factory->createNamed('is_admin', CheckboxType::class, $checked, [
             'mapped' => false,
             'required' => false,
-            'auto_initialize' => false
-        )));
+            'auto_initialize' => false,
+        ]));
     }
 
     /**

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the CQ-ranking parser package.
@@ -21,7 +21,9 @@ class RecentRaceDataContainer
     /**
      * @var string
      */
-    public $category, $url, $name;
+    public $category;
 
+    public $url;
 
+    public $name;
 }

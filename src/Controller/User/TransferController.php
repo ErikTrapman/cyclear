@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -21,10 +21,9 @@ use App\Form\Entity\UserTransfer;
 use App\Form\TransferUserType;
 use JMS\SecurityExtraBundle\Annotation\SecureParam;
 use RuntimeException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -42,10 +41,9 @@ class TransferController extends AbstractController
     {
         return array_merge([
             'cyclear_game.manager.user' => UserManager::class,
-            'cyclear_game.manager.transfer' => TransferManager::class
+            'cyclear_game.manager.transfer' => TransferManager::class,
         ], parent::getSubscribedServices());
     }
-
 
     /**
      * My team.
@@ -62,21 +60,21 @@ class TransferController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $ploeg = $id;
         if (null === $ploeg) {
-            throw new RuntimeException("Unknown ploeg");
+            throw new RuntimeException('Unknown ploeg');
         }
         if (!$usermanager->isOwner($this->getUser(), $ploeg)) {
-            throw new AccessDeniedHttpException("Dit is niet jouw ploeg");
+            throw new AccessDeniedHttpException('Dit is niet jouw ploeg');
         }
         $transferUser = new UserTransfer();
         $transferUser->setPloeg($ploeg);
         $transferUser->setSeizoen($seizoen);
         $transferUser->setDatum(new \DateTime());
 
-        $options = array();
+        $options = [];
         $rennerPloeg = $em->getRepository(Renner::class)->getPloeg($renner, $seizoen);
         if ($rennerPloeg !== $ploeg) {
             if (null !== $rennerPloeg) {
-                throw new AccessDeniedHttpException("Renner is niet in je ploeg");
+                throw new AccessDeniedHttpException('Renner is niet in je ploeg');
             } else {
                 $options['renner_in'] = $renner;
                 $transferUser->setRennerIn($renner);
@@ -98,20 +96,20 @@ class TransferController extends AbstractController
                     $transferManager->doUserTransfer($ploeg, $renner, $form->get('renner_in')->getData(), $seizoen, $form->get('userComment')->getData());
                 }
                 $em->flush();
-                return new RedirectResponse($this->generateUrl("ploeg_show", array("seizoen" => $seizoen->getSlug(), "id" => $ploeg->getId())));
+                return new RedirectResponse($this->generateUrl('ploeg_show', ['seizoen' => $seizoen->getSlug(), 'id' => $ploeg->getId()]));
             }
         }
         $transferInfo = $transferManager->getTtlTransfersDoneByPloeg($ploeg);
         $ttlTransfersAtm = $transferManager->getTtlTransfersAtm($seizoen);
         return
-            array(
+            [
                 'ploeg' => $ploeg,
                 'renner' => $renner,
                 'form' => $form->createView(),
                 'seizoen' => $seizoen,
-                'transferInfo' => array(
+                'transferInfo' => [
                     'count' => $transferInfo,
-                    'left' => $ttlTransfersAtm - $transferInfo)
-            );
+                    'left' => $ttlTransfersAtm - $transferInfo, ],
+            ];
     }
 }

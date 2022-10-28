@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -39,13 +39,11 @@ class Seizoen
     private $slug;
 
     /**
-     *
      * @ORM\Column(type="boolean")
      */
     private $closed = false;
 
     /**
-     *
      * @ORM\Column(type="boolean")
      */
     private $current = false;
@@ -117,6 +115,7 @@ class Seizoen
 
     /**
      * @param \DateTime
+     * @param mixed $start
      */
     public function setStart($start)
     {
@@ -133,6 +132,7 @@ class Seizoen
 
     /**
      * @param \DateTime
+     * @param mixed $end
      */
     public function setEnd($end)
     {

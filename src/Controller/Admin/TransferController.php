@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -12,16 +12,16 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Seizoen;
+use App\Entity\Transfer;
 use App\EntityManager\TransferManager;
 use App\Form\Admin\Transfer\TransferEditType;
+use App\Form\Admin\Transfer\TransferType;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use App\Entity\Transfer;
-use App\Form\Admin\Transfer\TransferType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,10 +36,11 @@ class TransferController extends AbstractController
     {
         return array_merge([
             'knp_paginator' => PaginatorInterface::class,
-            'cyclear_game.manager.transfer' => TransferManager::class
+            'cyclear_game.manager.transfer' => TransferManager::class,
         ],
             parent::getSubscribedServices());
     }
+
     /**
      * Lists all Transfer entities.
      *
@@ -57,7 +58,7 @@ class TransferController extends AbstractController
         );
         //$entities = $query->getResult();
 
-        return array('entities' => $pagination);
+        return ['entities' => $pagination];
     }
 
     /**
@@ -68,7 +69,7 @@ class TransferController extends AbstractController
      */
     public function newAction()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -77,7 +78,7 @@ class TransferController extends AbstractController
      * @Route("/new-draft", name="admin_transfer_new_draft")
      * @Template("admin/transfer/newDraft.html.twig")
      */
-    public function newDraftAction(\Symfony\Component\HttpFoundation\Request $request)
+    public function newDraftAction(Request $request)
     {
         $entity = new Transfer();
         $entity->setTransferType(Transfer::DRAFTTRANSFER);
@@ -93,7 +94,7 @@ class TransferController extends AbstractController
                 return $this->redirect($this->generateUrl('admin_transfer'));
             }
         }
-        return array('form' => $form->createView());
+        return ['form' => $form->createView()];
     }
 
     /**
@@ -102,7 +103,7 @@ class TransferController extends AbstractController
      * @Route("/new-exchange", name="admin_transfer_new_exchange")
      * @Template("admin/transfer/newExchange.html.twig")
      */
-    public function newExchangeAction(\Symfony\Component\HttpFoundation\Request $request)
+    public function newExchangeAction(Request $request)
     {
         $entity = new Transfer();
         $entity->setTransferType(Transfer::ADMINTRANSFER);
@@ -120,13 +121,13 @@ class TransferController extends AbstractController
                 return $this->redirect($this->generateUrl('admin_transfer'));
             }
         }
-        return array('form' => $form->createView());
+        return ['form' => $form->createView()];
     }
 
     private function getTransferForm($entity)
     {
         $seizoen = $this->getDoctrine()->getRepository(Seizoen::class)->getCurrent();
-        $form = $this->createForm(TransferType::class, $entity, array('transfertype' => $entity->getTransferType(), 'seizoen' => $seizoen));
+        $form = $this->createForm(TransferType::class, $entity, ['transfertype' => $entity->getTransferType(), 'seizoen' => $seizoen]);
         return $form;
     }
 
@@ -135,6 +136,7 @@ class TransferController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_transfer_edit")
      * @Template()
+     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -148,11 +150,11 @@ class TransferController extends AbstractController
 
         $editForm = $this->createForm(TransferEditType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
-        return array(
+        return [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView()
-        );
+            'delete_form' => $deleteForm->createView(),
+        ];
     }
 
     /**
@@ -160,6 +162,7 @@ class TransferController extends AbstractController
      *
      * @Route("/{id}/update", name="admin_transfer_update")
      * @Method("post")
+     * @param mixed $id
      */
     public function updateAction(Request $request, $id)
     {
@@ -180,14 +183,14 @@ class TransferController extends AbstractController
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_transfer_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_transfer_edit', ['id' => $id]));
         }
 
-        return array(
+        return [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ];
     }
 
     /**
@@ -195,6 +198,7 @@ class TransferController extends AbstractController
      *
      * @Route("/{id}/delete", name="admin_transfer_delete")
      * @Method("post")
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id)
     {
@@ -224,7 +228,7 @@ class TransferController extends AbstractController
 
     private function createDeleteForm($id)
     {
-        return $this->createFormBuilder(array('id' => $id))
+        return $this->createFormBuilder(['id' => $id])
             ->add('id', HiddenType::class)
             ->getForm();
     }

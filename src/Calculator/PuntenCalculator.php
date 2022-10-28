@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -15,7 +15,6 @@ use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
-use App\Repository\UitslagRepository;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -28,7 +27,6 @@ class PuntenCalculator
     }
 
     /**
-     * @param Renner $renner
      * @param $wedstrijdDatum
      * @param Seizoen $seizoen
      * @param null $referentieDatum

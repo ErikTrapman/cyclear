@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -8,20 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace App\Filter;
 
+namespace App\Filter;
 
 class RennerNaamFilter extends \Doctrine\ORM\Query\Filter\SQLFilter
 {
-
-
     public function addFilterConstraint(\Doctrine\ORM\Mapping\ClassMetadata $targetEntity, $targetTableAlias)
     {
-
-
         //if ($targetEntity->name != "Doctrine\Tests\Models\Company\CompanyPerson") {
         if ($targetEntity->name != "App\Entity\Renner") {
-            return "";
+            return '';
         }
 
         $value = $this->getParameter('naam');
@@ -30,7 +26,4 @@ class RennerNaamFilter extends \Doctrine\ORM\Query\Filter\SQLFilter
         $sql .= sprintf(' OR %s.cqranking_id = %d', $targetTableAlias, $value);
         return $sql;
     }
-
 }
-
-?>

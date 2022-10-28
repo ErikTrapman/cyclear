@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -13,5 +13,4 @@ namespace App\CQRanking\Exception;
 
 class NotEnoughContentException extends \Exception
 {
-
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the CQ-ranking parser package.
@@ -11,16 +11,12 @@
 
 namespace App\CQRanking\Parser\Strategy;
 
-use App\CQRanking\Parser\Exception\CQParserException;
-use App\CQRanking\Parser\Strategy\ParserStrategyInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractStrategy implements ParserStrategyInterface
 {
-
     public function __construct()
     {
-
     }
 
     public function __toString()
@@ -31,7 +27,7 @@ abstract class AbstractStrategy implements ParserStrategyInterface
     protected function parseResultsFromExpression(Crawler $crawler, $expr)
     {
         $data = $crawler->filter($expr)->filter('tr')->each(function ($node, $i) {
-            $returnValues = array();
+            $returnValues = [];
             foreach ($node->filter('td') as $key => $currentResult) {
                 if ($key == 1) {
                     $pos = trim($currentResult->nodeValue, '.');
@@ -41,10 +37,10 @@ abstract class AbstractStrategy implements ParserStrategyInterface
                     $returnValues['pos'] = $pos;
                 }
                 if ($key == 3) {
-                    $img = $currentResult->getElementsByTagName("img");
+                    $img = $currentResult->getElementsByTagName('img');
                     if ($img->length) {
                         $gif = $img->item(0)->getAttribute('src');
-                        $parts = explode(".", basename($gif));
+                        $parts = explode('.', basename($gif));
                         $returnValues['nat'] = $parts[0];
                     } else {
                         $returnValues['nat'] = null;
@@ -65,6 +61,6 @@ abstract class AbstractStrategy implements ParserStrategyInterface
             return $returnValues;
         });
         //array_values to generate new keys, starting from 0
-        return array_values(array_filter($data, fn($a) => !empty($a)));
+        return array_values(array_filter($data, fn ($a) => !empty($a)));
     }
 }

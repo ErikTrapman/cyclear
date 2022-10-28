@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -15,11 +15,10 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class LoadSeizoenData extends Fixture
 {
-
     public function load(\Doctrine\Persistence\ObjectManager $manager)
     {
         $s = new \App\Entity\Seizoen();
-        $s->setIdentifier("Seizoen 1");
+        $s->setIdentifier('Seizoen 1');
         $manager->persist($s);
 
         $manager->flush();

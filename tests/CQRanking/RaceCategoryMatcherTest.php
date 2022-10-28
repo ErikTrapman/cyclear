@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,7 +11,6 @@
 
 namespace App\Tests\CQRanking;
 
-
 use App\CQRanking\RaceCategoryMatcher;
 use App\Entity\UitslagType;
 use App\Entity\Wedstrijd;
@@ -19,7 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RaceCategoryMatcherTest extends WebTestCase
 {
-
     private function getEm()
     {
         return $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
@@ -27,6 +25,8 @@ class RaceCategoryMatcherTest extends WebTestCase
 
     /**
      * @dataProvider successDataProvider
+     * @param mixed $pattern
+     * @param mixed $lookup
      */
     public function testUitslagtypeLookupAccordingToCategorySucceeds($pattern, $lookup)
     {
@@ -48,12 +48,14 @@ class RaceCategoryMatcherTest extends WebTestCase
         return [
             ['2.HCs, 2.1s, GT2s', '2.1s'],
             ['2.HCs, 2.1s, GT2s', '2.HCs'],
-            ['2.HCs, 2.1s, GT2s', 'GT2s']
+            ['2.HCs, 2.1s, GT2s', 'GT2s'],
         ];
     }
 
     /**
      * @dataProvider failDataProvider
+     * @param mixed $pattern
+     * @param mixed $lookup
      */
     public function testUitslagtypeLookupAccordingToCategoryFails($pattern, $lookup)
     {
@@ -76,12 +78,14 @@ class RaceCategoryMatcherTest extends WebTestCase
             ['2.HCs,2.1s,GT2s', '2.HC'],
             ['2.HCs,2.1s,GT2s', 'GT2'],
             ['2.HCs,2.1s,GT2s', '2.2s'],
-            ['2.HCs,2.1s,GT2s', '1.HCs']
+            ['2.HCs,2.1s,GT2s', '1.HCs'],
         ];
     }
 
     /**
      * @dataProvider refStageDataProvider
+     * @param mixed $name
+     * @param mixed $res
      */
     public function testNeedsRefStage($name, $res)
     {
@@ -99,8 +103,7 @@ class RaceCategoryMatcherTest extends WebTestCase
             ['General classification, Vuelta a Espa?a', true],
             ['Vuelta a Espa?a, Stage 7 : Jodar - La Alpujarra', false],
             ['Volta a Catalunya, General classification', true],
-            ['Dubai Tour, Stage 3 : Dubai - Hatta (205 km)', false]
+            ['Dubai Tour, Stage 3 : Dubai - Hatta (205 km)', false],
         ];
     }
-
 }

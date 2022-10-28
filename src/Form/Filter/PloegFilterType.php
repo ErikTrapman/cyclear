@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -33,14 +33,13 @@ class PloegFilterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('naam', TextType::class, array('required' => false));
+            ->add('naam', TextType::class, ['required' => false]);
     }
 
     public function getBlockPrefix()
     {
         return 'ploeg_filter';
     }
-
 
     public function getName()
     {

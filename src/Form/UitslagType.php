@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -21,7 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UitslagType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $seizoen = $options['seizoen'];
@@ -32,17 +31,16 @@ class UitslagType extends AbstractType
             ->add('positie')
             ->add('rennerPunten');
         if ($options['use_wedstrijd']) {
-            $builder->add('wedstrijd', EntityType::class, array('class' => 'App\Entity\Wedstrijd', 'query_builder' =>
-                function (EntityRepository $e) use ($seizoen) {
+            $builder->add('wedstrijd', EntityType::class, ['class' => 'App\Entity\Wedstrijd', 'query_builder' => function (EntityRepository $e) use ($seizoen) {
                     return $e->createQueryBuilder('w')->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->orderBy('w.id', 'DESC');
-                }));
+                }]);
         }
         $builder
-            ->add('ploeg', EntityType::class, array('required' => false,
+            ->add('ploeg', EntityType::class, ['required' => false,
                 'class' => Ploeg::class,
                 'query_builder' => function (EntityRepository $e) use ($seizoen) {
                     return $e->createQueryBuilder('p')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->orderBy('p.afkorting');
-                }))
+                }, ])
             ->add('renner', RennerSelectorType::class);
     }
 
@@ -53,11 +51,11 @@ class UitslagType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'App\Entity\Uitslag',
             'registry' => null,
             'seizoen' => null,
-            'use_wedstrijd' => true
-        ));
+            'use_wedstrijd' => true,
+        ]);
     }
 }

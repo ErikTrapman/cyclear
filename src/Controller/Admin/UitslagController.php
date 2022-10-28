@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -18,27 +18,18 @@ use App\Entity\Wedstrijd;
 use App\EntityManager\RennerManager;
 use App\EntityManager\UitslagManager;
 use App\EntityManager\WedstrijdManager;
-use App\Form\UitslagConfirmType;
 use App\Form\UitslagCreateType;
-use App\Form\UitslagNewType;
 use App\Form\UitslagType;
-use App\Form\WedstrijdType;
 use DateTime;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- *
  * @Route("admin/uitslag")
- *
  */
 class UitslagController extends AbstractController
 {
@@ -48,17 +39,17 @@ class UitslagController extends AbstractController
             'cyclear_game.manager.uitslag' => UitslagManager::class,
             'cyclear_game.manager.wedstrijd' => WedstrijdManager::class,
             'cyclear_game.manager.renner' => RennerManager::class,
-            'eriktrapman_cqparser.crawler_manager' => CrawlerManager::class
+            'eriktrapman_cqparser.crawler_manager' => CrawlerManager::class,
             ],
             parent::getSubscribedServices());
     }
+
     /**
      * @Route("/", name="admin_uitslag")
      * @Template()
      */
     public function indexAction(Request $request)
     {
-
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQuery('SELECT w FROM App\Entity\Uitslag w ORDER BY w.id DESC');
@@ -68,7 +59,7 @@ class UitslagController extends AbstractController
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         $seizoen = $em->getRepository(Seizoen::class)->getCurrent();
-        return array('pagination' => $pagination, 'seizoen' => $seizoen);
+        return ['pagination' => $pagination, 'seizoen' => $seizoen];
     }
 
     /**
@@ -79,16 +70,16 @@ class UitslagController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $seizoen = $uitslag->getWedstrijd()->getSeizoen();
-        $form = $this->createForm(UitslagType::class, $uitslag, array('seizoen' => $seizoen));
+        $form = $this->createForm(UitslagType::class, $uitslag, ['seizoen' => $seizoen]);
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $em->flush();
-                return $this->redirect($this->generateUrl('admin_uitslag_edit', array('uitslag' => $uitslag->getId())));
+                return $this->redirect($this->generateUrl('admin_uitslag_edit', ['uitslag' => $uitslag->getId()]));
             }
         }
 
-        return array('form' => $form->createView(), 'entity' => $uitslag);
+        return ['form' => $form->createView(), 'entity' => $uitslag];
     }
 
     /**
@@ -101,7 +92,7 @@ class UitslagController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $seizoen = $em->getRepository(Seizoen::class)->getCurrent();
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(UitslagType::class, $uitslag, array('seizoen' => $seizoen));
+        $form = $this->createForm(UitslagType::class, $uitslag, ['seizoen' => $seizoen]);
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
@@ -110,7 +101,7 @@ class UitslagController extends AbstractController
                 return $this->redirect($this->generateUrl('admin_uitslag'));
             }
         }
-        return array('form' => $form->createView());
+        return ['form' => $form->createView()];
     }
 
     /**
@@ -126,7 +117,7 @@ class UitslagController extends AbstractController
         $wedstrijdManager = $this->get('cyclear_game.manager.wedstrijd');
         $crawlerManager = $this->get('eriktrapman_cqparser.crawler_manager');
         $rennerManager = $this->get('cyclear_game.manager.renner');
-        $options = array();
+        $options = [];
         $options['crawler_manager'] = $crawlerManager;
         $options['wedstrijd_manager'] = $wedstrijdManager;
         $options['uitslag_manager'] = $uitslagManager;
@@ -139,11 +130,11 @@ class UitslagController extends AbstractController
             $form->handleRequest($request);
 
             $twig = $this->get('twig');
-            $templateFile = "admin/uitslag/_ajaxTemplate.html.twig";
+            $templateFile = 'admin/uitslag/_ajaxTemplate.html.twig';
             $templateContent = $twig->loadTemplate($templateFile);
 
             // Render the whole template including any layouts etc
-            $body = $templateContent->render(array("form" => $form->createView()));
+            $body = $templateContent->render(['form' => $form->createView()]);
             return new Response($body);
         }
         if ($request->getMethod() == 'POST') {
@@ -165,6 +156,6 @@ class UitslagController extends AbstractController
             $em->flush();
             return $this->redirect($this->generateUrl('admin_uitslag_create'));
         }
-        return array('form' => $form->createView());
+        return ['form' => $form->createView()];
     }
 }

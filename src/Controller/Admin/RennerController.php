@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,22 +11,19 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Renner;
 use App\Form\Filter\RennerFilterType;
+use App\Form\RennerType;
+use Doctrine\DBAL\Types\Type;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Exception\ValidatorException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Doctrine\DBAL\Types\Type;
-use App\Entity\Renner,
-    App\Form\RennerType,
-    App\Entity\Transfer;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Exception\ValidatorException;
 
 /**
  * Renner controller.
@@ -40,6 +37,7 @@ class RennerController extends AbstractController
         return array_merge(['knp_paginator' => PaginatorInterface::class],
             parent::getSubscribedServices());
     }
+
     /**
      * Lists all Renner entities.
      *
@@ -53,34 +51,33 @@ class RennerController extends AbstractController
         $query = $em->createQuery('SELECT r FROM App\Entity\Renner r ORDER BY r.id DESC');
         $filter = $this->createForm(RennerFilterType::class);
         $config = $em->getConfiguration();
-        $config->addFilter("naam", "App\Filter\RennerNaamFilter");
+        $config->addFilter('naam', "App\Filter\RennerNaamFilter");
         if ($request->getMethod() == 'POST') {
             $filter->handleRequest($request);
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
-                    $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData(), Type::getType(Type::STRING)->getBindingType());
+                    $em->getFilters()->enable('naam')->setParameter('naam', $filter->get('naam')->getData(), Type::getType(Type::STRING)->getBindingType());
                 }
             }
         }
-
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
-        return array('pagination' => $pagination, 'filter' => $filter->createView());
+        return ['pagination' => $pagination, 'filter' => $filter->createView()];
     }
 
     /**
-     *
      * @Route("/{id}/edit", name="admin_renner_edit")
      * @Template()
+     * @param mixed $id
      */
     public function editAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository(Renner::class)->findOneBy(array('cqranking_id' => $id));
+        $entity = $em->getRepository(Renner::class)->findOneBy(['cqranking_id' => $id]);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Renner entity.');
@@ -96,36 +93,34 @@ class RennerController extends AbstractController
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return array('entity' => $entity, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView());
+        return ['entity' => $entity, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()];
     }
 
     public function createDeleteForm($id)
     {
-        return $this->createFormBuilder(array('id' => $id))->add('id', HiddenType::class)->getForm();
+        return $this->createFormBuilder(['id' => $id])->add('id', HiddenType::class)->getForm();
     }
 
     /**
-     *
      * @Route("/new", name="admin_renner_new")
      * @Template()
      */
     public function newAction()
     {
-        $entity = new Renner ();
+        $entity = new Renner();
         $form = $this->createForm(RennerType::class, $entity);
 
-        return array('entity' => $entity, 'form' => $form->createView());
+        return ['entity' => $entity, 'form' => $form->createView()];
     }
 
     /**
-     *
      * @Route("/create", name="admin_renner_create")
      * @Method("post")
      * @Template()
      */
     public function createAction(Request $request)
     {
-        $entity = new Renner ();
+        $entity = new Renner();
         $form = $this->createForm(RennerType::class, $entity);
         $form->handleRequest($request);
 
@@ -137,12 +132,13 @@ class RennerController extends AbstractController
             return $this->redirect($this->generateUrl('admin_renner'));
         }
 
-        return array('entity' => $entity, 'form' => $form->createView());
+        return ['entity' => $entity, 'form' => $form->createView()];
     }
 
     /**
      * @Route("/{id}/delete", name="admin_renner_delete")
      * @Method("post")
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id)
     {
@@ -156,6 +152,6 @@ class RennerController extends AbstractController
 
             return $this->redirect($this->generateUrl('admin_renner'));
         }
-        throw new ValidatorException("Invalid delete form");
+        throw new ValidatorException('Invalid delete form');
     }
 }

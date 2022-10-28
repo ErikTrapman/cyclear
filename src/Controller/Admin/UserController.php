@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,16 +11,16 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\User;
 use App\Form\UserEditType;
+use App\Form\UserType;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use App\Entity\User;
-use App\Form\UserType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -34,7 +34,7 @@ class UserController extends AbstractController
     {
         return array_merge([
             'knp_paginator' => PaginatorInterface::class,
-            'fos_user.user_manager' => UserManagerInterface::class
+            'fos_user.user_manager' => UserManagerInterface::class,
         ],
             parent::getSubscribedServices());
     }
@@ -51,7 +51,7 @@ class UserController extends AbstractController
 
         $entities = $em->getRepository(User::class)->findAll();
 
-        return array('entities' => $entities);
+        return ['entities' => $entities];
     }
 
     /**
@@ -64,9 +64,9 @@ class UserController extends AbstractController
     {
         $form = $this->createForm(UserType::class);
 
-        return array(
-            'form' => $form->createView()
-        );
+        return [
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -89,12 +89,12 @@ class UserController extends AbstractController
         $form->handleRequest($request);
         if ($form->isValid()) {
             $userManager->updateUser($user);
-            return $this->redirect($this->generateUrl('admin_user_edit', array('id' => $user->getId())));
+            return $this->redirect($this->generateUrl('admin_user_edit', ['id' => $user->getId()]));
         }
 
-        return array(
-            'form' => $form->createView()
-        );
+        return [
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -102,6 +102,7 @@ class UserController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_user_edit")
      * @Template()
+     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -115,10 +116,10 @@ class UserController extends AbstractController
         }
         $editForm = $this->createForm(UserEditType::class, $entity);
 
-        return array(
+        return [
             'entity' => $entity,
-            'edit_form' => $editForm->createView()
-        );
+            'edit_form' => $editForm->createView(),
+        ];
     }
 
     /**
@@ -127,6 +128,7 @@ class UserController extends AbstractController
      * @Route("/{id}/update", name="admin_user_update")
      * @Template()
      * @Method("post")
+     * @param mixed $id
      */
     public function updateAction(Request $request, $id)
     {
@@ -148,7 +150,6 @@ class UserController extends AbstractController
 
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
-
 //            this is now done in PloegController
 //            $usermanager = $this->get('cyclear_game.manager.user');
 //            //$usermanager->updatePloegen($editForm, $entity);
@@ -180,12 +181,12 @@ class UserController extends AbstractController
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_user_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_user_edit', ['id' => $id]));
         }
 
-        return array(
+        return [
             'entity' => $entity,
-            'edit_form' => $editForm->createView()
-        );
+            'edit_form' => $editForm->createView(),
+        ];
     }
 }

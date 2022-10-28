@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -18,9 +18,6 @@ use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
-use Doctrine\ORM\Query\ResultSetMapping;
-use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 /**
  * RennerRepository
@@ -30,19 +27,18 @@ use Doctrine\ORM\Query\ResultSetMappingBuilder;
  */
 class RennerRepository extends EntityRepository
 {
-
     public function findOneByNaam($naam)
     {
-        return $this->findOneBy(array('naam' => $naam));
+        return $this->findOneBy(['naam' => $naam]);
     }
 
     /**
      * @param $id
-     * @return null|object|Renner
+     * @return object|Renner|null
      */
     public function findOneByCQId($id)
     {
-        return $this->findOneBy(array('cqranking_id' => $id));
+        return $this->findOneBy(['cqranking_id' => $id]);
     }
 
     public function findOneBySelectorString($rennerString)
@@ -52,7 +48,7 @@ class RennerRepository extends EntityRepository
         $cqId = trim(substr($rennerString, 0, $firstBracket));
         $name = substr($rennerString, $firstBracket + 1, $lastBracket - $firstBracket - 1);
 
-        return $this->findOneBy(array('naam' => $name, 'cqranking_id' => $cqId));
+        return $this->findOneBy(['naam' => $name, 'cqranking_id' => $cqId]);
     }
 
     public function getPloeg($renner, $seizoen = null)
@@ -71,8 +67,6 @@ class RennerRepository extends EntityRepository
     }
 
     /**
-     * @param Renner $renner
-     * @param Ploeg $ploeg
      * @return bool
      */
     public function isDraftTransfer(Renner $renner, Ploeg $ploeg)
@@ -85,13 +79,13 @@ class RennerRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $rennersWithPloeg = array();
+        $rennersWithPloeg = [];
         foreach ($this->_em->getRepository(Contract::class)
                      ->createQueryBuilder('c')
                      ->where('c.seizoen = :seizoen')
                      ->andWhere('c.eind IS NULL')->setParameter('seizoen', $seizoen)
                      ->getQuery()->getResult() as $contract) {
-            $rennersWithPloeg [] = $contract->getRenner();
+            $rennersWithPloeg[] = $contract->getRenner();
         }
         return $rennersWithPloeg;
     }
@@ -132,5 +126,4 @@ class RennerRepository extends EntityRepository
         }
         return $qb->setParameter('seizoen', $seizoen); //->setMaxResults(20)->getQuery()->getResult();
     }
-
 }

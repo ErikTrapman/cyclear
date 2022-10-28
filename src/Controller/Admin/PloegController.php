@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -23,9 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Ploeg controller.
@@ -38,9 +36,10 @@ class PloegController extends AbstractController
     {
         return array_merge([
             'knp_paginator' => PaginatorInterface::class,
-            'cyclear_game.manager.user' => UserManager::class],
+            'cyclear_game.manager.user' => UserManager::class, ],
             parent::getSubscribedServices());
     }
+
     /**
      * Lists all Ploeg entities.
      *
@@ -49,21 +48,20 @@ class PloegController extends AbstractController
      */
     public function indexAction(Request $request)
     {
-
         $filter = $this->createForm(PloegFilterType::class);
 
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQuery("SELECT p FROM App\Entity\Ploeg p ORDER BY p.id DESC");
 
         $config = $em->getConfiguration();
-        $config->addFilter("naam", "App\Filter\Ploeg\PloegNaamFilter");
+        $config->addFilter('naam', "App\Filter\Ploeg\PloegNaamFilter");
 
         if ($request->getMethod() == 'POST') {
             $filter->handleRequest($request);
             //$data = $filter->get('user')->getData();
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
-                    $em->getFilters()->enable("naam")->setParameter("naam", $filter->get('naam')->getData(), Type::getType(Type::STRING)->getBindingType());
+                    $em->getFilters()->enable('naam')->setParameter('naam', $filter->get('naam')->getData(), Type::getType(Type::STRING)->getBindingType());
                 }
             }
         }
@@ -71,9 +69,8 @@ class PloegController extends AbstractController
         $entities = $paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
-        return array('entities' => $entities, 'filter' => $filter->createView());
+        return ['entities' => $entities, 'filter' => $filter->createView()];
     }
-
 
     /**
      * Displays a form to create a new Ploeg entity.
@@ -86,10 +83,10 @@ class PloegController extends AbstractController
         $entity = new Ploeg();
         $form = $this->createForm(PloegType::class, $entity);
 
-        return array(
+        return [
             'entity' => $entity,
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -114,10 +111,10 @@ class PloegController extends AbstractController
             return $this->redirect($this->generateUrl('admin_ploeg'));
         }
 
-        return array(
+        return [
             'entity' => $entity,
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -125,6 +122,7 @@ class PloegController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_ploeg_edit")
      * @Template()
+     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -139,11 +137,11 @@ class PloegController extends AbstractController
         $editForm = $this->createForm(PloegType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return array(
+        return [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ];
     }
 
     /**
@@ -151,6 +149,7 @@ class PloegController extends AbstractController
      *
      * @Route("/{id}/update", name="admin_ploeg_update")
      * @Method("post")
+     * @param mixed $id
      */
     public function updateAction(Request $request, $id)
     {
@@ -176,11 +175,11 @@ class PloegController extends AbstractController
             return $this->redirect($this->generateUrl('admin_ploeg'));
         }
 
-        return array(
+        return [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ];
     }
 
     /**
@@ -188,6 +187,7 @@ class PloegController extends AbstractController
      *
      * @Route("/{id}/delete", name="admin_ploeg_delete")
      * @Method("post")
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id)
     {
@@ -212,7 +212,7 @@ class PloegController extends AbstractController
 
     private function createDeleteForm($id)
     {
-        return $this->createFormBuilder(array('id' => $id))
+        return $this->createFormBuilder(['id' => $id])
             ->add('id', HiddenType::class)
             ->getForm();
     }

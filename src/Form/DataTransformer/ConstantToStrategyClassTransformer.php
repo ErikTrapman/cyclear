@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the CQ-ranking parser package.
@@ -19,9 +19,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class ConstantToStrategyClassTransformer implements DataTransformerInterface
 {
-
     /**
-     * 
      * @param Renner $value
      * @return string
      */
@@ -37,7 +35,6 @@ class ConstantToStrategyClassTransformer implements DataTransformerInterface
     }
 
     /**
-     * 
      * @param string $value
      * @return string|Stage
      * @throws TransformationFailedException
@@ -48,13 +45,12 @@ class ConstantToStrategyClassTransformer implements DataTransformerInterface
             return null;
         }
         if (!class_exists($value)) {
-            throw new TransformationFailedException("Unknown class ".$value);
+            throw new TransformationFailedException('Unknown class ' . $value);
         }
-        $instance = new $value;
+        $instance = new $value();
         if (!$instance instanceof AbstractStrategy) {
-            throw new TransformationFailedException("Invalid class ".$value);
+            throw new TransformationFailedException('Invalid class ' . $value);
         }
         return $instance;
     }
 }
-?>

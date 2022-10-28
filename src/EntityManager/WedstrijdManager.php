@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,12 +11,10 @@
 
 namespace App\EntityManager;
 
-
 use App\CQRanking\Parser\CQParser;
 
 class WedstrijdManager
 {
-
     /**
      * @var CQParser
      */
@@ -28,9 +26,7 @@ class WedstrijdManager
     }
 
     /**
-     *
-     * @param string $url
-     * @param \DateTime $dateTime
+     * @param mixed $crawler
      * @return App\Entity\Wedstrijd
      */
     public function createWedstrijdFromCrawler($crawler, \DateTime $dateTime)
@@ -38,20 +34,16 @@ class WedstrijdManager
         return $this->createWedstrijd($this->cqParser->getName($crawler), $dateTime);
     }
 
-
     /**
-     *
      * @param string $name
-     * @param \DateTime $datum
      * @return App\Entity\Wedstrijd
      */
     public function createWedstrijd($name, \DateTime $datum)
     {
         $wedstrijd = new \App\Entity\Wedstrijd();
-        $name = str_replace(array('(provisional)', '(prov)'), '', $name);
+        $name = str_replace(['(provisional)', '(prov)'], '', $name);
         $wedstrijd->setNaam($name);
         $wedstrijd->setDatum($datum);
         return $wedstrijd;
     }
-
 }

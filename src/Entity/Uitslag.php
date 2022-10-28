@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Uitslag
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -31,7 +31,7 @@ class Uitslag
     private $id;
 
     /**
-     * @var object $wedstrijd
+     * @var object
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Wedstrijd", inversedBy="uitslagen", cascade={"all"})
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -39,35 +39,35 @@ class Uitslag
     private $wedstrijd;
 
     /**
-     * @var Renner $renner
+     * @var Renner
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Renner")
      */
     private $renner;
 
     /**
-     * @var object $ploeg
+     * @var object
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Ploeg")
      */
     private $ploeg;
 
     /**
-     * @var smallint $positie
+     * @var smallint
      *
      * @ORM\Column(name="positie", type="smallint")
      */
     private $positie;
 
     /**
-     * @var float $punten
+     * @var float
      *
      * @ORM\Column(type="float", name="ploegPunten")
      */
     private $ploegPunten;
 
     /**
-     * @var float $punten
+     * @var float
      *
      * @ORM\Column(type="float", name="rennerPunten")
      */
@@ -76,7 +76,7 @@ class Uitslag
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

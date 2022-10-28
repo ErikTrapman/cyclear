@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -22,7 +22,6 @@ ini_set('memory_limit', '1G');
 
 class CleanUpRidersCommand extends ContainerAwareCommand
 {
-
     protected function configure()
     {
         $this->setName('cyclear:cleanup-riders');
@@ -30,11 +29,9 @@ class CleanUpRidersCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $qb = $em->getRepository(Renner::class)->createQueryBuilder('r')->where('r.country IS NULL');
         foreach ($qb->getQuery()->getResult() as $i => $renner) {
-
             $qb = $em->getRepository(Transfer::class)
                 ->createQueryBuilder('t')
                 ->where('t.renner = :renner')
@@ -53,7 +50,5 @@ class CleanUpRidersCommand extends ContainerAwareCommand
             $em->remove($renner);
         }
         $em->flush();
-
     }
-
 }

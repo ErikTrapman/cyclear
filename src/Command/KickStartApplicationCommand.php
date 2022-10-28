@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -21,7 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class KickStartApplicationCommand extends ContainerAwareCommand
 {
-
     protected function configure()
     {
         $this->setName('cyclear:kickstart')
@@ -50,6 +49,6 @@ class KickStartApplicationCommand extends ContainerAwareCommand
 
         $em->persist($p);
         $em->flush();
-        $output->write("Toegevoegd: 1 seizoen en 1 periode");
+        $output->write('Toegevoegd: 1 seizoen en 1 periode');
     }
 }

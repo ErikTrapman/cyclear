@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -18,7 +18,6 @@ use Doctrine\ORM\NoResultException;
 
 class PeriodeRepository extends EntityRepository
 {
-
     public function getCurrentPeriode($seizoen = null)
     {
         if (null === $seizoen) {
@@ -28,8 +27,8 @@ class PeriodeRepository extends EntityRepository
         $start->setTime(0, 0, 0);
         $eind = new DateTime();
         $eind->setTime(23, 59, 59);
-        $qb = $this->createQueryBuilder("p")
-            ->where("p.eind >= :start AND p.start <= :eind")
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.eind >= :start AND p.start <= :eind')
             ->andWhere('p.seizoen = :seizoen')->setParameter('start', $start)->setParameter('eind', $eind)->setParameter('seizoen', $seizoen);
         try {
             return $qb->getQuery()->getSingleResult();
@@ -46,6 +45,4 @@ class PeriodeRepository extends EntityRepository
             return $period;
         }
     }
-
-
 }

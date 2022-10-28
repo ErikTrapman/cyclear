@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -10,7 +10,6 @@
  */
 
 namespace App\Tests\CQRanking;
-
 
 use App\CQRanking\CQAutomaticResultsResolver;
 use App\CQRanking\Parser\Crawler\CrawlerManager;
@@ -51,7 +50,7 @@ class CQAutomaticResultsResolverTest extends WebTestCase
         $categoryMatcher->method('needsRefStage')->willReturn(false);
 
         $uitslagen = [
-            ['ploeg' => 1, 'rennerPunten' => 10, 'ploegPunten' => 10, 'renner' => 1, 'positie' => 1]
+            ['ploeg' => 1, 'rennerPunten' => 10, 'ploegPunten' => 10, 'renner' => 1, 'positie' => 1],
         ];
         $uitslagManager = $this->getMockBuilder('App\EntityManager\UitslagManager')->disableOriginalConstructor()->getMock();
         $uitslagManager->method('prepareUitslagen')->willReturn($uitslagen);
@@ -71,7 +70,5 @@ class CQAutomaticResultsResolverTest extends WebTestCase
 
         $res = $resolver->resolve($races, $seizoen, $start, $end, 999);
         $this->assertCount(32, $res);
-
     }
-
 }

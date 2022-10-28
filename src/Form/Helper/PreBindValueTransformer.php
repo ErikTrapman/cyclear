@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -13,9 +13,7 @@ namespace App\Form\Helper;
 
 class PreBindValueTransformer
 {
-
     /**
-     *
      * Transform a posted value in a PRE_BIND listener to it's original type.
      * E.g. a company-id gets transformed to it's corresponding Company-entity,
      *

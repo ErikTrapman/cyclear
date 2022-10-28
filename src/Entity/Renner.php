@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -12,7 +12,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -26,7 +25,7 @@ use JMS\Serializer\Annotation as Serializer;
 class Renner
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -38,7 +37,7 @@ class Renner
     private $id;
 
     /**
-     * @var string $naam
+     * @var string
      *
      * @ORM\Column(name="naam", type="string", length=255)
      * @Serializer\Expose
@@ -49,7 +48,6 @@ class Renner
 
     /**
      * @ORM\Column(name="cqranking_id", type="integer", length=11, nullable=true, unique=true)
-     *
      */
     private $cqranking_id;
 
@@ -60,7 +58,6 @@ class Renner
     private $transfers;
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Country")
      * @Serializer\Expose
      * @Serializer\Groups({"small","medium"})
@@ -96,7 +93,7 @@ class Renner
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -218,5 +215,4 @@ class Renner
     {
         $this->twitter = $twitter;
     }
-
 }

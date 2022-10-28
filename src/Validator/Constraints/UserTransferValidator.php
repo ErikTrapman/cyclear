@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -14,7 +14,6 @@ namespace App\Validator\Constraints;
 use App\Entity\Periode;
 use App\Entity\Renner;
 use App\Entity\Transfer;
-use App\Form\Entity\UserTransfer;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraint;
@@ -37,44 +36,41 @@ class UserTransferValidator extends ConstraintValidator
 
     /**
      * @param Transfer $value
-     * @param Constraint $constraint
      * @return bool
      */
     public function validate($value, Constraint $constraint)
     {
         if (null === $value->getRennerIn() || null === $value->getRennerUit()) {
-            $this->context->addViolation("Onbekende renner opgegeven");
+            $this->context->addViolation('Onbekende renner opgegeven');
         }
         if ($value->getSeizoen()->getClosed()) {
-            $this->context->addViolation("Het seizoen " . $value->getSeizoen() . " is gesloten");
+            $this->context->addViolation('Het seizoen ' . $value->getSeizoen() . ' is gesloten');
         }
         $periode = $this->em->getRepository(Periode::class)->getCurrentPeriode();
         $now = clone $value->getDatum();
         $now->setTime(0, 0, 0);
         if ($now < $periode->getStart()) {
-            $this->context->addViolation("De huidige periode staat nog geen transfers toe");
+            $this->context->addViolation('De huidige periode staat nog geen transfers toe');
         }
         if ($now > $periode->getEind()) {
-            $this->context->addViolation("De huidige periode staat geen transfers meer toe");
+            $this->context->addViolation('De huidige periode staat geen transfers meer toe');
         }
         $this->testMaxTransfers($value, $periode->getStart(), $periode->getEind(), $periode->getTransfers());
         $rennerPloeg = $this->em->getRepository(Renner::class)->getPloeg($value->getRennerIn(), $value->getSeizoen());
         if (null !== $rennerPloeg) {
-            $this->context->addViolation($value->getRennerIn()->getNaam() . " heeft al een ploeg");
+            $this->context->addViolation($value->getRennerIn()->getNaam() . ' heeft al een ploeg');
         }
     }
 
     /**
      * @param $value
-     * @param \DateTime $start
-     * @param \DateTime $end
      * @param $maxAmount
      */
     protected function testMaxTransfers($value, \DateTime $start, \DateTime $end, $maxAmount)
     {
         $transferCount = $this->em->getRepository(Transfer::class)->getTransferCountForUserTransfer($value->getPloeg(), $start, $end);
         if ($transferCount >= $maxAmount) {
-            $this->context->addViolation("Je zit op het maximaal aantal transfers van " . $maxAmount . " voor deze periode");
+            $this->context->addViolation('Je zit op het maximaal aantal transfers van ' . $maxAmount . ' voor deze periode');
         }
     }
 }

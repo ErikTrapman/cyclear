@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -13,17 +13,16 @@ namespace App\EntityManager;
 
 use App\Entity\Contract;
 use App\Entity\Periode;
-use App\Entity\Seizoen;
-use Doctrine\ORM\EntityManager;
-use App\Entity\Transfer;
-use App\Entity\Renner;
 use App\Entity\Ploeg;
+use App\Entity\Renner;
+use App\Entity\Seizoen;
+use App\Entity\Transfer;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TransferManager
 {
     /**
-     *
      * @var EntityManager
      */
     private $em;
@@ -39,9 +38,8 @@ class TransferManager
     private $maxTransferAmount;
 
     /**
-     *
      * @param EntityManager $em
-     * @param Transfer $entity
+     * @param mixed|null $maxTransferAmount
      */
     public function __construct(EntityManagerInterface $em, ContractManager $contractManager, $maxTransferAmount = null)
     {
@@ -52,7 +50,7 @@ class TransferManager
 
     public function doDraftTransfer(Transfer $transfer)
     {
-        list($renner, $seizoen, $datum) = array($transfer->getRenner(), $transfer->getSeizoen(), $transfer->getDatum());
+        list($renner, $seizoen, $datum) = [$transfer->getRenner(), $transfer->getSeizoen(), $transfer->getDatum()];
         try {
             $this->em->beginTransaction();
             $ploeg = $this->em->getRepository(Renner::class)->getPloeg($renner, $seizoen);
@@ -92,7 +90,6 @@ class TransferManager
         $ploeg2 = $this->em->getRepository(Renner::class)->getPloeg($renner2, $seizoen);
         if ($ploeg1 instanceof Ploeg && $ploeg2 instanceof Ploeg) {
             try {
-
                 $this->em->beginTransaction();
 
                 $t1 = new Transfer();
@@ -116,7 +113,6 @@ class TransferManager
                 $releaseTransfer2 = $this->createReleaseTransfer($t2, $ploeg2);
                 $this->contractManager->releaseRenner($renner2, $seizoen, $datum);
                 $this->em->persist($releaseTransfer2);
-
 
                 $releaseTransfer1->setInversionTransfer($t2);
                 $t2->setInversionTransfer($releaseTransfer1);
@@ -224,7 +220,6 @@ class TransferManager
     }
 
     /**
-     * @param Ploeg $ploeg
      * @return int
      */
     public function getTtlTransfersDoneByPloeg(Ploeg $ploeg)
@@ -234,7 +229,6 @@ class TransferManager
         if ($this->maxTransferAmount) {
             return $this->em->getRepository(Transfer::class)
                 ->getTransferCountByType($ploeg, $seizoen->getStart(), $seizoen->getEnd(), $transferTypes);
-
         } else {
             $periode = $this->em->getRepository(Periode::class)->getCurrentPeriode($seizoen);
             return $this->em->getRepository(Transfer::class)
@@ -243,7 +237,6 @@ class TransferManager
     }
 
     /**
-     * @param Seizoen $seizoen
      * @return int|null
      */
     public function getTtlTransfersAtm(Seizoen $seizoen)
@@ -254,5 +247,4 @@ class TransferManager
             return $this->em->getRepository(Periode::class)->getCurrentPeriode($seizoen)->getTransfers();
         }
     }
-
 }

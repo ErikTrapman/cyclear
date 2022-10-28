@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -18,9 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
 {
-
     /**
-     *
      * @var \Doctrine\ORM\EntityManager
      */
     private $em;
@@ -33,12 +31,12 @@ class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'class' => Seizoen::class,
-                'preferred_choices' => array($this->em->getRepository(Seizoen::class)->getCurrent()),
+                'preferred_choices' => [$this->em->getRepository(Seizoen::class)->getCurrent()],
                 'query_builder' => function (\Doctrine\ORM\EntityRepository $e) {
                     return $e->createQueryBuilder('s')->orderBy('s.id', 'DESC'); //->where('s.current = 1');
-                }));
+                }, ]);
     }
 
     public function getParent()

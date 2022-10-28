@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of the Cyclear-game package.
  *
@@ -11,8 +11,8 @@
 namespace App\Repository;
 
 use App\CQRanking\Exception\CyclearGameBundleCQException;
-use Doctrine\ORM\EntityRepository;
 use App\Entity\Wedstrijd;
+use Doctrine\ORM\EntityRepository;
 
 class WedstrijdRepository extends EntityRepository
 {
@@ -22,7 +22,6 @@ class WedstrijdRepository extends EntityRepository
      * Typically the Wedstrijd has a name like 'Dubai Tour, General classification'
      * We use that to lookup 'Dubai Tour, Stage 1' or 'Dubai Tour, Prologue'.
      *
-     * @param Wedstrijd $wedstrijd
      * @return Wedstrijd
      * @throws CyclearGameBundleCQException
      */
@@ -40,8 +39,8 @@ class WedstrijdRepository extends EntityRepository
         $qb = $this->createQueryBuilder('w');
         $qb->where('w.seizoen = :seizoen')->andWhere(
             $qb->expr()->orX(
-                $qb->expr()->like('w.naam', ":stage1"),
-                $qb->expr()->like('w.naam', ":prol"))
+                $qb->expr()->like('w.naam', ':stage1'),
+                $qb->expr()->like('w.naam', ':prol'))
         );
         $qb->setParameters(['seizoen' => $wedstrijd->getSeizoen(), 'stage1' => $stage1, 'prol' => $prologue]);
         $res = $qb->getQuery()->getResult();
@@ -50,7 +49,7 @@ class WedstrijdRepository extends EntityRepository
             $qb = $this->createQueryBuilder('w');
             $qb->where('w.seizoen = :seizoen')->andWhere(
                 $qb->expr()->orX(
-                    $qb->expr()->like('w.naam', ":stage2"))
+                    $qb->expr()->like('w.naam', ':stage2'))
             );
             $qb->setParameters(['seizoen' => $wedstrijd->getSeizoen(), 'stage2' => sprintf('%s, Stage 2%%', $stage)]);
             $res = $qb->getQuery()->getResult();
@@ -67,7 +66,6 @@ class WedstrijdRepository extends EntityRepository
      * Typically the Wedstrijd has a name like 'Dubai Tour, General classification'
      * We use that to lookup 'Dubai Tour, Stage *' or 'Dubai Tour, Prologue'.
      *
-     * @param Wedstrijd $wedstrijd
      * @return Wedstrijd[]
      */
     public function getRefStages(Wedstrijd $wedstrijd)
@@ -84,11 +82,10 @@ class WedstrijdRepository extends EntityRepository
         $qb = $this->createQueryBuilder('w');
         $qb->where('w.seizoen = :seizoen')->andWhere(
             $qb->expr()->orX(
-                $qb->expr()->like('w.naam', ":stages"),
-                $qb->expr()->like('w.naam', ":prol"))
+                $qb->expr()->like('w.naam', ':stages'),
+                $qb->expr()->like('w.naam', ':prol'))
         );
         $qb->setParameters(['seizoen' => $wedstrijd->getSeizoen(), 'stages' => $stages, 'prol' => $prologue]);
         return $qb->getQuery()->getResult();
     }
-
 }

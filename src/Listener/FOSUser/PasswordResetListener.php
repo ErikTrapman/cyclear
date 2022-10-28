@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,8 +11,8 @@
 
 namespace App\Listener\FOSUser;
 
-use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\FOSUserEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -34,9 +34,9 @@ class PasswordResetListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             FOSUserEvents::RESETTING_RESET_SUCCESS => 'onPasswordResettingSuccess',
-        );
+        ];
     }
 
     public function onPasswordResettingSuccess(FormEvent $event)

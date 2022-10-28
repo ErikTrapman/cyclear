@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -13,19 +13,17 @@ namespace App\Tests;
 
 class BaseFunctional extends \Liip\FunctionalTestBundle\Test\WebTestCase
 {
-
     protected function setUp(): void
     {
-
     }
 
     public function doLoadFixtures()
     {
-        $fixtures = array(
+        $fixtures = [
             'App\Tests\Fixtures\LoadSeizoenData',
             'App\Tests\Fixtures\LoadRennerData',
             'App\Tests\Fixtures\LoadPloegData',
-        );
+        ];
         $this->loadFixtures($fixtures);
     }
 }

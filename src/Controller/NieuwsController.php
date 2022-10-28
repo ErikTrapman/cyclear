@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -13,21 +13,17 @@ namespace App\Controller;
 
 use App\Entity\Nieuws;
 use App\Entity\Seizoen;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/{seizoen}/nieuws")
  */
 class NieuwsController extends AbstractController
 {
-
     /**
      * @Route("", name="nieuws")
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
@@ -45,7 +41,6 @@ class NieuwsController extends AbstractController
         $pagination = $paginator->paginate(
             $qb, $request->query->get('page', 1), 20
         );
-        return array('pagination' => $pagination, 'seizoen' => $seizoen);
+        return ['pagination' => $pagination, 'seizoen' => $seizoen];
     }
-
 }

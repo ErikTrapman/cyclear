@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -17,12 +17,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class SpelregelsType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('seizoen', SeizoenSelectorType::class)
-            ->add('content', TextareaType::class, array('attr' => array('rows' => 32, 'cols' => 32)));
+            ->add('content', TextareaType::class, ['attr' => ['rows' => 32, 'cols' => 32]]);
     }
 
     public function getName()

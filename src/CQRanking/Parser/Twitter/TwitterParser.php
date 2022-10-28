@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the CQ-ranking parser package.
@@ -11,13 +11,10 @@
 
 namespace App\CQRanking\Parser\Twitter;
 
-
 use App\CQRanking\Parser\Crawler\CrawlerManager;
 
 class TwitterParser
 {
-
-
     /**
      * @var CrawlerManager
      */
@@ -32,7 +29,6 @@ class TwitterParser
     }
 
     /**
-     *
      * @param int $cqId
      */
     public function getTwitterHandle($cqId)
@@ -49,5 +45,4 @@ class TwitterParser
         }
         return null;
     }
-
 }

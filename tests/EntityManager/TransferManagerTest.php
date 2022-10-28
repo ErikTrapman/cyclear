@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -17,7 +17,6 @@ use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\EntityManager\TransferManager;
-use App\Tests\BaseFunctional;
 use DateTime;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
@@ -29,13 +28,11 @@ class TransferManagerTest extends WebTestCase
     protected $databaseTool;
 
     /**
-     *
      * @var \Doctrine\ORM\EntityManager
      */
     private $em;
 
     /**
-     *
      * @var \App\EntityManager\TransferManager
      */
     private $transferManager;
@@ -58,7 +55,6 @@ class TransferManagerTest extends WebTestCase
             'App\Tests\Fixtures\LoadRennerData',
             'App\Tests\Fixtures\LoadSeizoenData',
         ]);
-
 
         $this->em = self::$container->get('doctrine')->getManager();
         $this->transferManager = self::$container->get(TransferManager::class);
@@ -86,7 +82,6 @@ class TransferManagerTest extends WebTestCase
 
     public function testDraftTransferAndContractCreation()
     {
-
         $em = $this->em;
 
         $p1 = $this->ploegRepo->find(1);
@@ -106,8 +101,9 @@ class TransferManagerTest extends WebTestCase
     }
 
     /**
-     *
      * @dataProvider revertExchangeTransfersDataProvider
+     * @param mixed $revertId1
+     * @param mixed $revertId2
      */
     public function testRevertExchangeTransfer($revertId1, $revertId2)
     {
@@ -132,7 +128,6 @@ class TransferManagerTest extends WebTestCase
         $this->transferManager->doExchangeTransfer($r1, $r2, new DateTime(), $seizoen);
         $this->em->flush();
 
-
         // find the last transfer for rider 1
         $renner1PloegNaarTransfer = $this->transferRepo->find($revertId1);
         $this->transferManager->revertTransfer($renner1PloegNaarTransfer);
@@ -141,7 +136,6 @@ class TransferManagerTest extends WebTestCase
         $renner2PloegNaarTransfer = $this->transferRepo->find($revertId2);
         $this->transferManager->revertTransfer($renner2PloegNaarTransfer);
         $this->em->flush();
-
 
         $contracts = $this->contractRepo->findAll();
         $transfers = $this->transferRepo->findAll();
@@ -157,20 +151,20 @@ class TransferManagerTest extends WebTestCase
 
     public function revertExchangeTransfersDataProvider()
     {
-        return array(
-            array(6, 4),
-            array(5, 3),
-            array(3, 5),
-            array(4, 6),
-        );
+        return [
+            [6, 4],
+            [5, 3],
+            [3, 5],
+            [4, 6],
+        ];
     }
 
     /**
      * @dataProvider revertUserTransfersDataProvider
+     * @param mixed $transferIdToRevert
      */
     public function testRevertUserTransfer($transferIdToRevert)
     {
-
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
 
@@ -205,15 +199,14 @@ class TransferManagerTest extends WebTestCase
 
     public function revertUserTransfersDataProvider()
     {
-        return array(
-            array(3),
-            array(2)
-        );
+        return [
+            [3],
+            [2],
+        ];
     }
 
     public function testRevertDraftTransfer()
     {
-
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
 
@@ -233,7 +226,6 @@ class TransferManagerTest extends WebTestCase
 
     public function testDraftTransfer()
     {
-
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
 
@@ -248,7 +240,6 @@ class TransferManagerTest extends WebTestCase
 
     public function testUserTransfer()
     {
-
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
 
@@ -274,7 +265,6 @@ class TransferManagerTest extends WebTestCase
 
     public function testExchangeTransfer()
     {
-
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
 

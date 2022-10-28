@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -12,8 +12,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use App\Form\Validator\Constraints as CyclearAssert;
 
 /**
  * App\Entity\Transfer
@@ -23,12 +21,12 @@ use App\Form\Validator\Constraints as CyclearAssert;
  */
 class Transfer
 {
-    const DRAFTTRANSFER = 32,
-        ADMINTRANSFER = 64,
-        USERTRANSFER = 128;
+    public const DRAFTTRANSFER = 32;
+    public const ADMINTRANSFER = 64;
+    public const USERTRANSFER = 128;
 
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -37,7 +35,7 @@ class Transfer
     private $id;
 
     /**
-     * @var Renner $renner
+     * @var Renner
      *
      * @ORM\JoinColumn(name="renner_id")
      * @ORM\ManyToOne(targetEntity="App\Entity\Renner",inversedBy="transfers")
@@ -45,7 +43,7 @@ class Transfer
     private $renner;
 
     /**
-     * @var Ploeg $ploegVan
+     * @var Ploeg
      *
      * @ORM\JoinColumn(name="ploegvan_id", nullable=true)
      * @ORM\ManyToOne(targetEntity="App\Entity\Ploeg")
@@ -53,7 +51,7 @@ class Transfer
     private $ploegVan;
 
     /**
-     * @var Ploeg $ploegNaar
+     * @var Ploeg
      *
      * @ORM\JoinColumn(name="ploegnaar_id", nullable=true)
      * @ORM\ManyToOne(targetEntity="App\Entity\Ploeg")
@@ -61,26 +59,23 @@ class Transfer
     private $ploegNaar;
 
     /**
-     * @var \DateTime $datum
+     * @var \DateTime
      *
      * @ORM\Column(name="datum", type="datetime")
      */
     private $datum;
 
     /**
-     *
      * @ORM\Column(type="integer", name="transferType")
      */
     private $transferType;
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Seizoen")
      */
     private $seizoen;
 
     /**
-     *
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE", name="inversionTransfer_id")
      * @ORM\OneToOne(targetEntity="App\Entity\Transfer", cascade={"all"})
      */
@@ -94,7 +89,7 @@ class Transfer
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -190,11 +185,11 @@ class Transfer
     {
         switch ($this->transferType) {
             case self::ADMINTRANSFER:
-                return "admin-transfer";
+                return 'admin-transfer';
             case self::DRAFTTRANSFER:
-                return "draft";
+                return 'draft';
             case self::USERTRANSFER:
-                return "gebruiker";
+                return 'gebruiker';
         }
     }
 

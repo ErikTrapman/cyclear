@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -25,8 +25,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class TransferRepository extends EntityRepository
 {
-
-    public function findByRenner(Renner $renner, $seizoen = null, $types = array())
+    public function findByRenner(Renner $renner, $seizoen = null, $types = [])
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
@@ -34,7 +33,7 @@ class TransferRepository extends EntityRepository
 
         $qb = $this->getQueryBuilderForRenner($renner, $seizoen);
         $qb->andWhere('t.seizoen = ?2');
-        $qb->setParameter("2", $seizoen);
+        $qb->setParameter('2', $seizoen);
         $qb->orderBy('t.datum DESC, t.id', 'DESC');
         if (!empty($types)) {
             $qb->andWhere('t.transferType IN ( :types )')->setParameter('types', $types);
@@ -44,14 +43,14 @@ class TransferRepository extends EntityRepository
 
     private function getQueryBuilderForRenner($renner)
     {
-        $qb = $this->createQueryBuilder("t");
+        $qb = $this->createQueryBuilder('t');
         $qb->where('t.renner = ?1');
         $qb->setParameter('1', $renner);
         return $qb;
     }
 
     // TODO: teveel argumenten. maak losse methoden!
-    public function getLatest($seizoen = null, $types = array(), $limit = 20, $ploegNaar = null, $renner = null)
+    public function getLatest($seizoen = null, $types = [], $limit = 20, $ploegNaar = null, $renner = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
@@ -60,7 +59,7 @@ class TransferRepository extends EntityRepository
             ->createQueryBuilder('t')
             ->where('t.ploegNaar IS NOT NULL')
             ->andWhere('t.seizoen = :seizoen')
-            ->setParameters(array('seizoen' => $seizoen))
+            ->setParameters(['seizoen' => $seizoen])
             ->setMaxResults($limit)
             ->orderBy('t.datum', 'DESC');
         if (null !== $ploegNaar) {
@@ -77,13 +76,13 @@ class TransferRepository extends EntityRepository
 
     public function getTransferCountForUserTransfer($ploeg, $start, $end)
     {
-        return $this->getTransferCountByType($ploeg, $start, $end, array(Transfer::USERTRANSFER, Transfer::ADMINTRANSFER));
+        return $this->getTransferCountByType($ploeg, $start, $end, [Transfer::USERTRANSFER, Transfer::ADMINTRANSFER]);
     }
 
     public function getTransferCountByType($ploeg, $start, $end, $type)
     {
         if (!is_array($type)) {
-            $type = array($type);
+            $type = [$type];
         }
         if (is_numeric($ploeg)) {
             $ploeg = $this->_em->getRepository(Ploeg::class)->find($ploeg);
@@ -93,9 +92,9 @@ class TransferRepository extends EntityRepository
         $cloneStart = clone $start;
         $cloneStart->setTime(0, 0, 0);
         $query = $this->getEntityManager()
-            ->createQuery("SELECT COUNT(t.id) AS freq FROM App\\Entity\\Transfer t
-                WHERE t.ploegNaar = :ploeg AND t.datum BETWEEN :start AND :end AND t.transferType IN( :type )")
-            ->setParameters(array("type" => $type, "ploeg" => $ploeg, "start" => $cloneStart, "end" => $cloneEnd));
+            ->createQuery('SELECT COUNT(t.id) AS freq FROM App\\Entity\\Transfer t
+                WHERE t.ploegNaar = :ploeg AND t.datum BETWEEN :start AND :end AND t.transferType IN( :type )')
+            ->setParameters(['type' => $type, 'ploeg' => $ploeg, 'start' => $cloneStart, 'end' => $cloneEnd]);
         $res = $query->getSingleResult();
         return (int)$res['freq'];
     }
@@ -103,12 +102,12 @@ class TransferRepository extends EntityRepository
     public function findLastTransferForDate($renner, \DateTime $date, $seizoen)
     {
         $cloneDate = clone $date;
-        $cloneDate->setTime("23", "59", "59");
-        $params = array("renner" => $renner, "datum" => $cloneDate, 'seizoen' => $seizoen);
-        $qb = $this->createQueryBuilder("t")
-            ->where("t.renner = :renner")
-            ->andWhere("t.datum <= :datum")->andWhere('t.seizoen = :seizoen')->
-            setParameters($params)->orderBy("t.datum", "DESC")->setMaxResults(1);
+        $cloneDate->setTime('23', '59', '59');
+        $params = ['renner' => $renner, 'datum' => $cloneDate, 'seizoen' => $seizoen];
+        $qb = $this->createQueryBuilder('t')
+            ->where('t.renner = :renner')
+            ->andWhere('t.datum <= :datum')->andWhere('t.seizoen = :seizoen')->
+            setParameters($params)->orderBy('t.datum', 'DESC')->setMaxResults(1);
         $res = $qb->getQuery()->getResult();
         if (count($res) == 0) {
             return null;
@@ -117,10 +116,8 @@ class TransferRepository extends EntityRepository
     }
 
     /**
-     *
      * @param type $ploeg
      * @param type $seizoen
-     * @param array $transferTypes
      */
     public function getTransferredInNonDraftRenners($ploeg, $seizoen = null)
     {
@@ -131,11 +128,11 @@ class TransferRepository extends EntityRepository
         $tQb = $this->_em->getRepository(Transfer::class)->createQueryBuilder('t');
 
         $draftrenners = $this->_em->getRepository(Ploeg::class)->getDraftRenners($ploeg);
-        $params = array(
+        $params = [
             'drafttransfer' => Transfer::DRAFTTRANSFER,
             'ploeg' => $ploeg,
-            'seizoen' => $seizoen
-        );
+            'seizoen' => $seizoen,
+        ];
 
         $qb2 = $this->_em->getRepository(Transfer::class)
             ->createQueryBuilder('t2')
@@ -149,11 +146,11 @@ class TransferRepository extends EntityRepository
         $qb2->setParameters($params);
 
         $tQb
-            ->where("t.transferType != :drafttransfer")
+            ->where('t.transferType != :drafttransfer')
             ->andWhere('t.ploegNaar = :ploeg')
             ->andWhere('t.seizoen = :seizoen')
             ->andWhere($tQb->expr()->notIn('t', $qb2->getDql()))
-            ->setParameters($params);;
+            ->setParameters($params);
         return $tQb->getQuery()->getResult();
     }
 
@@ -161,38 +158,36 @@ class TransferRepository extends EntityRepository
      * Creates a temporary table following this scheme:
      * CREATE TEMPORARY TABLE IF NOT EXISTS $tableName (ploeg_id int, renner_id int)
      *
-     * @param Seizoen $seizoen
+     * @param mixed $tableName
      * @throws \Doctrine\DBAL\DBALException
      */
     public function generateTempTableWithDraftRiders(Seizoen $seizoen, $tableName = 'draftriders')
     {
         $conn = $this->_em->getConnection();
-        $conn->executeQuery("DROP TABLE IF EXISTS $tableName; CREATE TEMPORARY TABLE " . $tableName . " (ploeg_id int, renner_id int) ENGINE=MEMORY");
-        $conn->executeQuery("INSERT INTO " . $tableName . "
+        $conn->executeQuery("DROP TABLE IF EXISTS $tableName; CREATE TEMPORARY TABLE " . $tableName . ' (ploeg_id int, renner_id int) ENGINE=MEMORY');
+        $conn->executeQuery('INSERT INTO ' . $tableName . '
           ( SELECT ploegNaar_id, renner_id FROM transfer t
-          WHERE t.transferType = " . Transfer::DRAFTTRANSFER . " AND t.seizoen_id = " . $seizoen->getId() . " )");
+          WHERE t.transferType = ' . Transfer::DRAFTTRANSFER . ' AND t.seizoen_id = ' . $seizoen->getId() . ' )');
     }
 
     public function generateTempTableWithTransferredRiders(Seizoen $seizoen, $tableName = 'transferriders')
     {
         $this->generateTempTableWithDraftRiders($seizoen);
         $conn = $this->_em->getConnection();
-        $conn->executeQuery("DROP TABLE IF EXISTS $tableName; CREATE TEMPORARY TABLE IF NOT EXISTS " . $tableName . " (ploeg_id int, renner_id int) ENGINE=MEMORY");
+        $conn->executeQuery("DROP TABLE IF EXISTS $tableName; CREATE TEMPORARY TABLE IF NOT EXISTS " . $tableName . ' (ploeg_id int, renner_id int) ENGINE=MEMORY');
 
         $seizoenId = $seizoen->getId();
 
         $a = "SELECT t.renner_id, t.ploegNaar_id
                 FROM transfer t
                 WHERE t.renner_id NOT IN ( SELECT dr.renner_id FROM draftriders dr WHERE dr.ploeg_id = t.ploegNaar_id )
-                AND t.seizoen_id = $seizoenId AND t.ploegNaar_id IS NOT NULL AND t.transferType <> " . Transfer::DRAFTTRANSFER . "
+                AND t.seizoen_id = $seizoenId AND t.ploegNaar_id IS NOT NULL AND t.transferType <> " . Transfer::DRAFTTRANSFER . '
                 GROUP BY t.renner_id, t.ploegNaar_id
-                ORDER BY t.ploegNaar_id";
-        $conn->executeQuery("INSERT INTO $tableName (" . $a . ")");
+                ORDER BY t.ploegNaar_id';
+        $conn->executeQuery("INSERT INTO $tableName (" . $a . ')');
     }
 
     /**
-     * @param Renner $renner
-     * @param Ploeg $ploeg
      * @return Transfer|null
      */
     public function hasDraftTransfer(Renner $renner, Ploeg $ploeg)
@@ -202,5 +197,4 @@ class TransferRepository extends EntityRepository
             ->setParameters(['rider' => $renner, 'team' => $ploeg, 'type' => Transfer::DRAFTTRANSFER])
             ->getQuery()->getOneOrNullResult();
     }
-
 }

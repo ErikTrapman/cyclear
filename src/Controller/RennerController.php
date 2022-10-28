@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -17,50 +17,38 @@ use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
-use App\EntityManager\RennerManager;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
-use Knp\Component\Pager\Paginator;
 use Knp\Component\Pager\PaginatorInterface;
-use PDO;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Renner controller.
- *
  */
 class RennerController extends AbstractController
 {
-    /**
-     * @var PaginatorInterface
-     */
     private PaginatorInterface $knpPaginator;
-    /**
-     * @var SerializerInterface
-     */
-    private SerializerInterface $serializer;
 
-    public static function getSubscribedServices()
-    {
-        return array_merge(['knp_paginator' => PaginatorInterface::class, 'jms_serializer' => SerializerInterface::class],
-            parent::getSubscribedServices());
-    }
+    private SerializerInterface $serializer;
 
     public function __construct(PaginatorInterface $knpPaginator, SerializerInterface $serializer)
     {
         $this->knpPaginator = $knpPaginator;
         $this->serializer = $serializer;
+    }
+
+    public static function getSubscribedServices()
+    {
+        return array_merge(['knp_paginator' => PaginatorInterface::class, 'jms_serializer' => SerializerInterface::class],
+            parent::getSubscribedServices());
     }
 
     /**
@@ -76,13 +64,13 @@ class RennerController extends AbstractController
         $renners = $em->getRepository(Renner::class)->getRennersWithPunten($seizoen, $exclude);
         $paginator = $this->get('knp_paginator');
 
-        $this->appendQuery($renners, $this->assertArray($request->query->get('filter'), "/\s+/"), array('r.naam'));
+        $this->appendQuery($renners, $this->assertArray($request->query->get('filter'), "/\s+/"), ['r.naam']);
 
         $pagination = $paginator->paginate($renners, $request->query->get('page', 1), 20);
 
-        $ret = array();
+        $ret = [];
         foreach ($pagination as $r) {
-            $ret [] = (new RiderSearchView())->serialize($r)->getData();
+            $ret[] = (new RiderSearchView())->serialize($r)->getData();
         }
         $pagination->setItems($ret);
         $serializer = $this->get('jms_serializer');
@@ -92,7 +80,7 @@ class RennerController extends AbstractController
             return new Response($entities);
         }
 
-        return array('seizoen' => $seizoen);
+        return ['seizoen' => $seizoen];
     }
 
     /**
@@ -103,7 +91,7 @@ class RennerController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $paginator = $this->knpPaginator;
         $qb = $em->getRepository(Renner::class)->createQueryBuilder('r')->orderBy('r.naam', 'ASC');
-        $this->appendQuery($qb, $this->assertArray($request->query->get('query'), "/\s+/"), array('r.cqranking_id', 'r.naam', 'r.slug'));
+        $this->appendQuery($qb, $this->assertArray($request->query->get('query'), "/\s+/"), ['r.cqranking_id', 'r.naam', 'r.slug']);
         $entities = $paginator->paginate(
             $qb, $request->query->get('page') !== null ? $request->query->get('page') : 1, 20
         );
@@ -112,7 +100,7 @@ class RennerController extends AbstractController
         foreach ($entities->getItems() as $item) {
             $ret[] = (new BloodHoundRiderView())->serialize($item)->getData();
         }
-        return new Response($serializer->serialize($ret, 'json', SerializationContext::create()->setGroups(array('small'))));
+        return new Response($serializer->serialize($ret, 'json', SerializationContext::create()->setGroups(['small'])));
     }
 
     /**
@@ -128,7 +116,7 @@ class RennerController extends AbstractController
         $uitslagRepo = $doctrine->getRepository(Uitslag::class);
         $seizoenRepo = $doctrine->getRepository(Seizoen::class);
 
-        $transfers = $transferrepo->findByRenner($renner, $seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER));
+        $transfers = $transferrepo->findByRenner($renner, $seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER]);
         $uitslagen = $uitslagRepo->getPuntenForRenner($renner, $seizoen, true);
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
@@ -146,11 +134,11 @@ class RennerController extends AbstractController
             }
             $puntenPerSeizoen[] = [
                 'seizoen' => $archivedSeizoen,
-                'punten' => $uitslagRepo->getTotalPuntenForRenner($renner, $archivedSeizoen)
+                'punten' => $uitslagRepo->getTotalPuntenForRenner($renner, $archivedSeizoen),
             ];
         }
 
-        return array(
+        return [
             'seizoen' => $seizoen,
             'renner' => $renner,
             'transfers' => $transfers,
@@ -158,8 +146,8 @@ class RennerController extends AbstractController
             'transferrepo' => $transferrepo,
             'ploeg' => $ploeg,
             'rennerPunten' => intval($punten),
-            'puntenPerSeizoen' => $puntenPerSeizoen
-        );
+            'puntenPerSeizoen' => $puntenPerSeizoen,
+        ];
     }
 
     /**
@@ -211,20 +199,16 @@ class RennerController extends AbstractController
 
     /**
      * Copied from https://github.com/SamsonIT/AutocompleteBundle/blob/master/Query/ResultsFetcher.php
-     *
-     * @param QueryBuilder $qb
-     * @param array $searchWords
-     * @param array $searchFields
      */
     private function appendQuery(QueryBuilder $qb, array $searchWords, array $searchFields)
     {
         foreach ($searchWords as $key => $searchWord) {
-            $expressions = array();
+            $expressions = [];
             foreach ($searchFields as $key2 => $field) {
                 $expressions[] = $qb->expr()->like($qb->expr()->lower($field), ':query' . $key . $key2);
                 $qb->setParameter('query' . $key . $key2, '%' . strtolower($searchWord) . '%');
             }
-            $qb->andWhere("(" . call_user_func_array(array($qb->expr(), 'orx'), $expressions) . ")");
+            $qb->andWhere('(' . call_user_func_array([$qb->expr(), 'orx'], $expressions) . ')');
         }
     }
 }

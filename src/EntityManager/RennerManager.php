@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -18,7 +18,6 @@ class RennerManager
     private $pattern = '[%d] %s';
 
     /**
-     *
      * @param type $rennerString
      * @return Renner
      */
@@ -38,7 +37,7 @@ class RennerManager
 
     public function getCqIdFromRennerSelectorTypeString($string)
     {
-        sscanf($string, "[%d]", $cqId);
+        sscanf($string, '[%d]', $cqId);
         return $cqId;
     }
 

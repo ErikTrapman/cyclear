@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -17,10 +17,9 @@ use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -33,7 +32,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class PloegController extends AbstractController
 {
-
     public static function getSubscribedServices()
     {
         return array_merge(['knp_paginator' => PaginatorInterface::class],
@@ -64,15 +62,15 @@ class PloegController extends AbstractController
             $uitslagRepo->getUitslagenForPloegQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('page', 1), 20
         );
         $transfers = $paginator->paginate($em->getRepository(Transfer::class)->getLatest(
-            $seizoen, array(Transfer::ADMINTRANSFER, Transfer::USERTRANSFER), 9999, $entity), $request->query->get('transferPage', 1), 20, array('pageParameterName' => 'transferPage'));
+            $seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER], 9999, $entity), $request->query->get('transferPage', 1), 20, ['pageParameterName' => 'transferPage']);
         $transferUitslagen = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('transferResultsPage', 1), 20, array('pageParameterName' => 'transferResultsPage')
+            $uitslagRepo->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('transferResultsPage', 1), 20, ['pageParameterName' => 'transferResultsPage']
         );
         $lostDrafts = $paginator->paginate(
             $uitslagRepo->getUitslagenForPloegForLostDraftsQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('page', 1), 20
         );
         $zeges = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegByPositionQb($entity, 1, $seizoen)->getQuery()->getResult(), $request->query->get('zegeResultsPage', 1), 20, array('pageParameterName' => 'zegeResultsPage')
+            $uitslagRepo->getUitslagenForPloegByPositionQb($entity, 1, $seizoen)->getQuery()->getResult(), $request->query->get('zegeResultsPage', 1), 20, ['pageParameterName' => 'zegeResultsPage']
         );
 
         $rennerRepo = $em->getRepository(Renner::class);
@@ -90,7 +88,7 @@ class PloegController extends AbstractController
             }
         }
 
-        return array(
+        return [
             'entity' => $entity,
             'renners' => $renners,
             'uitslagen' => $uitslagen,
@@ -105,7 +103,7 @@ class PloegController extends AbstractController
             'draftPunten' => array_sum(array_map(function ($el) {
                 return $el['punten'];
             }, $draftRenners)),
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 }

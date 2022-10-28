@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UitslagType
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -37,13 +37,11 @@ class UitslagType
 
     /**
      * @ORM\Column(name="maxResults", type="integer")
-     *
      */
     private $maxResults;
 
     /**
      * @ORM\Column(name="isGeneralClassification", type="boolean")
-     *
      */
     private $isGeneralClassification;
 

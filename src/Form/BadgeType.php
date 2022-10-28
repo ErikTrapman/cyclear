@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Form;
 
@@ -9,10 +9,6 @@ use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class BadgeType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -22,11 +18,10 @@ class BadgeType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Badge'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'App\Entity\Badge',
+        ]);
     }
-
 
     /**
      * @return string

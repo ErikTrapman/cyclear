@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -12,18 +12,16 @@
 namespace App\Controller;
 
 use App\Entity\Seizoen;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- *
  * @Route("/archief")
  */
 class ArchiefController extends AbstractController
 {
-
     /**
      * @Route("/", name="archief_index")
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
@@ -35,14 +33,14 @@ class ArchiefController extends AbstractController
 
         $current = $em->getRepository(Seizoen::class)->getCurrent();
         if (null !== $current) {
-            $seizoenen = $em->getRepository(Seizoen::class)->createQueryBuilder("s")
-                ->where("s != :current")->andWhere('s.closed = 1')
-                ->setParameters(array('current' => $current));;
+            $seizoenen = $em->getRepository(Seizoen::class)->createQueryBuilder('s')
+                ->where('s != :current')->andWhere('s.closed = 1')
+                ->setParameters(['current' => $current]);
             $res = $seizoenen->getQuery()->getResult();
         } else {
-            $res = array();
+            $res = [];
         }
 
-        return array('seizoenen' => $res);
+        return ['seizoenen' => $res];
     }
 }

@@ -1,7 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Tests\CQRanking\Parser\RecentRaces;
-
 
 use App\CQRanking\Parser\Crawler\CrawlerManager;
 use App\CQRanking\Parser\RecentRaces\RecentRacesParser;
@@ -9,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RecentRacesParserTest extends WebTestCase
 {
-
     public function testRecentRacesParsesCorrect()
     {
         $client = static::createClient();
@@ -30,6 +28,4 @@ class RecentRacesParserTest extends WebTestCase
         $this->assertEquals('Tour of Hainan, General classification', $ret[99]->name);
         $this->assertEquals('race.asp?raceid=28518', $ret[99]->url);
     }
-
-
 }

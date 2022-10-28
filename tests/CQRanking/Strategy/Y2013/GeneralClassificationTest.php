@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the CQ-ranking parser package.
@@ -16,7 +16,6 @@ use App\Tests\CQRanking\Strategy\StrategyTest;
 
 class GeneralClassificationTest extends StrategyTest
 {
-
     public function testResultsParseCorrect()
     {
         $url = 'http://cqranking.com/men/asp/gen/race.asp?raceid=24430';
@@ -26,15 +25,15 @@ class GeneralClassificationTest extends StrategyTest
         $this->assertEquals(111, count($results));
 
         $first = $results[0];
-        $this->assertEquals(array(1, 7225, 160), array($first['pos'], $first['cqranking_id'], $first['points']));
+        $this->assertEquals([1, 7225, 160], [$first['pos'], $first['cqranking_id'], $first['points']]);
         // cq-ranking has results in different tables
         $break1 = $results[31];
-        $this->assertEquals(array(32, 18, 5), array($break1['pos'], $break1['cqranking_id'], $break1['points']));
+        $this->assertEquals([32, 18, 5], [$break1['pos'], $break1['cqranking_id'], $break1['points']]);
         // cq-ranking has results in different tables
         $break2 = $results[61];
-        $this->assertEquals(array(62, 5056, 0), array($break2['pos'], $break2['cqranking_id'], $break2['points']));
+        $this->assertEquals([62, 5056, 0], [$break2['pos'], $break2['cqranking_id'], $break2['points']]);
         // cq-ranking has results in different tables
         $last = $results[110];
-        $this->assertEquals(array(111, 12282, 0), array($last['pos'], $last['cqranking_id'], $last['points']));
+        $this->assertEquals([111, 12282, 0], [$last['pos'], $last['cqranking_id'], $last['points']]);
     }
 }

@@ -1,6 +1,6 @@
-<?php
-namespace App\Twig;
+<?php declare(strict_types=1);
 
+namespace App\Twig;
 
 use App\Entity\Seizoen;
 use Doctrine\ORM\EntityManager;
@@ -20,14 +20,13 @@ class TemplateExtension extends \Twig_Extension
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('getCurrentSeason', array($this, 'currentSeason'))
-        );
+        return [
+            new \Twig_SimpleFunction('getCurrentSeason', [$this, 'currentSeason']),
+        ];
     }
 
     public function currentSeason()
     {
         return $this->em->getRepository(Seizoen::class)->findOneBy(['current' => true]);
     }
-
 }

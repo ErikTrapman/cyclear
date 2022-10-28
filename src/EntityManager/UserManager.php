@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -21,7 +21,6 @@ use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 class UserManager
 {
     /**
-     *
      * @var MutableAclProvider
      */
     private $aclprovider;
@@ -38,7 +37,7 @@ class UserManager
         try {
             $acl = $this->aclprovider->findAcl($objectIdentity);
             try {
-                if (!$acl->isGranted(array(MaskBuilder::MASK_OWNER), array($securityIdentity))) {
+                if (!$acl->isGranted([MaskBuilder::MASK_OWNER], [$securityIdentity])) {
                     $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
                     $this->aclprovider->updateAcl($acl);
                 }
@@ -65,7 +64,7 @@ class UserManager
         $objectIdentity = ObjectIdentity::fromDomainObject($ploeg);
         try {
             $acl = $this->aclprovider->findAcl($objectIdentity);
-            return $acl->isGranted(array(MaskBuilder::MASK_OWNER), array($securityIdentity));
+            return $acl->isGranted([MaskBuilder::MASK_OWNER], [$securityIdentity]);
         } catch (AclNotFoundException $e) {
             return false;
         } catch (\Symfony\Component\Security\Acl\Exception\NoAceFoundException $e) {

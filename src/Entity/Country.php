@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,14 +11,12 @@
 
 namespace App\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
-
 use JMS\Serializer\Annotation as Serializer;
 
 /**
- *
  * @ORM\Entity()
  * @ORM\Table(name="country")
  * @Serializer\ExclusionPolicy("all")
@@ -26,7 +24,7 @@ use JMS\Serializer\Annotation as Serializer;
 class Country implements Translatable
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -37,7 +35,6 @@ class Country implements Translatable
     private $id;
 
     /**
-     *
      * @ORM\Column(type="string", length=2)
      */
     private $iso2; // varchar(2) NOT NULL default '',
@@ -50,7 +47,6 @@ class Country implements Translatable
     private $name;
 
     /**
-     *
      * @Gedmo\Locale
      */
     private $locale;

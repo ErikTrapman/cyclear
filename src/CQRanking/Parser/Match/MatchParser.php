@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the CQ-ranking parser package.
@@ -20,7 +20,6 @@ class MatchParser
     private $matchesFeed;
 
     /**
-     * @param CrawlerManager $crawlermanager
      * @param $matchesFeed
      */
     public function __construct(CrawlerManager $crawlermanager, $matchesFeed)
@@ -29,12 +28,9 @@ class MatchParser
         $this->matchesFeed = $matchesFeed;
     }
 
-    /**
-     *
-     */
     public function getMatches()
     {
-        $ret = array();
+        $ret = [];
         // TODO refactor this to make it more testeable. e,g, the possibility to feed it with static content.
         $crawler = $this->crawlerManager->getCrawlerForMatchSelector($this->matchesFeed);
 
@@ -57,7 +53,6 @@ class MatchParser
                 }
             }
             $ret[$a] = sprintf('[%s] %s - %s', $date, $cat, $name);
-
         });
         return $ret;
     }

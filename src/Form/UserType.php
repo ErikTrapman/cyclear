@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,13 +11,11 @@
 
 namespace App\Form;
 
-use Symfony\Component\Form\AbstractType;
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class UserType extends BaseType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);

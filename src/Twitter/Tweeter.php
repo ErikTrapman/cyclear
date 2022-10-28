@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -14,7 +14,6 @@ namespace App\Twitter;
 class Tweeter
 {
     /**
-     *
      * @var Twitter
      */
     private $helper;

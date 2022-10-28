@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,7 +11,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -25,7 +24,7 @@ use JMS\Serializer\Annotation as Serializer;
 class Ploeg
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -37,13 +36,12 @@ class Ploeg
     private $id;
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="ploeg")
      */
     private $user;
 
     /**
-     * @var string $naam
+     * @var string
      *
      * @ORM\Column(name="naam", type="string", length=255)
      *
@@ -53,7 +51,7 @@ class Ploeg
     private $naam;
 
     /**
-     * @var string $afkorting
+     * @var string
      *
      * @ORM\Column(name="afkorting", type="string", length=6)
      *
@@ -63,7 +61,6 @@ class Ploeg
     private $afkorting;
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Seizoen")
      */
     private $seizoen;
@@ -94,7 +91,7 @@ class Ploeg
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -163,7 +160,6 @@ class Ploeg
     /**
      * @Serializer\Groups({"small","medium"})
      * @Serializer\VirtualProperty()
-     *
      */
     public function getPunten()
     {
@@ -190,5 +186,4 @@ class Ploeg
     {
         $this->memo = $memo;
     }
-
 }

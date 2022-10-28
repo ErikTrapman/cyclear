@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -47,7 +47,6 @@ class UserTransfer
         return $this->datum;
     }
 
-
     public function getRennerIn()
     {
         return $this->renner_in;
@@ -81,7 +80,6 @@ class UserTransfer
         $this->seizoen = $seizoen;
     }
 
-
     public function getRennerUit()
     {
         return $this->renner_uit;
@@ -107,5 +105,4 @@ class UserTransfer
     {
         $this->userComment = $userComment;
     }
-
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -13,7 +13,6 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Zicht\Itertools;
 
 /**
  * App\Entity\Wedstrijd
@@ -23,9 +22,8 @@ use Zicht\Itertools;
  */
 class Wedstrijd
 {
-
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -34,14 +32,14 @@ class Wedstrijd
     private $id;
 
     /**
-     * @var \DateTime $datum
+     * @var \DateTime
      *
      * @ORM\Column(name="datum", type="datetime")
      */
     private $datum;
 
     /**
-     * @var string $naam
+     * @var string
      *
      * @ORM\Column(name="naam", type="string", length=255)
      */
@@ -91,7 +89,7 @@ class Wedstrijd
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -145,7 +143,6 @@ class Wedstrijd
     {
         return $this->uitslagen;
     }
-
 
     public function getSeizoen()
     {
@@ -214,6 +211,7 @@ class Wedstrijd
 
     /**
      * Fetch the Uitslagen, grouped and totalled per team.
+     * @param mixed $keepRiders
      */
     public function getUitslagenGrouped($keepRiders = false)
     {
@@ -236,7 +234,7 @@ class Wedstrijd
                 'total' => $reduce,
                 'hits' => count($uitslagen),
                 'ploeg' => $uitslagen[0]->getPloeg(),
-                'renners' => []
+                'renners' => [],
             ];
             if ($keepRiders) {
                 foreach ($uitslagen as $uitslag) {
@@ -245,7 +243,7 @@ class Wedstrijd
                     if (!array_key_exists($index, $ret[$ploegId]['renners'])) {
                         $ret[$ploegId]['renners'][$index] = ['renner' => $renner, 'hits' => 0, 'total' => 0];
                     }
-                    $ret[$ploegId]['renners'][$index]['hits'] += 1;
+                    ++$ret[$ploegId]['renners'][$index]['hits'];
                     $ret[$ploegId]['renners'][$index]['total'] += $uitslag->getPloegPunten();
                     $ret[$ploegId]['renners'][$index]['result'] = $uitslag;
                 }
@@ -264,5 +262,4 @@ class Wedstrijd
     {
         return $this->getNaam();
     }
-
 }

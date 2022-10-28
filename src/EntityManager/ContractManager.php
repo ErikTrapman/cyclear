@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -17,7 +17,6 @@ use Doctrine\ORM\EntityManagerInterface;
 class ContractManager
 {
     /**
-     *
      * @var \Doctrine\ORM\EntityManager
      */
     private $em;

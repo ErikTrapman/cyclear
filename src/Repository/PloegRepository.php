@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -20,19 +20,17 @@ use Doctrine\ORM\EntityRepository;
 
 class PloegRepository extends EntityRepository
 {
-
     public function getRenners($ploeg)
     {
-        $renners = array();
+        $renners = [];
         foreach ($this->_em->getRepository(Contract::class)
                      ->createQueryBuilder('c')
                      ->where('c.ploeg = :ploeg')
                      ->andWhere('c.seizoen = :seizoen')
                      ->andWhere('c.eind IS NULL')
-                     ->setParameters(array('ploeg' => $ploeg, 'seizoen' => $ploeg->getSeizoen()))
+                     ->setParameters(['ploeg' => $ploeg, 'seizoen' => $ploeg->getSeizoen()])
                      ->orderBy('c.id', 'ASC')
                      ->getQuery()->getResult() as $contract) {
-
             $renners[] = $contract->getRenner();
         }
         return $renners;
@@ -41,22 +39,22 @@ class PloegRepository extends EntityRepository
     public function getDraftRenners(Ploeg $ploeg)
     {
         return $this->_em->getRepository(Renner::class)
-            ->createQueryBuilder("r")
-            ->innerJoin("App\Entity\Transfer", "t", 'WITH', 't.renner = r')
-            ->where("t.transferType = " . Transfer::DRAFTTRANSFER)
-            ->andWhere("t.ploegNaar = :ploeg")
-            ->andWhere("t.seizoen = :seizoen")
-            ->setParameters(array("ploeg" => $ploeg, "seizoen" => $ploeg->getSeizoen()))->getQuery()->getResult();
+            ->createQueryBuilder('r')
+            ->innerJoin("App\Entity\Transfer", 't', 'WITH', 't.renner = r')
+            ->where('t.transferType = ' . Transfer::DRAFTTRANSFER)
+            ->andWhere('t.ploegNaar = :ploeg')
+            ->andWhere('t.seizoen = :seizoen')
+            ->setParameters(['ploeg' => $ploeg, 'seizoen' => $ploeg->getSeizoen()])->getQuery()->getResult();
     }
 
     public function getRennersWithPunten(Ploeg $ploeg)
     {
         $renners = $this->getRenners($ploeg);
-        $ret = array();
+        $ret = [];
         $uitslagRepo = $this->_em->getRepository(Uitslag::class);
         foreach ($renners as $index => $renner) {
             $punten = $uitslagRepo->getPuntenForRennerWithPloeg($renner, $ploeg, $ploeg->getSeizoen());
-            $ret[] = array(0 => $renner, 'punten' => (int)$punten, 'index' => $index);
+            $ret[] = [0 => $renner, 'punten' => (int)$punten, 'index' => $index];
         }
         $this->puntenSort($ret);
         return $ret;
@@ -64,7 +62,7 @@ class PloegRepository extends EntityRepository
 
     public function getDraftRennersWithPunten(Ploeg $ploeg, $sort = true)
     {
-        $ret = array();
+        $ret = [];
         $seizoen = $ploeg->getSeizoen();
         $renners = $this->getDraftRenners($ploeg);
         $uitslagRepo = $this->_em->getRepository(Uitslag::class);
@@ -75,11 +73,11 @@ class PloegRepository extends EntityRepository
                 $punten = min($seizoen->getMaxPointsPerRider(), $punten);
             }
 
-            $ret[] = array(
+            $ret[] = [
                 0 => $renner,
                 'punten' => $punten,
                 'rennerPunten' => $rennerPunten,
-                'index' => $index);
+                'index' => $index, ];
         }
         if ($sort) {
             $this->puntenSort($ret);

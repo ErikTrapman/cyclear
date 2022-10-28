@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -27,7 +27,7 @@ class TransferListener
         '%team% fires %out% and hires %in%',
         '%team% kicks %out% out in favour of %in%',
         '.%out% got the sack, %in% a contract at %team%',
-        'High expectations at %team% for new signing %in%; %out% failed to extend'
+        'High expectations at %team% for new signing %in%; %out% failed to extend',
     ];
 
     public function __construct($tweeter, TranslatorInterface $translator)
@@ -71,6 +71,4 @@ class TransferListener
             }
         }
     }
-
-
 }

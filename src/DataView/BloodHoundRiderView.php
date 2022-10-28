@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace App\DataView;
 
 use App\Entity\Renner;
@@ -8,9 +9,8 @@ class BloodHoundRiderView extends AbstractDataView
 {
     /**
      * @param Renner $data
-     * @param array $options
      */
-    public function serialize($data, array $options = array())
+    public function serialize($data, array $options = [])
     {
         $this->addFixed('identifier', $data->getCqRankingId());
         $this->addFixed('name', $data->getNaam());
@@ -18,6 +18,4 @@ class BloodHoundRiderView extends AbstractDataView
         $this->addFixed('slug', $data->getSlug());
         return $this;
     }
-
-
 }

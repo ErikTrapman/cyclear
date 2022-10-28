@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,17 +11,14 @@
 
 namespace App\Controller\Admin;
 
-use App\EntityManager\UserManager;
+use App\Entity\Nieuws;
+use App\Form\NieuwsType;
 use Knp\Component\Pager\PaginatorInterface;
-use Monolog\Logger;
-
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use App\Entity\Nieuws;
-use App\Form\NieuwsType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -37,6 +34,7 @@ class NieuwsController extends AbstractController
         return array_merge(['knp_paginator' => PaginatorInterface::class],
             parent::getSubscribedServices());
     }
+
     /**
      * Lists all Nieuws entities.
      *
@@ -54,7 +52,7 @@ class NieuwsController extends AbstractController
             $entities, $request->query->get('page', 1), 20
         );
 
-        return array('entities' => $pagination);
+        return ['entities' => $pagination];
     }
 
     /**
@@ -68,10 +66,10 @@ class NieuwsController extends AbstractController
         $entity = new Nieuws();
         $form = $this->createForm(NieuwsType::class, $entity);
 
-        return array(
+        return [
             'entity' => $entity,
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -92,13 +90,12 @@ class NieuwsController extends AbstractController
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_nieuws'));
-
         }
 
-        return array(
+        return [
             'entity' => $entity,
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -106,6 +103,7 @@ class NieuwsController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_nieuws_edit")
      * @Template()
+     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -120,11 +118,11 @@ class NieuwsController extends AbstractController
         $editForm = $this->createForm(NieuwsType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return array(
+        return [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ];
     }
 
     /**
@@ -132,6 +130,7 @@ class NieuwsController extends AbstractController
      *
      * @Route("/{id}/update", name="admin_nieuws_update")
      * @Method("post")
+     * @param mixed $id
      */
     public function updateAction(Request $request, $id)
     {
@@ -152,14 +151,14 @@ class NieuwsController extends AbstractController
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_nieuws_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_nieuws_edit', ['id' => $id]));
         }
 
-        return array(
+        return [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ];
     }
 
     /**
@@ -167,6 +166,7 @@ class NieuwsController extends AbstractController
      *
      * @Route("/{id}/delete", name="admin_nieuws_delete")
      * @Method("post")
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id)
     {
@@ -191,7 +191,7 @@ class NieuwsController extends AbstractController
 
     private function createDeleteForm($id)
     {
-        return $this->createFormBuilder(array('id' => $id))
+        return $this->createFormBuilder(['id' => $id])
             ->add('id', HiddenType::class)
             ->getForm();
     }

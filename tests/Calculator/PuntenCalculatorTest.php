@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -23,14 +23,13 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class PuntenCalculatorTest extends WebTestCase
 {
-
     private function getMocks()
     {
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
         $repo = $this->getMockBuilder('App\Repository\TransferRepository')->disableOriginalConstructor()->getMock();
         $em->expects($this->any())->method('getRepository')->will($this->returnValue($repo));
 
-        return array($em, $repo);
+        return [$em, $repo];
     }
 
     public function testNeverBeenTransfered()
@@ -87,7 +86,7 @@ class PuntenCalculatorTest extends WebTestCase
 
         $seizoen = new Seizoen();
         $c = new PuntenCalculator($em);
-        $t->setDatum(clone $t->getDatum()->modify("+12 hours"));
+        $t->setDatum(clone $t->getDatum()->modify('+12 hours'));
         $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-01 11:00:00'), $seizoen);
         $this->assertEquals(false, $res);
     }
@@ -113,7 +112,7 @@ class PuntenCalculatorTest extends WebTestCase
         $repo->expects($this->at(0))->method('findLastTransferForDate')->will($this->returnValue($t));
 
         $t2 = clone $t;
-        $t2->setDatum($t2->getDatum()->modify("+4 days"));
+        $t2->setDatum($t2->getDatum()->modify('+4 days'));
         $repo->expects($this->at(1))->method('findLastTransferForDate')->will($this->returnValue($t2));
 
         $c = new PuntenCalculator($em);

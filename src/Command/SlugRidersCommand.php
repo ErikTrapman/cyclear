@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -20,7 +20,6 @@ ini_set('memory_limit', '1G');
 
 class SlugRidersCommand extends ContainerAwareCommand
 {
-
     protected function configure()
     {
         $this->setName('cyclear:slug-riders');
@@ -28,9 +27,8 @@ class SlugRidersCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $qb = $em->getRepository(Renner::class)->createQueryBuilder('r')->where('r.slug IS NULL');//->setMaxResults(5000);
+        $qb = $em->getRepository(Renner::class)->createQueryBuilder('r')->where('r.slug IS NULL'); //->setMaxResults(5000);
         $repo = $em->getRepository(Renner::class);
         foreach ($qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY) as $i => $renner) {
             $renner = $repo->find($renner['id']);
@@ -42,11 +40,9 @@ class SlugRidersCommand extends ContainerAwareCommand
                 $em->flush();
                 $em->clear();
             }
-            $output->writeln($renner->getId() . " slugged");
+            $output->writeln($renner->getId() . ' slugged');
             unset($renner);
         }
         $em->flush();
-
     }
-
 }

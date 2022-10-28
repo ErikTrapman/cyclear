@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,16 +11,14 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\UitslagType;
+use App\Form\UitslagTypeType;
 use Knp\Component\Pager\PaginatorInterface;
-use Monolog\Logger;
-
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use App\Entity\UitslagType;
-use App\Form\UitslagTypeType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,6 +34,7 @@ class UitslagTypeController extends AbstractController
         return array_merge(['knp_paginator' => PaginatorInterface::class],
             parent::getSubscribedServices());
     }
+
     /**
      * Lists all UitslagType entities.
      *
@@ -48,9 +47,8 @@ class UitslagTypeController extends AbstractController
 
         $entities = $em->getRepository(UitslagType::class)->findAll();
 
-        return array('entities' => $entities);
+        return ['entities' => $entities];
     }
-
 
     /**
      * Displays a form to create a new UitslagType entity.
@@ -63,10 +61,10 @@ class UitslagTypeController extends AbstractController
         $entity = new UitslagType();
         $form = $this->createForm(UitslagTypeType::class, $entity);
 
-        return array(
+        return [
             'entity' => $entity,
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -87,13 +85,12 @@ class UitslagTypeController extends AbstractController
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_uitslagtype'));
-
         }
 
-        return array(
+        return [
             'entity' => $entity,
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -101,6 +98,7 @@ class UitslagTypeController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_uitslagtype_edit")
      * @Template()
+     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -115,11 +113,11 @@ class UitslagTypeController extends AbstractController
         $editForm = $this->createForm(UitslagTypeType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return array(
+        return [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ];
     }
 
     /**
@@ -127,6 +125,7 @@ class UitslagTypeController extends AbstractController
      *
      * @Route("/{id}/update", name="admin_uitslagtype_update")
      * @Method("post")
+     * @param mixed $id
      */
     public function updateAction(Request $request, $id)
     {
@@ -147,14 +146,14 @@ class UitslagTypeController extends AbstractController
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_uitslagtype_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_uitslagtype_edit', ['id' => $id]));
         }
 
-        return array(
+        return [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ];
     }
 
     /**
@@ -162,6 +161,7 @@ class UitslagTypeController extends AbstractController
      *
      * @Route("/{id}/delete", name="admin_uitslagtype_delete")
      * @Method("post")
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id)
     {
@@ -186,7 +186,7 @@ class UitslagTypeController extends AbstractController
 
     private function createDeleteForm($id)
     {
-        return $this->createFormBuilder(array('id' => $id))
+        return $this->createFormBuilder(['id' => $id])
             ->add('id', HiddenType::class)
             ->getForm();
     }

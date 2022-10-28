@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -17,13 +17,10 @@ use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
 use Doctrine\ORM\EntityManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -31,7 +28,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class UitslagController extends AbstractController
 {
-
     /**
      * @Route("/periodes/{periode}", name="uitslag_periodes")
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
@@ -41,8 +37,7 @@ class UitslagController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $list = $this->getDoctrine()->getRepository(Uitslag::class)->getPuntenByPloegForPeriode($periode, $seizoen);
-        $periodes = $this->getDoctrine()->getRepository(Periode::class)->findBy(array("seizoen" => $seizoen));
-
+        $periodes = $this->getDoctrine()->getRepository(Periode::class)->findBy(['seizoen' => $seizoen]);
 
         $gainedTransferpoints = [];
         foreach ($em->getRepository(Uitslag::class)
@@ -66,25 +61,26 @@ class UitslagController extends AbstractController
             $zegesInPeriode[$teamResult[0]->getId()] = $teamResult['freqByPos'];
         }
 
-        return array(
+        return [
             'list' => $list,
             'seizoen' => $seizoen,
             'periodes' => $periodes,
             'periode' => $periode,
             'transferpoints' => $transferSaldo,
             'positionCount' => $zegesInPeriode,
-            'transferRepo' => $em->getRepository(Transfer::class));
+            'transferRepo' => $em->getRepository(Transfer::class), ];
     }
 
     /**
      * @Route("/posities/{positie}", name="uitslag_posities")
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
+     * @param mixed $positie
      */
     public function positiesAction(Request $request, Seizoen $seizoen, $positie = 1)
     {
         $list = $this->getDoctrine()->getRepository(Uitslag::class)->getCountForPosition($seizoen, $positie);
-        return array('list' => $list, 'seizoen' => $seizoen, 'positie' => $positie);
+        return ['list' => $list, 'seizoen' => $seizoen, 'positie' => $positie];
     }
 
     /**
@@ -95,7 +91,7 @@ class UitslagController extends AbstractController
     public function viewByDraftTransferAction(Seizoen $seizoen)
     {
         $list = $this->getDoctrine()->getRepository(Uitslag::class)->getPuntenByPloegForDraftTransfers($seizoen);
-        return array('list' => $list, 'seizoen' => $seizoen);
+        return ['list' => $list, 'seizoen' => $seizoen];
     }
 
     /**
@@ -107,7 +103,7 @@ class UitslagController extends AbstractController
     {
         $seizoen = $this->getDoctrine()->getRepository(Seizoen::class)->findBySlug($seizoen);
         $list = $this->getDoctrine()->getRepository(Uitslag::class)->getPuntenByPloegForUserTransfers($seizoen);
-        return array('list' => $list, 'seizoen' => $seizoen);
+        return ['list' => $list, 'seizoen' => $seizoen];
     }
 
     /**
@@ -122,11 +118,11 @@ class UitslagController extends AbstractController
         $uitslagRepo = $em->getRepository(Uitslag::class);
         $transfer = $uitslagRepo->getPuntenByPloegForUserTransfers($seizoen);
 
-        $gained = array();
+        $gained = [];
         foreach ($uitslagRepo->getPuntenByPloegForUserTransfersWithoutLoss($seizoen) as $teamResult) {
             $gained[$teamResult['id']] = $teamResult['punten'];
         }
-        $lost = array();
+        $lost = [];
         foreach ($uitslagRepo->getLostDraftPuntenByPloeg($seizoen) as $teamResult) {
             if ($teamResult instanceof Ploeg) {
                 $lost[$teamResult->getId()] = $teamResult->getPunten();
@@ -140,7 +136,7 @@ class UitslagController extends AbstractController
 
         $bestTransfers = array_slice($uitslagRepo->getBestTransfers($seizoen), 0, 50);
 
-        return array(
+        return [
             'seizoen' => $seizoen,
             'transfer' => $transfer,
             'shadowgained' => $gained,
@@ -148,7 +144,6 @@ class UitslagController extends AbstractController
             'stand' => $stand,
             'draft' => $draft,
             'transferRepo' => $transferRepo,
-            'bestTransfers' => $bestTransfers);
+            'bestTransfers' => $bestTransfers, ];
     }
-
 }

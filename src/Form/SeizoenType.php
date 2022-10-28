@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -17,13 +17,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class SeizoenType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('identifier', TextType::class)
-            ->add('current', null, array('required' => false))
-            ->add('closed', null, array('required' => false))
+            ->add('current', null, ['required' => false])
+            ->add('closed', null, ['required' => false])
             ->add('start')
             ->add('end')
             ->add('maxPointsPerRider');
@@ -33,5 +32,4 @@ class SeizoenType extends AbstractType
     {
         return 'cyclear_gamebundle_seizoentype';
     }
-
 }

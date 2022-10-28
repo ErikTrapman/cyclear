@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -19,16 +19,14 @@ use App\Entity\Country;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
-use App\Entity\Uitslag;
-use App\Entity\Wedstrijd;
 use App\Entity\UitslagType;
+use App\Entity\Wedstrijd;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UitslagManager
 {
     /**
-     *
      * @var EntityManager
      */
     private $entityManager;
@@ -66,12 +64,7 @@ class UitslagManager
     /**
      * UitslagManager constructor.
      * @param EntityManager $em
-     * @param CQParser $parser
-     * @param PuntenCalculator $puntenCalculator
      * @param $cqRankingWedstrijdUrl
-     * @param RennerManager $rennerManager
-     * @param NationalityResolver $cqNationalityResolver
-     * @param TwitterParser $twitterParser
      */
     public function __construct(EntityManagerInterface $em,
                                 CQParser $parser,
@@ -91,9 +84,7 @@ class UitslagManager
     }
 
     /**
-     * @param UitslagType $uitslagType
      * @param $crawler
-     * @param Wedstrijd $wedstrijd
      * @param Seizoen $seizoen
      * @param null $puntenReferentieDatum
      * @return array
@@ -104,7 +95,7 @@ class UitslagManager
         $uitslagregels = $this->cqParser->getResultRows($crawler, $parseStrategy);
         $rows = 0;
         $maxResults = $uitslagType->getMaxResults();
-        $uitslagen = array();
+        $uitslagen = [];
         $rennerRepo = $this->entityManager->getRepository(Renner::class);
         $transferRepo = $this->entityManager->getRepository(Transfer::class);
         $rennerManager = $this->rennerManager;
@@ -112,7 +103,7 @@ class UitslagManager
             if (strcmp(strtolower($uitslagregel['pos']), 'leader') === 0) {
                 continue;
             }
-            $row = array();
+            $row = [];
             $row['ploegPunten'] = 0;
             $row['positie'] = $uitslagregel['pos'];
             $row['rennerPunten'] = $uitslagregel['points'];
@@ -133,7 +124,7 @@ class UitslagManager
                 $row['renner'] = $rennerString;
             }
             $uitslagen[] = $row;
-            $rows++;
+            ++$rows;
             if ($rows == $maxResults) {
                 break;
             }
@@ -146,7 +137,7 @@ class UitslagManager
         $renner = $this->rennerManager->createRennerFromRennerSelectorTypeString($rennerString);
         $countryFullName = $this->nationalityResolver->getFullNameFromCode($nat);
         $transRepo = $this->entityManager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
-        $trans = $transRepo->findOneBy(array('content' => $countryFullName, 'locale' => 'en_GB'));
+        $trans = $transRepo->findOneBy(['content' => $countryFullName, 'locale' => 'en_GB']);
         $countryRepo = $this->entityManager->getRepository(Country::class);
         if (null === $trans) {
             $country = $countryRepo->findOneByName($countryFullName);

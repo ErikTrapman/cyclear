@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,9 +11,9 @@
 
 namespace App\Command;
 
+use App\CQRanking\Nationality\NationalityResolver;
 use App\Entity\Country;
 use App\Entity\Renner;
-use App\CQRanking\Nationality\NationalityResolver;
 use SplFileObject;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,7 +23,6 @@ ini_set('memory_limit', '1G');
 
 class CQNationalityFixerCommand extends ContainerAwareCommand
 {
-
     protected function configure()
     {
         $this->setName('cyclear:fixer:nationality')
@@ -62,16 +61,16 @@ class CQNationalityFixerCommand extends ContainerAwareCommand
             }
             $countryName = $resolver->getFullNameFromCode($row['Nationality']);
             if (!strlen($countryName)) {
-                $output->writeln("Skipped row " . $cqId);
+                $output->writeln('Skipped row ' . $cqId);
                 continue;
             }
             if (null === $countryName) {
-                $output->writeln($row['Nationality'] . " not found in NationalityResolver");
+                $output->writeln($row['Nationality'] . ' not found in NationalityResolver');
                 break;
             }
 
-            $rider->setNaam($row["Name"]);
-            $trans = $transRepo->findOneBy(array('content' => $countryName, 'locale' => 'en_GB'));
+            $rider->setNaam($row['Name']);
+            $trans = $transRepo->findOneBy(['content' => $countryName, 'locale' => 'en_GB']);
             if (null === $trans) {
                 $country = $countryRepo->findOneByName($countryName);
             } else {

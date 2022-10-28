@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -19,27 +19,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WedstrijdType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-        $dateOptions = array('format' => 'dd-MM-y');
+        $dateOptions = ['format' => 'dd-MM-y'];
         if ($options['default_date']) {
             $dateOptions['data'] = $options['default_date'];
         }
         $builder
             ->add('datum', DateType::class, $dateOptions)
             ->add('naam')
-            ->add('uitslagtype', EntityType::class, array('class' => \App\Entity\UitslagType::class, 'mapped' => false))
+            ->add('uitslagtype', EntityType::class, ['class' => \App\Entity\UitslagType::class, 'mapped' => false])
             ->add('seizoen', SeizoenSelectorType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'App\Entity\Wedstrijd',
-            'default_date' => null
-        ));
+            'default_date' => null,
+        ]);
     }
 
     public function getName()

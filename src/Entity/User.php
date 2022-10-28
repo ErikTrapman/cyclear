@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,7 +11,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class User extends \FOS\UserBundle\Model\User implements \Serializable
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -30,13 +29,11 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable
     protected $id;
 
     /**
-     *
      * @ORM\OneToMany(
      *  targetEntity="App\Entity\Ploeg", mappedBy="user"
      * )
      */
     private $ploeg;
-
 
     public function __construct()
     {
@@ -47,7 +44,7 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -73,6 +70,4 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable
         }
         return null;
     }
-
-
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,16 +11,14 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Periode;
+use App\Form\PeriodeType;
 use Knp\Component\Pager\PaginatorInterface;
-use Monolog\Logger;
-
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use App\Entity\Periode;
-use App\Form\PeriodeType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,6 +34,7 @@ class PeriodeController extends AbstractController
         return array_merge(['knp_paginator' => PaginatorInterface::class],
             parent::getSubscribedServices());
     }
+
     /**
      * Lists all Periode entities.
      *
@@ -53,7 +52,7 @@ class PeriodeController extends AbstractController
             $entities, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
 
-        return array('entities' => $entities);
+        return ['entities' => $entities];
     }
 
     /**
@@ -67,10 +66,10 @@ class PeriodeController extends AbstractController
         $entity = new Periode();
         $form = $this->createForm(PeriodeType::class, $entity);
 
-        return array(
+        return [
             'entity' => $entity,
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -91,13 +90,12 @@ class PeriodeController extends AbstractController
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_periode'));
-
         }
 
-        return array(
+        return [
             'entity' => $entity,
-            'form' => $form->createView()
-        );
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -105,6 +103,7 @@ class PeriodeController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_periode_edit")
      * @Template()
+     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -119,11 +118,11 @@ class PeriodeController extends AbstractController
         $editForm = $this->createForm(PeriodeType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return array(
+        return [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ];
     }
 
     /**
@@ -131,6 +130,7 @@ class PeriodeController extends AbstractController
      *
      * @Route("/{id}/update", name="admin_periode_update")
      * @Method("post")
+     * @param mixed $id
      */
     public function updateAction(Request $request, $id)
     {
@@ -151,14 +151,14 @@ class PeriodeController extends AbstractController
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_periode_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_periode_edit', ['id' => $id]));
         }
 
-        return array(
+        return [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ];
     }
 
     /**
@@ -166,6 +166,7 @@ class PeriodeController extends AbstractController
      *
      * @Route("/{id}/delete", name="admin_periode_delete")
      * @Method("post")
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id)
     {
@@ -190,7 +191,7 @@ class PeriodeController extends AbstractController
 
     private function createDeleteForm($id)
     {
-        return $this->createFormBuilder(array('id' => $id))
+        return $this->createFormBuilder(['id' => $id])
             ->add('id', HiddenType::class)
             ->getForm();
     }

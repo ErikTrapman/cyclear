@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -12,13 +12,11 @@
 namespace App\Controller\Admin;
 
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- *
  * @Route("/admin")
  */
 class DefaultController extends AbstractController
@@ -28,13 +26,13 @@ class DefaultController extends AbstractController
         return array_merge(['knp_paginator' => PaginatorInterface::class],
             parent::getSubscribedServices());
     }
+
     /**
      * @Route("/", name="admin_index")
      * @Template()
      */
     public function indexAction(\Symfony\Component\HttpFoundation\Request $request)
     {
-
-        return array();
+        return [];
     }
 }

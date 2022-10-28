@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -18,8 +18,7 @@ use Symfony\Component\Validator\Constraint;
  */
 class UserTransfer extends Constraint
 {
-
-    public $message = "Je zit op het maximaal aantal transfers van %max% voor deze periode";
+    public $message = 'Je zit op het maximaal aantal transfers van %max% voor deze periode';
 
     public $entity;
 
@@ -34,5 +33,4 @@ class UserTransfer extends Constraint
     {
         return self::CLASS_CONSTRAINT;
     }
-
 }

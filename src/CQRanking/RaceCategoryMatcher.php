@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -11,15 +11,12 @@
 
 namespace App\CQRanking;
 
-
-use App\CQRanking\Exception\CyclearGameBundleCQException;
 use App\Entity\UitslagType;
 use App\Entity\Wedstrijd;
 use Doctrine\ORM\EntityManager;
 
 class RaceCategoryMatcher
 {
-
     /**
      * @var EntityManager
      */
@@ -68,7 +65,6 @@ class RaceCategoryMatcher
     }
 
     /**
-     * @param Wedstrijd $wedstrijd
      * @return Wedstrijd
      */
     public function getRefStage(Wedstrijd $wedstrijd)

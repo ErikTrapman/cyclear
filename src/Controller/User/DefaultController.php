@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -12,14 +12,12 @@
 namespace App\Controller\User;
 
 use App\Entity\Seizoen;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- *
  * @Route("/user/{seizoen}")
  */
 class DefaultController extends AbstractController
@@ -31,6 +29,6 @@ class DefaultController extends AbstractController
      */
     public function indexAction(Seizoen $seizoen)
     {
-        return array('seizoen' => $seizoen);
+        return ['seizoen' => $seizoen];
     }
 }

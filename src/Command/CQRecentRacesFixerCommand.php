@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -10,7 +10,6 @@
  */
 
 namespace App\Command;
-
 
 use App\Entity\Seizoen;
 use App\Entity\Wedstrijd;
@@ -39,7 +38,7 @@ class CQRecentRacesFixerCommand extends ContainerAwareCommand
             $output->writeln('resolving ' . $r->name);
             $transliterator = \Transliterator::createFromRules(':: NFD; :: [:Nonspacing Mark:] Remove; :: NFC;', \Transliterator::FORWARD);
             $test = $transliterator->transliterate($r->name);
-            $existing = $repo->where($repo->expr()->like('w.naam', ":naam"))->setParameter('naam', $test . '%')
+            $existing = $repo->where($repo->expr()->like('w.naam', ':naam'))->setParameter('naam', $test . '%')
                 ->andWhere('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->getQuery();
             $existing = $existing->getOneOrNullResult();
             if ($existing) {
@@ -52,6 +51,4 @@ class CQRecentRacesFixerCommand extends ContainerAwareCommand
         }
         $em->flush();
     }
-
-
 }

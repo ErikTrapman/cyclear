@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -22,7 +22,6 @@ use Symfony\Component\Routing\RouterInterface;
 class RennerSelectorType extends AbstractType
 {
     /**
-     *
      * @var \Doctrine\ORM\EntityManager
      */
     private $em;
@@ -39,8 +38,6 @@ class RennerSelectorType extends AbstractType
 
     /**
      * @param \Doctrine\ORM\EntityManager $em
-     * @param RennerManager $rennerManager
-     * @param RouterInterface $router
      */
     public function __construct(EntityManagerInterface $em, RennerManager $rennerManager, RouterInterface $router)
     {
@@ -57,12 +54,12 @@ class RennerSelectorType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $url = $this->router->generate('get_riders', array('_format' => 'json'));
+        $url = $this->router->generate('get_riders', ['_format' => 'json']);
         $resolver->setDefaults(
-            array('invalid_message' => 'De ingevulde renner is niet teruggevonden',
-                'attr' => array(
+            ['invalid_message' => 'De ingevulde renner is niet teruggevonden',
+                'attr' => [
                     'autocomplete' => 'off',
-                    'data-link' => $url))
+                    'data-link' => $url, ], ]
         );
     }
 

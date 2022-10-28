@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Cyclear-game package.
@@ -24,7 +24,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UitslagCreateType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $wedstrijdManager = $options['wedstrijd_manager'];
@@ -34,17 +33,16 @@ class UitslagCreateType extends AbstractType
         $seizoen = $options['seizoen'];
         $rennerManager = $options['renner_manager'];
         $builder
-            ->add('url', MatchSelectorType::class, array('mapped' => false, 'required' => false, 'label' => 'CQ-wedstrijd'))
-            ->add('url_manual', null, array('mapped' => false, 'required' => false, 'label' => 'URL', 'attr' => array('size' => 80)))
-            ->add('referentiewedstrijd', EntityType::class, array('required' => false, 'mapped' => false, 'class' => Wedstrijd::class,
+            ->add('url', MatchSelectorType::class, ['mapped' => false, 'required' => false, 'label' => 'CQ-wedstrijd'])
+            ->add('url_manual', null, ['mapped' => false, 'required' => false, 'label' => 'URL', 'attr' => ['size' => 80]])
+            ->add('referentiewedstrijd', EntityType::class, ['required' => false, 'mapped' => false, 'class' => Wedstrijd::class,
                 'query_builder' => function (EntityRepository $r) {
                     return $r->createQueryBuilder('w')
                         ->where('w.generalClassification = 0')
                         ->add('orderBy', 'w.id DESC')
                         ->setMaxResults(90);
-                }))
-            ->add('wedstrijd', WedstrijdType::class, array('default_date' => $options['default_date']));
-
+                }, ])
+            ->add('wedstrijd', WedstrijdType::class, ['default_date' => $options['default_date']]);
 
         $factory = $builder->getFormFactory();
 
@@ -65,13 +63,13 @@ class UitslagCreateType extends AbstractType
             $uitslagType = $helper->transformPostedValue($data['wedstrijd']['uitslagtype'], $form->get('wedstrijd')->get('uitslagtype'));
             $referentieWedstrijd = $helper->transformPostedValue($data['referentiewedstrijd'], $form->get('referentiewedstrijd'));
             $datum = $helper->transformPostedValue($data['wedstrijd']['datum'], $form->get('wedstrijd')->get('datum'));
-            $form->add($factory->createNamed('uitslag', CollectionType::class, null, array('entry_type' => UitslagType::class,
+            $form->add($factory->createNamed('uitslag', CollectionType::class, null, ['entry_type' => UitslagType::class,
                 'allow_add' => true,
                 'auto_initialize' => false,
                 'by_reference' => false,
-                'entry_options' => array(
+                'entry_options' => [
                     'use_wedstrijd' => false,
-                    'seizoen' => $seizoen))));
+                    'seizoen' => $seizoen, ], ]));
             if ($request->isXmlHttpRequest()) {
                 $url = $data['url'] ? $data['url'] : $data['url_manual'];
                 $crawler = $crawlerManager->getCrawler($url);
@@ -84,8 +82,7 @@ class UitslagCreateType extends AbstractType
             }
         });
 
-
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $e) use ($request, $rennerManager) {
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $e) use ($request) {
             $form = $e->getForm();
             $data = $e->getData();
             if (null === $data) {
@@ -110,14 +107,14 @@ class UitslagCreateType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'wedstrijd_manager' => null,
             'uitslag_manager' => null,
             'crawler_manager' => null,
             'renner_manager' => null,
             'request' => null,
             'seizoen' => null,
-            'default_date' => null
-        ));
+            'default_date' => null,
+        ]);
     }
 }

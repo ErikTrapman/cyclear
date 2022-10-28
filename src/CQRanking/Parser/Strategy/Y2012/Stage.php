@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the CQ-ranking parser package.
@@ -17,7 +17,6 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class Stage extends AbstractStrategy implements ParserStrategyInterface
 {
-
     public function parseResults(Crawler $crawler)
     {
         return $this->parseResultsFromExpression($crawler, 'table.bordertop tr');
