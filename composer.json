@@ -33,7 +33,6 @@
         "symfony/process": "^4.4",
         "symfony/property-access": "^4.4",
         "symfony/serializer": "^4.4",
-        "symfony/swiftmailer-bundle": "^3",
         "symfony/templating": "4.4.*",
         "symfony/validator": "^4.4",
         "symfony/yaml": "^4.4",
