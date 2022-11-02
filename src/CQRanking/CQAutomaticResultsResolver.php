@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\CQRanking;
 
 use App\CQRanking\Exception\CyclearGameBundleCQException;
@@ -17,64 +8,21 @@ use App\Entity\Ploeg;
 use App\Entity\Seizoen;
 use App\Entity\Uitslag;
 use App\Entity\Wedstrijd;
-use App\EntityManager\RennerManager;
 use App\EntityManager\UitslagManager;
 use App\Form\DataTransformer\RennerNameToRennerIdTransformer;
-use Doctrine\ORM\EntityManager;
-use Monolog\Logger;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 
 class CQAutomaticResultsResolver
 {
-    /**
-     * @var EntityManager
-     */
-    private $em;
-
-    /**
-     * @var RaceCategoryMatcher
-     */
-    private $categoryMatcher;
-
-    /**
-     * @var UitslagManager
-     */
-    private $uitslagManager;
-
-    /**
-     * @var CrawlerManager
-     */
-    private $crawlerManager;
-
-    /**
-     * @var RennerManager
-     */
-    private $rennerManager;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var RennerNameToRennerIdTransformer
-     */
-    private $transformer;
-
     public function __construct(
-        EntityManager $em,
-        RaceCategoryMatcher $raceCategoryMatcher,
-        UitslagManager $uitslagManager,
-        CrawlerManager $crawlerManager,
-        RennerNameToRennerIdTransformer $transformer,
-        Logger $logger)
-    {
-        $this->em = $em;
-        $this->categoryMatcher = $raceCategoryMatcher;
-        $this->uitslagManager = $uitslagManager;
-        $this->crawlerManager = $crawlerManager;
-        $this->rennerManager = new RennerManager();
-        $this->logger = $logger;
-        $this->transformer = $transformer;
+        private readonly EntityManagerInterface $em,
+        private readonly RaceCategoryMatcher $categoryMatcher,
+        private readonly UitslagManager $uitslagManager,
+        private readonly CrawlerManager $crawlerManager,
+        private readonly RennerNameToRennerIdTransformer $transformer,
+        private readonly LoggerInterface $logger
+    ) {
     }
 
     /**
@@ -101,7 +49,7 @@ class CQAutomaticResultsResolver
                 continue;
             }
             // we skip Team Time Trials. Just try this...
-            if (false !== strpos($race->name, 'T.T.T') || false !== strpos($race->name, 'TTT')) {
+            if (str_contains($race->name, 'T.T.T') || str_contains($race->name, 'TTT')) {
                 continue;
             }
             $wedstrijd = new Wedstrijd();
@@ -140,10 +88,8 @@ class CQAutomaticResultsResolver
             } catch (\Throwable $throwable) {
                 $this->logger->error($race->url . ' / ' . $race->name . ' has error: ' . $throwable->getMessage());
                 continue;
-            } catch (\Exception $e) {
-                $this->logger->error($race->url . ' / ' . $race->name . ' has error: ' . $e->getMessage());
-                continue;
             }
+
             foreach ($uitslagen as $uitslagRow) {
                 $uitslag = new Uitslag();
                 $uitslag->setWedstrijd($wedstrijd);

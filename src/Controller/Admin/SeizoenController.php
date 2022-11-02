@@ -1,26 +1,15 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller\Admin;
 
 use App\Entity\Seizoen;
 use App\Form\SeizoenType;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Seizoen controller.
@@ -70,8 +59,7 @@ class SeizoenController extends AbstractController
     /**
      * Creates a new Seizoen entity.
      *
-     * @Route("/create", name="admin_seizoen_create")
-     * @Method("post")
+     * @Route("/create", name="admin_seizoen_create", methods={"POST"})
      */
     public function createAction(Request $request)
     {
@@ -106,7 +94,6 @@ class SeizoenController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_seizoen_edit")
      * @Template()
-     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -131,9 +118,7 @@ class SeizoenController extends AbstractController
     /**
      * Edits an existing Seizoen entity.
      *
-     * @Route("/{id}/update", name="admin_seizoen_update")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/update", name="admin_seizoen_update", methods={"POST"})
      */
     public function updateAction(Request $request, $id)
     {
@@ -167,9 +152,7 @@ class SeizoenController extends AbstractController
     /**
      * Deletes a Seizoen entity.
      *
-     * @Route("/{id}/delete", name="admin_seizoen_delete")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/delete", name="admin_seizoen_delete", methods={"POST"})
      */
     public function deleteAction(Request $request, $id)
     {

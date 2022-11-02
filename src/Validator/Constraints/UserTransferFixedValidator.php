@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Validator\Constraints;
 
 use App\Entity\Renner;
@@ -20,28 +11,14 @@ use Symfony\Component\Validator\ConstraintValidator;
 class UserTransferFixedValidator extends ConstraintValidator
 {
     /**
-     * @var int
-     */
-    private $maxTransfers;
-
-    private $em;
-
-    /**
-     * UserTransferFixedValidator constructor.
-     * @param $em
-     * @param $maxTransfers
-     *
      * TODO write tests!!
      */
-    public function __construct(EntityManagerInterface $em, $maxTransfers)
+    public function __construct(private EntityManagerInterface $em, private int $maxTransfers)
     {
-        $this->em = $em;
-        $this->maxTransfers = $maxTransfers;
     }
 
     /**
-     * @param UserTransfer $value
-     * @return bool
+     * @param \App\Form\Entity\UserTransfer $value
      */
     public function validate($value, Constraint $constraint)
     {
@@ -59,10 +36,7 @@ class UserTransferFixedValidator extends ConstraintValidator
         $this->doSpecificValidate($value);
     }
 
-    /**
-     * @param UserTransfer $value
-     */
-    protected function doSpecificValidate($value)
+    protected function doSpecificValidate(\App\Form\Entity\UserTransfer $value)
     {
         $seizoen = $value->getSeizoen();
 

@@ -1,19 +1,10 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the CQ-ranking parser package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\CQRanking\Nationality;
 
 class NationalityResolver
 {
-    private $cqNationalities = [
+    private static $cqNationalities = [
         'Afg' => 'Afghanistan',
         'Aho' => 'Netherlands Antilles',
         'Aia' => 'Anguilla',
@@ -205,7 +196,7 @@ class NationalityResolver
      * Diff based on cldr.country.en_GB.yaml
      * @see translations/umpirsky/country-list
      */
-    private $cldrDiff = [
+    private static $cldrDiff = [
         'Cgo' => 'Congo - Brazzaville',
         'Civ' => 'Côte d’Ivoire',
         'Gbr' => 'United Kingdom',
@@ -215,18 +206,14 @@ class NationalityResolver
         'Tls' => 'Timor-Leste',
     ];
 
-    public function __construct()
-    {
-    }
-
-    public function getFullNameFromCode($code)
+    public static function getFullNameFromCode(?string $code = null): ?string
     {
         $code = ucfirst(strtolower($code));
-        if (array_key_exists($code, $this->cldrDiff)) {
-            return $this->cldrDiff[$code];
+        if (array_key_exists($code, self::$cldrDiff)) {
+            return self::$cldrDiff[$code];
         }
-        if (array_key_exists($code, $this->cqNationalities)) {
-            return $this->cqNationalities[$code];
+        if (array_key_exists($code, self::$cqNationalities)) {
+            return self::$cqNationalities[$code];
         }
         return null;
     }

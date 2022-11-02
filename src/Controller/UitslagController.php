@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller;
 
 use App\Entity\Periode;
@@ -18,10 +9,10 @@ use App\Entity\Transfer;
 use App\Entity\Uitslag;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/{seizoen}/uitslag")
@@ -68,7 +59,7 @@ class UitslagController extends AbstractController
             'periode' => $periode,
             'transferpoints' => $transferSaldo,
             'positionCount' => $zegesInPeriode,
-            'transferRepo' => $em->getRepository(Transfer::class), ];
+            'transferRepo' => $em->getRepository(Transfer::class),];
     }
 
     /**
@@ -86,7 +77,6 @@ class UitslagController extends AbstractController
     /**
      * @Route("/draft-klassement", name="uitslag_draft")
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
      */
     public function viewByDraftTransferAction(Seizoen $seizoen)
     {
@@ -97,7 +87,6 @@ class UitslagController extends AbstractController
     /**
      * @Route("/transfer-klassement", name="uitslag_transfers")
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
      */
     public function viewByUserTransferAction(Seizoen $seizoen)
     {
@@ -144,6 +133,6 @@ class UitslagController extends AbstractController
             'stand' => $stand,
             'draft' => $draft,
             'transferRepo' => $transferRepo,
-            'bestTransfers' => $bestTransfers, ];
+            'bestTransfers' => $bestTransfers,];
     }
 }

@@ -1,26 +1,15 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller\Admin;
 
 use App\Entity\Nieuws;
 use App\Form\NieuwsType;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Nieuws controller.
@@ -75,8 +64,7 @@ class NieuwsController extends AbstractController
     /**
      * Creates a new Nieuws entity.
      *
-     * @Route("/create", name="admin_nieuws_create")
-     * @Method("post")
+     * @Route("/create", name="admin_nieuws_create", methods={"POST"})
      */
     public function createAction(Request $request)
     {
@@ -103,7 +91,6 @@ class NieuwsController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_nieuws_edit")
      * @Template()
-     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -128,9 +115,7 @@ class NieuwsController extends AbstractController
     /**
      * Edits an existing Nieuws entity.
      *
-     * @Route("/{id}/update", name="admin_nieuws_update")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/update", name="admin_nieuws_update", methods={"POST"})
      */
     public function updateAction(Request $request, $id)
     {
@@ -164,9 +149,7 @@ class NieuwsController extends AbstractController
     /**
      * Deletes a Nieuws entity.
      *
-     * @Route("/{id}/delete", name="admin_nieuws_delete")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/delete", name="admin_nieuws_delete", methods={"POST"})
      */
     public function deleteAction(Request $request, $id)
     {

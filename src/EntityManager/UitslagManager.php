@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\EntityManager;
 
 use App\Calculator\PuntenCalculator;
@@ -52,11 +43,6 @@ class UitslagManager
     private $rennerManager;
 
     /**
-     * @var NationalityResolver
-     */
-    private $nationalityResolver;
-
-    /**
      * @var TwitterParser
      */
     private $twitterParser;
@@ -66,20 +52,19 @@ class UitslagManager
      * @param EntityManager $em
      * @param $cqRankingWedstrijdUrl
      */
-    public function __construct(EntityManagerInterface $em,
-                                CQParser $parser,
-                                PuntenCalculator $puntenCalculator,
-                                $cqRankingWedstrijdUrl,
-                                RennerManager $rennerManager,
-                                NationalityResolver $cqNationalityResolver,
-                                TwitterParser $twitterParser)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        CQParser $parser,
+        PuntenCalculator $puntenCalculator,
+        $cqRankingWedstrijdUrl,
+        RennerManager $rennerManager,
+        TwitterParser $twitterParser
+    ) {
         $this->entityManager = $em;
         $this->puntenCalculator = $puntenCalculator;
         $this->cqParser = $parser;
         $this->cqRankingWedstrijdUrl = $cqRankingWedstrijdUrl;
         $this->rennerManager = $rennerManager;
-        $this->nationalityResolver = $cqNationalityResolver;
         $this->twitterParser = $twitterParser;
     }
 
@@ -135,7 +120,7 @@ class UitslagManager
     private function handleUnknownRenner($rennerString, $nat)
     {
         $renner = $this->rennerManager->createRennerFromRennerSelectorTypeString($rennerString);
-        $countryFullName = $this->nationalityResolver->getFullNameFromCode($nat);
+        $countryFullName = NationalityResolver::getFullNameFromCode($nat);
         $transRepo = $this->entityManager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
         $trans = $transRepo->findOneBy(['content' => $countryFullName, 'locale' => 'en_GB']);
         $countryRepo = $this->entityManager->getRepository(Country::class);

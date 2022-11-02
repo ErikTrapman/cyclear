@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller\Admin;
 
 use App\Entity\Renner;
@@ -16,13 +7,11 @@ use App\Form\Filter\RennerFilterType;
 use App\Form\RennerType;
 use Doctrine\DBAL\Types\Type;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
 /**
@@ -71,7 +60,6 @@ class RennerController extends AbstractController
     /**
      * @Route("/{id}/edit", name="admin_renner_edit")
      * @Template()
-     * @param mixed $id
      */
     public function editAction(Request $request, $id)
     {
@@ -114,9 +102,7 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route("/create", name="admin_renner_create")
-     * @Method("post")
-     * @Template()
+     * @Route("/create", name="admin_renner_create", methods={"POST"})
      */
     public function createAction(Request $request)
     {
@@ -136,9 +122,7 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/delete", name="admin_renner_delete")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/delete", name="admin_renner_delete", methods={"POST"})
      */
     public function deleteAction(Request $request, $id)
     {

@@ -1,38 +1,23 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Calculator;
 
 use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Calculate points for a team.
  */
 class PuntenCalculator
 {
-    public function __construct(private EntityManager $em)
+    public function __construct(private EntityManagerInterface $em)
     {
     }
 
-    /**
-     * @param $wedstrijdDatum
-     * @param Seizoen $seizoen
-     * @param null $referentieDatum
-     * @return bool
-     */
-    public function canGetTeamPoints(Renner $renner, $wedstrijdDatum, $seizoen, $referentieDatum = null)
+    public function canGetTeamPoints(Renner $renner, \DateTime $wedstrijdDatum, Seizoen $seizoen, \DateTime $referentieDatum = null): bool
     {
         $transferRepo = $this->em->getRepository(Transfer::class);
         if (null !== $referentieDatum) {

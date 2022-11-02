@@ -11,6 +11,8 @@
 
 namespace App\Tests\CQRanking\Parser\Twitter;
 
+use App\CQRanking\Parser\Crawler\CrawlerManager;
+use App\CQRanking\Parser\Twitter\TwitterParser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TwitterParserTest extends WebTestCase
@@ -23,7 +25,7 @@ class TwitterParserTest extends WebTestCase
     public function testTwitterHandleParser($cqId, $exp)
     {
         $client = static::createClient();
-        $parser = $client->getContainer()->get('eriktrapman_cqparser.twitterparser');
+        $parser = new TwitterParser(new CrawlerManager(), 'https://cqranking.com/men/asp/gen/rider.asp?riderid=');
         $this->assertEquals($exp, $parser->getTwitterHandle($cqId));
     }
 

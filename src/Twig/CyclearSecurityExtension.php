@@ -5,40 +5,22 @@ namespace App\Twig;
 use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class SecurityExtension extends \Twig_Extension
+class CyclearSecurityExtension extends AbstractExtension
 {
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
-     * @var EntityManager
-     */
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker, RequestStack $requestStack)
+    public function __construct(private EntityManagerInterface $em, private RequestStack $requestStack)
     {
-        $this->authorizationChecker = $authorizationChecker;
-        $this->requestStack = $requestStack;
-        $this->em = $em;
     }
 
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('isMyTeam', [$this, 'isMyTeam']),
-            new \Twig_SimpleFunction('isMyRider', [$this, 'isMyRider']),
+            new TwigFunction('isMyTeam', [$this, 'isMyTeam']),
+            new TwigFunction('isMyRider', [$this, 'isMyRider']),
         ];
     }
 

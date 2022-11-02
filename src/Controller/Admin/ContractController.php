@@ -1,27 +1,16 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller\Admin;
 
 use App\Entity\Contract;
 use App\Entity\Seizoen;
 use App\Form\Admin\ContractType;
 use App\Form\Filter\RennerIdFilterType;
-use Doctrine\DBAL\Types\Type;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Contract controller.
@@ -90,8 +79,7 @@ class ContractController extends AbstractController
     /**
      * Creates a new Contract entity.
      *
-     * @Route("/create", name="admin_contract_create")
-     * @Method("post")
+     * @Route("/create", name="admin_contract_create", methods={"POST"})
      */
     public function createAction(Request $request)
     {
@@ -118,7 +106,6 @@ class ContractController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_contract_edit")
      * @Template()
-     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -142,9 +129,7 @@ class ContractController extends AbstractController
     /**
      * Edits an existing Contract entity.
      *
-     * @Route("/{id}/update", name="admin_contract_update")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/update", name="admin_contract_update", methods={"POST"})
      */
     public function updateAction(Request $request, $id)
     {

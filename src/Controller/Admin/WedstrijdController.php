@@ -1,25 +1,15 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller\Admin;
 
 use App\Entity\Wedstrijd;
 use App\Form\WedstrijdType;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/admin/wedstrijd")
@@ -69,8 +59,7 @@ class WedstrijdController extends AbstractController
     /**
      * Creates a new Periode entity.
      *
-     * @Route("/create", name="admin_wedstrijd_create")
-     * @Method("post")
+     * @Route("/create", name="admin_wedstrijd_create", methods={"POST"})
      */
     public function createAction(Request $request)
     {
@@ -97,7 +86,6 @@ class WedstrijdController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_wedstrijd_edit")
      * @Template()
-     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -122,9 +110,7 @@ class WedstrijdController extends AbstractController
     /**
      * Edits an existing Periode entity.
      *
-     * @Route("/{id}/update", name="admin_wedstrijd_update")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/update", name="admin_wedstrijd_update", methods={"POST"})
      */
     public function updateAction(Request $request, $id)
     {
@@ -158,9 +144,7 @@ class WedstrijdController extends AbstractController
     /**
      * Deletes a Periode entity.
      *
-     * @Route("/{id}/delete", name="admin_wedstrijd_delete")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/delete", name="admin_wedstrijd_delete", methods={"POST"})
      */
     public function deleteAction(Request $request, $id)
     {

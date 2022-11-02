@@ -1,34 +1,21 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller\User;
 
 use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
-use App\Entity\Transfer;
 use App\EntityManager\TransferManager;
 use App\EntityManager\UserManager;
 use App\Form\Entity\UserTransfer;
 use App\Form\TransferUserType;
-use JMS\SecurityExtraBundle\Annotation\SecureParam;
-use RuntimeException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Transfer controller.
@@ -37,32 +24,18 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  */
 class TransferController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge([
-            'cyclear_game.manager.user' => UserManager::class,
-            'cyclear_game.manager.transfer' => TransferManager::class,
-        ], parent::getSubscribedServices());
-    }
-
     /**
      * My team.
      *
      * @Route("/ploeg/{id}/renner/{renner}", name="user_transfer")
-     * @Template("transfer/User:index.html.twig")
+     * @Template()
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @ParamConverter("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
-     * SecureParam(name="id", permissions="OWNER")
      */
-    public function indexAction(Request $request, Seizoen $seizoen, Ploeg $id, Renner $renner)
+    public function indexAction(UserManager $userManager, TransferManager $transferManager, Request $request, Seizoen $seizoen, Ploeg $ploeg, Renner $renner)
     {
-        $usermanager = $this->get('cyclear_game.manager.user');
         $em = $this->getDoctrine()->getManager();
-        $ploeg = $id;
-        if (null === $ploeg) {
-            throw new RuntimeException('Unknown ploeg');
-        }
-        if (!$usermanager->isOwner($this->getUser(), $ploeg)) {
+        if (!$userManager->isOwner($this->getUser(), $ploeg)) {
             throw new AccessDeniedHttpException('Dit is niet jouw ploeg');
         }
         $transferUser = new UserTransfer();
@@ -86,7 +59,6 @@ class TransferController extends AbstractController
         $options['ploegRenners'] = $this->getDoctrine()->getRepository(Ploeg::class)->getRenners($ploeg);
         $options['ploeg'] = $ploeg;
         $form = $this->createForm(TransferUserType::class, $transferUser, $options);
-        $transferManager = $this->get('cyclear_game.manager.transfer');
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
@@ -109,7 +81,7 @@ class TransferController extends AbstractController
                 'seizoen' => $seizoen,
                 'transferInfo' => [
                     'count' => $transferInfo,
-                    'left' => $ttlTransfersAtm - $transferInfo, ],
+                    'left' => $ttlTransfersAtm - $transferInfo],
             ];
     }
 }

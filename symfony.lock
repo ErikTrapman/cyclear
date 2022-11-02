@@ -459,6 +459,18 @@
     "symfony/intl": {
         "version": "v3.4.42"
     },
+    "symfony/lock": {
+        "version": "4.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "4.4",
+            "ref": "e13a79427495e670ef7a19f0e25fd13fbdd909d4"
+        },
+        "files": [
+            "config/packages/lock.yaml"
+        ]
+    },
     "symfony/maker-bundle": {
         "version": "1.0",
         "recipe": {

@@ -1,12 +1,4 @@
 <?php declare(strict_types=1);
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 namespace App\Controller;
 
@@ -61,8 +53,7 @@ class DefaultController extends AbstractController
         $periodestand = $periode ? $doctrine->getRepository(Uitslag::class)->getPuntenByPloegForPeriode($periode, $seizoen) : [];
         $gainedTransferpoints = [];
         if ($periode) {
-            foreach ($doctrine->getRepository(Uitslag::class)
-                         ->getPuntenByPloegForUserTransfersWithoutLoss($seizoen, $periode->getStart(), $periode->getEind()) as $teamResult) {
+            foreach ($doctrine->getRepository(Uitslag::class)->getPuntenByPloegForUserTransfersWithoutLoss($seizoen, $periode->getStart(), $periode->getEind()) as $teamResult) {
                 $gainedTransferpoints[$teamResult['id']] = $teamResult['punten'];
             }
         }
@@ -88,24 +79,23 @@ class DefaultController extends AbstractController
             }
         }
         $draft = $doctrine->getRepository(Uitslag::class)->getPuntenByPloegForDraftTransfers($seizoen);
-        $transfers = $this->getDoctrine()->getRepository(Transfer::class)
-            ->getLatest($seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER], 20);
+        $transfers = $this->getDoctrine()->getRepository(Transfer::class)->getLatest($seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER], 20);
         $transferRepo = $this->getDoctrine()->getRepository(Transfer::class);
 
         return [
-            'periode' => $periode,
-            'seizoen' => $seizoen,
-            'nieuws' => $nieuws,
-            'stand' => $stand,
-            'shadowstandingsById' => $shadowStandingsById,
-            'wedstrijden' => $wedstrijden,
-            'periodestand' => $periodestand,
-            'transferpuntenPeriode' => $transferSaldo,
-            'zegestand' => $zeges,
-            'zegesInPeriode' => $zegesInPeriode,
             'drafts' => $draft,
-            'transfers' => $transfers,
+            'nieuws' => $nieuws,
+            'periode' => $periode,
+            'periodestand' => $periodestand,
+            'seizoen' => $seizoen,
+            'shadowstandingsById' => $shadowStandingsById,
+            'stand' => $stand,
+            'transferpuntenPeriode' => $transferSaldo,
             'transferRepo' => $transferRepo,
+            'transfers' => $transfers,
+            'wedstrijden' => $wedstrijden,
+            'zegesInPeriode' => $zegesInPeriode,
+            'zegestand' => $zeges,
         ];
     }
 }

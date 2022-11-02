@@ -1,34 +1,17 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Form\DataTransformer;
 
 use App\Entity\Renner;
-use Doctrine\ORM\EntityManager;
+use App\EntityManager\RennerManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class RennerNameToRennerIdTransformer implements DataTransformerInterface
 {
-    /**
-     * @var Symfony\Bundle\DoctrineBundle\Registry
-     */
-    private $em;
-
-    private $rennerManager;
-
-    public function __construct(EntityManager $em, $rennerManager)
+    public function __construct(private EntityManagerInterface $em, private RennerManager $rennerManager)
     {
-        $this->em = $em;
-        $this->rennerManager = $rennerManager;
     }
 
     /* (non-PHPdoc)

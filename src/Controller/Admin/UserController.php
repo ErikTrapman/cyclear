@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller\Admin;
 
 use App\Entity\User;
@@ -16,12 +7,10 @@ use App\Form\UserEditType;
 use App\Form\UserType;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * User controller.
@@ -72,8 +61,7 @@ class UserController extends AbstractController
     /**
      * Creates a new User entity.
      *
-     * @Route("/create", name="admin_user_create")
-     * @Method("post")
+     * @Route("/create", name="admin_user_create", methods={"POST"})
      */
     public function createAction(Request $request)
     {
@@ -102,7 +90,6 @@ class UserController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_user_edit")
      * @Template()
-     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -125,10 +112,8 @@ class UserController extends AbstractController
     /**
      * Edits an existing User entity.
      *
-     * @Route("/{id}/update", name="admin_user_update")
+     * @Route("/{id}/update", name="admin_user_update", methods={"POST"})
      * @Template()
-     * @Method("post")
-     * @param mixed $id
      */
     public function updateAction(Request $request, $id)
     {

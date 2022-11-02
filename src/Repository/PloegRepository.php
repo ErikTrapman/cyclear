@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Repository;
 
 use App\Entity\Contract;
@@ -77,7 +68,7 @@ class PloegRepository extends EntityRepository
                 0 => $renner,
                 'punten' => $punten,
                 'rennerPunten' => $rennerPunten,
-                'index' => $index, ];
+                'index' => $index,];
         }
         if ($sort) {
             $this->puntenSort($ret);

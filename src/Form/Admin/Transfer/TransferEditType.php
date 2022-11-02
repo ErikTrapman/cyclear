@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Form\Admin\Transfer;
 
 use App\Entity\Transfer;
@@ -29,7 +20,7 @@ class TransferEditType extends \Symfony\Component\Form\AbstractType
         $choices = [
             Transfer::DRAFTTRANSFER => 'draft transfer',
             Transfer::ADMINTRANSFER => 'admin transfer',
-            Transfer::USERTRANSFER => 'user transfer', ];
+            Transfer::USERTRANSFER => 'user transfer',];
         $builder
             ->add('renner', RennerSelectorType::class, ['attr' => ['read_only' => true]])
             ->add('transferType', ChoiceType::class, ['choices' => array_flip($choices)])

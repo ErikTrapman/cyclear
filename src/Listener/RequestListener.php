@@ -1,45 +1,21 @@
 <?php declare(strict_types=1);
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 namespace App\Listener;
 
 use App\Entity\Seizoen;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class RequestListener
 {
-    /**
-     * @var EntityManager
-     */
-    private $em;
-
-    /**
-     * @var \Symfony\Component\Security\Core\SecurityContext
-     */
-    private $security;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    public function __construct($em, TokenStorageInterface $tokenStorage)
+    public function __construct(private EntityManagerInterface $em, private TokenStorageInterface $tokenStorage)
     {
-        $this->em = $em;
-        $this->tokenStorage = $tokenStorage;
     }
 
-    public function onKernelRequest(\Symfony\Component\HttpKernel\Event\GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
             // don't do anything if it's not the master request
@@ -50,6 +26,7 @@ class RequestListener
         if ('POST' === $request->getMethod()) {
             return;
         }
+
         if (null !== $request->get('seizoen')) {
             $seizoen = $this->em->getRepository(Seizoen::class)->findBySlug($request->get('seizoen'));
             if (empty($seizoen)) {

@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace App\Tests\Calculator;
 
@@ -100,7 +93,7 @@ class PuntenCalculatorTest extends WebTestCase
         $repo->expects($this->at(1))->method('findLastTransferForDate')->will($this->returnValue($t));
 
         $c = new PuntenCalculator($em);
-        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-21 11:00:00'), null, new DateTime('2013-05-01 11:00:00'));
+        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-21 11:00:00'), new Seizoen(), new DateTime('2013-05-01 11:00:00'));
         $this->assertEquals(true, $res);
     }
 
@@ -116,7 +109,7 @@ class PuntenCalculatorTest extends WebTestCase
         $repo->expects($this->at(1))->method('findLastTransferForDate')->will($this->returnValue($t2));
 
         $c = new PuntenCalculator($em);
-        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-21 11:00:00'), null, new DateTime('2013-05-01 11:00:00'));
+        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2013-05-21 11:00:00'), new Seizoen(), new DateTime('2013-05-01 11:00:00'));
         $this->assertEquals(false, $res);
     }
 
@@ -129,7 +122,7 @@ class PuntenCalculatorTest extends WebTestCase
         $repo->expects($this->at(1))->method('findLastTransferForDate')->will($this->returnValue($t));
 
         $c = new PuntenCalculator($em);
-        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2016-02-21 00:00:00'), null, new DateTime('2013-02-16 00:00:00'));
+        $res = $c->canGetTeamPoints(new Renner(), new DateTime('2016-02-21 00:00:00'), new Seizoen(), new DateTime('2013-02-16 00:00:00'));
         $this->assertEquals(false, $res);
     }
 

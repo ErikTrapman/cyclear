@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace App\Tests\Validator\Constraints;
 
@@ -19,6 +12,7 @@ use App\Repository\PeriodeRepository;
 use App\Repository\RennerRepository;
 use App\Repository\TransferRepository;
 use App\Validator\Constraints\UserTransfer;
+use App\Validator\Constraints\UserTransferFixedValidator;
 use App\Validator\Constraints\UserTransferValidator;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
@@ -51,7 +45,7 @@ class UserTransferValidatorTest extends WebTestCase
     {
         $this->context = $this->createMock(ExecutionContextInterface::class);
         $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
-        $this->validator = new UserTransferValidator($this->em);
+        $this->validator = new UserTransferFixedValidator($this->em, 50);
         $this->validator->initialize($this->context);
     }
 
@@ -86,7 +80,7 @@ class UserTransferValidatorTest extends WebTestCase
 
     public function testNoRider()
     {
-        $this->context->expects($this->at(0))->method('addViolation')->with($this->equalTo('Onbekende renner opgegeven'));
+        $this->context->expects($this->at(0))->method('addViolation')->with($this->equalTo('Onbekende renner opgegeven.'));
         $t = $this->getValidTransfer();
         $t->setRennerIn(null);
         $this->validator->validate($t, new UserTransfer());
@@ -94,7 +88,7 @@ class UserTransferValidatorTest extends WebTestCase
 
     public function testInvalidSeason()
     {
-        $this->context->expects($this->at(0))->method('addViolation')->with($this->equalTo('Het seizoen 1 is gesloten'));
+        $this->context->expects($this->at(0))->method('addViolation')->with($this->equalTo('Het seizoen 1 is gesloten.'));
         $t = $this->getValidTransfer();
         $t->getSeizoen()->setClosed(true);
         $t->getSeizoen()->setIdentifier('1');

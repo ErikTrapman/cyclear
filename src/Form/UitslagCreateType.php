@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Form;
 
 use App\Entity\Wedstrijd;
@@ -41,7 +32,7 @@ class UitslagCreateType extends AbstractType
                         ->where('w.generalClassification = 0')
                         ->add('orderBy', 'w.id DESC')
                         ->setMaxResults(90);
-                }, ])
+                },])
             ->add('wedstrijd', WedstrijdType::class, ['default_date' => $options['default_date']]);
 
         $factory = $builder->getFormFactory();
@@ -69,7 +60,7 @@ class UitslagCreateType extends AbstractType
                 'by_reference' => false,
                 'entry_options' => [
                     'use_wedstrijd' => false,
-                    'seizoen' => $seizoen, ], ]));
+                    'seizoen' => $seizoen,],]));
             if ($request->isXmlHttpRequest()) {
                 $url = $data['url'] ? $data['url'] : $data['url_manual'];
                 $crawler = $crawlerManager->getCrawler($url);

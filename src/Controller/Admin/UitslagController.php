@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller\Admin;
 
 use App\CQRanking\Parser\Crawler\CrawlerManager;
@@ -22,11 +13,11 @@ use App\Form\UitslagCreateType;
 use App\Form\UitslagType;
 use DateTime;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("admin/uitslag")
@@ -40,7 +31,7 @@ class UitslagController extends AbstractController
             'cyclear_game.manager.wedstrijd' => WedstrijdManager::class,
             'cyclear_game.manager.renner' => RennerManager::class,
             'eriktrapman_cqparser.crawler_manager' => CrawlerManager::class,
-            ],
+        ],
             parent::getSubscribedServices());
     }
 

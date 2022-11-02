@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Form;
 
 use App\Entity\Ploeg;
@@ -32,15 +23,15 @@ class UitslagType extends AbstractType
             ->add('rennerPunten');
         if ($options['use_wedstrijd']) {
             $builder->add('wedstrijd', EntityType::class, ['class' => 'App\Entity\Wedstrijd', 'query_builder' => function (EntityRepository $e) use ($seizoen) {
-                    return $e->createQueryBuilder('w')->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->orderBy('w.id', 'DESC');
-                }]);
+                return $e->createQueryBuilder('w')->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->orderBy('w.id', 'DESC');
+            }]);
         }
         $builder
             ->add('ploeg', EntityType::class, ['required' => false,
                 'class' => Ploeg::class,
                 'query_builder' => function (EntityRepository $e) use ($seizoen) {
                     return $e->createQueryBuilder('p')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->orderBy('p.afkorting');
-                }, ])
+                },])
             ->add('renner', RennerSelectorType::class);
     }
 

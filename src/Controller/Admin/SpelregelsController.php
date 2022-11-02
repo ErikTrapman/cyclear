@@ -1,26 +1,15 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller\Admin;
 
 use App\Entity\Spelregels;
 use App\Form\SpelregelsType;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Spelregels controller.
@@ -70,8 +59,7 @@ class SpelregelsController extends AbstractController
     /**
      * Creates a new Spelregels entity.
      *
-     * @Route("/create", name="admin_spelregels_create")
-     * @Method("post")
+     * @Route("/create", name="admin_spelregels_create", methods={"POST"})
      */
     public function createAction(Request $request)
     {
@@ -98,7 +86,6 @@ class SpelregelsController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_spelregels_edit")
      * @Template()
-     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -123,9 +110,7 @@ class SpelregelsController extends AbstractController
     /**
      * Edits an existing Spelregels entity.
      *
-     * @Route("/{id}/update", name="admin_spelregels_update")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/update", name="admin_spelregels_update", methods={"POST"})
      */
     public function updateAction(Request $request, $id)
     {
@@ -159,9 +144,7 @@ class SpelregelsController extends AbstractController
     /**
      * Deletes a Spelregels entity.
      *
-     * @Route("/{id}/delete", name="admin_spelregels_delete")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/delete", name="admin_spelregels_delete", methods={"POST"})
      */
     public function deleteAction(Request $request, $id)
     {

@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\EntityManager;
 
 use App\Entity\Contract;
@@ -39,13 +30,13 @@ class TransferManager
 
     /**
      * @param EntityManager $em
-     * @param mixed|null $maxTransferAmount
+     * @param mixed|null $maxTransfers
      */
-    public function __construct(EntityManagerInterface $em, ContractManager $contractManager, $maxTransferAmount = null)
+    public function __construct(EntityManagerInterface $em, ContractManager $contractManager, $maxTransfers = null)
     {
         $this->em = $em;
         $this->contractManager = $contractManager;
-        $this->maxTransferAmount = $maxTransferAmount;
+        $this->maxTransferAmount = $maxTransfers;
     }
 
     public function doDraftTransfer(Transfer $transfer)

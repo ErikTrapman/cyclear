@@ -56,7 +56,6 @@
                 </div>
             </form>
             <ul class="nav navbar-nav">
-                <li><a href="http://www.cyclear.nl/cyclear/forum/index.php" target="_blank">Forum</a></li>
                 {% if app.request.attributes.has('seizoen') %}
                     <li>
                         <a href="{{ path('rider_index', {'seizoen':app.request.attributes.get('seizoen').slug} ) }}">Renners</a>
@@ -108,7 +107,7 @@
 
         <div class="col-lg-4 col-md-offset-2">
             <div>
-                <h1 style="margin-top:0;">Cyclear <span class="badge">{{ version }}</span></h1>
+                <h1 style="margin-top:0;">Cyclear</h1>
                 <a href="https://twitter.com/Cyclear" target="_blank">Twitter</a>
                 <a href="https://github.com/ErikTrapman/cyclear" target="_blank">Github</a>
             </div>
@@ -121,9 +120,6 @@
                                 href="{{ path('spelregels_index',{'seizoen':app.request.attributes.get('seizoen').slug}) }}">Spelregels {{ app.request.attributes.get('seizoen') }}</a>
                     </li>
                 {% endif %}
-                <li>
-                    <a href="http://www.cyclear.nl/cyclear/forum/index.php" target="_blank">Forum</a>
-                </li>
                 {% if app.request.attributes.has('seizoen') %}
                     <li>
                         <a href="{{ path('rider_index', {'seizoen':app.request.attributes.get('seizoen').slug} ) }}">Renners</a>

@@ -38,7 +38,6 @@
                         <form action="{{ path('user_transfer', { seizoen:seizoen.slug, id:ploeg.id, renner:renner.slug }) }}"
                               method="post">
 
-
                             {{ form_widget(form) }}
                             {% if transferInfo['left'] > 0 %}
                                 <button type="submit" class="btn btn-danger">Transfer</button>

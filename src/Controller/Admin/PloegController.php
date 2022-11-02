@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller\Admin;
 
 use App\Entity\Ploeg;
@@ -17,13 +8,11 @@ use App\Form\Filter\PloegFilterType;
 use App\Form\PloegType;
 use Doctrine\DBAL\Types\Type;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Ploeg controller.
@@ -34,10 +23,13 @@ class PloegController extends AbstractController
 {
     public static function getSubscribedServices()
     {
-        return array_merge([
-            'knp_paginator' => PaginatorInterface::class,
-            'cyclear_game.manager.user' => UserManager::class, ],
-            parent::getSubscribedServices());
+        return array_merge(
+            [
+                'knp_paginator' => PaginatorInterface::class,
+                'cyclear_game.manager.user' => UserManager::class,
+            ],
+            parent::getSubscribedServices()
+        );
     }
 
     /**
@@ -92,8 +84,7 @@ class PloegController extends AbstractController
     /**
      * Creates a new Ploeg entity.
      *
-     * @Route("/create", name="admin_ploeg_create")
-     * @Method("post")
+     * @Route("/create", name="admin_ploeg_create", methods={"POST"})
      */
     public function createAction(Request $request)
     {
@@ -122,7 +113,6 @@ class PloegController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_ploeg_edit")
      * @Template()
-     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -147,9 +137,7 @@ class PloegController extends AbstractController
     /**
      * Edits an existing Ploeg entity.
      *
-     * @Route("/{id}/update", name="admin_ploeg_update")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/update", name="admin_ploeg_update", methods={"POST"})
      */
     public function updateAction(Request $request, $id)
     {
@@ -185,9 +173,7 @@ class PloegController extends AbstractController
     /**
      * Deletes a Ploeg entity.
      *
-     * @Route("/{id}/delete", name="admin_ploeg_delete")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/delete", name="admin_ploeg_delete", methods={"POST"})
      */
     public function deleteAction(Request $request, $id)
     {

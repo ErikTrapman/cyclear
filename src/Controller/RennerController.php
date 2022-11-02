@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller;
 
 use App\DataView\BloodHoundRiderView;
@@ -22,13 +13,13 @@ use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Renner controller.
@@ -105,7 +96,7 @@ class RennerController extends AbstractController
 
     /**
      * @Route("/{seizoen}/renner/{renner}", name="renner_show", options={"expose"=true})
-     * @Template("renner/show.html.twig")
+     * @Template()
      * @ParamConverter("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
      * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      */
@@ -156,26 +147,26 @@ class RennerController extends AbstractController
      */
     public function csvDownloadAction(Request $request, Seizoen $seizoen)
     {
-        $q = sprintf('SELECT r.id, r.naam, (SELECT SUM(rennerPunten) FROM Uitslag u
-            INNER JOIN Wedstrijd w ON u.wedstrijd_id = w.id WHERE u.renner_id = r.id AND w.seizoen_id = %d ) AS pts
-            FROM Renner r HAVING pts > 0 ORDER BY pts DESC, r.naam', $seizoen->getId());
+        $q = sprintf('SELECT r.id, r.naam, (SELECT SUM(rennerPunten) FROM uitslag u
+            INNER JOIN wedstrijd w ON u.wedstrijd_id = w.id WHERE u.renner_id = r.id AND w.seizoen_id = %d ) AS pts
+            FROM renner r HAVING pts > 0 ORDER BY pts DESC, r.naam', $seizoen->getId());
 
         $em = $this->get('doctrine');
         $delimiter = ';';
+        $filename = 'riders-' . $seizoen->getSlug() . date('-dmYHis') . '_65001utf8';
+
         $response = new StreamedResponse(function () use ($em, $q, $delimiter) {
             $stmt = $em->getConnection()->executeQuery($q);
             $handle = fopen('php://output', 'r+');
             fputcsv($handle, ['id', 'name', 'points'], $delimiter);
-            foreach ($stmt->fetchAll() as $row) {
+            foreach ($stmt->fetchAllAssociative() as $row) {
                 fputcsv($handle, $row, $delimiter);
             }
             fclose($handle);
         });
-
-        $response->headers->set('Content-Type', 'application/force-download');
-        $filename = 'riders-' . $seizoen->getSlug() . date('-dmYHis') . '_65001utf8';
-        $response->headers->set('Content-Disposition', sprintf('attachment; filename="%s.csv"', $filename));
-
+        $response->headers->set('Content-Type', 'text/csv');
+        $disposition = HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, $filename);
+        $response->headers->set('Content-Disposition', $disposition);
         return $response;
     }
 
@@ -189,12 +180,14 @@ class RennerController extends AbstractController
         if (is_array($value)) {
             return $value;
         }
+        if (null === $value) {
+            return [];
+        }
 
         if ($separator[0] == '/') {
             return preg_split($separator, $value);
-        } else {
-            return explode($separator, $value);
         }
+        return explode($separator, $value);
     }
 
     /**

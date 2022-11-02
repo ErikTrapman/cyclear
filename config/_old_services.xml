@@ -153,7 +153,7 @@
             <argument type="service" id="App\EntityManager\RennerManager"/>
         </service>
 
-        <service class="App\Twig\SecurityExtension"
+        <service class="CyclearSecurityExtension"
                  id="cyclear_game.twig.security_extension">
             <argument id="doctrine.orm.default_entity_manager" type="service"/>
             <argument id="security.authorization_checker" type="service"/>

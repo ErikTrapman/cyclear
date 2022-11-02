@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Repository;
 
 use App\Entity\Periode;
@@ -17,12 +8,19 @@ use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
-use Doctrine\DBAL\FetchMode;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class UitslagRepository extends EntityRepository
+class UitslagRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry, private AdapterInterface $cache)
+    {
+        parent::__construct($registry, Uitslag::class);
+    }
+
+
     /**
      * @param $values
      * @param string $fallBackSort
@@ -87,9 +85,9 @@ class UitslagRepository extends EntityRepository
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
         $start = clone $periode->getStart();
-        $start->setTime(0,0,0);
+        $start->setTime(0, 0, 0);
         $end = clone $periode->getEind();
-        $end->setTime(23,59,59);
+        $end->setTime(23, 59, 59);
         $qb = $this->_em->getRepository(Ploeg::class)->createQueryBuilder('p');
         $subQ = $this->_em->getRepository(Uitslag::class)->createQueryBuilder('u')
             ->innerJoin('u.wedstrijd', 'w')
@@ -292,29 +290,31 @@ class UitslagRepository extends EntityRepository
 
     public function getPuntenByPloegForUserTransfersWithoutLoss($seizoen = null, \DateTime $start = null, \DateTime $end = null)
     {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
-        }
-        $params = [':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER];
-        $startEndWhere = null;
-        if ($start && $end) {
-            $startEndWhere = ' AND (w.datum >= :start AND w.datum <= :end)';
-            $start = clone $start;
-            $start->setTime(0, 0, 0);
-            $end = clone $end;
-            $end->setTime(0, 0, 0);
-            $params['start'] = $start->format('Y-m-d H:i:s');
-            $params['end'] = $end->format('Y-m-d H:i:s');
-        }
-        // TODO DQL'en net als getCountForPosition
-        $transfers = 'SELECT DISTINCT t.renner_id FROM transfer t
+        $item = $this->cache->getItem('UitslagRepository.getPuntenByPloegForUserTransfersWithoutLoss');
+        if (!$item->isHit()) {
+            if (null === $seizoen) {
+                $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
+            }
+            $params = [':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER];
+            $startEndWhere = null;
+            if ($start && $end) {
+                $startEndWhere = ' AND (w.datum >= :start AND w.datum <= :end)';
+                $start = clone $start;
+                $start->setTime(0, 0, 0);
+                $end = clone $end;
+                $end->setTime(0, 0, 0);
+                $params['start'] = $start->format('Y-m-d H:i:s');
+                $params['end'] = $end->format('Y-m-d H:i:s');
+            }
+            // TODO DQL'en net als getCountForPosition
+            $transfers = 'SELECT DISTINCT t.renner_id FROM transfer t
             WHERE t.transferType != ' . Transfer::DRAFTTRANSFER . ' AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
                 AND t.renner_id NOT IN
                 (SELECT t.renner_id FROM transfer t
                 WHERE t.transferType = ' . Transfer::DRAFTTRANSFER . ' AND t.ploegNaar_id = p.id
                 AND t.seizoen_id = :seizoen_id)';
 
-        $sql = sprintf('
+            $sql = sprintf('
                 SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 100 AS b,
                 (
 
@@ -328,9 +328,13 @@ class UitslagRepository extends EntityRepository
                 FROM ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
                 ', $startEndWhere, $transfers);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->prepare($sql);
-        return $stmt->executeQuery($params)->fetchAll(FetchMode::ASSOCIATIVE);
+            $conn = $this->getEntityManager()->getConnection();
+            $stmt = $conn->prepare($sql);
+            $res = $stmt->executeQuery($params)->fetchAllAssociative();
+            $item->set($res);
+            $this->cache->save($item);
+        }
+        return $item->get();
     }
 
     /**
@@ -399,7 +403,7 @@ class UitslagRepository extends EntityRepository
                 ', $transfers);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
-        return $stmt->executeQuery([':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER])->fetchAll(\PDO::FETCH_NAMED);
+        return $stmt->executeQuery([':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER])->fetchAllAssociative();
     }
 
     /**

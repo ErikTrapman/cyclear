@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Form;
 
 use App\Entity\Renner;
@@ -42,7 +33,7 @@ class TransferUserType extends AbstractType
                             ->where('r IN ( :renners )')
                             ->setParameter(':renners', $ploegRenners)
                             ->orderBy('r.naam');
-                    }, ]);
+                    },]);
         }
         $builder->add('userComment', null, ['label' => 'Commentaar', 'attr' => ['placeholder' => 'Commentaar...']]);
     }

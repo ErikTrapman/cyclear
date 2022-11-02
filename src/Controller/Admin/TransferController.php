@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller\Admin;
 
 use App\Entity\Seizoen;
@@ -17,13 +8,11 @@ use App\EntityManager\TransferManager;
 use App\Form\Admin\Transfer\TransferEditType;
 use App\Form\Admin\Transfer\TransferType;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Transfer controller.
@@ -76,7 +65,7 @@ class TransferController extends AbstractController
      * Displays a form to create a new Transfer entity.
      *
      * @Route("/new-draft", name="admin_transfer_new_draft")
-     * @Template("admin/transfer/newDraft.html.twig")
+     * @Template()
      */
     public function newDraftAction(Request $request)
     {
@@ -87,7 +76,7 @@ class TransferController extends AbstractController
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $form->get('datum')->getData()->setTime(date('H'), date('i'), date('s'));
+                $form->get('datum')->getData()->setTime((int)date('H'), (int)date('i'), 0);
                 $transferManager = $this->get('cyclear_game.manager.transfer');
                 $transferManager->doDraftTransfer($entity);
                 $this->getDoctrine()->getManager()->flush();
@@ -101,7 +90,7 @@ class TransferController extends AbstractController
      * Displays a form to create a new Transfer entity.
      *
      * @Route("/new-exchange", name="admin_transfer_new_exchange")
-     * @Template("admin/transfer/newExchange.html.twig")
+     * @Template()
      */
     public function newExchangeAction(Request $request)
     {
@@ -136,7 +125,6 @@ class TransferController extends AbstractController
      *
      * @Route("/{id}/edit", name="admin_transfer_edit")
      * @Template()
-     * @param mixed $id
      */
     public function editAction($id)
     {
@@ -160,9 +148,7 @@ class TransferController extends AbstractController
     /**
      * Edits an existing Transfer entity.
      *
-     * @Route("/{id}/update", name="admin_transfer_update")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/update", name="admin_transfer_update", methods={"POST"})
      */
     public function updateAction(Request $request, $id)
     {
@@ -196,9 +182,7 @@ class TransferController extends AbstractController
     /**
      * Deletes a Transfer entity.
      *
-     * @Route("/{id}/delete", name="admin_transfer_delete")
-     * @Method("post")
-     * @param mixed $id
+     * @Route("/{id}/delete", name="admin_transfer_delete", methods={"POST"})
      */
     public function deleteAction(Request $request, $id)
     {

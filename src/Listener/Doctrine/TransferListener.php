@@ -1,19 +1,10 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Listener\Doctrine;
 
 use App\Entity\Transfer;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TransferListener
 {
@@ -44,9 +35,7 @@ class TransferListener
 
     public function postPersist(LifecycleEventArgs $args)
     {
-        $entity = $args->getEntity();
-        $entityManager = $args->getEntityManager();
-
+        $entity = $args->getObject();
         if ($entity instanceof Transfer) {
             if (null !== $entity->getPloegNaar() && $entity->getTransferType() != Transfer::DRAFTTRANSFER) {
                 $inversion = $entity->getInversionTransfer();

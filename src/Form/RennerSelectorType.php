@@ -1,14 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Form;
 
 use App\EntityManager\RennerManager;
@@ -58,8 +49,10 @@ class RennerSelectorType extends AbstractType
         $resolver->setDefaults(
             ['invalid_message' => 'De ingevulde renner is niet teruggevonden',
                 'attr' => [
+                    'style' => 'width: 400px',
                     'autocomplete' => 'off',
-                    'data-link' => $url, ], ]
+                    'data-link' => $url]
+            ]
         );
     }
 

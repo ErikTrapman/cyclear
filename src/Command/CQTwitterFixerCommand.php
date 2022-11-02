@@ -3,13 +3,19 @@
 namespace App\Command;
 
 use App\Entity\Renner;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CQTwitterFixerCommand extends ContainerAwareCommand
+class CQTwitterFixerCommand extends Command
 {
+    public function __construct(private EntityManagerInterface $em, string $name = null)
+    {
+        parent::__construct($name);
+    }
+
     protected function configure()
     {
         $this->setName('cyclear:fixer:twitter')
@@ -23,9 +29,8 @@ class CQTwitterFixerCommand extends ContainerAwareCommand
 //        $reader = new CsvReader(new \SplFileObject($input->getOption('file')), ';');
 //        $reader->setHeaderRowNumber(0);
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $reader = [];
-        $riderRepo = $em->getRepository(Renner::class);
+        $riderRepo = $this->em->getRepository(Renner::class);
         foreach ($reader as $i => $row) {
             $cqId = $row['RiderID'];
             $rider = $riderRepo->findOneByCQId($cqId);
@@ -40,12 +45,12 @@ class CQTwitterFixerCommand extends ContainerAwareCommand
                 continue;
             }
             $rider->setTwitter($handle);
-            $em->persist($rider);
             if ($i > 0 && 0 === $i % 100) {
-                $em->flush();
+                $this->em->flush();
                 $output->writeln('Flushed');
             }
         }
-        $em->flush();
+        // Flush leftovers
+        $this->em->flush();
     }
 }

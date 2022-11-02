@@ -3,7 +3,6 @@
 {% set rennerPloeg = ( rennerPloeg is defined ) ? rennerPloeg : null %}
 
 {# TODO move securitychecks to twig-extensoin cyclear_security #}
-
 {% if rennerPloeg and is_granted("ROLE_USER") and is_granted('OWNER', ploeg) and rennerPloeg == ingelogdPloeg %}
     <td class="col-sm-1">
         <a style="color: red"

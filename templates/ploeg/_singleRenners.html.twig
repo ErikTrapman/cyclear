@@ -14,8 +14,7 @@
                 {% endif %}
             </td>
             {% if showActions is defined and showActions %}
-                {% include "renner/_singleRowActions.html.twig"
-                with {"ploeg":entity, "renner":renner[0],"seizoen":seizoen, "rennerPloeg":entity } %}
+                {% include "renner/_singleRowActions.html.twig" with {"ploeg":entity, "renner":renner[0],"seizoen":seizoen, "rennerPloeg":entity } %}
             {% endif %}
             <td>
                 {% include "renner/_singleRow.html.twig" with {"renner":renner[0],"seizoen":seizoen } %}

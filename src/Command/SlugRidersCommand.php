@@ -1,25 +1,23 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Command;
 
 use App\Entity\Renner;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 ini_set('memory_limit', '1G');
 
-class SlugRidersCommand extends ContainerAwareCommand
+class SlugRidersCommand extends Command
 {
+    public function __construct(private EntityManagerInterface $em, string $name = null)
+    {
+        parent::__construct($name);
+    }
+
     protected function configure()
     {
         $this->setName('cyclear:slug-riders');
@@ -27,22 +25,20 @@ class SlugRidersCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $qb = $em->getRepository(Renner::class)->createQueryBuilder('r')->where('r.slug IS NULL'); //->setMaxResults(5000);
-        $repo = $em->getRepository(Renner::class);
+        $qb = $this->em->getRepository(Renner::class)->createQueryBuilder('r')->where('r.slug IS NULL'); //->setMaxResults(5000);
+        $repo = $this->em->getRepository(Renner::class);
         foreach ($qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY) as $i => $renner) {
             $renner = $repo->find($renner['id']);
             $renner->setSlug(\Gedmo\Sluggable\Util\Urlizer::urlize($renner->getNaam()));
-            $em->persist($renner);
             if ($i % 250 == 0 && $i != 0) {
                 $output->writeln(memory_get_usage(1));
                 $output->writeln("$i; have to flush");
-                $em->flush();
-                $em->clear();
+                $this->em->flush();
+                $this->em->clear();
             }
             $output->writeln($renner->getId() . ' slugged');
             unset($renner);
         }
-        $em->flush();
+        $this->em->flush();
     }
 }

@@ -1,24 +1,21 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Cyclear-game package.
- *
- * (c) Erik Trapman <veggatron@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Command;
 
 use App\Entity\Country;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class CountryBootstrapCommand extends ContainerAwareCommand
+class CountryBootstrapCommand extends Command
 {
+    public function __construct(private EntityManagerInterface $em, string $name = null)
+    {
+        parent::__construct($name);
+    }
+
     protected function configure()
     {
         $this->setName('cyclear:country-bootstrap')
@@ -28,12 +25,10 @@ class CountryBootstrapCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // add ISO-list of countries
-        $kernel = $this->getContainer()->get('kernel');
         $yaml = Yaml::parse(file_get_contents(
-            $kernel->getRootDir() . DIRECTORY_SEPARATOR . 'Resources/files/umpirsky/country-list/cldr.country.nl_NL.yaml'));
+            __DIR__ . '/../Resources/files/umpirsky/country-list/cldr.country.nl_NL.yaml'));
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $cRepo = $em->getRepository(Country::class);
+        $cRepo = $this->em->getRepository(Country::class);
 
         foreach ($yaml as $iso => $name) {
             $c = $cRepo->findOneByIso2($iso);
@@ -42,23 +37,23 @@ class CountryBootstrapCommand extends ContainerAwareCommand
                 $c->setIso2($iso);
                 $c->setName($name);
                 $c->setTranslatableLocale('nl_NL');
-                $em->persist($c);
+                $this->em->persist($c);
             }
         }
-        $em->flush();
+        $this->em->flush();
 
         $yamlEN = Yaml::parse(file_get_contents(
-            $kernel->getRootDir() . DIRECTORY_SEPARATOR . 'Resources/files/umpirsky/country-list/cldr.country.en_GB.yaml'));
+            __DIR__ . '../Resources/files/umpirsky/country-list/cldr.country.en_GB.yaml'));
         foreach ($yamlEN as $iso => $name) {
             $country = $cRepo->findOneByIso2($iso);
             if (null !== $country) {
                 $country->setTranslatableLocale('en_GB');
                 $country->setName($name);
-                $em->persist($country);
+                $this->em->persist($country);
             } else {
                 $output->writeln("$iso not added. Does exist in en_GB, but not in nl_NL");
             }
         }
-        $em->flush();
+        $this->em->flush();
     }
 }
