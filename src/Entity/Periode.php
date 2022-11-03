@@ -23,22 +23,16 @@ class Periode
     private $id;
 
     /**
-     * @var datetime
-     *
      * @ORM\Column(name="start", type="date")
      */
     private $start;
 
     /**
-     * @var datetime
-     *
      * @ORM\Column(name="eind", type="date")
      */
     private $eind;
 
     /**
-     * @var smallint
-     *
      * @ORM\Column(name="transfers", type="smallint", nullable=true)
      */
     private $transfers;
@@ -48,71 +42,36 @@ class Periode
      */
     private $seizoen;
 
-    /**
-     * Get id
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set start
-     *
-     * @param datetime $start
-     */
     public function setStart($start)
     {
         $this->start = $start;
     }
 
-    /**
-     * Get start
-     *
-     * @return datetime
-     */
     public function getStart()
     {
         return $this->start;
     }
 
-    /**
-     * Set eind
-     *
-     * @param datetime $eind
-     */
     public function setEind($eind)
     {
         $this->eind = $eind;
     }
 
-    /**
-     * Get eind
-     *
-     * @return datetime
-     */
     public function getEind()
     {
         return $this->eind;
     }
 
-    /**
-     * Set transfers
-     *
-     * @param smallint $transfers
-     */
     public function setTransfers($transfers)
     {
         $this->transfers = $transfers;
     }
 
-    /**
-     * Get transfers
-     *
-     * @return smallint
-     */
     public function getTransfers()
     {
         return $this->transfers;

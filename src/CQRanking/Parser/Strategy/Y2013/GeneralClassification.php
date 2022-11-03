@@ -8,7 +8,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class GeneralClassification extends AbstractStrategy implements ParserStrategyInterface
 {
-    public function parseResults(Crawler $crawler)
+    public function parseResults(Crawler $crawler): array
     {
         // It's january 2013 now, so only some GC's from a 2.2...
         // not sure if GC's from 2.1 or higher will have the same HTML structure

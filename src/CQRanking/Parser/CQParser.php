@@ -2,21 +2,12 @@
 
 namespace App\CQRanking\Parser;
 
+use App\CQRanking\Parser\Strategy\ParserStrategyInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 class CQParser
 {
-    /**
-     * Enter description here ...
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Naam van de uitslag.
-     */
-    public function getName(Crawler $crawler)
+    public function getName(Crawler $crawler): string
     {
         $headers = $crawler->filter('table.borderNoOpac th.raceheader b');
         $values = $headers->extract(['_text', 'b']);
@@ -27,12 +18,7 @@ class CQParser
         return trim($name);
     }
 
-    /**
-     * Parse de resultaatregels
-     * @param mixed $strategyClassname
-     * @return array
-     */
-    public function getResultRows(Crawler $crawler, $strategyClassname)
+    public function getResultRows(Crawler $crawler, ParserStrategyInterface $strategyClassname): array
     {
         return $strategyClassname->parseResults($crawler);
     }

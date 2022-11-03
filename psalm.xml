@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="8"
+    resolveFromConfigFile="true"
+
+    findUnusedVariablesAndParams="true"
+    usePhpDocMethodsWithoutMagicCall="true"
+    usePhpDocPropertiesWithoutMagicCall="true"
+
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="src" />
+        <directory name="tests" />
+        <ignoreFiles>
+            <file name="config/bootstrap.php" />
+            <file name="src/Kernel.php" />
+            <directory name="vendor" />
+        </ignoreFiles>
+    </projectFiles>
+
+    <issueHandlers>
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <directory name="src/Entity" />
+                <referencedProperty name="Monolog\Handler\AbstractHandler::$formatter" />
+                <referencedProperty name="Symfony\Component\DependencyInjection\ContainerAwareTrait::$container" />
+                <referencedProperty name="Symfony\Component\Serializer\SerializerAwareTrait::$serializer" />
+                <referencedProperty name="Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait::$denormalizer" />
+                <referencedProperty name="Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait::$normalizer" />
+                <referencedProperty name="Psr\Log\LoggerAwareTrait::$logger" />
+                <!-- tests -->
+                <referencedProperty name="PHPUnit\Framework\TestCase::$runTestInSeparateProcess" />
+                <referencedProperty name="PHPUnit\Framework\TestCase::$backupStaticAttributes" />
+            </errorLevel>
+        </PropertyNotSetInConstructor>
+        <TooManyArguments>
+            <errorLevel type="suppress">
+                <referencedFunction name="Doctrine\Common\Collections\ExpressionBuilder::orX" />
+                <referencedFunction name="Doctrine\Common\Collections\ExpressionBuilder::andX" />
+                <referencedFunction name="Doctrine\ORM\Query\Expr::orX" />
+                <referencedFunction name="Doctrine\ORM\Query\Expr::andX" />
+                <referencedFunction name="Symfony\Contracts\EventDispatcher\EventDispatcherInterface::dispatch" />
+            </errorLevel>
+        </TooManyArguments>
+        <UnusedClosureParam>
+            <!-- The fix is to prefix the variables with an underscore `_`. Since we use a lot of Closures with a predefined param list, this is not really dev friendly to force... -->
+            <errorLevel type="info">
+                <directory name="src" />
+            </errorLevel>
+        </UnusedClosureParam>
+    </issueHandlers>
+</psalm>

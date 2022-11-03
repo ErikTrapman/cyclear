@@ -16,8 +16,6 @@ use JMS\Serializer\Annotation as Serializer;
 class Renner
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -28,8 +26,6 @@ class Renner
     private $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="naam", type="string", length=255)
      * @Serializer\Expose
      * @Serializer\Accessor(getter="__toString")
@@ -81,31 +77,16 @@ class Renner
         $this->transfers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Get id
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set naam
-     *
-     * @param string $naam
-     */
     public function setNaam($naam)
     {
         $this->naam = $naam;
     }
 
-    /**
-     * Get naam
-     *
-     * @return string
-     */
     public function getNaam()
     {
         return $this->naam;
@@ -191,17 +172,11 @@ class Renner
         return null;
     }
 
-    /**
-     * @return mixed
-     */
     public function getTwitter()
     {
         return $this->twitter;
     }
 
-    /**
-     * @param mixed $twitter
-     */
     public function setTwitter($twitter)
     {
         $this->twitter = $twitter;

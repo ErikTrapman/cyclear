@@ -8,7 +8,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class OneDay extends AbstractStrategy implements ParserStrategyInterface
 {
-    public function parseResults(Crawler $crawler)
+    public function parseResults(Crawler $crawler): array
     {
         $values1 = $this->parseResultsFromExpression($crawler, 'table.border tr');
         if (!empty($values1)) {

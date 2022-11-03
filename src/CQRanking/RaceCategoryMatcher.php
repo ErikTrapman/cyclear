@@ -12,11 +12,7 @@ class RaceCategoryMatcher
     {
     }
 
-    /**
-     * @param string $category
-     * @return UitslagType
-     */
-    public function getUitslagTypeAccordingToCategory($category)
+    public function getUitslagTypeAccordingToCategory(string $category): ?UitslagType
     {
         $repo = $this->em->getRepository(UitslagType::class);
         /** @var UitslagType $uitslagType */
@@ -30,14 +26,7 @@ class RaceCategoryMatcher
         return null;
     }
 
-    /**
-     * Tells if given Wedstrijd needs a reference-stage.
-     * True if wedstrijdname contains 'general classification'
-     *
-     * @param $string
-     * @return bool
-     */
-    public function needsRefStage(Wedstrijd $wedstrijd)
+    public function needsRefStage(Wedstrijd $wedstrijd):bool
     {
         $in = 'generalclassification';
         $string = $wedstrijd->getNaam();

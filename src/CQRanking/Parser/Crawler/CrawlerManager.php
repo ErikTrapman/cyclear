@@ -17,10 +17,6 @@ class CrawlerManager
         $this->crawler = new Crawler();
     }
 
-    /**
-     * @param $url
-     * @return Crawler
-     */
     public function getCrawler($url)
     {
         $this->crawler->clear();
@@ -28,29 +24,17 @@ class CrawlerManager
         return $this->crawler;
     }
 
-    /**
-     * @param type $url
-     * @return Crawler Description
-     */
     public function getCrawlerForMatchSelector($url)
     {
         return $this->getCrawler($url);
     }
 
-    /**
-     * @param $content
-     * @return Crawler
-     */
     public function getCrawlerForHTMLContent($content)
     {
         $this->crawler->addContent($content, 'text/html');
         return $this->crawler;
     }
 
-    /**
-     * @param $feed
-     * @return string
-     */
     private function getContent($feed)
     {
         $content = file_get_contents($feed);

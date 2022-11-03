@@ -15,8 +15,6 @@ use JMS\Serializer\Annotation as Serializer;
 class Ploeg
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -32,8 +30,6 @@ class Ploeg
     private $user;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="naam", type="string", length=255)
      *
      * @Serializer\Expose
@@ -42,8 +38,6 @@ class Ploeg
     private $naam;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="afkorting", type="string", length=6)
      *
      * @Serializer\Expose
@@ -63,63 +57,36 @@ class Ploeg
      */
     private $memo;
 
-    /**
-     * @return the $user
-     */
     public function getUser()
     {
         return $this->user;
     }
 
-    /**
-     * @param field_type $user
-     */
     public function setUser($user)
     {
         $this->user = $user;
     }
 
-    /**
-     * Get id
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set naam
-     *
-     * @param string $naam
-     */
     public function setNaam($naam)
     {
         $this->naam = $naam;
     }
 
-    /**
-     * Get naam
-     *
-     * @return string
-     */
     public function getNaam()
     {
         return $this->naam;
     }
 
-    /**
-     * @return the $afkorting
-     */
     public function getAfkorting()
     {
         return $this->afkorting;
     }
 
-    /**
-     * @param string $afkorting
-     */
     public function setAfkorting($afkorting)
     {
         $this->afkorting = $afkorting;
@@ -162,17 +129,11 @@ class Ploeg
         $this->punten = $punten;
     }
 
-    /**
-     * @return mixed
-     */
     public function getMemo()
     {
         return $this->memo;
     }
 
-    /**
-     * @param mixed $memo
-     */
     public function setMemo($memo)
     {
         $this->memo = $memo;

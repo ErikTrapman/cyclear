@@ -50,8 +50,6 @@ class Seizoen
     private $end;
 
     /**
-     * @var int
-     *
      * @ORM\Column(type="integer", nullable=true, name="maxPointsPerRider")
      */
     private $maxPointsPerRider;
@@ -96,51 +94,31 @@ class Seizoen
         $this->current = $current;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getStart()
     {
         return $this->start;
     }
 
-    /**
-     * @param \DateTime
-     * @param mixed $start
-     */
     public function setStart($start)
     {
         $this->start = $start;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getEnd()
     {
         return $this->end;
     }
 
-    /**
-     * @param \DateTime
-     * @param mixed $end
-     */
     public function setEnd($end)
     {
         $this->end = $end;
     }
 
-    /**
-     * @return mixed
-     */
     public function getMaxPointsPerRider()
     {
         return $this->maxPointsPerRider;
     }
 
-    /**
-     * @param mixed $maxPointsPerRider
-     */
     public function setMaxPointsPerRider($maxPointsPerRider)
     {
         $this->maxPointsPerRider = $maxPointsPerRider;

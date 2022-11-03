@@ -8,7 +8,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class Stage extends AbstractStrategy implements ParserStrategyInterface
 {
-    public function parseResults(Crawler $crawler)
+    public function parseResults(Crawler $crawler): array
     {
         return $this->parseResultsFromExpression($crawler, 'table.bordertop tr');
     }

@@ -6,20 +6,11 @@ use App\CQRanking\Parser\Crawler\CrawlerManager;
 
 class MatchParser
 {
-    private $crawlerManager;
-
-    private $matchesFeed;
-
-    /**
-     * @param $matchesFeed
-     */
-    public function __construct(CrawlerManager $crawlermanager, $matchesFeed)
+    public function __construct(private CrawlerManager $crawlerManager, private string $matchesFeed)
     {
-        $this->crawlerManager = $crawlermanager;
-        $this->matchesFeed = $matchesFeed;
     }
 
-    public function getMatches()
+    public function getMatches(): array
     {
         $ret = [];
         // TODO refactor this to make it more testeable. e,g, the possibility to feed it with static content.
@@ -39,7 +30,7 @@ class MatchParser
                 }
                 if (7 === $index) {
                     $aEl = $td->getElementsByTagName('a')->item(0);
-                    $a = 'http://cqranking.com/men/asp/gen/' . $aEl->getAttribute('href');
+                    $a = 'https://cqranking.com/men/asp/gen/' . $aEl->getAttribute('href');
                     $name = $aEl->nodeValue;
                 }
             }

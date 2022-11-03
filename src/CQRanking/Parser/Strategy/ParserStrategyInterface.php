@@ -6,5 +6,5 @@ use Symfony\Component\DomCrawler\Crawler;
 
 interface ParserStrategyInterface
 {
-    public function parseResults(Crawler $crawler);
+    public function parseResults(Crawler $crawler): array;
 }

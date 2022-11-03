@@ -8,7 +8,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class GeneralClassification extends AbstractStrategy implements ParserStrategyInterface
 {
-    public function parseResults(Crawler $crawler)
+    public function parseResults(Crawler $crawler): array
     {
         $val1 = $this->parseResultsFromExpression($crawler, 'table.bordertop tr');
         $val2 = $this->parseResultsFromExpression($crawler, 'table.bordersides tr');

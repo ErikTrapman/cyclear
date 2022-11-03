@@ -25,12 +25,7 @@ class CQAutomaticResultsResolver
     ) {
     }
 
-    /**
-     * @param int $max
-     * @return Wedstrijd[]
-     * @throws CyclearGameBundleCQException
-     */
-    public function resolve(array $races, Seizoen $seizoen, \DateTime $start, \DateTime $end, $max = 1)
+    public function resolve(array $races, Seizoen $seizoen, \DateTime $start, \DateTime $end, int $max = 1): array
     {
         $start = clone $start;
         $start->setTime(0, 0, 0);

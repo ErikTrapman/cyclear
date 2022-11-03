@@ -31,15 +31,11 @@ class Contract
     private $renner;
 
     /**
-     * @var datetime
-     *
      * @ORM\Column(name="start", type="datetime")
      */
     private $start;
 
     /**
-     * @var datetime
-     *
      * @ORM\Column(name="eind", type="datetime", nullable=true)
      */
     private $eind;

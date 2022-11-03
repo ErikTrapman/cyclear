@@ -6,16 +6,12 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractStrategy implements ParserStrategyInterface
 {
-    public function __construct()
-    {
-    }
-
     public function __toString()
     {
         return get_class($this);
     }
 
-    protected function parseResultsFromExpression(Crawler $crawler, $expr)
+    protected function parseResultsFromExpression(Crawler $crawler, string $expr): array
     {
         $data = $crawler->filter($expr)->filter('tr')->each(function ($node, $i) {
             $returnValues = [];
