@@ -16,7 +16,7 @@ use App\Tests\CQRanking\Strategy\StrategyTest;
 
 class StageTest extends StrategyTest
 {
-    public function testResultsFromGTParseCorrect()
+    public function testResultsFromGTParseCorrect(): void
     {
         $url = 'http://cqranking.com/men/asp/gen/race.asp?raceid=24019';
         $strategy = new Stage();
@@ -32,7 +32,7 @@ class StageTest extends StrategyTest
         $this->assertEquals([178, 13228, 0], [$last['pos'], $last['cqranking_id'], $last['points']]);
     }
 
-    public function testResultsFrom2HCParseCorrect()
+    public function testResultsFrom2HCParseCorrect(): void
     {
         $url = 'http://cqranking.com/men/asp/gen/race.asp?raceid=24197';
         $strategy = new Stage();
@@ -47,7 +47,7 @@ class StageTest extends StrategyTest
         $this->assertEquals([20, 8768, 0], [$last['pos'], $last['cqranking_id'], $last['points']]);
     }
 
-    public function testResultsFrom21ParseCorrect()
+    public function testResultsFrom21ParseCorrect(): void
     {
         $url = 'http://cqranking.com/men/asp/gen/race.asp?raceid=24460';
         $strategy = new Stage();
@@ -62,7 +62,7 @@ class StageTest extends StrategyTest
         $this->assertEquals([20, 9828, 0], [$last['pos'], $last['cqranking_id'], $last['points']]);
     }
 
-    public function testResultsFromWTParseCorrect()
+    public function testResultsFromWTParseCorrect(): void
     {
         $url = 'http://cqranking.com/men/asp/gen/race.asp?raceid=23853';
         $strategy = new Stage();

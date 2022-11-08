@@ -15,6 +15,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UitslagCreateType extends AbstractType
 {
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $wedstrijdManager = $options['wedstrijd_manager'];
@@ -22,7 +25,6 @@ class UitslagCreateType extends AbstractType
         $crawlerManager = $options['crawler_manager'];
         $request = $options['request'];
         $seizoen = $options['seizoen'];
-        $rennerManager = $options['renner_manager'];
         $builder
             ->add('url', MatchSelectorType::class, ['mapped' => false, 'required' => false, 'label' => 'CQ-wedstrijd'])
             ->add('url_manual', null, ['mapped' => false, 'required' => false, 'label' => 'URL', 'attr' => ['size' => 80]])
@@ -47,10 +49,6 @@ class UitslagCreateType extends AbstractType
                 return;
             }
             $helper = new PreBindValueTransformer();
-            //var_dump( $clonedForm->get('wedstrijd'));die;
-            //$clonedForm->get('wedstrijd')->getData()->getUitslagType();
-            //$clonedForm->get('referentiewedstrijd')->getData();
-            //$clonedForm->get('wedstrijd')->getData()->getDatum();
             $uitslagType = $helper->transformPostedValue($data['wedstrijd']['uitslagtype'], $form->get('wedstrijd')->get('uitslagtype'));
             $referentieWedstrijd = $helper->transformPostedValue($data['referentiewedstrijd'], $form->get('referentiewedstrijd'));
             $datum = $helper->transformPostedValue($data['wedstrijd']['datum'], $form->get('wedstrijd')->get('datum'));
@@ -82,8 +80,7 @@ class UitslagCreateType extends AbstractType
             $postData = $request->request->get($form->getName());
             if (array_key_exists('uitslag', $postData)) {
                 $wedstrijd = $data['wedstrijd'];
-                $uitslagen = $postData['uitslag'];
-                foreach ($data['uitslag'] as $index => $uitslag) {
+                foreach ($data['uitslag'] as $uitslag) {
                     // we gebruiken het uitslagen-form hierboven zonder 'Wedstrijd'
                     $uitslag->setWedstrijd($wedstrijd);
                 }
@@ -91,11 +88,14 @@ class UitslagCreateType extends AbstractType
         });
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'cyclear_gamebundle_uitslagcreatetype';
     }
 
+    /**
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

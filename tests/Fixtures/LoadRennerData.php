@@ -10,6 +10,9 @@ use Doctrine\Persistence\ObjectManager;
 
 class LoadRennerData extends Fixture
 {
+    /**
+     * @return void
+     */
     public function load(ObjectManager $manager)
     {
         $r1 = new Renner();

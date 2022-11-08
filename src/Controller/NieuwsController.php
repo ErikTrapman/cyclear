@@ -16,11 +16,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class NieuwsController extends AbstractController
 {
     /**
-     * @Route("", name="nieuws")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
+     * @Route ("", name="nieuws")
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     *
+     * @Template ()
+     *
+     * @return (Seizoen|mixed)[]
+     *
+     * @psalm-return array{pagination: mixed, seizoen: Seizoen}
      */
-    public function indexAction(Request $request, Seizoen $seizoen)
+    public function indexAction(Request $request, Seizoen $seizoen): array
     {
         $em = $this->get('doctrine');
 

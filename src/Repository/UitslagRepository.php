@@ -25,12 +25,13 @@ class UitslagRepository extends ServiceEntityRepository
      * @param $values
      * @param string $fallBackSort
      * @param mixed $sortKey
+     * @param ((array|mixed)[]|mixed)[] $values
+     *
+     * @psalm-param array<array{total: mixed, hits?: mixed, renners?: array}|mixed> $values
      */
-    public static function puntenSort(&$values, $fallBackSort = 'afkorting', $sortKey = 'punten')
+    public static function puntenSort(array &$values, $fallBackSort = 'afkorting', $sortKey = 'punten'): void
     {
         uasort($values, function ($a, $b) use ($fallBackSort, $sortKey) {
-            $aPoints = null;
-            $bPoints = null;
             if ($a instanceof Ploeg && $b instanceof Ploeg) {
                 $aPoints = $a->getPunten();
                 $bPoints = $b->getPunten();
@@ -79,7 +80,12 @@ class UitslagRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function getPuntenByPloegForPeriode(Periode $periode, $seizoen = null)
+    /**
+     * @return array[]
+     *
+     * @psalm-return array<array>
+     */
+    public function getPuntenByPloegForPeriode(Periode $periode, $seizoen = null): array
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
@@ -148,7 +154,7 @@ class UitslagRepository extends ServiceEntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $qb = $this->getPuntenForRennerQb($renner);
+        $qb = $this->getPuntenForRennerQb();
         $qb->andWhere('w.seizoen = :seizoen');
         if ($excludeZeros) {
             $qb->andWhere('u.rennerPunten > 0');
@@ -167,7 +173,7 @@ class UitslagRepository extends ServiceEntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $qb = $this->getPuntenForRennerQb($renner);
+        $qb = $this->getPuntenForRennerQb();
         $qb->andWhere('w.seizoen = :seizoen');
         $qb->setParameters(['seizoen' => $seizoen, 'renner' => $renner]);
         $qb->add('select', 'SUM(u.rennerPunten)');
@@ -179,14 +185,14 @@ class UitslagRepository extends ServiceEntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $qb = $this->getPuntenForRennerQb($renner);
+        $qb = $this->getPuntenForRennerQb();
         $qb->andWhere('w.seizoen = :seizoen')->andWhere('u.ploeg = :ploeg');
         $qb->setParameters(['seizoen' => $seizoen, 'ploeg' => $ploeg, 'renner' => $renner]);
         $qb->add('select', 'SUM(u.ploegPunten)');
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    private function getPuntenForRennerQb()
+    private function getPuntenForRennerQb(): \Doctrine\ORM\QueryBuilder
     {
         $qb = $this->createQueryBuilder('u')
             ->join('u.wedstrijd', 'w')
@@ -195,7 +201,12 @@ class UitslagRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getPuntenWithRenners($seizoen = null, $limit = 20)
+    /**
+     * @return array[]
+     *
+     * @psalm-return list<array{0: mixed, punten: mixed}>
+     */
+    public function getPuntenWithRenners($seizoen = null, $limit = 20): array
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
@@ -215,7 +226,12 @@ class UitslagRepository extends ServiceEntityRepository
         return $ret;
     }
 
-    public function getPuntenWithRennersNoPloeg($seizoen = null, $limit = 20)
+    /**
+     * @return array[]
+     *
+     * @psalm-return list<array{0: mixed, punten: mixed}>
+     */
+    public function getPuntenWithRennersNoPloeg($seizoen = null, $limit = 20): array
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
@@ -371,7 +387,12 @@ class UitslagRepository extends ServiceEntityRepository
         return $res;
     }
 
-    public function getPuntenByPloegForUserTransfers($seizoen = null)
+    /**
+     * @return array[]
+     *
+     * @psalm-return list<array<string, mixed>>
+     */
+    public function getPuntenByPloegForUserTransfers($seizoen = null): array
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
@@ -411,7 +432,7 @@ class UitslagRepository extends ServiceEntityRepository
      * @param null $seizoen
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getUitslagenForPloegForNonDraftTransfersQb($ploeg, $seizoen = null, \DateTime $start = null, \DateTime $end = null)
+    public function getUitslagenForPloegForNonDraftTransfersQb(Ploeg $ploeg, $seizoen = null, \DateTime $start = null, \DateTime $end = null)
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
@@ -469,7 +490,7 @@ class UitslagRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getUitslagenForPloegQb($ploeg, $seizoen = null)
+    public function getUitslagenForPloegQb($ploeg, $seizoen = null): \Doctrine\ORM\QueryBuilder
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
@@ -484,7 +505,7 @@ class UitslagRepository extends ServiceEntityRepository
             ->orderBy('w.datum DESC, u.id', 'DESC');
     }
 
-    public function getUitslagenForPloegByPositionQb($ploeg, $position, $seizoen = null)
+    public function getUitslagenForPloegByPositionQb($ploeg, $position, $seizoen = null): \Doctrine\ORM\QueryBuilder
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();

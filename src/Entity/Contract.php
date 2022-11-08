@@ -45,7 +45,7 @@ class Contract
      */
     private $seizoen;
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -55,7 +55,7 @@ class Contract
         return $this->ploeg;
     }
 
-    public function setPloeg($ploeg)
+    public function setPloeg($ploeg): void
     {
         $this->ploeg = $ploeg;
     }
@@ -65,7 +65,7 @@ class Contract
         return $this->renner;
     }
 
-    public function setRenner($renner)
+    public function setRenner($renner): void
     {
         $this->renner = $renner;
     }
@@ -75,7 +75,7 @@ class Contract
         return $this->start;
     }
 
-    public function setStart(\DateTime $start)
+    public function setStart(\DateTime $start): void
     {
         $this->start = $start;
     }
@@ -85,7 +85,7 @@ class Contract
         return $this->eind;
     }
 
-    public function setEind($eind)
+    public function setEind($eind): void
     {
         $this->eind = $eind;
     }
@@ -95,7 +95,7 @@ class Contract
         return $this->seizoen;
     }
 
-    public function setSeizoen($seizoen)
+    public function setSeizoen($seizoen): void
     {
         $this->seizoen = $seizoen;
     }

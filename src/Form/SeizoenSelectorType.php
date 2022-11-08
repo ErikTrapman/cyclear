@@ -19,6 +19,9 @@ class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
         $this->em = $em;
     }
 
+    /**
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -35,7 +38,7 @@ class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
         return EntityType::class;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'seizoen_selector';
     }

@@ -57,12 +57,12 @@ class TransferManagerTest extends WebTestCase
         $this->transferRepo = $this->em->getRepository(Transfer::class);
     }
 
-    private function getSeizoen()
+    private function getSeizoen(): Seizoen|null
     {
         return $this->em->getRepository(Seizoen::class)->find(1);
     }
 
-    private function createTransfer($renner, $ploeg, $type = Transfer::DRAFTTRANSFER)
+    private function createTransfer($renner, $ploeg, int $type = Transfer::DRAFTTRANSFER): Transfer
     {
         $t = new Transfer();
         $t->setDatum(new DateTime());
@@ -73,7 +73,7 @@ class TransferManagerTest extends WebTestCase
         return $t;
     }
 
-    public function testDraftTransferAndContractCreation()
+    public function testDraftTransferAndContractCreation(): void
     {
         $em = $this->em;
 
@@ -95,10 +95,11 @@ class TransferManagerTest extends WebTestCase
 
     /**
      * @dataProvider revertExchangeTransfersDataProvider
+     *
      * @param mixed $revertId1
      * @param mixed $revertId2
      */
-    public function testRevertExchangeTransfer($revertId1, $revertId2)
+    public function testRevertExchangeTransfer($revertId1, $revertId2): void
     {
         $p1 = $this->ploegRepo->findOneByAfkorting('pl1');
         $r1 = $this->rennerRepo->findOneByNaam('RENNER Voornaam');
@@ -142,7 +143,12 @@ class TransferManagerTest extends WebTestCase
         $this->assertEquals(2, $transfers[1]->getId());
     }
 
-    public function revertExchangeTransfersDataProvider()
+    /**
+     * @return int[][]
+     *
+     * @psalm-return array{0: array{0: 6, 1: 4}, 1: array{0: 5, 1: 3}, 2: array{0: 3, 1: 5}, 3: array{0: 4, 1: 6}}
+     */
+    public function revertExchangeTransfersDataProvider(): array
     {
         return [
             [6, 4],
@@ -154,9 +160,10 @@ class TransferManagerTest extends WebTestCase
 
     /**
      * @dataProvider revertUserTransfersDataProvider
+     *
      * @param mixed $transferIdToRevert
      */
-    public function testRevertUserTransfer($transferIdToRevert)
+    public function testRevertUserTransfer($transferIdToRevert): void
     {
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
@@ -190,7 +197,12 @@ class TransferManagerTest extends WebTestCase
         $this->assertEquals(null, $this->rennerRepo->getPloeg($r2, $seizoen));
     }
 
-    public function revertUserTransfersDataProvider()
+    /**
+     * @return int[][]
+     *
+     * @psalm-return array{0: array{0: 3}, 1: array{0: 2}}
+     */
+    public function revertUserTransfersDataProvider(): array
     {
         return [
             [3],
@@ -198,7 +210,7 @@ class TransferManagerTest extends WebTestCase
         ];
     }
 
-    public function testRevertDraftTransfer()
+    public function testRevertDraftTransfer(): void
     {
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
@@ -217,7 +229,7 @@ class TransferManagerTest extends WebTestCase
         $this->assertEquals(null, $this->rennerRepo->getPloeg($r1, $seizoen));
     }
 
-    public function testDraftTransfer()
+    public function testDraftTransfer(): void
     {
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
@@ -231,7 +243,7 @@ class TransferManagerTest extends WebTestCase
         $this->assertEquals($p1, $this->rennerRepo->getPloeg($r1, $this->getSeizoen()));
     }
 
-    public function testUserTransfer()
+    public function testUserTransfer(): void
     {
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);
@@ -256,7 +268,7 @@ class TransferManagerTest extends WebTestCase
         $this->assertEquals(null, $this->rennerRepo->getPloeg($r1, $this->getSeizoen()));
     }
 
-    public function testExchangeTransfer()
+    public function testExchangeTransfer(): void
     {
         $p1 = $this->ploegRepo->find(1);
         $r1 = $this->rennerRepo->find(1);

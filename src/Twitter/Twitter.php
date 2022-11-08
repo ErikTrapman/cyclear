@@ -169,7 +169,6 @@ class Twitter
         $parameters = (array)$parameters;
 
         // init var
-        $pairs = [];
         $chunks = [];
 
         // sort parameters by key
@@ -271,7 +270,7 @@ class Twitter
         );
 
         // calculate header
-        $header = $this->calculateHeader(
+        $this->calculateHeader(
             $parameters,
             self::SECURE_API_URL . '/oauth/' . $method
         );
@@ -299,7 +298,6 @@ class Twitter
 
         // execute
         $response = curl_exec($this->curl);
-        $headers = curl_getinfo($this->curl);
 
         // fetch errors
         $errorNumber = curl_errno($this->curl);
@@ -327,14 +325,17 @@ class Twitter
      * @param array[optional]  $parameters    Optional parameters.
      * @param bool[optional]   $authenticate  Should we authenticate.
      * @param bool[optional]   $method        The method to use. Possible values are GET, POST.
-     * @param string[optional] $filePath      The path to the file to upload.
+     * @param null|string $filePath
      * @param bool[optional]   $expectJSON    Do we expect JSON.
      * @param bool[optional]   $returnHeaders Should the headers be returned?
+     *
      * @return string
+     *
+     * @psalm-param 'GET'|'POST' $method
      */
     private function doCall(
-        $url, array $parameters = null, $authenticate = false, $method = 'GET',
-        $filePath = null, $expectJSON = true, $returnHeaders = false
+        $url, array $parameters = null, bool $authenticate = false, string $method = 'GET',
+        string|null $filePath = null, bool $expectJSON = true, bool $returnHeaders = false
     ) {
         // allowed methods
         $allowedMethods = ['GET', 'POST'];
@@ -342,7 +343,6 @@ class Twitter
         // redefine
         $url = (string)$url;
         $parameters = (array)$parameters;
-        $authenticate = (bool)$authenticate;
         $method = (string)$method;
         $expectJSON = (bool)$expectJSON;
 
@@ -459,7 +459,6 @@ class Twitter
         $headers = curl_getinfo($this->curl);
 
         // fetch errors
-        $errorNumber = curl_errno($this->curl);
         $errorMessage = curl_error($this->curl);
 
         // return the headers
@@ -624,7 +623,7 @@ class Twitter
      *
      * @param string $key The consumer key to use.
      */
-    private function setConsumerKey($key)
+    private function setConsumerKey($key): void
     {
         $this->consumerKey = (string)$key;
     }
@@ -634,7 +633,7 @@ class Twitter
      *
      * @param string $secret The consumer secret to use.
      */
-    private function setConsumerSecret($secret)
+    private function setConsumerSecret($secret): void
     {
         $this->consumerSecret = (string)$secret;
     }
@@ -644,7 +643,7 @@ class Twitter
      *
      * @param string $token The token to use.
      */
-    public function setOAuthToken($token)
+    public function setOAuthToken($token): void
     {
         $this->oAuthToken = (string)$token;
     }
@@ -654,7 +653,7 @@ class Twitter
      *
      * @param string $secret The secret to use.
      */
-    public function setOAuthTokenSecret($secret)
+    public function setOAuthTokenSecret($secret): void
     {
         $this->oAuthTokenSecret = (string)$secret;
     }
@@ -664,7 +663,7 @@ class Twitter
      *
      * @param int $seconds The timeout in seconds.
      */
-    public function setTimeOut($seconds)
+    public function setTimeOut($seconds): void
     {
         $this->timeOut = (int)$seconds;
     }
@@ -675,7 +674,7 @@ class Twitter
      *
      * @param string $userAgent Your user-agent, it should look like <app-name>/<app-version>.
      */
-    public function setUserAgent($userAgent)
+    public function setUserAgent($userAgent): void
     {
         $this->userAgent = (string)$userAgent;
     }
@@ -696,9 +695,8 @@ class Twitter
      * URL-encode method for internal use
      *
      * @param mixed $value The value to encode.
-     * @return string
      */
-    private static function urlencode_rfc3986($value)
+    private static function urlencode_rfc3986($value): array|string
     {
         if (is_array($value)) {
             return array_map([__CLASS__, 'urlencode_rfc3986'], $value);
@@ -1062,6 +1060,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function statusesUpdateWithMedia()
     {
@@ -1187,6 +1187,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function statusesFilter()
     {
@@ -1195,6 +1197,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function statusesSample()
     {
@@ -1203,6 +1207,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function statusesFirehose()
     {
@@ -1211,6 +1217,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function user()
     {
@@ -1219,6 +1227,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function site()
     {
@@ -2335,6 +2345,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function accountUpdateProfileBanner()
     {
@@ -2521,6 +2533,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsList()
     {
@@ -2529,6 +2543,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsStatuses()
     {
@@ -2537,6 +2553,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsMembersDestroy()
     {
@@ -2545,6 +2563,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsMemberships()
     {
@@ -2553,6 +2573,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsSubscribers()
     {
@@ -2561,6 +2583,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsSubscribersCreate()
     {
@@ -2569,6 +2593,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsSubscribersShow()
     {
@@ -2577,6 +2603,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsSubscribersDestroy()
     {
@@ -2585,6 +2613,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsMembersCreateAll()
     {
@@ -2593,6 +2623,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsMembersShow()
     {
@@ -2601,6 +2633,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsMembers()
     {
@@ -2609,6 +2643,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsMembersCreate()
     {
@@ -2617,6 +2653,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsDestroy()
     {
@@ -2625,6 +2663,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsUpdate()
     {
@@ -2633,6 +2673,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsCreate()
     {
@@ -2641,6 +2683,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsShow()
     {
@@ -2649,6 +2693,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listSubscriptions()
     {
@@ -2657,6 +2703,8 @@ class Twitter
 
     /**
      * Not implemented yet
+     *
+     * @return never
      */
     public function listsMembersDestroyAll()
     {
@@ -3002,6 +3050,8 @@ class Twitter
      * REMARK: This method seems not to work    @later
      *
      * @param bool[optional] $force Force the authentication.
+     *
+     * @return never
      */
     public function oAuthAuthenticate($force = false)
     {
@@ -3021,7 +3071,7 @@ class Twitter
      *
      * @param string $token The token.
      */
-    public function oAuthAuthorize($token)
+    public function oAuthAuthorize($token): void
     {
         header('Location: ' . self::SECURE_API_URL .
             '/oauth/authorize?oauth_token=' . $token);
@@ -3099,10 +3149,8 @@ class Twitter
     /**
      * Returns the current configuration used by Twitter including twitter.com slugs which are not usernames, maximum photo resolutions, and t.co URL lengths.
      * It is recommended applications request this endpoint when they are loaded, but no more than once a day.
-     *
-     * @return array
      */
-    public function helpConfiguration()
+    public function helpConfiguration(): string
     {
         // make the call
         return $this->doCall(
@@ -3112,10 +3160,8 @@ class Twitter
 
     /**
      * Returns the list of languages supported by Twitter along with their ISO 639-1 code. The ISO 639-1 code is the two letter value to use if you include lang with any of your requests.
-     *
-     * @return array
      */
-    public function helpLanguages()
+    public function helpLanguages(): string
     {
         // make the call
         return $this->doCall(
@@ -3125,10 +3171,8 @@ class Twitter
 
     /**
      * Returns Twitter's Privacy Policy
-     *
-     * @return array
      */
-    public function helpPrivacy()
+    public function helpPrivacy(): string
     {
         // make the call
         return $this->doCall(
@@ -3138,10 +3182,8 @@ class Twitter
 
     /**
      * Returns the Twitter Terms of Service in the requested format. These are not the same as the Developer Rules of the Road.
-     *
-     * @return array
      */
-    public function helpTos()
+    public function helpTos(): string
     {
         // make the call
         return $this->doCall(

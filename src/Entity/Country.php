@@ -42,7 +42,7 @@ class Country implements Translatable
      */
     private $locale;
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -52,7 +52,7 @@ class Country implements Translatable
         return $this->iso2;
     }
 
-    public function setIso2($iso2)
+    public function setIso2($iso2): void
     {
         $this->iso2 = $iso2;
     }
@@ -62,12 +62,12 @@ class Country implements Translatable
         return $this->name;
     }
 
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
 
-    public function setTranslatableLocale($locale)
+    public function setTranslatableLocale(string $locale): void
     {
         $this->locale = $locale;
     }

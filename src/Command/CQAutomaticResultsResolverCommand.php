@@ -18,9 +18,9 @@ class CQAutomaticResultsResolverCommand extends Command
     protected static $defaultName = 'cyclear:auto-results';
 
     public function __construct(
-        private CQAutomaticResultsResolver $resolver,
-        private RecentRacesParser $parser,
-        private ManagerRegistry $doctrine,
+        private readonly CQAutomaticResultsResolver $resolver,
+        private readonly RecentRacesParser $parser,
+        private readonly ManagerRegistry $doctrine,
         string $name = null
     ) {
         parent::__construct($name);

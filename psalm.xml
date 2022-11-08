@@ -17,6 +17,7 @@
         <ignoreFiles>
             <file name="config/bootstrap.php" />
             <file name="src/Kernel.php" />
+            <file name="src/Twitter/Twitter.php" />
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
@@ -25,6 +26,9 @@
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
                 <directory name="src/Entity" />
+                <directory name="src/Validator" />
+                <directory name="tests" />
+                <file name="src/Command/CQAutomaticResultsResolverCommand.php"/>
                 <referencedProperty name="Monolog\Handler\AbstractHandler::$formatter" />
                 <referencedProperty name="Symfony\Component\DependencyInjection\ContainerAwareTrait::$container" />
                 <referencedProperty name="Symfony\Component\Serializer\SerializerAwareTrait::$serializer" />
@@ -51,5 +55,11 @@
                 <directory name="src" />
             </errorLevel>
         </UnusedClosureParam>
+        <InvalidExtendClass>
+            <errorLevel type="suppress">
+                <referencedClass name="App\Form\UserEditType"/>
+                <referencedClass name="App\Form\UserType"/>
+            </errorLevel>
+        </InvalidExtendClass>
     </issueHandlers>
 </psalm>

@@ -8,6 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class SpelregelsType extends AbstractType
 {
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -15,7 +18,7 @@ class SpelregelsType extends AbstractType
             ->add('content', TextareaType::class, ['attr' => ['rows' => 32, 'cols' => 32]]);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'cyclear_gamebundle_spelregelstype';
     }

@@ -17,7 +17,10 @@ class ContractManager
         $this->em = $em;
     }
 
-    public function releaseRenner($renner, $seizoen, $einddatum)
+    /**
+     * @return true
+     */
+    public function releaseRenner(\App\Entity\Renner $renner, $seizoen, \DateTime $einddatum): bool
     {
         $currentContract = $this->em->getRepository(Contract::class)->getCurrentContract($renner, $seizoen);
         if (null === $currentContract) {
@@ -28,7 +31,7 @@ class ContractManager
         return true;
     }
 
-    public function createContract($renner, $ploeg, $seizoen, $datum)
+    public function createContract(\App\Entity\Renner $renner, \App\Entity\Ploeg $ploeg, $seizoen, \DateTime $datum): Contract
     {
         $c = new \App\Entity\Contract();
         $c->setPloeg($ploeg);

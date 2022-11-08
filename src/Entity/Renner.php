@@ -82,7 +82,7 @@ class Renner
         return $this->id;
     }
 
-    public function setNaam($naam)
+    public function setNaam(string $naam): void
     {
         $this->naam = $naam;
     }
@@ -97,7 +97,7 @@ class Renner
         return $this->cqranking_id;
     }
 
-    public function setCqRanking_id($id)
+    public function setCqRanking_id($id): void
     {
         $this->cqranking_id = $id;
     }
@@ -107,7 +107,7 @@ class Renner
         return $this->getCqRanking_id();
     }
 
-    public function setCqRankingId($id)
+    public function setCqRankingId($id): void
     {
         $this->setCqRanking_id($id);
     }
@@ -117,7 +117,7 @@ class Renner
         return $this->transfers;
     }
 
-    public function setTransfers($transfers)
+    public function setTransfers($transfers): void
     {
         $this->transfers = $transfers;
     }
@@ -127,7 +127,7 @@ class Renner
         return $this->country;
     }
 
-    public function setCountry($country)
+    public function setCountry($country): void
     {
         $this->country = $country;
     }
@@ -143,12 +143,12 @@ class Renner
         return $this->slug;
     }
 
-    public function setSlug($slug)
+    public function setSlug(string $slug): void
     {
         $this->slug = $slug;
     }
 
-    public function getCountryIso()
+    public function getCountryIso(): string
     {
         return strtolower($this->getCountry()->getIso2());
     }
@@ -158,7 +158,7 @@ class Renner
         return $this->contracts;
     }
 
-    public function setContracts($contracts)
+    public function setContracts($contracts): void
     {
         $this->contracts = $contracts;
     }
@@ -177,7 +177,7 @@ class Renner
         return $this->twitter;
     }
 
-    public function setTwitter($twitter)
+    public function setTwitter(string|null $twitter): void
     {
         $this->twitter = $twitter;
     }

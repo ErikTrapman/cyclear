@@ -18,11 +18,17 @@ class SlugRidersCommand extends Command
         parent::__construct($name);
     }
 
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('cyclear:slug-riders');
     }
 
+    /**
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $qb = $this->em->getRepository(Renner::class)->createQueryBuilder('r')->where('r.slug IS NULL'); //->setMaxResults(5000);

@@ -19,6 +19,9 @@ class MatchSelectorType extends AbstractType
         $this->matchParser = $matchParser;
     }
 
+    /**
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $options = [];
@@ -27,7 +30,7 @@ class MatchSelectorType extends AbstractType
         $resolver->setDefaults($options);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'eriktrapman_cqrankingmatchselector_type';
     }

@@ -6,6 +6,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class RennerFilterType extends \Symfony\Component\Form\AbstractType
 {
+    /**
+     * @return void
+     */
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         $builder->add('naam', TextType::class, [
@@ -13,7 +16,7 @@ class RennerFilterType extends \Symfony\Component\Form\AbstractType
             'label' => 'Naam / CQ-id',]);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'renner_filter';
     }

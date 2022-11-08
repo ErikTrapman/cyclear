@@ -8,6 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class SeizoenType extends AbstractType
 {
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -19,7 +22,7 @@ class SeizoenType extends AbstractType
             ->add('maxPointsPerRider');
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'cyclear_gamebundle_seizoentype';
     }

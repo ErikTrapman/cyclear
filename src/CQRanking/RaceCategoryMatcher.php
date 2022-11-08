@@ -15,7 +15,6 @@ class RaceCategoryMatcher
     public function getUitslagTypeAccordingToCategory(string $category): ?UitslagType
     {
         $repo = $this->em->getRepository(UitslagType::class);
-        /** @var UitslagType $uitslagType */
         foreach ($repo->findAll() as $uitslagType) {
             $pattern = '/^(' . $this->getPregPattern($uitslagType->getAutomaticResolvingCategories()) . ')$/';
             $match = preg_match($pattern, $category);
@@ -49,7 +48,7 @@ class RaceCategoryMatcher
     /**
      * @param string $string
      */
-    public function getPregPattern($string)
+    public function getPregPattern($string): string
     {
         return implode('|', explode(',', str_replace(' ', '', $string)));
     }

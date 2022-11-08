@@ -16,11 +16,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class SpelregelsController extends AbstractController
 {
     /**
-     * @Route("/", name="spelregels_index")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
+     * @Route ("/", name="spelregels_index")
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     *
+     * @Template ()
+     *
+     * @return (Seizoen|mixed|null)[]
+     *
+     * @psalm-return array{spelregels: mixed|null, seizoen: Seizoen}
      */
-    public function indexAction(Request $request, Seizoen $seizoen)
+    public function indexAction(Request $request, Seizoen $seizoen): array
     {
         $spelregels = $this->getDoctrine()->getRepository(Spelregels::class)->createQueryBuilder('s')
             ->where('s.seizoen = :seizoen')->orderBy('s.id', 'DESC')->setMaxResults(1)

@@ -17,9 +17,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class MatchParserTest extends WebTestCase
 {
-    public function testMatchParser()
+    public function testMatchParser(): void
     {
-        $client = static::createClient();
+        static::createClient();
         $matchParser = new MatchParser(new CrawlerManager(), 'https://cqranking.com/men/asp/gen/RacesRecent.asp?changed=0');
         $res = $matchParser->getMatches();
         $this->assertEquals(true, !empty($res));

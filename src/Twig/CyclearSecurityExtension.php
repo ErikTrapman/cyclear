@@ -59,7 +59,7 @@ class CyclearSecurityExtension extends AbstractExtension
      *
      * {% if rennerPloeg and is_granted("ROLE_USER") and is_granted('OWNER', ploeg) and rennerPloeg == ingelogdPloeg %}
      */
-    public function isMyRider(Renner $renner)
+    public function isMyRider(Renner $renner): bool
     {
         $season = $this->getSeason();
         $requestTeam = $this->getLoggedInTeam();
@@ -67,7 +67,7 @@ class CyclearSecurityExtension extends AbstractExtension
         return $requestTeam === $riderTeam;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'cycleargame_security';
     }

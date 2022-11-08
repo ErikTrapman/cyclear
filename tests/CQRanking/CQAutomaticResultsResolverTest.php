@@ -17,9 +17,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CQAutomaticResultsResolverTest extends WebTestCase
 {
-    public function testResolvingBetweenDates()
+    public function testResolvingBetweenDates(): void
     {
-        $client = static::createClient();
+        static::createClient();
         $parser = new RecentRacesParser(new CrawlerManager());
 
         $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'recentraces-20151029.html');

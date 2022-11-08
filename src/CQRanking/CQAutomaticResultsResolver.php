@@ -34,7 +34,7 @@ class CQAutomaticResultsResolver
         $repo = $this->em->getRepository(Wedstrijd::class);
         $ploegRepo = $this->em->getRepository(Ploeg::class);
         $ret = [];
-        foreach ($races as $i => $race) {
+        foreach ($races as $race) {
             // we simply use the url as external identifier
             $wedstrijd = $repo->findOneBy(['externalIdentifier' => $race->url]);
             if ($wedstrijd) {

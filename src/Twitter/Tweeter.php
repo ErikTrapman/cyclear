@@ -17,7 +17,7 @@ class Tweeter
         $this->enableTwitter = $enableTwitter;
     }
 
-    public function sendTweet($msg)
+    public function sendTweet($msg): void
     {
         if ($this->enableTwitter) {
             $this->helper->statusesUpdate($msg);

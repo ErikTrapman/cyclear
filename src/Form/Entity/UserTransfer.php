@@ -25,7 +25,7 @@ class UserTransfer
     /**
      * @param mixed $datum
      */
-    public function setDatum($datum)
+    public function setDatum($datum): void
     {
         $this->datum = $datum;
     }
@@ -43,12 +43,12 @@ class UserTransfer
         return $this->renner_in;
     }
 
-    public function setRennerIn($renner)
+    public function setRennerIn(\App\Entity\Renner $renner): void
     {
         $this->renner_in = $renner;
     }
 
-    public function setPloeg($ploeg)
+    public function setPloeg(\App\Entity\Ploeg $ploeg): void
     {
         $this->ploeg = $ploeg;
     }
@@ -66,7 +66,7 @@ class UserTransfer
         return $this->seizoen;
     }
 
-    public function setSeizoen($seizoen)
+    public function setSeizoen(Seizoen $seizoen): void
     {
         $this->seizoen = $seizoen;
     }
@@ -76,7 +76,7 @@ class UserTransfer
         return $this->renner_uit;
     }
 
-    public function setRennerUit($renner_uit)
+    public function setRennerUit(\App\Entity\Renner $renner_uit): void
     {
         $this->renner_uit = $renner_uit;
     }
@@ -92,7 +92,7 @@ class UserTransfer
     /**
      * @param mixed $userComment
      */
-    public function setUserComment($userComment)
+    public function setUserComment($userComment): void
     {
         $this->userComment = $userComment;
     }

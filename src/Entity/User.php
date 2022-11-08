@@ -47,7 +47,7 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable
         return $this->ploeg;
     }
 
-    public function setPloeg($ploeg)
+    public function setPloeg($ploeg): void
     {
         $this->ploeg = $ploeg;
     }

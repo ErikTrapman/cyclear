@@ -72,7 +72,7 @@ class Transfer
         return $this->id;
     }
 
-    public function setRenner($renner)
+    public function setRenner(Renner $renner): void
     {
         $this->renner = $renner;
     }
@@ -82,7 +82,7 @@ class Transfer
         return $this->renner;
     }
 
-    public function setPloegVan($ploegVan)
+    public function setPloegVan(Ploeg|null $ploegVan): void
     {
         $this->ploegVan = $ploegVan;
     }
@@ -92,7 +92,7 @@ class Transfer
         return $this->ploegVan;
     }
 
-    public function setPloegNaar($ploegNaar)
+    public function setPloegNaar(Ploeg|null $ploegNaar): void
     {
         $this->ploegNaar = $ploegNaar;
     }
@@ -102,7 +102,7 @@ class Transfer
         return $this->ploegNaar;
     }
 
-    public function setDatum($datum)
+    public function setDatum(\DateTime $datum): void
     {
         $this->datum = $datum;
     }
@@ -117,6 +117,11 @@ class Transfer
         return $this->transferType;
     }
 
+    /**
+     * @return null|string
+     *
+     * @psalm-return 'admin-transfer'|'draft'|'gebruiker'|null
+     */
     public function getTransferTypeFormatted()
     {
         switch ($this->transferType) {
@@ -129,7 +134,7 @@ class Transfer
         }
     }
 
-    public function setTransferType($transferType)
+    public function setTransferType(int $transferType): void
     {
         $this->transferType = $transferType;
     }
@@ -139,7 +144,7 @@ class Transfer
         return $this->seizoen;
     }
 
-    public function setSeizoen($seizoen)
+    public function setSeizoen($seizoen): void
     {
         $this->seizoen = $seizoen;
     }
@@ -149,7 +154,7 @@ class Transfer
         return $this->inversionTransfer;
     }
 
-    public function setInversionTransfer($inversionTransfer)
+    public function setInversionTransfer(self $inversionTransfer): void
     {
         $this->inversionTransfer = $inversionTransfer;
     }
@@ -164,7 +169,7 @@ class Transfer
         return $this->userComment;
     }
 
-    public function setUserComment($userComment)
+    public function setUserComment($userComment): void
     {
         $this->userComment = $userComment;
     }

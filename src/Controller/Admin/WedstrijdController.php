@@ -23,10 +23,13 @@ class WedstrijdController extends AbstractController
     }
 
     /**
-     * @Route("/", name="admin_wedstrijd")
-     * @Template()
+     * @Route ("/", name="admin_wedstrijd")
+     *
+     * @Template ()
+     *
+     * @psalm-return array{pagination: mixed}
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): array
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -42,10 +45,15 @@ class WedstrijdController extends AbstractController
     /**
      * Displays a form to create a new Periode entity.
      *
-     * @Route("/new", name="admin_wedstrijd_new")
-     * @Template()
+     * @Route ("/new", name="admin_wedstrijd_new")
+     *
+     * @Template ()
+     *
+     * @return (Wedstrijd|\Symfony\Component\Form\FormView)[]
+     *
+     * @psalm-return array{entity: Wedstrijd, form: \Symfony\Component\Form\FormView}
      */
-    public function newAction()
+    public function newAction(): array
     {
         $entity = new Wedstrijd();
         $form = $this->createForm(WedstrijdType::class, $entity);
@@ -59,9 +67,13 @@ class WedstrijdController extends AbstractController
     /**
      * Creates a new Periode entity.
      *
-     * @Route("/create", name="admin_wedstrijd_create", methods={"POST"})
+     * @Route ("/create", name="admin_wedstrijd_create", methods={"POST"})
+     *
+     * @return (Wedstrijd|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Wedstrijd, form: \Symfony\Component\Form\FormView}
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $entity = new Wedstrijd();
         $form = $this->createForm(WedstrijdType::class, $entity);
@@ -84,10 +96,15 @@ class WedstrijdController extends AbstractController
     /**
      * Displays a form to edit an existing Periode entity.
      *
-     * @Route("/{id}/edit", name="admin_wedstrijd_edit")
-     * @Template()
+     * @Route ("/{id}/edit", name="admin_wedstrijd_edit")
+     *
+     * @Template ()
+     *
+     * @return (Wedstrijd|\Symfony\Component\Form\FormView|mixed)[]
+     *
+     * @psalm-return array{entity: Wedstrijd, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
      */
-    public function editAction($id)
+    public function editAction($id): array
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -110,9 +127,13 @@ class WedstrijdController extends AbstractController
     /**
      * Edits an existing Periode entity.
      *
-     * @Route("/{id}/update", name="admin_wedstrijd_update", methods={"POST"})
+     * @Route ("/{id}/update", name="admin_wedstrijd_update", methods={"POST"})
+     *
+     * @return (Wedstrijd|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Wedstrijd, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -144,9 +165,9 @@ class WedstrijdController extends AbstractController
     /**
      * Deletes a Periode entity.
      *
-     * @Route("/{id}/delete", name="admin_wedstrijd_delete", methods={"POST"})
+     * @Route ("/{id}/delete", name="admin_wedstrijd_delete", methods={"POST"})
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $form = $this->createDeleteForm($id);
 
@@ -167,7 +188,7 @@ class WedstrijdController extends AbstractController
         return $this->redirect($this->generateUrl('admin_wedstrijd'));
     }
 
-    private function createDeleteForm($id)
+    private function createDeleteForm($id): \Symfony\Component\Form\FormInterface
     {
         return $this->createFormBuilder(['id' => $id])
             ->add('id', HiddenType::class)

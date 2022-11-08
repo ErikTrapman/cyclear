@@ -1,0 +1,23 @@
+[LOCAL]
+@SecureParam(name="id", permissions="OWNER")
+--cqranking-bundle kopieren in src
+Mails versturen testen via fos-user (opzoeken huidige credentials voor sendgrid)
+Fully fix lost-drafts scenario verwerkt in 3.x ? En andere bugfixes commits
+admin/default/ vs default/admin - deze hebben dezelfde bestanden
+in public/css en public/js staan alle bestanden hardcoded gekopieerd
+ddev gaan gebruiken
+tests fixen
+services.xml leegmaken
+cqranking.xml leegmaken
+Github QA
+--lint-fix
+JMS serializer vervangen
+Commands herschrijven
+recipes
+uitslag_type kolom voor strategie herschrijven (via migration?)
+query cache voor resultaten op homepage (let op invalidatie)
+
+[BIG]
+* Hosting: terraform + ansible
+* Backups Google Drive via cyclear-backup
+* Deploys... GH Actions + Surf?

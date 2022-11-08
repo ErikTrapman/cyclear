@@ -6,6 +6,7 @@ use App\Entity\Renner;
 use App\Form\Filter\RennerFilterType;
 use App\Form\RennerType;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,10 +31,15 @@ class RennerController extends AbstractController
     /**
      * Lists all Renner entities.
      *
-     * @Route("/", name="admin_renner")
-     * @Template()
+     * @Route ("/", name="admin_renner")
+     *
+     * @Template ()
+     *
+     * @return (\Symfony\Component\Form\FormView|mixed)[]
+     *
+     * @psalm-return array{pagination: mixed, filter: \Symfony\Component\Form\FormView}
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): array
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -45,7 +51,7 @@ class RennerController extends AbstractController
             $filter->handleRequest($request);
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
-                    $em->getFilters()->enable('naam')->setParameter('naam', $filter->get('naam')->getData(), Type::getType(Type::STRING)->getBindingType());
+                    $em->getFilters()->enable('naam')->setParameter('naam', $filter->get('naam')->getData(), Type::getType(Types::STRING)->getBindingType());
                 }
             }
         }
@@ -58,10 +64,15 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_renner_edit")
-     * @Template()
+     * @Route ("/{id}/edit", name="admin_renner_edit")
+     *
+     * @Template ()
+     *
+     * @return (Renner|\Symfony\Component\Form\FormView|mixed)[]
+     *
+     * @psalm-return array{entity: Renner, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, $id): array
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -84,16 +95,21 @@ class RennerController extends AbstractController
         return ['entity' => $entity, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()];
     }
 
-    public function createDeleteForm($id)
+    public function createDeleteForm($id): \Symfony\Component\Form\FormInterface
     {
         return $this->createFormBuilder(['id' => $id])->add('id', HiddenType::class)->getForm();
     }
 
     /**
-     * @Route("/new", name="admin_renner_new")
-     * @Template()
+     * @Route ("/new", name="admin_renner_new")
+     *
+     * @Template ()
+     *
+     * @return (Renner|\Symfony\Component\Form\FormView)[]
+     *
+     * @psalm-return array{entity: Renner, form: \Symfony\Component\Form\FormView}
      */
-    public function newAction()
+    public function newAction(): array
     {
         $entity = new Renner();
         $form = $this->createForm(RennerType::class, $entity);
@@ -102,9 +118,13 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route("/create", name="admin_renner_create", methods={"POST"})
+     * @Route ("/create", name="admin_renner_create", methods={"POST"})
+     *
+     * @return (Renner|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Renner, form: \Symfony\Component\Form\FormView}
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $entity = new Renner();
         $form = $this->createForm(RennerType::class, $entity);
@@ -122,9 +142,9 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/delete", name="admin_renner_delete", methods={"POST"})
+     * @Route ("/{id}/delete", name="admin_renner_delete", methods={"POST"})
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);

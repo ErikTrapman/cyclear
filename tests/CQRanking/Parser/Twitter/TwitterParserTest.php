@@ -19,17 +19,23 @@ class TwitterParserTest extends WebTestCase
 {
     /**
      * @dataProvider twitterDataProvider
+     *
      * @param mixed $cqId
      * @param mixed $exp
      */
-    public function testTwitterHandleParser($cqId, $exp)
+    public function testTwitterHandleParser($cqId, $exp): void
     {
-        $client = static::createClient();
+        static::createClient();
         $parser = new TwitterParser(new CrawlerManager(), 'https://cqranking.com/men/asp/gen/rider.asp?riderid=');
         $this->assertEquals($exp, $parser->getTwitterHandle($cqId));
     }
 
-    public function twitterDataProvider()
+    /**
+     * @return (int|null|string)[][]
+     *
+     * @psalm-return array{0: array{0: 16941, 1: 'estecharu'}, 1: array{0: 27, 1: null}}
+     */
+    public function twitterDataProvider(): array
     {
         return [
             [16941, 'estecharu'],

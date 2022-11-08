@@ -34,7 +34,7 @@ class Nieuws
      */
     private $content;
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -44,7 +44,7 @@ class Nieuws
         return $this->seizoen;
     }
 
-    public function setSeizoen($seizoen)
+    public function setSeizoen($seizoen): void
     {
         $this->seizoen = $seizoen;
     }
@@ -54,7 +54,7 @@ class Nieuws
         return $this->titel;
     }
 
-    public function setTitel($titel)
+    public function setTitel($titel): void
     {
         $this->titel = $titel;
     }
@@ -64,7 +64,7 @@ class Nieuws
         return $this->content;
     }
 
-    public function setContent($content)
+    public function setContent($content): void
     {
         $this->content = $content;
     }

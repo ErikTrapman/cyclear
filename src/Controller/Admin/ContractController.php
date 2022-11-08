@@ -28,10 +28,15 @@ class ContractController extends AbstractController
     /**
      * Lists all Contract entities.
      *
-     * @Route("/", name="admin_contract")
-     * @Template()
+     * @Route ("/", name="admin_contract")
+     *
+     * @Template ()
+     *
+     * @return (\Symfony\Component\Form\FormView|mixed)[]
+     *
+     * @psalm-return array{entities: mixed, filter: \Symfony\Component\Form\FormView}
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): array
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -62,10 +67,15 @@ class ContractController extends AbstractController
     /**
      * Displays a form to create a new Contract entity.
      *
-     * @Route("/new", name="admin_contract_new")
-     * @Template()
+     * @Route ("/new", name="admin_contract_new")
+     *
+     * @Template ()
+     *
+     * @return (Contract|\Symfony\Component\Form\FormView)[]
+     *
+     * @psalm-return array{entity: Contract, form: \Symfony\Component\Form\FormView}
      */
-    public function newAction()
+    public function newAction(): array
     {
         $entity = new Contract();
         $form = $this->createForm(ContractType::class, $entity);
@@ -79,9 +89,13 @@ class ContractController extends AbstractController
     /**
      * Creates a new Contract entity.
      *
-     * @Route("/create", name="admin_contract_create", methods={"POST"})
+     * @Route ("/create", name="admin_contract_create", methods={"POST"})
+     *
+     * @return (Contract|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Contract, form: \Symfony\Component\Form\FormView}
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $entity = new Contract();
         $form = $this->createForm(ContractType::class, $entity);
@@ -104,10 +118,15 @@ class ContractController extends AbstractController
     /**
      * Displays a form to edit an existing Contract entity.
      *
-     * @Route("/{id}/edit", name="admin_contract_edit")
-     * @Template()
+     * @Route ("/{id}/edit", name="admin_contract_edit")
+     *
+     * @Template ()
+     *
+     * @return (Contract|\Symfony\Component\Form\FormView)[]
+     *
+     * @psalm-return array{entity: Contract, edit_form: \Symfony\Component\Form\FormView}
      */
-    public function editAction($id)
+    public function editAction($id): array
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -129,9 +148,13 @@ class ContractController extends AbstractController
     /**
      * Edits an existing Contract entity.
      *
-     * @Route("/{id}/update", name="admin_contract_update", methods={"POST"})
+     * @Route ("/{id}/update", name="admin_contract_update", methods={"POST"})
+     *
+     * @return (Contract|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Contract, edit_form: \Symfony\Component\Form\FormView}
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
 

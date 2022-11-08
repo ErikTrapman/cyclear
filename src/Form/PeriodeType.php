@@ -8,6 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class PeriodeType extends AbstractType
 {
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -17,7 +20,7 @@ class PeriodeType extends AbstractType
             ->add('seizoen', SeizoenSelectorType::class);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'cyclear_gamebundle_periodetype';
     }

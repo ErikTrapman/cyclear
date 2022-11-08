@@ -14,66 +14,19 @@ use App\Entity\UitslagType;
 use App\Entity\Wedstrijd;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Translatable\Entity\Translation;
 
 class UitslagManager
 {
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
-    /**
-     * @var PuntenCalculator
-     */
-    private $puntenCalculator;
-
-    /**
-     * @var CQParser
-     */
-    private $cqParser;
-
-    /**
-     * @var string
-     */
-    private $cqRankingWedstrijdUrl;
-
-    /**
-     * @var RennerManager
-     */
-    private $rennerManager;
-
-    /**
-     * @var TwitterParser
-     */
-    private $twitterParser;
-
-    /**
-     * UitslagManager constructor.
-     * @param EntityManager $em
-     * @param $cqRankingWedstrijdUrl
-     */
     public function __construct(
-        EntityManagerInterface $em,
-        CQParser $parser,
-        PuntenCalculator $puntenCalculator,
-        $cqRankingWedstrijdUrl,
-        RennerManager $rennerManager,
-        TwitterParser $twitterParser
+        private EntityManagerInterface $entityManager,
+        private CQParser $cqParser,
+        private PuntenCalculator $puntenCalculator,
+        private RennerManager $rennerManager,
+        private TwitterParser $twitterParser
     ) {
-        $this->entityManager = $em;
-        $this->puntenCalculator = $puntenCalculator;
-        $this->cqParser = $parser;
-        $this->cqRankingWedstrijdUrl = $cqRankingWedstrijdUrl;
-        $this->rennerManager = $rennerManager;
-        $this->twitterParser = $twitterParser;
     }
 
-    /**
-     * @param $crawler
-     * @param Seizoen $seizoen
-     * @param null $puntenReferentieDatum
-     * @return array
-     */
     public function prepareUitslagen(UitslagType $uitslagType, $crawler, Wedstrijd $wedstrijd, $seizoen, $puntenReferentieDatum = null)
     {
         $parseStrategy = $uitslagType->getCqParsingStrategy();
@@ -117,11 +70,11 @@ class UitslagManager
         return $uitslagen;
     }
 
-    private function handleUnknownRenner($rennerString, $nat)
+    private function handleUnknownRenner($rennerString, $nat): void
     {
         $renner = $this->rennerManager->createRennerFromRennerSelectorTypeString($rennerString);
         $countryFullName = NationalityResolver::getFullNameFromCode($nat);
-        $transRepo = $this->entityManager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
+        $transRepo = $this->entityManager->getRepository(Translation::class);
         $trans = $transRepo->findOneBy(['content' => $countryFullName, 'locale' => 'en_GB']);
         $countryRepo = $this->entityManager->getRepository(Country::class);
         if (null === $trans) {
@@ -133,6 +86,6 @@ class UitslagManager
         $renner->setTwitter($this->twitterParser->getTwitterHandle($renner->getCqRankingId()));
         // save renner immediately to database.
         $this->entityManager->persist($renner);
-        $this->entityManager->flush($renner);
+        $this->entityManager->flush();
     }
 }

@@ -6,6 +6,9 @@ use Samson\Bundle\DataViewBundle\DataView\AbstractDataView;
 
 class RiderSearchView extends AbstractDataView
 {
+    /**
+     * @return static
+     */
     public function serialize($data, array $options = [])
     {
         $this->add('naam', $data[0]);

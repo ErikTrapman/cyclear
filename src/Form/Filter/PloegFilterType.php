@@ -21,6 +21,9 @@ class PloegFilterType extends AbstractType
         $this->em = $em;
     }
 
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -32,7 +35,7 @@ class PloegFilterType extends AbstractType
         return 'ploeg_filter';
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'ploeg_filter';
     }

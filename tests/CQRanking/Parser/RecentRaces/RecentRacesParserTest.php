@@ -8,9 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RecentRacesParserTest extends WebTestCase
 {
-    public function testRecentRacesParsesCorrect()
+    public function testRecentRacesParsesCorrect(): void
     {
-        $client = static::createClient();
+        static::createClient();
         $parser = new RecentRacesParser(new CrawlerManager());
 
         $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'recentraces-20151029.html');

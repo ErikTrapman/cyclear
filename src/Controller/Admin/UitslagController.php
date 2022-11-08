@@ -36,10 +36,13 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * @Route("/", name="admin_uitslag")
-     * @Template()
+     * @Route ("/", name="admin_uitslag")
+     *
+     * @Template ()
+     *
+     * @psalm-return array{pagination: mixed, seizoen: mixed}
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): array
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -54,10 +57,15 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * @Route("/{uitslag}/edit", name="admin_uitslag_edit")
-     * @Template()
+     * @Route ("/{uitslag}/edit", name="admin_uitslag_edit")
+     *
+     * @Template ()
+     *
+     * @return (Uitslag|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{form: \Symfony\Component\Form\FormView, entity: Uitslag}
      */
-    public function editAction(Request $request, Uitslag $uitslag)
+    public function editAction(Request $request, Uitslag $uitslag): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
         $seizoen = $uitslag->getWedstrijd()->getSeizoen();
@@ -74,10 +82,15 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_uitslag_new")
-     * @Template()
+     * @Route ("/new", name="admin_uitslag_new")
+     *
+     * @Template ()
+     *
+     * @return \Symfony\Component\Form\FormView[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{form: \Symfony\Component\Form\FormView}
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $uitslag = new Uitslag();
         $em = $this->getDoctrine()->getManager();
@@ -98,10 +111,15 @@ class UitslagController extends AbstractController
     /**
      * Displays a form to create a new Periode entity.
      *
-     * @Route("/create", name="admin_uitslag_create")
-     * @Template()
+     * @Route ("/create", name="admin_uitslag_create")
+     *
+     * @Template ()
+     *
+     * @return Response|\Symfony\Component\Form\FormView[]
+     *
+     * @psalm-return Response|array{form: \Symfony\Component\Form\FormView}
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): array|Response
     {
         $em = $this->getDoctrine()->getManager();
         $uitslagManager = $this->get('cyclear_game.manager.uitslag');

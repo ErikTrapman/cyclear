@@ -43,12 +43,18 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route("/{seizoen}/renners.{_format}", name="rider_index", options={"_format"="json|html","expose"=true}, defaults={"_format":"html"})
-     * @Route("/api/v1/{seizoen}/riders.{_format}", name="api_season_rider_index", options={"_format"="json"}, defaults={"_format":"json"})
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Route ("/{seizoen}/renners.{_format}", name="rider_index", options={"_format"="json|html","expose"=true}, defaults={"_format":"html"})
+     * @Route ("/api/v1/{seizoen}/riders.{_format}", name="api_season_rider_index", options={"_format"="json"}, defaults={"_format":"json"})
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     *
      * @Template
+     *
+     * @return Response|Seizoen[]
+     *
+     * @psalm-return Response|array{seizoen: Seizoen}
      */
-    public function indexAction(Request $request, Seizoen $seizoen)
+    public function indexAction(Request $request, Seizoen $seizoen): array|Response
     {
         $em = $this->getDoctrine()->getManager();
         $exclude = $request->query->get('excludeWithTeam') === 'true' ? true : false;
@@ -75,9 +81,9 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route("/renners/get.{_format}", name="get_riders", options={"_format"="json"}, defaults={"_format"="json"})
+     * @Route ("/renners/get.{_format}", name="get_riders", options={"_format"="json"}, defaults={"_format"="json"})
      */
-    public function getAction(Request $request)
+    public function getAction(Request $request): Response
     {
         $em = $this->getDoctrine()->getManager();
         $paginator = $this->knpPaginator;
@@ -95,12 +101,18 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route("/{seizoen}/renner/{renner}", name="renner_show", options={"expose"=true})
-     * @Template()
-     * @ParamConverter("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Route ("/{seizoen}/renner/{renner}", name="renner_show", options={"expose"=true})
+     *
+     * @Template ()
+     *
+     * @ParamConverter ("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     *
+     * @return ((Seizoen|mixed)[][]|Renner|Seizoen|\Doctrine\Persistence\ObjectRepository|int|mixed)[]
+     *
+     * @psalm-return array{seizoen: Seizoen, renner: Renner, transfers: mixed, uitslagen: mixed, transferrepo: \Doctrine\Persistence\ObjectRepository<Transfer>, ploeg: mixed, rennerPunten: int, puntenPerSeizoen: list<array{seizoen: Seizoen, punten: mixed}>}
      */
-    public function showAction(Request $request, Seizoen $seizoen, Renner $renner)
+    public function showAction(Request $request, Seizoen $seizoen, Renner $renner): array
     {
         $doctrine = $this->getDoctrine();
         $transferrepo = $doctrine->getRepository(Transfer::class);
@@ -142,10 +154,11 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route("/{seizoen}/download", name="renner_download")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Route ("/{seizoen}/download", name="renner_download")
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
      */
-    public function csvDownloadAction(Request $request, Seizoen $seizoen)
+    public function csvDownloadAction(Request $request, Seizoen $seizoen): StreamedResponse
     {
         $q = sprintf('SELECT r.id, r.naam, (SELECT SUM(rennerPunten) FROM uitslag u
             INNER JOIN wedstrijd w ON u.wedstrijd_id = w.id WHERE u.renner_id = r.id AND w.seizoen_id = %d ) AS pts
@@ -173,9 +186,12 @@ class RennerController extends AbstractController
     /**
      * @param $value
      * @param $separator
+     *
      * @return array|false|string[]
+     *
+     * @psalm-param '/\s+/' $separator
      */
-    private function assertArray($value, $separator)
+    private function assertArray($value, string $separator)
     {
         if (is_array($value)) {
             return $value;
@@ -193,7 +209,7 @@ class RennerController extends AbstractController
     /**
      * Copied from https://github.com/SamsonIT/AutocompleteBundle/blob/master/Query/ResultsFetcher.php
      */
-    private function appendQuery(QueryBuilder $qb, array $searchWords, array $searchFields)
+    private function appendQuery(QueryBuilder $qb, array $searchWords, array $searchFields): void
     {
         foreach ($searchWords as $key => $searchWord) {
             $expressions = [];

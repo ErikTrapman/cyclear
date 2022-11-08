@@ -10,11 +10,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class ConstantToStrategyClassTransformer implements DataTransformerInterface
 {
-    /**
-     * @param Renner $value
-     * @return string
-     */
-    public function transform($value)
+    public function transform($value): ?string
     {
         if ($value === null) {
             return $value;
@@ -25,12 +21,7 @@ class ConstantToStrategyClassTransformer implements DataTransformerInterface
         return null;
     }
 
-    /**
-     * @param string $value
-     * @return string|Stage
-     * @throws TransformationFailedException
-     */
-    public function reverseTransform($value)
+    public function reverseTransform($value): ?AbstractStrategy
     {
         if ($value === null) {
             return null;

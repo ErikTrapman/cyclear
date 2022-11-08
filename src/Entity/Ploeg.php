@@ -62,7 +62,7 @@ class Ploeg
         return $this->user;
     }
 
-    public function setUser($user)
+    public function setUser($user): void
     {
         $this->user = $user;
     }
@@ -72,7 +72,7 @@ class Ploeg
         return $this->id;
     }
 
-    public function setNaam($naam)
+    public function setNaam(string $naam): void
     {
         $this->naam = $naam;
     }
@@ -87,7 +87,7 @@ class Ploeg
         return $this->afkorting;
     }
 
-    public function setAfkorting($afkorting)
+    public function setAfkorting(string $afkorting): void
     {
         $this->afkorting = $afkorting;
     }
@@ -105,12 +105,12 @@ class Ploeg
         return $this->seizoen;
     }
 
-    public function setSeizoen($seizoen)
+    public function setSeizoen($seizoen): void
     {
         $this->seizoen = $seizoen;
     }
 
-    public function getNaamWithSeizoen()
+    public function getNaamWithSeizoen(): string
     {
         return $this->getNaam() . ' [' . $this->getSeizoen()->getIdentifier() . ']';
     }
@@ -124,7 +124,7 @@ class Ploeg
         return $this->punten;
     }
 
-    public function setPunten($punten)
+    public function setPunten($punten): void
     {
         $this->punten = $punten;
     }
@@ -134,7 +134,7 @@ class Ploeg
         return $this->memo;
     }
 
-    public function setMemo($memo)
+    public function setMemo($memo): void
     {
         $this->memo = $memo;
     }

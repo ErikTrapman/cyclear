@@ -9,6 +9,9 @@ use Symfony\Component\Validator\Constraints\NotNull;
 
 class PloegType extends AbstractType
 {
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -23,7 +26,7 @@ class PloegType extends AbstractType
             ]);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'cyclear_gamebundle_ploegtype';
     }

@@ -16,12 +16,18 @@ class CountryBootstrapCommand extends Command
         parent::__construct($name);
     }
 
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('cyclear:country-bootstrap')
             ->setDescription('Add countries in locales nl_NL and en_GB');
     }
 
+    /**
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // add ISO-list of countries

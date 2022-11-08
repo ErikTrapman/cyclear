@@ -92,7 +92,7 @@ class Wedstrijd
      *
      * @param \DateTime $datum
      */
-    public function setDatum($datum)
+    public function setDatum($datum): void
     {
         $this->datum = $datum;
     }
@@ -112,7 +112,7 @@ class Wedstrijd
      *
      * @param string $naam
      */
-    public function setNaam($naam)
+    public function setNaam($naam): void
     {
         $this->naam = $naam;
     }
@@ -135,12 +135,12 @@ class Wedstrijd
         return $this->uitslagen;
     }
 
-    public function getSeizoen()
+    public function getSeizoen(): Seizoen
     {
         return $this->seizoen;
     }
 
-    public function setSeizoen($seizoen)
+    public function setSeizoen(Seizoen $seizoen): void
     {
         $this->seizoen = $seizoen;
     }
@@ -156,7 +156,7 @@ class Wedstrijd
     /**
      * @param mixed $generalClassification
      */
-    public function setGeneralClassification($generalClassification)
+    public function setGeneralClassification($generalClassification): void
     {
         $this->generalClassification = $generalClassification;
     }
@@ -172,7 +172,7 @@ class Wedstrijd
     /**
      * @param mixed $externalIdentifier
      */
-    public function setExternalIdentifier($externalIdentifier)
+    public function setExternalIdentifier($externalIdentifier): void
     {
         $this->externalIdentifier = $externalIdentifier;
     }
@@ -188,12 +188,12 @@ class Wedstrijd
     /**
      * @param mixed $fullyProcessed
      */
-    public function setFullyProcessed($fullyProcessed)
+    public function setFullyProcessed($fullyProcessed): void
     {
         $this->fullyProcessed = $fullyProcessed;
     }
 
-    public function addUitslag(Uitslag $uitslag)
+    public function addUitslag(Uitslag $uitslag): void
     {
         if (!$this->uitslagen->contains($uitslag)) {
             $this->uitslagen->add($uitslag);
@@ -202,9 +202,14 @@ class Wedstrijd
 
     /**
      * Fetch the Uitslagen, grouped and totalled per team.
+     *
      * @param mixed $keepRiders
+     *
+     * @return ((Uitslag|int|mixed)[][]|int|mixed)[][]
+     *
+     * @psalm-return array<array{total: 0|mixed, hits: 0|positive-int, ploeg: mixed, renners: array<array{renner: mixed, hits: int, total: 0|mixed, result?: Uitslag}>}>
      */
-    public function getUitslagenGrouped($keepRiders = false)
+    public function getUitslagenGrouped($keepRiders = false): array
     {
         $group = [];
         foreach ($this->uitslagen as $uitslag) {

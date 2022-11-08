@@ -19,10 +19,13 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/", name="admin_index")
-     * @Template()
+     * @Route ("/", name="admin_index")
+     *
+     * @Template ()
+     *
+     * @psalm-return array<empty, empty>
      */
-    public function indexAction(\Symfony\Component\HttpFoundation\Request $request)
+    public function indexAction(\Symfony\Component\HttpFoundation\Request $request): array
     {
         return [];
     }

@@ -18,7 +18,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RennerRepository extends EntityRepository
 {
-    public function findOneByNaam($naam)
+    public function findOneByNaam($naam): object|null
     {
         return $this->findOneBy(['naam' => $naam]);
     }
@@ -32,7 +32,7 @@ class RennerRepository extends EntityRepository
         return $this->findOneBy(['cqranking_id' => $id]);
     }
 
-    public function findOneBySelectorString($rennerString)
+    public function findOneBySelectorString($rennerString): object|null
     {
         $firstBracket = strpos($rennerString, '[');
         $lastBracket = strpos($rennerString, ']');
@@ -65,7 +65,10 @@ class RennerRepository extends EntityRepository
         return (bool)$this->_em->getRepository(Transfer::class)->hasDraftTransfer($renner, $ploeg);
     }
 
-    public function getRennersWithPloeg($seizoen = null)
+    /**
+     * @psalm-return list<mixed>
+     */
+    public function getRennersWithPloeg($seizoen = null): array
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();

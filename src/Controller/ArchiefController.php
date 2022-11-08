@@ -14,11 +14,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArchiefController extends AbstractController
 {
     /**
-     * @Route("/", name="archief_index")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
+     * @Route ("/", name="archief_index")
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     *
+     * @Template ()
+     *
+     * @return (array|mixed)[]
+     *
+     * @psalm-return array{seizoenen: array<empty, empty>|mixed}
      */
-    public function indexAction(Seizoen $seizoen)
+    public function indexAction(Seizoen $seizoen): array
     {
         $em = $this->getDoctrine()->getManager();
 

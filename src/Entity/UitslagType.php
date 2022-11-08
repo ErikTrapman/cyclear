@@ -46,12 +46,12 @@ class UitslagType
      */
     private $automaticResolvingCategories;
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $id;
     }
@@ -61,7 +61,7 @@ class UitslagType
         return $this->naam;
     }
 
-    public function setNaam($naam)
+    public function setNaam($naam): void
     {
         $this->naam = $naam;
     }
@@ -71,7 +71,7 @@ class UitslagType
         return $this->maxResults;
     }
 
-    public function setMaxResults($maxResults)
+    public function setMaxResults(int $maxResults): void
     {
         $this->maxResults = $maxResults;
     }
@@ -86,7 +86,7 @@ class UitslagType
         return $this->getIsGeneralClassification();
     }
 
-    public function setIsGeneralClassification($isGeneralClassification)
+    public function setIsGeneralClassification($isGeneralClassification): void
     {
         $this->isGeneralClassification = $isGeneralClassification;
     }
@@ -96,7 +96,7 @@ class UitslagType
         return $this->cqParsingStrategy;
     }
 
-    public function setCqParsingStrategy($cqParsingStrategy)
+    public function setCqParsingStrategy($cqParsingStrategy): void
     {
         $this->cqParsingStrategy = $cqParsingStrategy;
     }
@@ -112,7 +112,7 @@ class UitslagType
     /**
      * @param mixed $automaticResolvingCategories
      */
-    public function setAutomaticResolvingCategories($automaticResolvingCategories)
+    public function setAutomaticResolvingCategories($automaticResolvingCategories): void
     {
         $this->automaticResolvingCategories = $automaticResolvingCategories;
     }

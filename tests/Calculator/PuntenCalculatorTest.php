@@ -16,7 +16,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class PuntenCalculatorTest extends WebTestCase
 {
-    private function getMocks()
+    /**
+     * @return \PHPUnit\Framework\MockObject\MockObject[]
+     *
+     * @psalm-return array{0: \PHPUnit\Framework\MockObject\MockObject, 1: \PHPUnit\Framework\MockObject\MockObject}
+     */
+    private function getMocks(): array
     {
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
         $repo = $this->getMockBuilder('App\Repository\TransferRepository')->disableOriginalConstructor()->getMock();
@@ -25,7 +30,7 @@ class PuntenCalculatorTest extends WebTestCase
         return [$em, $repo];
     }
 
-    public function testNeverBeenTransfered()
+    public function testNeverBeenTransfered(): void
     {
         list($em, $repo) = $this->getMocks();
         $repo->expects($this->any())->method('findLastTransferForDate')->will($this->returnValue(null));
@@ -35,7 +40,7 @@ class PuntenCalculatorTest extends WebTestCase
         $this->assertEquals(false, $res);
     }
 
-    public function testTransferBeforeCourse()
+    public function testTransferBeforeCourse(): void
     {
         list($em, $repo) = $this->getMocks();
         $t = new Transfer();
@@ -51,7 +56,7 @@ class PuntenCalculatorTest extends WebTestCase
         $this->assertEquals(true, $res);
     }
 
-    public function testTransferOnCourse()
+    public function testTransferOnCourse(): void
     {
         list($em, $repo) = $this->getMocks();
         $t = new Transfer();
@@ -67,7 +72,7 @@ class PuntenCalculatorTest extends WebTestCase
         $this->assertEquals(false, $res);
     }
 
-    public function testTransferAfterCourse()
+    public function testTransferAfterCourse(): void
     {
         list($em, $repo) = $this->getMocks();
         $t = new Transfer();
@@ -84,7 +89,7 @@ class PuntenCalculatorTest extends WebTestCase
         $this->assertEquals(false, $res);
     }
 
-    public function testTransferBeforeReferentionCourse()
+    public function testTransferBeforeReferentionCourse(): void
     {
         list($em, $repo) = $this->getMocks();
         $t = new Transfer();
@@ -97,7 +102,7 @@ class PuntenCalculatorTest extends WebTestCase
         $this->assertEquals(true, $res);
     }
 
-    public function testTransferBeforeReferentionCourseAndDuring()
+    public function testTransferBeforeReferentionCourseAndDuring(): void
     {
         list($em, $repo) = $this->getMocks();
         $t = new Transfer();
@@ -113,7 +118,7 @@ class PuntenCalculatorTest extends WebTestCase
         $this->assertEquals(false, $res);
     }
 
-    public function testTransferOnFirstDayOfReferentionCourse()
+    public function testTransferOnFirstDayOfReferentionCourse(): void
     {
         list($em, $repo) = $this->getMocks();
         $t = new Transfer();
@@ -126,7 +131,7 @@ class PuntenCalculatorTest extends WebTestCase
         $this->assertEquals(false, $res);
     }
 
-    public function testRiderPassedMaxSeasonalPoints()
+    public function testRiderPassedMaxSeasonalPoints(): void
     {
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
         $transferRepo = $this->getMockBuilder(TransferRepository::class)->disableOriginalConstructor()->getMock();

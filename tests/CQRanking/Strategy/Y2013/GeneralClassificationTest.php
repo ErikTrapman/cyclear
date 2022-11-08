@@ -16,7 +16,7 @@ use App\Tests\CQRanking\Strategy\StrategyTest;
 
 class GeneralClassificationTest extends StrategyTest
 {
-    public function testResultsParseCorrect()
+    public function testResultsParseCorrect(): void
     {
         $url = 'http://cqranking.com/men/asp/gen/race.asp?raceid=24430';
         $strategy = new GeneralClassification();

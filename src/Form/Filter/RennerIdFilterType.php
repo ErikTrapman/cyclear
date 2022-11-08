@@ -6,6 +6,9 @@ use App\Form\RennerSelectorType;
 
 class RennerIdFilterType extends \Symfony\Component\Form\AbstractType
 {
+    /**
+     * @return void
+     */
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         $builder->add('renner', RennerSelectorType::class, [
@@ -13,7 +16,7 @@ class RennerIdFilterType extends \Symfony\Component\Form\AbstractType
             'label' => 'Naam / CQ-id',]);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'renner_id_filter';
     }

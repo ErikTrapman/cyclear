@@ -10,7 +10,7 @@ class BaseFunctional extends \Liip\FunctionalTestBundle\Test\WebTestCase
     {
     }
 
-    public function doLoadFixtures()
+    public function doLoadFixtures(): void
     {
         $fixtures = [
             'App\Tests\Fixtures\LoadSeizoenData',

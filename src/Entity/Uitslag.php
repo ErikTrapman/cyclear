@@ -55,7 +55,7 @@ class Uitslag
         return $this->id;
     }
 
-    public function setWedstrijd($wedstrijd)
+    public function setWedstrijd(Wedstrijd $wedstrijd): void
     {
         $this->wedstrijd = $wedstrijd;
     }
@@ -65,7 +65,7 @@ class Uitslag
         return $this->wedstrijd;
     }
 
-    public function setRenner($renner)
+    public function setRenner($renner): void
     {
         $this->renner = $renner;
     }
@@ -75,7 +75,7 @@ class Uitslag
         return $this->renner;
     }
 
-    public function setPloeg(Ploeg $ploeg = null)
+    public function setPloeg(Ploeg $ploeg = null): void
     {
         $this->ploeg = $ploeg;
     }
@@ -85,7 +85,7 @@ class Uitslag
         return $this->ploeg;
     }
 
-    public function setPositie($positie)
+    public function setPositie($positie): void
     {
         $this->positie = $positie;
     }
@@ -95,7 +95,7 @@ class Uitslag
         return $this->positie;
     }
 
-    public function setPloegPunten($punten)
+    public function setPloegPunten($punten): void
     {
         $this->ploegPunten = $punten;
     }
@@ -110,7 +110,7 @@ class Uitslag
         return $this->rennerPunten;
     }
 
-    public function setRennerPunten($rennerPunten)
+    public function setRennerPunten($rennerPunten): void
     {
         $this->rennerPunten = $rennerPunten;
     }

@@ -7,6 +7,9 @@ use Samson\Bundle\DataViewBundle\DataView\AbstractDataView;
 
 class BloodHoundRiderView extends AbstractDataView
 {
+    /**
+     * @return static
+     */
     public function serialize($data, array $options = [])
     {
         $this->addFixed('identifier', $data->getCqRankingId());

@@ -33,7 +33,7 @@ class TransferListener
         return $this->tweetMsgs[$index];
     }
 
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getObject();
         if ($entity instanceof Transfer) {

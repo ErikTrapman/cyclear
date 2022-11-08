@@ -37,7 +37,9 @@ class IsAdminFieldSubscriber implements EventSubscriberInterface
     /**
      * Called before form data is set
      *
-     * @param DataEvent $event
+     * @param \Symfony\Component\Form\FormEvent $event
+     *
+     * @return void
      */
     public function preSetData(\Symfony\Component\Form\FormEvent $event)
     {
@@ -60,7 +62,9 @@ class IsAdminFieldSubscriber implements EventSubscriberInterface
     /**
      * Called when the form is bound to a request
      *
-     * @param DataEvent $event
+     * @param \Symfony\Component\Form\FormEvent $event
+     *
+     * @return void
      */
     public function bind(\Symfony\Component\Form\FormEvent $event)
     {

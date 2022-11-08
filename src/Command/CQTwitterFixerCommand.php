@@ -16,12 +16,18 @@ class CQTwitterFixerCommand extends Command
         parent::__construct($name);
     }
 
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('cyclear:fixer:twitter')
             ->addOption('file', 'f', InputOption::VALUE_REQUIRED);
     }
 
+    /**
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // RiderID;UCICode;Name;Twitter

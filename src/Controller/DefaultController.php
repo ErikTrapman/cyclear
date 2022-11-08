@@ -21,11 +21,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/", name="game")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
+     * @Route ("/", name="game")
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     *
+     * @Template ()
+     *
+     * @return (Nieuws|Seizoen|\Doctrine\Persistence\ObjectRepository|array|mixed|null)[]
+     *
+     * @psalm-return array{drafts: mixed, nieuws: Nieuws|null, periode: mixed|null, periodestand: mixed, seizoen: Seizoen, shadowstandingsById: array, stand: mixed, transferpuntenPeriode: array, transferRepo: \Doctrine\Persistence\ObjectRepository<Transfer>, transfers: mixed, wedstrijden: mixed, zegesInPeriode: array, zegestand: mixed}
      */
-    public function indexAction(Request $request, Seizoen $seizoen)
+    public function indexAction(Request $request, Seizoen $seizoen): array
     {
         $doctrine = $this->getDoctrine();
         $periode = $this->getDoctrine()->getRepository(Periode::class)->getCurrentPeriode($seizoen);

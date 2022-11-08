@@ -12,6 +12,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UitslagType extends AbstractType
 {
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $seizoen = $options['seizoen'];
@@ -35,11 +38,14 @@ class UitslagType extends AbstractType
             ->add('renner', RennerSelectorType::class);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'cyclear_gamebundle_uitslagtype';
     }
 
+    /**
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

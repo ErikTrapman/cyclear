@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 
-
-
 namespace App\Tests\Validator\Constraints;
 
 use App\Entity\Periode;
@@ -14,42 +12,28 @@ use App\Repository\TransferRepository;
 use App\Validator\Constraints\UserTransfer;
 use App\Validator\Constraints\UserTransferFixedValidator;
 use App\Validator\Constraints\UserTransferValidator;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class UserTransferValidatorTest extends WebTestCase
 {
-    /**
-     * @var ExecutionContextInterface
-     */
-    private $context;
+    private ExecutionContextInterface $context;
 
-    /**
-     * @var ConstraintValidatorInterface
-     */
-    private $validator;
+    private ConstraintValidatorInterface $validator;
 
-    private $em;
-
-    private $transferRepo;
-
-    private $rennerRepo;
-
-    /**
-     * @var Periode
-     */
-    private $periode;
+    private EntityManagerInterface $em;
 
     protected function setUp(): void
     {
         $this->context = $this->createMock(ExecutionContextInterface::class);
-        $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
+        $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManagerInterface')->disableOriginalConstructor()->getMock();
         $this->validator = new UserTransferFixedValidator($this->em, 50);
         $this->validator->initialize($this->context);
     }
 
-    private function getValidTransfer()
+    private function getValidTransfer(): \App\Form\Entity\UserTransfer
     {
         $t = new \App\Form\Entity\UserTransfer();
         $s = new Seizoen();
@@ -69,7 +53,7 @@ class UserTransferValidatorTest extends WebTestCase
         return $t;
     }
 
-    private function initRepos()
+    private function initRepos(): void
     {
         $this->transferRepo = $this->getMockBuilder(TransferRepository::class)->disableOriginalConstructor()->getMock();
         $this->em->expects($this->at(1))->method('getRepository')->with(Transfer::class)->will($this->returnValue($this->transferRepo));
@@ -78,7 +62,7 @@ class UserTransferValidatorTest extends WebTestCase
         $this->rennerRepo->expects($this->once())->method('getPloeg')->will($this->returnValue(null));
     }
 
-    public function testNoRider()
+    public function testNoRider(): void
     {
         $this->context->expects($this->at(0))->method('addViolation')->with($this->equalTo('Onbekende renner opgegeven.'));
         $t = $this->getValidTransfer();
@@ -86,7 +70,7 @@ class UserTransferValidatorTest extends WebTestCase
         $this->validator->validate($t, new UserTransfer());
     }
 
-    public function testInvalidSeason()
+    public function testInvalidSeason(): void
     {
         $this->context->expects($this->at(0))->method('addViolation')->with($this->equalTo('Het seizoen 1 is gesloten.'));
         $t = $this->getValidTransfer();
@@ -95,7 +79,7 @@ class UserTransferValidatorTest extends WebTestCase
         $this->validator->validate($t, new UserTransfer());
     }
 
-    public function testInvalidPeriodBeforeOpening()
+    public function testInvalidPeriodBeforeOpening(): void
     {
         $this->context->expects($this->at(0))->method('addViolation')->with($this->equalTo('De huidige periode staat nog geen transfers toe'));
         $t = $this->getValidTransfer();
@@ -103,7 +87,7 @@ class UserTransferValidatorTest extends WebTestCase
         $this->validator->validate($t, new UserTransfer());
     }
 
-    public function testInvalidPeriodAfterClosing()
+    public function testInvalidPeriodAfterClosing(): void
     {
         $this->context->expects($this->at(0))->method('addViolation')->with($this->equalTo('De huidige periode staat geen transfers meer toe'));
         $t = $this->getValidTransfer();
@@ -111,7 +95,7 @@ class UserTransferValidatorTest extends WebTestCase
         $this->validator->validate($t, new UserTransfer());
     }
 
-    public function testInvalidMaxTransfers()
+    public function testInvalidMaxTransfers(): void
     {
         $this->context->expects($this->once())->method('addViolation')->with($this->stringContains('Je zit op het maximaal aantal transfers'));
 
@@ -120,7 +104,7 @@ class UserTransferValidatorTest extends WebTestCase
         $this->validator->validate($t, new UserTransfer());
     }
 
-    public function testValidTransferOnLastDayOfPeriod()
+    public function testValidTransferOnLastDayOfPeriod(): void
     {
         $this->context->expects($this->never())->method('addViolation');
         $t = $this->getValidTransfer();
@@ -132,7 +116,7 @@ class UserTransferValidatorTest extends WebTestCase
         $this->validator->validate($t, new UserTransfer());
     }
 
-    public function testValidTransferOnFirstDayOfPeriod()
+    public function testValidTransferOnFirstDayOfPeriod(): void
     {
         $this->context->expects($this->never())->method('addViolation');
         $t = $this->getValidTransfer();

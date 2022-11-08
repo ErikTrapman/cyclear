@@ -11,7 +11,10 @@ use Doctrine\ORM\EntityRepository;
 
 class PloegRepository extends EntityRepository
 {
-    public function getRenners($ploeg)
+    /**
+     * @psalm-return list<mixed>
+     */
+    public function getRenners(Ploeg $ploeg): array
     {
         $renners = [];
         foreach ($this->_em->getRepository(Contract::class)
@@ -76,7 +79,7 @@ class PloegRepository extends EntityRepository
         return $ret;
     }
 
-    private function puntenSort(&$values)
+    private function puntenSort(array &$values): void
     {
         uasort($values, function ($a, $b) {
             if ($a['punten'] == $b['punten']) {

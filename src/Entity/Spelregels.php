@@ -37,7 +37,7 @@ class Spelregels
         return $this->seizoen;
     }
 
-    public function setSeizoen($seizoen)
+    public function setSeizoen($seizoen): void
     {
         $this->seizoen = $seizoen;
     }
@@ -47,7 +47,7 @@ class Spelregels
         return $this->content;
     }
 
-    public function setContent($content)
+    public function setContent($content): void
     {
         $this->content = $content;
     }

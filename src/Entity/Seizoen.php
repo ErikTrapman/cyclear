@@ -64,7 +64,7 @@ class Seizoen
         return $this->identifier;
     }
 
-    public function setIdentifier($identifier)
+    public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
     }
@@ -74,7 +74,7 @@ class Seizoen
         return $this->closed;
     }
 
-    public function setClosed($closed)
+    public function setClosed(bool $closed): void
     {
         $this->closed = $closed;
     }
@@ -84,12 +84,12 @@ class Seizoen
         return $this->slug;
     }
 
-    public function isCurrent()
+    public function isCurrent(): bool
     {
         return (bool)$this->current;
     }
 
-    public function setCurrent($current)
+    public function setCurrent(bool $current): void
     {
         $this->current = $current;
     }
@@ -99,7 +99,7 @@ class Seizoen
         return $this->start;
     }
 
-    public function setStart($start)
+    public function setStart($start): void
     {
         $this->start = $start;
     }
@@ -109,7 +109,7 @@ class Seizoen
         return $this->end;
     }
 
-    public function setEnd($end)
+    public function setEnd($end): void
     {
         $this->end = $end;
     }
@@ -119,7 +119,7 @@ class Seizoen
         return $this->maxPointsPerRider;
     }
 
-    public function setMaxPointsPerRider($maxPointsPerRider)
+    public function setMaxPointsPerRider(int $maxPointsPerRider): void
     {
         $this->maxPointsPerRider = $maxPointsPerRider;
     }

@@ -20,11 +20,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class UitslagController extends AbstractController
 {
     /**
-     * @Route("/periodes/{periode}", name="uitslag_periodes")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
+     * @Route ("/periodes/{periode}", name="uitslag_periodes")
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     *
+     * @Template ()
+     *
+     * @return ((Periode|mixed)[]|Periode|Seizoen|\Doctrine\Persistence\ObjectRepository|mixed)[]
+     *
+     * @psalm-return array{list: mixed, seizoen: Seizoen, periodes: array<Periode>, periode: Periode, transferpoints: array, positionCount: array, transferRepo: \Doctrine\Persistence\ObjectRepository<Transfer>}
      */
-    public function periodesAction(Seizoen $seizoen, Periode $periode)
+    public function periodesAction(Seizoen $seizoen, Periode $periode): array
     {
         $em = $this->getDoctrine()->getManager();
         $list = $this->getDoctrine()->getRepository(Uitslag::class)->getPuntenByPloegForPeriode($periode, $seizoen);
@@ -63,32 +69,47 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * @Route("/posities/{positie}", name="uitslag_posities")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
+     * @Route ("/posities/{positie}", name="uitslag_posities")
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     *
+     * @Template ()
+     *
      * @param mixed $positie
+     *
+     * @return (Seizoen|mixed)[]
+     *
+     * @psalm-return array{list: mixed, seizoen: Seizoen, positie: mixed}
      */
-    public function positiesAction(Request $request, Seizoen $seizoen, $positie = 1)
+    public function positiesAction(Request $request, Seizoen $seizoen, $positie = 1): array
     {
         $list = $this->getDoctrine()->getRepository(Uitslag::class)->getCountForPosition($seizoen, $positie);
         return ['list' => $list, 'seizoen' => $seizoen, 'positie' => $positie];
     }
 
     /**
-     * @Route("/draft-klassement", name="uitslag_draft")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Route ("/draft-klassement", name="uitslag_draft")
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     *
+     * @return (Seizoen|mixed)[]
+     *
+     * @psalm-return array{list: mixed, seizoen: Seizoen}
      */
-    public function viewByDraftTransferAction(Seizoen $seizoen)
+    public function viewByDraftTransferAction(Seizoen $seizoen): array
     {
         $list = $this->getDoctrine()->getRepository(Uitslag::class)->getPuntenByPloegForDraftTransfers($seizoen);
         return ['list' => $list, 'seizoen' => $seizoen];
     }
 
     /**
-     * @Route("/transfer-klassement", name="uitslag_transfers")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Route ("/transfer-klassement", name="uitslag_transfers")
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     *
+     * @psalm-return array{list: mixed, seizoen: mixed}
      */
-    public function viewByUserTransferAction(Seizoen $seizoen)
+    public function viewByUserTransferAction(Seizoen $seizoen): array
     {
         $seizoen = $this->getDoctrine()->getRepository(Seizoen::class)->findBySlug($seizoen);
         $list = $this->getDoctrine()->getRepository(Uitslag::class)->getPuntenByPloegForUserTransfers($seizoen);
@@ -96,11 +117,17 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * @Route("/overzicht", name="uitslag_overview")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
+     * @Route ("/overzicht", name="uitslag_overview")
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     *
+     * @Template ()
+     *
+     * @return (Seizoen|\Doctrine\ORM\EntityRepository|array|mixed)[]
+     *
+     * @psalm-return array{seizoen: Seizoen, transfer: mixed, shadowgained: array, shadowlost: array, stand: mixed, draft: mixed, transferRepo: \Doctrine\ORM\EntityRepository<Transfer>, bestTransfers: array}
      */
-    public function overviewAction(Request $request, Seizoen $seizoen)
+    public function overviewAction(Request $request, Seizoen $seizoen): array
     {
         /** @var EntityManager $em */
         $em = $this->get('doctrine');

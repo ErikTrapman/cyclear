@@ -13,33 +13,14 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TransferManager
 {
-    /**
-     * @var EntityManager
-     */
-    private $em;
-
-    /**
-     * @var ContractManager
-     */
-    private $contractManager;
-
-    /**
-     * @var int|null
-     */
-    private $maxTransferAmount;
-
-    /**
-     * @param EntityManager $em
-     * @param mixed|null $maxTransfers
-     */
-    public function __construct(EntityManagerInterface $em, ContractManager $contractManager, $maxTransfers = null)
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private readonly ContractManager $contractManager,
+        private $maxTransfers = null)
     {
-        $this->em = $em;
-        $this->contractManager = $contractManager;
-        $this->maxTransferAmount = $maxTransfers;
     }
 
-    public function doDraftTransfer(Transfer $transfer)
+    public function doDraftTransfer(Transfer $transfer): bool
     {
         list($renner, $seizoen, $datum) = [$transfer->getRenner(), $transfer->getSeizoen(), $transfer->getDatum()];
         try {
@@ -54,13 +35,13 @@ class TransferManager
             $this->contractManager->createContract($renner, $transfer->getPloegNaar(), $seizoen, $datum);
             $this->em->persist($transfer);
             $this->em->commit();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->em->rollback();
         }
         return true;
     }
 
-    public function createReleaseTransfer(Transfer $transfer, $ploeg)
+    public function createReleaseTransfer(Transfer $transfer, Ploeg $ploeg): Transfer
     {
         $renner = $transfer->getRenner();
         $seizoen = $transfer->getSeizoen();
@@ -75,7 +56,7 @@ class TransferManager
         return $transferNew;
     }
 
-    public function doExchangeTransfer($renner1, $renner2, $datum, $seizoen, $type = Transfer::ADMINTRANSFER)
+    public function doExchangeTransfer($renner1, $renner2, \DateTime $datum, $seizoen, $type = Transfer::ADMINTRANSFER): bool
     {
         $ploeg1 = $this->em->getRepository(Renner::class)->getPloeg($renner1, $seizoen);
         $ploeg2 = $this->em->getRepository(Renner::class)->getPloeg($renner2, $seizoen);
@@ -118,7 +99,7 @@ class TransferManager
                 $this->em->persist($t2);
 
                 $this->em->commit();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->em->rollback();
                 return false;
             }
@@ -132,7 +113,7 @@ class TransferManager
         return true;
     }
 
-    public function doUserTransfer(Ploeg $ploeg, Renner $rennerUit, Renner $rennerIn, $seizoen, $msg = null)
+    public function doUserTransfer(Ploeg $ploeg, Renner $rennerUit, Renner $rennerIn, Seizoen $seizoen, $msg = null): bool
     {
         try {
             $this->em->beginTransaction();
@@ -168,7 +149,7 @@ class TransferManager
         return true;
     }
 
-    public function revertTransfer(Transfer $transfer)
+    public function revertTransfer(Transfer $transfer): bool
     {
         try {
             $this->em->beginTransaction();
@@ -186,12 +167,12 @@ class TransferManager
         }
     }
 
-    private function revertInversionTransfer($transfer)
+    private function revertInversionTransfer($transfer): void
     {
-        return $this->revertBaseTransfer($transfer);
+        $this->revertBaseTransfer($transfer);
     }
 
-    private function revertBaseTransfer($transfer)
+    private function revertBaseTransfer(Transfer $transfer): void
     {
         $renner = $transfer->getRenner();
         $contractRepo = $this->em->getRepository(Contract::class);
@@ -210,14 +191,11 @@ class TransferManager
         }
     }
 
-    /**
-     * @return int
-     */
     public function getTtlTransfersDoneByPloeg(Ploeg $ploeg)
     {
         $transferTypes = [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER];
         $seizoen = $ploeg->getSeizoen();
-        if ($this->maxTransferAmount) {
+        if ($this->maxTransfers) {
             return $this->em->getRepository(Transfer::class)
                 ->getTransferCountByType($ploeg, $seizoen->getStart(), $seizoen->getEnd(), $transferTypes);
         } else {
@@ -227,13 +205,10 @@ class TransferManager
         }
     }
 
-    /**
-     * @return int|null
-     */
     public function getTtlTransfersAtm(Seizoen $seizoen)
     {
-        if ($this->maxTransferAmount) {
-            return $this->maxTransferAmount;
+        if ($this->maxTransfers) {
+            return $this->maxTransfers;
         } else {
             return $this->em->getRepository(Periode::class)->getCurrentPeriode($seizoen)->getTransfers();
         }

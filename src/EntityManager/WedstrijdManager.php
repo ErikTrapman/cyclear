@@ -3,35 +3,22 @@
 namespace App\EntityManager;
 
 use App\CQRanking\Parser\CQParser;
+use App\Entity\Wedstrijd;
 
 class WedstrijdManager
 {
-    /**
-     * @var CQParser
-     */
-    private $cqParser;
-
-    public function __construct(CQParser $cqParser)
+    public function __construct(private CQParser $cqParser)
     {
-        $this->cqParser = $cqParser;
     }
 
-    /**
-     * @param mixed $crawler
-     * @return App\Entity\Wedstrijd
-     */
     public function createWedstrijdFromCrawler($crawler, \DateTime $dateTime)
     {
         return $this->createWedstrijd($this->cqParser->getName($crawler), $dateTime);
     }
 
-    /**
-     * @param string $name
-     * @return App\Entity\Wedstrijd
-     */
-    public function createWedstrijd($name, \DateTime $datum)
+    public function createWedstrijd($name, \DateTime $datum): Wedstrijd
     {
-        $wedstrijd = new \App\Entity\Wedstrijd();
+        $wedstrijd = new Wedstrijd();
         $name = str_replace(['(provisional)', '(prov)'], '', $name);
         $wedstrijd->setNaam($name);
         $wedstrijd->setDatum($datum);

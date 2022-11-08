@@ -42,12 +42,12 @@ class Periode
      */
     private $seizoen;
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function setStart($start)
+    public function setStart(\DateTime $start): void
     {
         $this->start = $start;
     }
@@ -57,7 +57,7 @@ class Periode
         return $this->start;
     }
 
-    public function setEind($eind)
+    public function setEind(\DateTime $eind): void
     {
         $this->eind = $eind;
     }
@@ -67,7 +67,7 @@ class Periode
         return $this->eind;
     }
 
-    public function setTransfers($transfers)
+    public function setTransfers(int $transfers): void
     {
         $this->transfers = $transfers;
     }
@@ -82,7 +82,7 @@ class Periode
         return $this->seizoen;
     }
 
-    public function setSeizoen($seizoen)
+    public function setSeizoen($seizoen): void
     {
         $this->seizoen = $seizoen;
     }

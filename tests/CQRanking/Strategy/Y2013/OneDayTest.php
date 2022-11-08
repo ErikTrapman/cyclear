@@ -16,7 +16,7 @@ use App\Tests\CQRanking\Strategy\StrategyTest;
 
 class OneDayTest extends StrategyTest
 {
-    public function testResultsParseCorrect()
+    public function testResultsParseCorrect(): void
     {
         $url = 'http://cqranking.com/men/asp/gen/race.asp?raceid=23598';
         $strategy = new OneDay();

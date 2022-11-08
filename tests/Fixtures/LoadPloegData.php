@@ -10,6 +10,9 @@ use Doctrine\Persistence\ObjectManager;
 
 class LoadPloegData extends Fixture
 {
+    /**
+     * @return void
+     */
     public function load(ObjectManager $manager)
     {
         $p1 = new Ploeg();

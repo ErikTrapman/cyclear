@@ -21,7 +21,7 @@ class UserManager
         $this->aclprovider = $aclprovider;
     }
 
-    public function setOwnerAcl($user, $ploeg)
+    public function setOwnerAcl($user, $ploeg): void
     {
         $securityIdentity = UserSecurityIdentity::fromAccount($user);
         $objectIdentity = ObjectIdentity::fromDomainObject($ploeg);
@@ -43,23 +43,20 @@ class UserManager
         }
     }
 
-    public function unsetOwnerAcl($user, $ploeg)
+    public function unsetOwnerAcl($user, $ploeg): void
     {
         $objectIdentity = ObjectIdentity::fromDomainObject($ploeg);
         $this->aclprovider->deleteAcl($objectIdentity);
     }
 
-    public function isOwner($user, $ploeg)
+    public function isOwner(object|null $user, \App\Entity\Ploeg $ploeg): bool
     {
         $securityIdentity = UserSecurityIdentity::fromAccount($user);
         $objectIdentity = ObjectIdentity::fromDomainObject($ploeg);
         try {
             $acl = $this->aclprovider->findAcl($objectIdentity);
             return $acl->isGranted([MaskBuilder::MASK_OWNER], [$securityIdentity]);
-        } catch (AclNotFoundException $e) {
-            return false;
-        } catch (\Symfony\Component\Security\Acl\Exception\NoAceFoundException $e) {
-            return false;
+        } catch (\Exception $e) {
         }
         return false;
     }

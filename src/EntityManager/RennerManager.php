@@ -6,12 +6,8 @@ use App\Entity\Renner;
 
 class RennerManager
 {
-    private $pattern = '[%d] %s';
+    private string $pattern = '[%d] %s';
 
-    /**
-     * @param type $rennerString
-     * @return Renner
-     */
     public function createRennerFromRennerSelectorTypeString($rennerString)
     {
         $cqId = $this->getCqIdFromRennerSelectorTypeString($rennerString);
@@ -21,18 +17,18 @@ class RennerManager
         return $renner;
     }
 
-    public function getRennerSelectorTypeStringFromRenner(Renner $renner)
+    public function getRennerSelectorTypeStringFromRenner(Renner $renner): string
     {
         return sprintf($this->pattern, $renner->getCqRankingId(), $renner->getNaam());
     }
 
-    public function getCqIdFromRennerSelectorTypeString($string)
+    public function getCqIdFromRennerSelectorTypeString(string $string): string|int|float|null
     {
         sscanf($string, '[%d]', $cqId);
         return $cqId;
     }
 
-    public function getNameFromRennerSelectorTypeString($string, $cqId = null)
+    public function getNameFromRennerSelectorTypeString(string $string, $cqId = null): string
     {
         if (null === $cqId) {
             $cqId = $this->getCqIdFromRennerSelectorTypeString($string);
@@ -40,7 +36,7 @@ class RennerManager
         return trim(str_replace(sprintf('[%d]', $cqId), '', $string));
     }
 
-    public function getRennerSelectorTypeString($cqRankingId, $name)
+    public function getRennerSelectorTypeString($cqRankingId, $name): string
     {
         return sprintf($this->pattern, $cqRankingId, $name);
     }

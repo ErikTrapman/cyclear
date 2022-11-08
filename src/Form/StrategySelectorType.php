@@ -10,6 +10,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class StrategySelectorType extends AbstractType
 {
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addModelTransformer(new ConstantToStrategyClassTransformer());
@@ -20,11 +23,14 @@ class StrategySelectorType extends AbstractType
         return $this->getName();
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'eriktrapman_cqparser_strategy';
     }
 
+    /**
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

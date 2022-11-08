@@ -8,6 +8,9 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class LoadSeizoenData extends Fixture
 {
+    /**
+     * @return void
+     */
     public function load(\Doctrine\Persistence\ObjectManager $manager)
     {
         $s = new \App\Entity\Seizoen();

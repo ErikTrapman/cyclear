@@ -14,6 +14,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class TransferUserType extends AbstractType
 {
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if (null !== $options['renner_uit']) {
@@ -21,7 +24,7 @@ class TransferUserType extends AbstractType
                 ->add('renner_in', RennerSelectorType::class, ['label' => 'Renner in', 'mapped' => 'rennerIn']);
         }
         if (null !== $options['renner_in']) {
-            $ploeg = $options['ploeg'];
+            $options['ploeg'];
             $ploegRenners = array_merge([0], $options['ploegRenners']);
             $builder
                 ->add('renner_uit', EntityType::class, [
@@ -38,11 +41,14 @@ class TransferUserType extends AbstractType
         $builder->add('userComment', null, ['label' => 'Commentaar', 'attr' => ['placeholder' => 'Commentaar...']]);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'cyclear_gamebundle_transferusertype';
     }
 
+    /**
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(

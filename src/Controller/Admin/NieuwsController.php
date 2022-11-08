@@ -27,10 +27,13 @@ class NieuwsController extends AbstractController
     /**
      * Lists all Nieuws entities.
      *
-     * @Route("/", name="admin_nieuws")
-     * @Template()
+     * @Route ("/", name="admin_nieuws")
+     *
+     * @Template ()
+     *
+     * @psalm-return array{entities: mixed}
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): array
     {
         $em = $this->get('doctrine');
 
@@ -47,10 +50,15 @@ class NieuwsController extends AbstractController
     /**
      * Displays a form to create a new Nieuws entity.
      *
-     * @Route("/new", name="admin_nieuws_new")
-     * @Template()
+     * @Route ("/new", name="admin_nieuws_new")
+     *
+     * @Template ()
+     *
+     * @return (Nieuws|\Symfony\Component\Form\FormView)[]
+     *
+     * @psalm-return array{entity: Nieuws, form: \Symfony\Component\Form\FormView}
      */
-    public function newAction()
+    public function newAction(): array
     {
         $entity = new Nieuws();
         $form = $this->createForm(NieuwsType::class, $entity);
@@ -64,9 +72,13 @@ class NieuwsController extends AbstractController
     /**
      * Creates a new Nieuws entity.
      *
-     * @Route("/create", name="admin_nieuws_create", methods={"POST"})
+     * @Route ("/create", name="admin_nieuws_create", methods={"POST"})
+     *
+     * @return (Nieuws|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Nieuws, form: \Symfony\Component\Form\FormView}
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $entity = new Nieuws();
         $form = $this->createForm(NieuwsType::class, $entity);
@@ -89,10 +101,15 @@ class NieuwsController extends AbstractController
     /**
      * Displays a form to edit an existing Nieuws entity.
      *
-     * @Route("/{id}/edit", name="admin_nieuws_edit")
-     * @Template()
+     * @Route ("/{id}/edit", name="admin_nieuws_edit")
+     *
+     * @Template ()
+     *
+     * @return (Nieuws|\Symfony\Component\Form\FormView|mixed)[]
+     *
+     * @psalm-return array{entity: Nieuws, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
      */
-    public function editAction($id)
+    public function editAction($id): array
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -115,9 +132,13 @@ class NieuwsController extends AbstractController
     /**
      * Edits an existing Nieuws entity.
      *
-     * @Route("/{id}/update", name="admin_nieuws_update", methods={"POST"})
+     * @Route ("/{id}/update", name="admin_nieuws_update", methods={"POST"})
+     *
+     * @return (Nieuws|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Nieuws, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -149,9 +170,9 @@ class NieuwsController extends AbstractController
     /**
      * Deletes a Nieuws entity.
      *
-     * @Route("/{id}/delete", name="admin_nieuws_delete", methods={"POST"})
+     * @Route ("/{id}/delete", name="admin_nieuws_delete", methods={"POST"})
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $form = $this->createDeleteForm($id);
 
@@ -172,7 +193,7 @@ class NieuwsController extends AbstractController
         return $this->redirect($this->generateUrl('admin_nieuws'));
     }
 
-    private function createDeleteForm($id)
+    private function createDeleteForm($id): \Symfony\Component\Form\FormInterface
     {
         return $this->createFormBuilder(['id' => $id])
             ->add('id', HiddenType::class)

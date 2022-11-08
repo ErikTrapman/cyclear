@@ -17,25 +17,25 @@ class CrawlerManager
         $this->crawler = new Crawler();
     }
 
-    public function getCrawler($url)
+    public function getCrawler(string $url): Crawler
     {
         $this->crawler->clear();
         $this->crawler->addContent($this->getContent($url), 'text/html');
         return $this->crawler;
     }
 
-    public function getCrawlerForMatchSelector($url)
+    public function getCrawlerForMatchSelector(string $url)
     {
         return $this->getCrawler($url);
     }
 
-    public function getCrawlerForHTMLContent($content)
+    public function getCrawlerForHTMLContent(string $content): Crawler
     {
         $this->crawler->addContent($content, 'text/html');
         return $this->crawler;
     }
 
-    private function getContent($feed)
+    private function getContent($feed): string
     {
         $content = file_get_contents($feed);
         if ($content === false) {

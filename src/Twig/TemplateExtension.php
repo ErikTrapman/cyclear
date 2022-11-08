@@ -25,7 +25,7 @@ class TemplateExtension extends \Twig_Extension
         ];
     }
 
-    public function currentSeason()
+    public function currentSeason(): Seizoen|null
     {
         return $this->em->getRepository(Seizoen::class)->findOneBy(['current' => true]);
     }

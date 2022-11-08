@@ -9,6 +9,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class RennerType extends AbstractType
 {
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -22,7 +25,7 @@ class RennerType extends AbstractType
             ->add('twitter', null, ['required' => false]);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'cyclear_gamebundle_rennertype';
     }

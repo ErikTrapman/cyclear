@@ -27,12 +27,18 @@ class TransferController extends AbstractController
     /**
      * My team.
      *
-     * @Route("/ploeg/{id}/renner/{renner}", name="user_transfer")
-     * @Template()
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @ParamConverter("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
+     * @Route ("/ploeg/{id}/renner/{renner}", name="user_transfer")
+     *
+     * @Template ()
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @ParamConverter ("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
+     *
+     * @return (Ploeg|Renner|Seizoen|\Symfony\Component\Form\FormView|int[])[]|RedirectResponse
+     *
+     * @psalm-return RedirectResponse|array{ploeg: Ploeg, renner: Renner, form: \Symfony\Component\Form\FormView, seizoen: Seizoen, transferInfo: array{count: int, left: int}}
      */
-    public function indexAction(UserManager $userManager, TransferManager $transferManager, Request $request, Seizoen $seizoen, Ploeg $ploeg, Renner $renner)
+    public function indexAction(UserManager $userManager, TransferManager $transferManager, Request $request, Seizoen $seizoen, Ploeg $ploeg, Renner $renner): array|RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
         if (!$userManager->isOwner($this->getUser(), $ploeg)) {

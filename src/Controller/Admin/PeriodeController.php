@@ -27,10 +27,13 @@ class PeriodeController extends AbstractController
     /**
      * Lists all Periode entities.
      *
-     * @Route("/", name="admin_periode")
-     * @Template()
+     * @Route ("/", name="admin_periode")
+     *
+     * @Template ()
+     *
+     * @psalm-return array{entities: mixed}
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): array
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -47,10 +50,15 @@ class PeriodeController extends AbstractController
     /**
      * Displays a form to create a new Periode entity.
      *
-     * @Route("/new", name="admin_periode_new")
-     * @Template()
+     * @Route ("/new", name="admin_periode_new")
+     *
+     * @Template ()
+     *
+     * @return (Periode|\Symfony\Component\Form\FormView)[]
+     *
+     * @psalm-return array{entity: Periode, form: \Symfony\Component\Form\FormView}
      */
-    public function newAction()
+    public function newAction(): array
     {
         $entity = new Periode();
         $form = $this->createForm(PeriodeType::class, $entity);
@@ -64,9 +72,13 @@ class PeriodeController extends AbstractController
     /**
      * Creates a new Periode entity.
      *
-     * @Route("/create", name="admin_periode_create", methods={"POST"})
+     * @Route ("/create", name="admin_periode_create", methods={"POST"})
+     *
+     * @return (Periode|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Periode, form: \Symfony\Component\Form\FormView}
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $entity = new Periode();
         $form = $this->createForm(PeriodeType::class, $entity);
@@ -89,10 +101,15 @@ class PeriodeController extends AbstractController
     /**
      * Displays a form to edit an existing Periode entity.
      *
-     * @Route("/{id}/edit", name="admin_periode_edit")
-     * @Template()
+     * @Route ("/{id}/edit", name="admin_periode_edit")
+     *
+     * @Template ()
+     *
+     * @return (Periode|\Symfony\Component\Form\FormView|mixed)[]
+     *
+     * @psalm-return array{entity: Periode, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
      */
-    public function editAction($id)
+    public function editAction($id): array
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -115,9 +132,13 @@ class PeriodeController extends AbstractController
     /**
      * Edits an existing Periode entity.
      *
-     * @Route("/{id}/update", name="admin_periode_update", methods={"POST"})
+     * @Route ("/{id}/update", name="admin_periode_update", methods={"POST"})
+     *
+     * @return (Periode|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Periode, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -149,9 +170,9 @@ class PeriodeController extends AbstractController
     /**
      * Deletes a Periode entity.
      *
-     * @Route("/{id}/delete", name="admin_periode_delete", methods={"POST"})
+     * @Route ("/{id}/delete", name="admin_periode_delete", methods={"POST"})
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $form = $this->createDeleteForm($id);
 
@@ -172,7 +193,7 @@ class PeriodeController extends AbstractController
         return $this->redirect($this->generateUrl('admin_periode'));
     }
 
-    private function createDeleteForm($id)
+    private function createDeleteForm($id): \Symfony\Component\Form\FormInterface
     {
         return $this->createFormBuilder(['id' => $id])
             ->add('id', HiddenType::class)

@@ -31,11 +31,17 @@ class PloegController extends AbstractController
     /**
      * Finds and displays a Ploeg entity.
      *
-     * @Route("/{id}/show", name="ploeg_show")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
+     * @Route ("/{id}/show", name="ploeg_show")
+     *
+     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     *
+     * @Template ()
+     *
+     * @return (Ploeg|Seizoen|\Doctrine\Persistence\ObjectRepository|\Symfony\Component\Form\FormView|float|int|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Ploeg, renners: mixed, uitslagen: mixed, seizoen: Seizoen, transfers: mixed, rennerRepo: \Doctrine\Persistence\ObjectRepository<Renner>, transferUitslagen: mixed, lostDrafts: mixed, zeges: mixed, punten: mixed, draftRenners: mixed, draftPunten: float|int, form: \Symfony\Component\Form\FormView}
      */
-    public function showAction(Request $request, Seizoen $seizoen, Ploeg $id)
+    public function showAction(Request $request, Seizoen $seizoen, Ploeg $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -73,7 +79,7 @@ class PloegController extends AbstractController
             ->getForm();
         if ('POST' === $request->getMethod()) {
             if ($form->handleRequest($request)->isValid()) {
-                $em->flush($entity);
+                $em->flush();
                 return $this->redirect($this->generateUrl('ploeg_show', ['id' => $entity->getId(), 'seizoen' => $seizoen->getSlug()]));
             }
         }

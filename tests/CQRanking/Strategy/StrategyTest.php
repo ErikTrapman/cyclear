@@ -17,9 +17,9 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class StrategyTest extends TestCase
 {
-    public function getCrawler($url)
+    public function getCrawler(string $url)
     {
-        $manager = new CrawlerManager(new Crawler());
+        $manager = new CrawlerManager();
         return $manager->getCrawler($url);
     }
 }

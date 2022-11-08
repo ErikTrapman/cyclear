@@ -15,6 +15,9 @@ class RequestListener
     {
     }
 
+    /**
+     * @return void
+     */
     public function onKernelRequest(RequestEvent $event)
     {
         if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {

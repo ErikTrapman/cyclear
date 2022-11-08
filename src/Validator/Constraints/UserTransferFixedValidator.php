@@ -15,10 +15,13 @@ class UserTransferFixedValidator extends ConstraintValidator
      */
     public function __construct(private EntityManagerInterface $em, private int $maxTransfers)
     {
+
     }
 
     /**
      * @param \App\Form\Entity\UserTransfer $value
+     *
+     * @return void
      */
     public function validate($value, Constraint $constraint)
     {
@@ -36,7 +39,7 @@ class UserTransferFixedValidator extends ConstraintValidator
         $this->doSpecificValidate($value);
     }
 
-    protected function doSpecificValidate(\App\Form\Entity\UserTransfer $value)
+    protected function doSpecificValidate(\App\Form\Entity\UserTransfer $value): void
     {
         $seizoen = $value->getSeizoen();
 
