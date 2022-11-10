@@ -10,12 +10,14 @@ use App\Entity\Transfer;
 use App\Entity\Uitslag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 class UitslagRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, private AdapterInterface $cache)
+    public const CACHE_TAG = 'UitslagRepository';
+
+    public function __construct(ManagerRegistry $registry, private TagAwareCacheInterface $cache)
     {
         parent::__construct($registry, Uitslag::class);
     }
@@ -262,55 +264,57 @@ class UitslagRepository extends ServiceEntityRepository
      * @param null $seizoen
      * @return array
      */
-    public function getPuntenByPloegForDraftTransfers($seizoen = null, Ploeg $ploeg = null)
+    public function getPuntenByPloegForDraftTransfers(Seizoen $seizoen, Ploeg $ploeg = null)
     {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
+        $item = $this->cache->getItem('getPuntenByPloegForDraftTransfers' . $seizoen?->getId() . $ploeg?->getId());
+        $item->tag(self::CACHE_TAG);
+        if (!$item->isHit()) {
+            $subQ = $this->_em->getRepository(Renner::class)->createQueryBuilder('r');
+            $subQ->innerJoin('App\Entity\Transfer', 't', 'WITH',
+                't.renner = r AND t.transferType = :draft AND t.seizoen = :seizoen')->andWhere('t.ploegNaar = :p');
+            $subQ->select('DISTINCT r.id');
+            $subQPoints = $this->_em->getRepository(Uitslag::class)->createQueryBuilder('u');
+            $subQPoints->select('IFNULL(SUM(u.rennerPunten),0)')
+                ->groupBy('u.renner')
+                ->innerJoin('u.wedstrijd', 'w')
+                ->where('w.seizoen = :seizoen')
+                ->andWhere($subQ->expr()->in('u.renner', $subQ->getDQL()));
+            $subQPoints->setParameter('draft', Transfer::DRAFTTRANSFER)->setParameter('seizoen', $seizoen);
+            if ($ploeg) {
+                $retPloeg = $this->_em->getRepository(Ploeg::class)
+                    ->createQueryBuilder('p')->where($subQ->expr()->eq('p', $ploeg->getId()))->getQuery()->getArrayResult();
+                $subRes = $subQPoints->setParameter('p', $ploeg)->getQuery()->getScalarResult();
+                $retPloeg['punten'] = array_sum(array_map(function ($item) {
+                    return (int)reset($item);
+                }, $subRes));
+                return [$retPloeg];
+            }
+            $res = [];
+            $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : pow(8, 8);
+            foreach ($this->_em->getRepository(Ploeg::class)
+                         ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
+                         ->setParameter('seizoen', $seizoen)->getQuery()->getArrayResult() as $ploeg) {
+                $subQPoints->setParameter('p', $ploeg['id']);
+                $subRes = $subQPoints->getQuery()->getArrayResult();
+                // results are grouped by rider. all riders can score the max amounts of maxPointsPerRider.
+                $ploeg['punten'] = array_sum(array_map(function ($item) use ($maxPointsPerRider) {
+                    return (int)min($maxPointsPerRider, reset($item));
+                }, $subRes));
+                $res[] = $ploeg;
+            }
+            static::puntenSort($res, 'afkorting');
+            $item->set($res);
+            $this->cache->save($item);
         }
-        $subQ = $this->_em->getRepository(Renner::class)->createQueryBuilder('r');
-        $subQ->innerJoin('App\Entity\Transfer', 't', 'WITH',
-            't.renner = r AND t.transferType = :draft AND t.seizoen = :seizoen')->andWhere('t.ploegNaar = :p');
-        $subQ->select('DISTINCT r.id');
-        $subQPoints = $this->_em->getRepository(Uitslag::class)->createQueryBuilder('u');
-        $subQPoints->select('IFNULL(SUM(u.rennerPunten),0)')
-            ->groupBy('u.renner')
-            ->innerJoin('u.wedstrijd', 'w')
-            ->where('w.seizoen = :seizoen')
-            ->andWhere($subQ->expr()->in('u.renner', $subQ->getDQL()));
-        $subQPoints->setParameter('draft', Transfer::DRAFTTRANSFER)->setParameter('seizoen', $seizoen);
-        if ($ploeg) {
-            $retPloeg = $this->_em->getRepository(Ploeg::class)
-                ->createQueryBuilder('p')->where($subQ->expr()->eq('p', $ploeg->getId()))->getQuery()->getArrayResult();
-            $subRes = $subQPoints->setParameter('p', $ploeg)->getQuery()->getScalarResult();
-            $retPloeg['punten'] = array_sum(array_map(function ($item) {
-                return (int)reset($item);
-            }, $subRes));
-            return [$retPloeg];
-        }
-        $res = [];
-        $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : pow(8, 8);
-        foreach ($this->_em->getRepository(Ploeg::class)
-                     ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
-                     ->setParameter('seizoen', $seizoen)->getQuery()->getArrayResult() as $ploeg) {
-            $subQPoints->setParameter('p', $ploeg['id']);
-            $subRes = $subQPoints->getQuery()->getArrayResult();
-            // results are grouped by rider. all riders can score the max amounts of maxPointsPerRider.
-            $ploeg['punten'] = array_sum(array_map(function ($item) use ($maxPointsPerRider) {
-                return (int)min($maxPointsPerRider, reset($item));
-            }, $subRes));
-            $res[] = $ploeg;
-        }
-        static::puntenSort($res, 'afkorting');
-        return $res;
+        return $item->get();
     }
 
-    public function getPuntenByPloegForUserTransfersWithoutLoss($seizoen = null, \DateTime $start = null, \DateTime $end = null)
+    public function getPuntenByPloegForUserTransfersWithoutLoss(Seizoen $seizoen, \DateTime $start = null, \DateTime $end = null)
     {
-        $item = $this->cache->getItem('UitslagRepository.getPuntenByPloegForUserTransfersWithoutLoss');
+        $key = 'getPuntenByPloegForUserTransfersWithoutLoss_' . $seizoen->getId() . $start?->format('Ymd') . $end?->format('Ymd');
+        $item = $this->cache->getItem($key);
+        $item->tag(self::CACHE_TAG);
         if (!$item->isHit()) {
-            if (null === $seizoen) {
-                $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
-            }
             $params = [':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER];
             $startEndWhere = null;
             if ($start && $end) {
