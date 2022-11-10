@@ -41,7 +41,7 @@ class CyclearSecurityExtension extends AbstractExtension
      */
     private function getSeason()
     {
-        return $this->requestStack->getMasterRequest()->attributes->get('seizoen');
+        return $this->requestStack->getMainRequest()->attributes->get('seizoen');
     }
 
     /**
@@ -49,7 +49,7 @@ class CyclearSecurityExtension extends AbstractExtension
      */
     private function getLoggedInTeam()
     {
-        return $this->requestStack->getMasterRequest()->attributes->get('seizoen-ploeg');
+        return $this->requestStack->getMainRequest()->attributes->get('seizoen-ploeg');
     }
 
     /**

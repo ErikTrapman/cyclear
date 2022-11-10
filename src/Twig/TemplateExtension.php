@@ -5,8 +5,10 @@ namespace App\Twig;
 use App\Entity\Seizoen;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class TemplateExtension extends \Twig_Extension
+class TemplateExtension extends AbstractExtension
 {
     /**
      * @var EntityManager
@@ -21,7 +23,7 @@ class TemplateExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('getCurrentSeason', [$this, 'currentSeason']),
+            new TwigFunction('getCurrentSeason', [$this, 'currentSeason']),
         ];
     }
 

@@ -15,7 +15,7 @@
                     {% set prevpos =  shadowlist[ploeg[0].id].position %}
                     {% set posdiff = prevpos - curpos %}
                     <td>
-                        {% spaceless %}
+                        {% apply spaceless %}
                             {{ curpos }}
                             {% if posdiff > 0 %}
                                 <img title=" + {{ posdiff }} "
@@ -24,8 +24,7 @@
                                 <img title=" {{ posdiff }} "
                                      src="/icons/famfamfam/bullet_red.png"/>
                             {% endif %}
-
-                        {% endspaceless %}
+                        {% endapply %}
                     </td>
                 {% else %}
                     <td>{{ curpos }}</td>

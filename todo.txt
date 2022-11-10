@@ -16,6 +16,7 @@ Commands herschrijven
 recipes
 uitslag_type kolom voor strategie herschrijven (via migration?)
 query cache voor resultaten op homepage (let op invalidatie)
+Samson Dataview wegwerken
 
 [BIG]
 * Hosting: terraform + ansible
