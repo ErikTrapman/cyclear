@@ -25,9 +25,9 @@ security:
             form_login:
                 provider: fos_userbundle
                 login_path:  /login-user/login
-                csrf_token_generator: security.csrf.token_manager
+                #csrf_token_generator: security.csrf.token_manager
+                enable_csrf: true
             logout:       true
-            anonymous:    lazy
             provider: fos_userbundle
             lazy: true
 
