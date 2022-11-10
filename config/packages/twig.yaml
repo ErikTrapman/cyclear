@@ -11,3 +11,7 @@ twig:
         corresponding_address: '%corresponding_address%'
         project_dir: '%kernel.project_dir%'
     exception_controller: null
+
+when@test:
+    twig:
+        strict_variables: true
