@@ -11,7 +11,7 @@ class WedstrijdManager
     {
     }
 
-    public function createWedstrijdFromCrawler($crawler, \DateTime $dateTime)
+    public function createWedstrijdFromCrawler($crawler, \DateTime $dateTime): Wedstrijd
     {
         return $this->createWedstrijd($this->cqParser->getName($crawler), $dateTime);
     }

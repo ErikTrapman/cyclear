@@ -2,26 +2,21 @@
 
 namespace App\EntityManager;
 
-use Symfony\Component\Security\Acl\Dbal\MutableAclProvider;
+use App\Entity\Ploeg;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Exception\AclNotFoundException;
 use Symfony\Component\Security\Acl\Model\AclProviderInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserManager
 {
-    /**
-     * @var MutableAclProvider
-     */
-    private $aclprovider;
-
-    public function __construct(AclProviderInterface $aclprovider)
+    public function __construct(private AclProviderInterface $aclprovider)
     {
-        $this->aclprovider = $aclprovider;
     }
 
-    public function setOwnerAcl($user, $ploeg): void
+    public function setOwnerAcl(UserInterface $user, Ploeg $ploeg): void
     {
         $securityIdentity = UserSecurityIdentity::fromAccount($user);
         $objectIdentity = ObjectIdentity::fromDomainObject($ploeg);
@@ -49,7 +44,7 @@ class UserManager
         $this->aclprovider->deleteAcl($objectIdentity);
     }
 
-    public function isOwner(object|null $user, \App\Entity\Ploeg $ploeg): bool
+    public function isOwner(UserInterface $user, Ploeg $ploeg): bool
     {
         $securityIdentity = UserSecurityIdentity::fromAccount($user);
         $objectIdentity = ObjectIdentity::fromDomainObject($ploeg);

@@ -2,22 +2,19 @@
 
 namespace App\DataView;
 
-use Samson\Bundle\DataViewBundle\DataView\AbstractDataView;
-
-class RiderSearchView extends AbstractDataView
+class RiderSearchView
 {
-    /**
-     * @return static
-     */
-    public function serialize($data, array $options = [])
+    public function serialize(array $data): array
     {
-        $this->add('naam', $data[0]);
-        $this->add('slug', $data[0]);
-        $this->addFixed('punten', $data['punten']);
-        if (isset($data['team'])) {
-            $this->addFixed('team', $data['team'] == -1 ? null : $data['team']);
-        }
-        $this->add(new CountryView(), $data[0]->getCountry(), 'country');
-        return $this;
+        return [
+            'naam' => $data[0]->getNaam(),
+            'slug' => $data[0]->getSlug(),
+            'punten' => $data['punten'],
+            'team' => ($data['team'] ?? false) == -1 ? null : $data['team'],
+            'country' => [
+                'name' => $data[0]->getCountry()->getName(),
+                'iso2' => $data[0]->getCountry()->getIso2(),
+            ]
+        ];
     }
 }

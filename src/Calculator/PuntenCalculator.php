@@ -8,9 +8,6 @@ use App\Entity\Transfer;
 use App\Entity\Uitslag;
 use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * Calculate points for a team.
- */
 class PuntenCalculator
 {
     public function __construct(private EntityManagerInterface $em)

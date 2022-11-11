@@ -135,7 +135,7 @@ class Wedstrijd
         return $this->uitslagen;
     }
 
-    public function getSeizoen(): Seizoen
+    public function getSeizoen(): ?Seizoen
     {
         return $this->seizoen;
     }

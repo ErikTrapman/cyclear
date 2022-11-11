@@ -8,7 +8,7 @@ class RennerManager
 {
     private string $pattern = '[%d] %s';
 
-    public function createRennerFromRennerSelectorTypeString($rennerString)
+    public function createRennerFromRennerSelectorTypeString($rennerString): Renner
     {
         $cqId = $this->getCqIdFromRennerSelectorTypeString($rennerString);
         $renner = new Renner();
@@ -22,10 +22,10 @@ class RennerManager
         return sprintf($this->pattern, $renner->getCqRankingId(), $renner->getNaam());
     }
 
-    public function getCqIdFromRennerSelectorTypeString(string $string): string|int|float|null
+    public function getCqIdFromRennerSelectorTypeString(string $string): string
     {
         sscanf($string, '[%d]', $cqId);
-        return $cqId;
+        return (string) $cqId;
     }
 
     public function getNameFromRennerSelectorTypeString(string $string, $cqId = null): string

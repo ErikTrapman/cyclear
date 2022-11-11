@@ -57,17 +57,17 @@ class RennerController extends AbstractController
     public function indexAction(Request $request, Seizoen $seizoen): array|Response
     {
         $em = $this->getDoctrine()->getManager();
-        $exclude = $request->query->get('excludeWithTeam') === 'true' ? true : false;
+        $exclude = $request->query->get('excludeWithTeam') === 'true';
         $renners = $em->getRepository(Renner::class)->getRennersWithPunten($seizoen, $exclude);
         $paginator = $this->get('knp_paginator');
 
         $this->appendQuery($renners, $this->assertArray($request->query->get('filter'), "/\s+/"), ['r.naam']);
 
-        $pagination = $paginator->paginate($renners, $request->query->get('page', 1), 20);
+        $pagination = $paginator->paginate($renners, (int)$request->query->get('page', 1), 20);
 
         $ret = [];
         foreach ($pagination as $r) {
-            $ret[] = (new RiderSearchView())->serialize($r)->getData();
+            $ret[] = (new RiderSearchView())->serialize($r);
         }
         $pagination->setItems($ret);
         $serializer = $this->get('jms_serializer');
@@ -95,7 +95,7 @@ class RennerController extends AbstractController
         $serializer = $this->serializer;
         $ret = [];
         foreach ($entities->getItems() as $item) {
-            $ret[] = (new BloodHoundRiderView())->serialize($item)->getData();
+            $ret[] = (new BloodHoundRiderView())->serialize($item);
         }
         return new Response($serializer->serialize($ret, 'json', SerializationContext::create()->setGroups(['small'])));
     }

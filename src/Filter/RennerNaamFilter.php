@@ -2,12 +2,14 @@
 
 namespace App\Filter;
 
-class RennerNaamFilter extends \Doctrine\ORM\Query\Filter\SQLFilter
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Query\Filter\SQLFilter;
+
+class RennerNaamFilter extends SQLFilter
 {
-    public function addFilterConstraint(\Doctrine\ORM\Mapping\ClassMetadata $targetEntity, $targetTableAlias)
+    public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
     {
-        //if ($targetEntity->name != "Doctrine\Tests\Models\Company\CompanyPerson") {
-        if ($targetEntity->name != "App\Entity\Renner") {
+        if ($targetEntity->name != 'App\Entity\Renner') {
             return '';
         }
 

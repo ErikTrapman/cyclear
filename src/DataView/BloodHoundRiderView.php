@@ -3,19 +3,16 @@
 namespace App\DataView;
 
 use App\Entity\Renner;
-use Samson\Bundle\DataViewBundle\DataView\AbstractDataView;
 
-class BloodHoundRiderView extends AbstractDataView
+class BloodHoundRiderView
 {
-    /**
-     * @return static
-     */
-    public function serialize($data, array $options = [])
+    public function serialize(Renner $data): array
     {
-        $this->addFixed('identifier', $data->getCqRankingId());
-        $this->addFixed('name', $data->getNaam());
-        $this->addFixed('value', $data->__toString());
-        $this->addFixed('slug', $data->getSlug());
-        return $this;
+        return [
+            'identifier' => $data->getCQRankingId(),
+            'name' => $data->getNaam(),
+            'value' => $data->__toString(),
+            'slug' => $data->getSlug()
+        ];
     }
 }

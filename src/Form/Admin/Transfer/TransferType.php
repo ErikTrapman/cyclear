@@ -51,9 +51,4 @@ class TransferType extends AbstractType
                 'transfertype' => Transfer::DRAFTTRANSFER,]
         );
     }
-
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_transfertype';
-    }
 }

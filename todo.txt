@@ -15,10 +15,19 @@ JMS serializer vervangen
 Commands herschrijven
 recipes
 uitslag_type kolom voor strategie herschrijven (via migration?)
-query cache voor resultaten op homepage (let op invalidatie)
+query cache voor resultaten op homepage (let op invalidatie!!)
 Samson Dataview wegwerken
+- $naming->expects($this->at(0))->method('normalize')->willReturn('foo.png');
+-  $naming->expects($this->at(1))->method('normalize')->willReturn('foo-1.png');
++  $naming->expects($this->exactly(2))->method('normalize')->willReturnOnConsecutiveCalls('foo.png', 'foo-1.png');
+->withConsecutive(['/media/someentity/someField/foo.png'], ['/media/someentity/someField/foo-1.png'])
+            ->willReturnOnConsecutiveCalls($this->returnValue(true), $this->returnValue(false));
+Cannot count query that uses a HAVING clause. Use the output walkers for pagination - renners beschikbaar paginatie
+Alle CQRanking urls parametriseren
+$this->get('' in Controllers wegwerken
 
 [BIG]
 * Hosting: terraform + ansible
 * Backups Google Drive via cyclear-backup
 * Deploys... GH Actions + Surf?
+* Easyadmin

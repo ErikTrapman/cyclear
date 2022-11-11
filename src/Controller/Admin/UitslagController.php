@@ -137,13 +137,10 @@ class UitslagController extends AbstractController
         $form = $this->createForm(UitslagCreateType::class, null, $options);
         if ($request->isXmlHttpRequest()) {
             $form->handleRequest($request);
-
             $twig = $this->get('twig');
             $templateFile = 'admin/uitslag/_ajaxTemplate.html.twig';
-            $templateContent = $twig->loadTemplate($templateFile);
-
             // Render the whole template including any layouts etc
-            $body = $templateContent->render(['form' => $form->createView()]);
+            $body = $twig->render($templateFile, ['form' => $form->createView()]);
             return new Response($body);
         }
         if ($request->getMethod() == 'POST') {
