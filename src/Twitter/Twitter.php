@@ -244,7 +244,6 @@ class Twitter
      * @param array[optional] $parameters The parameters.
      * @return array
      * @todo    refactor me
-     *
      */
     private function doOAuthCall($method, array $parameters = null)
     {
@@ -325,7 +324,7 @@ class Twitter
      * @param array[optional]  $parameters    Optional parameters.
      * @param bool[optional]   $authenticate  Should we authenticate.
      * @param bool[optional]   $method        The method to use. Possible values are GET, POST.
-     * @param null|string $filePath
+     * @param string|null $filePath
      * @param bool[optional]   $expectJSON    Do we expect JSON.
      * @param bool[optional]   $returnHeaders Should the headers be returned?
      *

@@ -48,9 +48,9 @@ class ContractController extends AbstractController
             $filter->handleRequest($request);
             if ($filter->isValid()) {
                 if ($filter->get('renner')->getData()) {
-                    //$em->getFilters()->enable("renner")->setParameter(
+                    // $em->getFilters()->enable("renner")->setParameter(
                     //    "renner", $filter->get('renner')->getData(), Type::getType(Type::OBJECT)->getBindingType()
-                    //);
+                    // );
                     $entities->andWhere('c.renner = :renner')->setParameter('renner', $filter->get('renner')->getData()->getId());
                 }
             }
@@ -122,9 +122,9 @@ class ContractController extends AbstractController
      *
      * @Template ()
      *
-     * @return (Contract|\Symfony\Component\Form\FormView)[]
-     *
      * @psalm-return array{entity: Contract, edit_form: \Symfony\Component\Form\FormView}
+     * @param mixed $id
+     * @return (Contract|\Symfony\Component\Form\FormView)[]
      */
     public function editAction($id): array
     {
@@ -150,9 +150,9 @@ class ContractController extends AbstractController
      *
      * @Route ("/{id}/update", name="admin_contract_update", methods={"POST"})
      *
-     * @return (Contract|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
      * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Contract, edit_form: \Symfony\Component\Form\FormView}
+     * @param mixed $id
+     * @return (Contract|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {

@@ -12,7 +12,7 @@ class BloodHoundRiderView
             'identifier' => $data->getCQRankingId(),
             'name' => $data->getNaam(),
             'value' => $data->__toString(),
-            'slug' => $data->getSlug()
+            'slug' => $data->getSlug(),
         ];
     }
 }

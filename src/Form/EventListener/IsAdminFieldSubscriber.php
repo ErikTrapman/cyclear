@@ -3,7 +3,6 @@
 namespace App\Form\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Form\Event\DataEvent;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -37,8 +36,6 @@ class IsAdminFieldSubscriber implements EventSubscriberInterface
     /**
      * Called before form data is set
      *
-     * @param \Symfony\Component\Form\FormEvent $event
-     *
      * @return void
      */
     public function preSetData(\Symfony\Component\Form\FormEvent $event)
@@ -61,8 +58,6 @@ class IsAdminFieldSubscriber implements EventSubscriberInterface
 
     /**
      * Called when the form is bound to a request
-     *
-     * @param \Symfony\Component\Form\FormEvent $event
      *
      * @return void
      */

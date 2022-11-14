@@ -20,7 +20,7 @@ class ContractType extends \Symfony\Component\Form\AbstractType
         $seizoen = $options['seizoen'];
         $timeoptions = ['widget' => 'single_text', 'format' => 'd-M-yyyy k:m'];
         $builder
-            //->add('ploeg')
+            // ->add('ploeg')
             ->add('renner', RennerSelectorType::class)
             ->add('ploeg', null, ['label' => 'Ploeg naar', 'required' => true, 'query_builder' => function ($e) use ($seizoen) {
                 return $e->createQueryBuilder('p')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen);

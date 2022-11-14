@@ -13,7 +13,7 @@ class RennerIdFilterType extends \Symfony\Component\Form\AbstractType
     {
         $builder->add('renner', RennerSelectorType::class, [
             'required' => false,
-            'label' => 'Naam / CQ-id',]);
+            'label' => 'Naam / CQ-id', ]);
     }
 
     public function getName(): string

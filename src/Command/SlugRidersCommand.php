@@ -4,7 +4,6 @@ namespace App\Command;
 
 use App\Entity\Renner;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -31,7 +30,7 @@ class SlugRidersCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $qb = $this->em->getRepository(Renner::class)->createQueryBuilder('r')->where('r.slug IS NULL'); //->setMaxResults(5000);
+        $qb = $this->em->getRepository(Renner::class)->createQueryBuilder('r')->where('r.slug IS NULL'); // ->setMaxResults(5000);
         $repo = $this->em->getRepository(Renner::class);
         foreach ($qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY) as $i => $renner) {
             $renner = $repo->find($renner['id']);

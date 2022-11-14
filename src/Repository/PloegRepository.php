@@ -71,7 +71,7 @@ class PloegRepository extends EntityRepository
                 0 => $renner,
                 'punten' => $punten,
                 'rennerPunten' => $rennerPunten,
-                'index' => $index,];
+                'index' => $index, ];
         }
         if ($sort) {
             $this->puntenSort($ret);

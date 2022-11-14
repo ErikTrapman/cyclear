@@ -106,9 +106,9 @@ class UserController extends AbstractController
      *
      * @Template ()
      *
-     * @return (User|\Symfony\Component\Form\FormView)[]
-     *
      * @psalm-return array{entity: User, edit_form: \Symfony\Component\Form\FormView}
+     * @param mixed $id
+     * @return (User|\Symfony\Component\Form\FormView)[]
      */
     public function editAction($id): array
     {
@@ -135,9 +135,9 @@ class UserController extends AbstractController
      *
      * @Template ()
      *
-     * @return (User|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
      * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: User, edit_form: \Symfony\Component\Form\FormView}
+     * @param mixed $id
+     * @return (User|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {

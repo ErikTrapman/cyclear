@@ -87,7 +87,7 @@ class TransferController extends AbstractController
                 'seizoen' => $seizoen,
                 'transferInfo' => [
                     'count' => $transferInfo,
-                    'left' => $ttlTransfersAtm - $transferInfo],
+                    'left' => $ttlTransfersAtm - $transferInfo, ],
             ];
     }
 }

@@ -25,7 +25,7 @@ class RennerManager
     public function getCqIdFromRennerSelectorTypeString(string $string): string
     {
         sscanf($string, '[%d]', $cqId);
-        return (string) $cqId;
+        return (string)$cqId;
     }
 
     public function getNameFromRennerSelectorTypeString(string $string, $cqId = null): string

@@ -103,7 +103,8 @@
         "lint-fix": "php-cs-fixer fix",
         "lint-twig": "php bin/console lint:twig --show-deprecations templates/ --ansi",
         "lint-yaml": "php bin/console lint:yaml translations/ config/ --parse-tags",
-        "psalm": "psalm --no-cache"
+        "psalm": "psalm --no-cache",
+        "test": "APP_ENV=test vendor/bin/phpunit -c . tests/"
     },
     "conflict": {
         "symfony/symfony": "*"

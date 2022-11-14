@@ -102,9 +102,9 @@ class SpelregelsController extends AbstractController
      *
      * @Template ()
      *
-     * @return (Spelregels|\Symfony\Component\Form\FormView|mixed)[]
-     *
      * @psalm-return array{entity: Spelregels, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (Spelregels|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
@@ -131,9 +131,9 @@ class SpelregelsController extends AbstractController
      *
      * @Route ("/{id}/update", name="admin_spelregels_update", methods={"POST"})
      *
-     * @return (Spelregels|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
      * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Spelregels, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (Spelregels|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -168,6 +168,7 @@ class SpelregelsController extends AbstractController
      * Deletes a Spelregels entity.
      *
      * @Route ("/{id}/delete", name="admin_spelregels_delete", methods={"POST"})
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {

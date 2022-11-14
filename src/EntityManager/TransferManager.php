@@ -8,7 +8,6 @@ use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TransferManager
@@ -16,8 +15,8 @@ class TransferManager
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly ContractManager $contractManager,
-        private $maxTransfers = null)
-    {
+        private $maxTransfers = null
+    ) {
     }
 
     public function doDraftTransfer(Transfer $transfer): bool
@@ -139,7 +138,7 @@ class TransferManager
             $transferIn->setUserComment($msg);
             $this->em->persist($transferIn);
             $this->contractManager->createContract($rennerIn, $ploeg, $seizoen, $datum);
-            //$transferUit->setInversionTransfer($transferIn);
+            // $transferUit->setInversionTransfer($transferIn);
             $transferIn->setInversionTransfer($transferUit);
             $transferUit->setInversionTransfer($transferIn);
             $this->em->commit();

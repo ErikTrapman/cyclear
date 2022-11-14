@@ -118,7 +118,7 @@ class Transfer
     }
 
     /**
-     * @return null|string
+     * @return string|null
      *
      * @psalm-return 'admin-transfer'|'draft'|'gebruiker'|null
      */

@@ -48,7 +48,7 @@ class TransferController extends AbstractController
         $pagination = $paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
-        //$entities = $query->getResult();
+        // $entities = $query->getResult();
 
         return ['entities' => $pagination];
     }
@@ -73,8 +73,6 @@ class TransferController extends AbstractController
      * @Route ("/new-draft", name="admin_transfer_new_draft")
      *
      * @Template ()
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|array
      *
      * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{form: mixed}
      */
@@ -104,8 +102,6 @@ class TransferController extends AbstractController
      *
      * @Template ()
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|array
-     *
      * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{form: mixed}
      */
     public function newExchangeAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
@@ -113,7 +109,7 @@ class TransferController extends AbstractController
         $entity = new Transfer();
         $entity->setTransferType(Transfer::ADMINTRANSFER);
         $entity->setDatum(new \DateTime());
-        //$entity->setSeizoen($seizoen);
+        // $entity->setSeizoen($seizoen);
         $form = $this->getTransferForm($entity);
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
@@ -143,9 +139,9 @@ class TransferController extends AbstractController
      *
      * @Template ()
      *
-     * @return (Transfer|\Symfony\Component\Form\FormView|mixed)[]
-     *
      * @psalm-return array{entity: Transfer, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (Transfer|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
@@ -171,9 +167,9 @@ class TransferController extends AbstractController
      *
      * @Route ("/{id}/update", name="admin_transfer_update", methods={"POST"})
      *
-     * @return (Transfer|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
      * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Transfer, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (Transfer|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -208,6 +204,7 @@ class TransferController extends AbstractController
      * Deletes a Transfer entity.
      *
      * @Route ("/{id}/delete", name="admin_transfer_delete", methods={"POST"})
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {

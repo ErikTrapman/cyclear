@@ -164,7 +164,6 @@ class TransferRepository extends EntityRepository
         $conn->executeQuery("INSERT INTO $tableName (" . $a . ')');
     }
 
-
     public function hasDraftTransfer(Renner $renner, Ploeg $ploeg)
     {
         return $this->createQueryBuilder('t')

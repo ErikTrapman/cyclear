@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Seizoen;
-use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 
@@ -14,9 +13,9 @@ class PeriodeRepository extends EntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
-        $start = new DateTime();
+        $start = new \DateTime();
         $start->setTime(0, 0, 0);
-        $eind = new DateTime();
+        $eind = new \DateTime();
         $eind->setTime(23, 59, 59);
         $qb = $this->createQueryBuilder('p')
             ->where('p.eind >= :start AND p.start <= :eind')
@@ -24,7 +23,7 @@ class PeriodeRepository extends EntityRepository
         try {
             return $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
-            $now = new DateTime();
+            $now = new \DateTime();
             $now->setTime(0, 0, 0);
             $period = null;
             $periods = $this->createQueryBuilder('p')->orderBy('p.start', 'ASC')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen);

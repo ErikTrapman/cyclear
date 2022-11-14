@@ -8,11 +8,9 @@ use App\CQRanking\Parser\CQParser;
 use App\CQRanking\Parser\Twitter\TwitterParser;
 use App\Entity\Country;
 use App\Entity\Renner;
-use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\UitslagType;
 use App\Entity\Wedstrijd;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Translatable\Entity\Translation;
 

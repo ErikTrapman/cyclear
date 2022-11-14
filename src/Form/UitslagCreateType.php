@@ -34,7 +34,7 @@ class UitslagCreateType extends AbstractType
                         ->where('w.generalClassification = 0')
                         ->add('orderBy', 'w.id DESC')
                         ->setMaxResults(90);
-                },])
+                }, ])
             ->add('wedstrijd', WedstrijdType::class, ['default_date' => $options['default_date']]);
 
         $factory = $builder->getFormFactory();
@@ -58,7 +58,7 @@ class UitslagCreateType extends AbstractType
                 'by_reference' => false,
                 'entry_options' => [
                     'use_wedstrijd' => false,
-                    'seizoen' => $seizoen,],]));
+                    'seizoen' => $seizoen, ], ]));
             if ($request->isXmlHttpRequest()) {
                 $url = $data['url'] ? $data['url'] : $data['url_manual'];
                 $crawler = $crawlerManager->getCrawler($url);

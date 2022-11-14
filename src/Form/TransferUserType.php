@@ -36,7 +36,7 @@ class TransferUserType extends AbstractType
                             ->where('r IN ( :renners )')
                             ->setParameter(':renners', $ploegRenners)
                             ->orderBy('r.naam');
-                    },]);
+                    }, ]);
         }
         $builder->add('userComment', null, ['label' => 'Commentaar', 'attr' => ['placeholder' => 'Commentaar...']]);
     }

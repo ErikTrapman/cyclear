@@ -23,7 +23,7 @@ class TransferEditType extends \Symfony\Component\Form\AbstractType
         $choices = [
             Transfer::DRAFTTRANSFER => 'draft transfer',
             Transfer::ADMINTRANSFER => 'admin transfer',
-            Transfer::USERTRANSFER => 'user transfer',];
+            Transfer::USERTRANSFER => 'user transfer', ];
         $builder
             ->add('renner', RennerSelectorType::class, ['attr' => ['read_only' => true]])
             ->add('transferType', ChoiceType::class, ['choices' => array_flip($choices)])

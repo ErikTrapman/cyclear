@@ -21,7 +21,7 @@ class RennerType extends AbstractType
                 'class' => Country::class,
                 'query_builder' => function (\Doctrine\ORM\EntityRepository $e) {
                     return $e->createQueryBuilder('c')->orderBy('c.name');
-                },])
+                }, ])
             ->add('twitter', null, ['required' => false]);
     }
 

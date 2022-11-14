@@ -3,8 +3,6 @@
 namespace App\Form\DataTransformer;
 
 use App\CQRanking\Parser\Strategy\AbstractStrategy;
-use App\CQRanking\Parser\Strategy\Y2012\Stage;
-use App\Entity\Renner;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 

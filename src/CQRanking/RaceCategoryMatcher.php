@@ -25,7 +25,7 @@ class RaceCategoryMatcher
         return null;
     }
 
-    public function needsRefStage(Wedstrijd $wedstrijd):bool
+    public function needsRefStage(Wedstrijd $wedstrijd): bool
     {
         $in = 'generalclassification';
         $string = $wedstrijd->getNaam();

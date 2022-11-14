@@ -11,7 +11,6 @@ use App\EntityManager\UitslagManager;
 use App\EntityManager\WedstrijdManager;
 use App\Form\UitslagCreateType;
 use App\Form\UitslagType;
-use DateTime;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -133,7 +132,7 @@ class UitslagController extends AbstractController
         $options['request'] = $request;
         $options['seizoen'] = $em->getRepository(Seizoen::class)->getCurrent();
         $options['renner_manager'] = $rennerManager;
-        $options['default_date'] = new DateTime();
+        $options['default_date'] = new \DateTime();
         $form = $this->createForm(UitslagCreateType::class, null, $options);
         if ($request->isXmlHttpRequest()) {
             $form->handleRequest($request);

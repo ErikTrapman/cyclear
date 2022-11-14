@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 
-
-
 namespace App\Tests\CQRanking;
 
 use App\CQRanking\CQAutomaticResultsResolver;
@@ -28,7 +26,7 @@ class CQAutomaticResultsResolverTest extends WebTestCase
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
         $wedstrijdRepo = $this->getMockBuilder('App\Repository\WedstrijdRepository')->disableOriginalConstructor()->getMock();
         $em->expects($this->at(0))->method('getRepository')->with(Wedstrijd::class)->willReturn($wedstrijdRepo);
-        //$wedstrijdRepo->method('findOneByExternalIdentifier')->willReturn(null);
+        // $wedstrijdRepo->method('findOneByExternalIdentifier')->willReturn(null);
 
         $ploegRepo = $this->getMockBuilder('Doctrine\ORM\EntityRepository')->disableOriginalConstructor()->getMock();
         $em->expects($this->at(1))->method('getRepository')->with(Ploeg::class)->willReturn($ploegRepo);

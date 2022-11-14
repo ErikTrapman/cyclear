@@ -57,7 +57,7 @@ class RennerSelectorType extends AbstractType
                 'attr' => [
                     'style' => 'width: 400px',
                     'autocomplete' => 'off',
-                    'data-link' => $url]
+                    'data-link' => $url, ],
             ]
         );
     }

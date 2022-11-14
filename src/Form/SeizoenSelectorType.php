@@ -29,8 +29,8 @@ class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
                 'class' => Seizoen::class,
                 'preferred_choices' => [$this->em->getRepository(Seizoen::class)->getCurrent()],
                 'query_builder' => function (\Doctrine\ORM\EntityRepository $e) {
-                    return $e->createQueryBuilder('s')->orderBy('s.id', 'DESC'); //->where('s.current = 1');
-                },]);
+                    return $e->createQueryBuilder('s')->orderBy('s.id', 'DESC'); // ->where('s.current = 1');
+                }, ]);
     }
 
     public function getParent()

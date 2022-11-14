@@ -14,7 +14,7 @@ class RiderSearchView
             'country' => [
                 'name' => $data[0]->getCountry()->getName(),
                 'iso2' => $data[0]->getCountry()->getIso2(),
-            ]
+            ],
         ];
     }
 }

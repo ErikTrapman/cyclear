@@ -15,7 +15,6 @@ class UserTransferFixedValidator extends ConstraintValidator
      */
     public function __construct(private EntityManagerInterface $em, private int $maxTransfers)
     {
-
     }
 
     /**
@@ -27,9 +26,11 @@ class UserTransferFixedValidator extends ConstraintValidator
     {
         if (null === $value->getRennerIn() || null === $value->getRennerUit()) {
             $this->context->addViolation('Onbekende renner opgegeven.');
+            return;
         }
         if ($value->getSeizoen()->getClosed()) {
             $this->context->addViolation('Het seizoen ' . $value->getSeizoen() . ' is gesloten.');
+            return;
         }
         $rennerPloeg = $this->em->getRepository(Renner::class)
             ->getPloeg($value->getRennerIn(), $value->getSeizoen());

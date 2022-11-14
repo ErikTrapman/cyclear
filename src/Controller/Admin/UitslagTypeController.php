@@ -102,9 +102,9 @@ class UitslagTypeController extends AbstractController
      *
      * @Template ()
      *
-     * @return (UitslagType|\Symfony\Component\Form\FormView|mixed)[]
-     *
      * @psalm-return array{entity: UitslagType, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (UitslagType|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
@@ -131,9 +131,9 @@ class UitslagTypeController extends AbstractController
      *
      * @Route ("/{id}/update", name="admin_uitslagtype_update", methods={"POST"})
      *
-     * @return (UitslagType|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
      * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: UitslagType, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (UitslagType|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -168,6 +168,7 @@ class UitslagTypeController extends AbstractController
      * Deletes a UitslagType entity.
      *
      * @Route ("/{id}/delete", name="admin_uitslagtype_delete", methods={"POST"})
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {

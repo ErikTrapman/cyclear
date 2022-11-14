@@ -34,7 +34,7 @@ class UitslagType extends AbstractType
                 'class' => Ploeg::class,
                 'query_builder' => function (EntityRepository $e) use ($seizoen) {
                     return $e->createQueryBuilder('p')->where('p.seizoen = :seizoen')->setParameter('seizoen', $seizoen)->orderBy('p.afkorting');
-                },])
+                }, ])
             ->add('renner', RennerSelectorType::class);
     }
 

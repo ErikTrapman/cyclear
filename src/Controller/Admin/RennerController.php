@@ -68,9 +68,9 @@ class RennerController extends AbstractController
      *
      * @Template ()
      *
-     * @return (Renner|\Symfony\Component\Form\FormView|mixed)[]
-     *
      * @psalm-return array{entity: Renner, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (Renner|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction(Request $request, $id): array
     {
@@ -143,6 +143,7 @@ class RennerController extends AbstractController
 
     /**
      * @Route ("/{id}/delete", name="admin_renner_delete", methods={"POST"})
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {

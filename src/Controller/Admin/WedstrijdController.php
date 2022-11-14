@@ -100,9 +100,9 @@ class WedstrijdController extends AbstractController
      *
      * @Template ()
      *
-     * @return (Wedstrijd|\Symfony\Component\Form\FormView|mixed)[]
-     *
      * @psalm-return array{entity: Wedstrijd, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (Wedstrijd|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
@@ -129,9 +129,9 @@ class WedstrijdController extends AbstractController
      *
      * @Route ("/{id}/update", name="admin_wedstrijd_update", methods={"POST"})
      *
-     * @return (Wedstrijd|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
      * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Wedstrijd, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (Wedstrijd|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -166,6 +166,7 @@ class WedstrijdController extends AbstractController
      * Deletes a Periode entity.
      *
      * @Route ("/{id}/delete", name="admin_wedstrijd_delete", methods={"POST"})
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {

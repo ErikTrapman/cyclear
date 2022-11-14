@@ -22,9 +22,7 @@ class UitslagRepository extends ServiceEntityRepository
         parent::__construct($registry, Uitslag::class);
     }
 
-
     /**
-     * @param $values
      * @param string $fallBackSort
      * @param mixed $sortKey
      * @param ((array|mixed)[]|mixed)[] $values
@@ -66,7 +64,7 @@ class UitslagRepository extends ServiceEntityRepository
         if (null !== $maxDate) {
             $subQuery->andWhere('w.datum < :maxdate');
             $maxDate->setTime(0, 0, 0);
-            //$subQuery->setParameter('maxdate', $maxDate);
+            // $subQuery->setParameter('maxdate', $maxDate);
             $params['maxdate'] = $maxDate;
         }
 
@@ -83,9 +81,9 @@ class UitslagRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array[]
-     *
      * @psalm-return array<array>
+     * @param mixed|null $seizoen
+     * @return array[]
      */
     public function getPuntenByPloegForPeriode(Periode $periode, $seizoen = null): array
     {
@@ -204,9 +202,10 @@ class UitslagRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array[]
-     *
      * @psalm-return list<array{0: mixed, punten: mixed}>
+     * @param mixed|null $seizoen
+     * @param mixed $limit
+     * @return array[]
      */
     public function getPuntenWithRenners($seizoen = null, $limit = 20): array
     {
@@ -229,9 +228,10 @@ class UitslagRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array[]
-     *
      * @psalm-return list<array{0: mixed, punten: mixed}>
+     * @param mixed|null $seizoen
+     * @param mixed $limit
+     * @return array[]
      */
     public function getPuntenWithRennersNoPloeg($seizoen = null, $limit = 20): array
     {
@@ -260,13 +260,9 @@ class UitslagRepository extends ServiceEntityRepository
         return $ret;
     }
 
-    /**
-     * @param null $seizoen
-     * @return array
-     */
-    public function getPuntenByPloegForDraftTransfers(Seizoen $seizoen, Ploeg $ploeg = null)
+    public function getPuntenByPloegForDraftTransfers(Seizoen $seizoen, Ploeg $ploeg = null): array
     {
-        $item = $this->cache->getItem('getPuntenByPloegForDraftTransfers' . $seizoen?->getId() . $ploeg?->getId());
+        $item = $this->cache->getItem('getPuntenByPloegForDraftTransfers' . $seizoen->getId() . $ploeg?->getId());
         $item->tag(self::CACHE_TAG);
         if (!$item->isHit()) {
             $subQ = $this->_em->getRepository(Renner::class)->createQueryBuilder('r');
@@ -392,9 +388,9 @@ class UitslagRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array[]
-     *
      * @psalm-return list<array<string, mixed>>
+     * @param mixed|null $seizoen
+     * @return array[]
      */
     public function getPuntenByPloegForUserTransfers($seizoen = null): array
     {
@@ -432,7 +428,6 @@ class UitslagRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $ploeg
      * @param null $seizoen
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -459,7 +454,6 @@ class UitslagRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $ploeg
      * @param null $seizoen
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -472,14 +466,14 @@ class UitslagRepository extends ServiceEntityRepository
         $draftrenners = $this->_em->getRepository(Ploeg::class)->getDraftRenners($ploeg);
         $qb = $this->createQueryBuilder('u');
         $qb
-            //->where('u.ploeg = :ploeg')
+            // ->where('u.ploeg = :ploeg')
             ->join('u.wedstrijd', 'w')
             ->andWhere('w.seizoen = :seizoen')
             ->andWhere($qb->expr()->in('u.renner', array_merge(array_unique(array_map(function ($r) {
                 return $r->getId();
             }, $draftrenners)), [0])))
             ->andWhere('u.rennerPunten > 0')
-            //->andWhere('1=1')
+            // ->andWhere('1=1')
             ->andWhere('(u.ploeg != :ploeg OR u.ploeg IS NULL) OR (u.ploeg = :ploeg AND u.ploegPunten = 0)')
             ->setParameters($parameters)
             ->orderBy('w.datum DESC, u.id', 'DESC');

@@ -2,7 +2,6 @@
 
 namespace App\CQRanking;
 
-use App\CQRanking\Exception\CyclearGameBundleCQException;
 use App\CQRanking\Parser\Crawler\CrawlerManager;
 use App\Entity\Ploeg;
 use App\Entity\Seizoen;

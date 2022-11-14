@@ -24,7 +24,6 @@ class RennerRepository extends EntityRepository
     }
 
     /**
-     * @param $id
      * @return object|Renner|null
      */
     public function findOneByCQId($id)
@@ -67,6 +66,7 @@ class RennerRepository extends EntityRepository
 
     /**
      * @psalm-return list<mixed>
+     * @param mixed|null $seizoen
      */
     public function getRennersWithPloeg($seizoen = null): array
     {
@@ -107,7 +107,7 @@ class RennerRepository extends EntityRepository
             ->innerJoin('c.ploeg', 'p')
             ->where('c.seizoen = :seizoen')
             ->andWhere('c.eind IS NULL')
-            ->andWhere('c.renner = r')//->setParameter('seizoen', $seizoen)
+            ->andWhere('c.renner = r')// ->setParameter('seizoen', $seizoen)
         ;
         $qb = $this->createQueryBuilder('r')
             ->addSelect('IFNULL((' . $puntenQb->getDQL() . '), 0) AS punten')
@@ -118,6 +118,6 @@ class RennerRepository extends EntityRepository
         } else {
             $qb->addSelect('(' . $teamQb->getDQL() . ') AS team');
         }
-        return $qb->setParameter('seizoen', $seizoen); //->setMaxResults(20)->getQuery()->getResult();
+        return $qb->setParameter('seizoen', $seizoen); // ->setMaxResults(20)->getQuery()->getResult();
     }
 }

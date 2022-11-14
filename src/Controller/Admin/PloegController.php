@@ -56,7 +56,7 @@ class PloegController extends AbstractController
 
         if ($request->getMethod() == 'POST') {
             $filter->handleRequest($request);
-            //$data = $filter->get('user')->getData();
+            // $data = $filter->get('user')->getData();
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
                     $em->getFilters()->enable('naam')->setParameter('naam', $filter->get('naam')->getData(), Type::getType(Types::STRING)->getBindingType());
@@ -130,9 +130,9 @@ class PloegController extends AbstractController
      *
      * @Template ()
      *
-     * @return (Ploeg|\Symfony\Component\Form\FormView|mixed)[]
-     *
      * @psalm-return array{entity: Ploeg, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (Ploeg|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
@@ -159,9 +159,9 @@ class PloegController extends AbstractController
      *
      * @Route ("/{id}/update", name="admin_ploeg_update", methods={"POST"})
      *
-     * @return (Ploeg|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
      * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Ploeg, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (Ploeg|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -198,6 +198,7 @@ class PloegController extends AbstractController
      * Deletes a Ploeg entity.
      *
      * @Route ("/{id}/delete", name="admin_ploeg_delete", methods={"POST"})
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -228,6 +229,7 @@ class PloegController extends AbstractController
     }
 
     /**
+     * @param mixed|null $user
      * @return void
      */
     private function handleUserManagement(Ploeg $ploeg, $user = null)

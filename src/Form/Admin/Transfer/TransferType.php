@@ -48,7 +48,7 @@ class TransferType extends AbstractType
             [
                 'admin' => true,
                 'seizoen' => null,
-                'transfertype' => Transfer::DRAFTTRANSFER,]
+                'transfertype' => Transfer::DRAFTTRANSFER, ]
         );
     }
 }

@@ -184,9 +184,6 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @param $value
-     * @param $separator
-     *
      * @return array|false|string[]
      *
      * @psalm-param '/\s+/' $separator

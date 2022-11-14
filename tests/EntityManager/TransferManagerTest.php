@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 
-
-
 namespace App\Tests\EntityManager;
 
 use App\Entity\Contract;
@@ -10,7 +8,6 @@ use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\EntityManager\TransferManager;
-use DateTime;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -65,7 +62,7 @@ class TransferManagerTest extends WebTestCase
     private function createTransfer($renner, $ploeg, int $type = Transfer::DRAFTTRANSFER): Transfer
     {
         $t = new Transfer();
-        $t->setDatum(new DateTime());
+        $t->setDatum(new \DateTime());
         $t->setPloegNaar($ploeg);
         $t->setRenner($renner);
         $t->setSeizoen($this->getSeizoen());
@@ -119,7 +116,7 @@ class TransferManagerTest extends WebTestCase
         $this->transferManager->doDraftTransfer($draftTransfer2);
         $this->em->flush();
 
-        $this->transferManager->doExchangeTransfer($r1, $r2, new DateTime(), $seizoen);
+        $this->transferManager->doExchangeTransfer($r1, $r2, new \DateTime(), $seizoen);
         $this->em->flush();
 
         // find the last transfer for rider 1
@@ -288,7 +285,7 @@ class TransferManagerTest extends WebTestCase
         $this->transferManager->doDraftTransfer($draftTransfer2);
         $this->em->flush();
 
-        $this->transferManager->doExchangeTransfer($r1, $r2, new DateTime(), $seizoen);
+        $this->transferManager->doExchangeTransfer($r1, $r2, new \DateTime(), $seizoen);
         $this->em->flush();
 
         $this->assertEquals(6, count($this->transferRepo->findAll()));

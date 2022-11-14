@@ -105,9 +105,9 @@ class NieuwsController extends AbstractController
      *
      * @Template ()
      *
-     * @return (Nieuws|\Symfony\Component\Form\FormView|mixed)[]
-     *
      * @psalm-return array{entity: Nieuws, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (Nieuws|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
@@ -134,9 +134,9 @@ class NieuwsController extends AbstractController
      *
      * @Route ("/{id}/update", name="admin_nieuws_update", methods={"POST"})
      *
-     * @return (Nieuws|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
      * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Nieuws, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @param mixed $id
+     * @return (Nieuws|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -171,6 +171,7 @@ class NieuwsController extends AbstractController
      * Deletes a Nieuws entity.
      *
      * @Route ("/{id}/delete", name="admin_nieuws_delete", methods={"POST"})
+     * @param mixed $id
      */
     public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {

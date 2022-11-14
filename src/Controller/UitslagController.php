@@ -65,7 +65,7 @@ class UitslagController extends AbstractController
             'periode' => $periode,
             'transferpoints' => $transferSaldo,
             'positionCount' => $zegesInPeriode,
-            'transferRepo' => $em->getRepository(Transfer::class),];
+            'transferRepo' => $em->getRepository(Transfer::class), ];
     }
 
     /**
@@ -160,6 +160,6 @@ class UitslagController extends AbstractController
             'stand' => $stand,
             'draft' => $draft,
             'transferRepo' => $transferRepo,
-            'bestTransfers' => $bestTransfers,];
+            'bestTransfers' => $bestTransfers, ];
     }
 }

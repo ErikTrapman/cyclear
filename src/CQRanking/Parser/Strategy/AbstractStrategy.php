@@ -47,7 +47,7 @@ abstract class AbstractStrategy implements ParserStrategyInterface
             }
             return $returnValues;
         });
-        //array_values to generate new keys, starting from 0
+        // array_values to generate new keys, starting from 0
         return array_values(array_filter($data, fn ($a) => !empty($a)));
     }
 }
