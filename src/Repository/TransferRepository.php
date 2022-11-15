@@ -6,10 +6,19 @@ use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
-class TransferRepository extends EntityRepository
+class TransferRepository extends ServiceEntityRepository
 {
+    public const CACHE_TAG = 'TransferRepository';
+
+    public function __construct(ManagerRegistry $registry, private readonly TagAwareCacheInterface $cache)
+    {
+        parent::__construct($registry, Transfer::class);
+    }
+
     public function findByRenner(Renner $renner, $seizoen = null, $types = [])
     {
         if (null === $seizoen) {
@@ -66,11 +75,13 @@ class TransferRepository extends EntityRepository
 
     public function getTransferCountByType($ploeg, $start, $end, array $type): int
     {
-        if (!is_array($type)) {
-            $type = [$type];
-        }
         if (is_numeric($ploeg)) {
             $ploeg = $this->_em->getRepository(Ploeg::class)->find($ploeg);
+        }
+        $key = __FUNCTION__ . $ploeg->getId() . $start?->format('YmdHis') . $end?->format('YmdHis') . implode('', $type);
+        $item = $this->cache->getItem($key);
+        if ($item->isHit()) {
+            return $item->get();
         }
         $cloneEnd = clone $end;
         $cloneEnd->setTime(23, 59, 59);
@@ -81,7 +92,11 @@ class TransferRepository extends EntityRepository
                 WHERE t.ploegNaar = :ploeg AND t.datum BETWEEN :start AND :end AND t.transferType IN( :type )')
             ->setParameters(['type' => $type, 'ploeg' => $ploeg, 'start' => $cloneStart, 'end' => $cloneEnd]);
         $res = $query->getSingleResult();
-        return (int)$res['freq'];
+        $count = (int)$res['freq'];
+        $item->set($count);
+        $item->tag(self::CACHE_TAG);
+        $this->cache->save($item);
+        return $count;
     }
 
     public function findLastTransferForDate($renner, \DateTime $date, $seizoen)

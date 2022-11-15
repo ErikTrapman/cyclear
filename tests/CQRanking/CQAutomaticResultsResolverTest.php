@@ -25,11 +25,17 @@ class CQAutomaticResultsResolverTest extends WebTestCase
 
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
         $wedstrijdRepo = $this->getMockBuilder('App\Repository\WedstrijdRepository')->disableOriginalConstructor()->getMock();
-        $em->expects($this->at(0))->method('getRepository')->with(Wedstrijd::class)->willReturn($wedstrijdRepo);
+        // $em->expects($this->at(0))->method('getRepository')->with(Wedstrijd::class)->willReturn($wedstrijdRepo);
         // $wedstrijdRepo->method('findOneByExternalIdentifier')->willReturn(null);
 
         $ploegRepo = $this->getMockBuilder('Doctrine\ORM\EntityRepository')->disableOriginalConstructor()->getMock();
-        $em->expects($this->at(1))->method('getRepository')->with(Ploeg::class)->willReturn($ploegRepo);
+        // $em->expects($this->at(1))->method('getRepository')->with(Ploeg::class)->willReturn($ploegRepo);
+
+        $em->expects($this->exactly(2))->method('getRepository')->withConsecutive([Wedstrijd::class], [Ploeg::class])->willReturnOnConsecutiveCalls(
+            $wedstrijdRepo,
+            $ploegRepo
+        );
+
         $ploeg = new Ploeg();
         $ploegRepo->method('find')->willReturn($ploeg);
 

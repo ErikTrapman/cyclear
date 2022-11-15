@@ -25,7 +25,7 @@ class Transfer
 
     /**
      * @ORM\JoinColumn(name="renner_id")
-     * @ORM\ManyToOne(targetEntity="App\Entity\Renner",inversedBy="transfers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Renner",inversedBy="transfers", fetch="EAGER")
      */
     private $renner;
 

@@ -26,7 +26,7 @@ class Uitslag
     private $wedstrijd;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Renner")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Renner", fetch="EAGER")
      */
     private $renner;
 

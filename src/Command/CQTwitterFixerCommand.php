@@ -11,24 +11,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CQTwitterFixerCommand extends Command
 {
-    public function __construct(private EntityManagerInterface $em, string $name = null)
+    public function __construct(private readonly EntityManagerInterface $em, string $name = null)
     {
         parent::__construct($name);
     }
 
-    /**
-     * @return void
-     */
     protected function configure()
     {
         $this->setName('cyclear:fixer:twitter')
             ->addOption('file', 'f', InputOption::VALUE_REQUIRED);
     }
 
-    /**
-     * @return void
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // RiderID;UCICode;Name;Twitter
         // TODO replace with Symfony CSV
@@ -58,5 +52,6 @@ class CQTwitterFixerCommand extends Command
         }
         // Flush leftovers
         $this->em->flush();
+        return Command::SUCCESS;
     }
 }

@@ -24,6 +24,7 @@ class RennerRepository extends EntityRepository
     }
 
     /**
+     * @param mixed $id
      * @return object|Renner|null
      */
     public function findOneByCQId($id)

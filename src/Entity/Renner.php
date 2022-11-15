@@ -45,7 +45,7 @@ class Renner
     private $transfers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Country")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Country", fetch="EAGER")
      * @Serializer\Expose
      * @Serializer\Groups({"small","medium"})
      * @Serializer\Accessor(getter="getCountryIso")

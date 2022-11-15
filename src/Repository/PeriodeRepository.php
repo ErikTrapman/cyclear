@@ -2,12 +2,19 @@
 
 namespace App\Repository;
 
+use App\Entity\Periode;
 use App\Entity\Seizoen;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NoResultException;
+use Doctrine\Persistence\ManagerRegistry;
 
-class PeriodeRepository extends EntityRepository
+class PeriodeRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Periode::class);
+    }
+
     public function getCurrentPeriode($seizoen = null)
     {
         if (null === $seizoen) {

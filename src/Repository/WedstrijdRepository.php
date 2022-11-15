@@ -3,11 +3,18 @@
 namespace App\Repository;
 
 use App\CQRanking\Exception\CyclearGameBundleCQException;
+use App\Entity\Seizoen;
 use App\Entity\Wedstrijd;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class WedstrijdRepository extends EntityRepository
+class WedstrijdRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Wedstrijd::class);
+    }
+
     /**
      * Gets refstage for given $wedstrijd.
      * refStage is the first registered stage for a multiple-days race.
@@ -79,5 +86,15 @@ class WedstrijdRepository extends EntityRepository
         );
         $qb->setParameters(['seizoen' => $wedstrijd->getSeizoen(), 'stages' => $stages, 'prol' => $prologue]);
         return $qb->getQuery()->getResult();
+    }
+
+    public function getLatest(Seizoen $seizoen, int $limit = 20): array
+    {
+        return $this->createQueryBuilder('w')
+            ->where('w.seizoen = :seizoen')
+            ->setParameter('seizoen', $seizoen)
+            ->orderBy('w.datum DESC, w.id', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()->getResult();
     }
 }

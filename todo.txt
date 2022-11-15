@@ -25,9 +25,10 @@ Samson Dataview wegwerken
 Cannot count query that uses a HAVING clause. Use the output walkers for pagination - renners beschikbaar paginatie
 Alle CQRanking urls parametriseren
 $this->get('' in Controllers wegwerken
+fix iconen op allerlei plekken (TW , EURO)
 
 [BIG]
 * Hosting: terraform + ansible
 * Backups Google Drive via cyclear-backup
 * Deploys... GH Actions + Surf?
-* Easyadmin
+* Easyadmin?

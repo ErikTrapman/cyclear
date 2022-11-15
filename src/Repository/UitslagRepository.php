@@ -17,7 +17,7 @@ class UitslagRepository extends ServiceEntityRepository
 {
     public const CACHE_TAG = 'UitslagRepository';
 
-    public function __construct(ManagerRegistry $registry, private TagAwareCacheInterface $cache)
+    public function __construct(ManagerRegistry $registry, private readonly TagAwareCacheInterface $cache)
     {
         parent::__construct($registry, Uitslag::class);
     }
@@ -53,6 +53,11 @@ class UitslagRepository extends ServiceEntityRepository
 
     public function getPuntenByPloeg($seizoen = null, $ploeg = null, \DateTime $maxDate = null)
     {
+        $item = $this->cache->getItem(__FUNCTION__ . $seizoen?->getId() . $ploeg?->getId() . $maxDate?->format('YmdHis'));
+        $item->tag(self::CACHE_TAG);
+        if ($item->isHit()) {
+            return $item->get();
+        }
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
@@ -77,7 +82,10 @@ class UitslagRepository extends ServiceEntityRepository
         }
         $qb->orderBy('punten', 'DESC, p.afkorting ASC');
         $qb->setParameters($params);
-        return $qb->getQuery()->getResult();
+        $value = $qb->getQuery()->getResult();
+        $item->set($value);
+        $this->cache->save($item);
+        return $value;
     }
 
     /**
@@ -117,6 +125,11 @@ class UitslagRepository extends ServiceEntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
+        $key = __FUNCTION__ . $seizoen->getId() . $pos . $start?->format('YmdHis') . $end?->format('YmdHis');
+        $item = $this->cache->getItem($key);
+        if ($item->isHit()) {
+            return $item->get();
+        }
         $parameters = ['seizoen' => $seizoen, 'pos' => $pos];
         $qb2 = $this->createQueryBuilder('u')
             ->select('SUM(IF(u.positie = :pos,1,0))')
@@ -140,7 +153,11 @@ class UitslagRepository extends ServiceEntityRepository
             ->groupBy('p.id')
             ->orderBy('freqByPos DESC, p.afkorting', 'ASC')
             ->setParameters($parameters);
-        return $qb->getQuery()->getResult();
+        $ret = $qb->getQuery()->getResult();
+        $item->set($ret);
+        $item->tag(self::CACHE_TAG);
+        $this->cache->save($item);
+        return $ret;
     }
 
     /**
@@ -264,44 +281,45 @@ class UitslagRepository extends ServiceEntityRepository
     {
         $item = $this->cache->getItem('getPuntenByPloegForDraftTransfers' . $seizoen->getId() . $ploeg?->getId());
         $item->tag(self::CACHE_TAG);
-        if (!$item->isHit()) {
-            $subQ = $this->_em->getRepository(Renner::class)->createQueryBuilder('r');
-            $subQ->innerJoin('App\Entity\Transfer', 't', 'WITH',
-                't.renner = r AND t.transferType = :draft AND t.seizoen = :seizoen')->andWhere('t.ploegNaar = :p');
-            $subQ->select('DISTINCT r.id');
-            $subQPoints = $this->_em->getRepository(Uitslag::class)->createQueryBuilder('u');
-            $subQPoints->select('IFNULL(SUM(u.rennerPunten),0)')
-                ->groupBy('u.renner')
-                ->innerJoin('u.wedstrijd', 'w')
-                ->where('w.seizoen = :seizoen')
-                ->andWhere($subQ->expr()->in('u.renner', $subQ->getDQL()));
-            $subQPoints->setParameter('draft', Transfer::DRAFTTRANSFER)->setParameter('seizoen', $seizoen);
-            if ($ploeg) {
-                $retPloeg = $this->_em->getRepository(Ploeg::class)
-                    ->createQueryBuilder('p')->where($subQ->expr()->eq('p', $ploeg->getId()))->getQuery()->getArrayResult();
-                $subRes = $subQPoints->setParameter('p', $ploeg)->getQuery()->getScalarResult();
-                $retPloeg['punten'] = array_sum(array_map(function ($item) {
-                    return (int)reset($item);
-                }, $subRes));
-                return [$retPloeg];
-            }
-            $res = [];
-            $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : pow(8, 8);
-            foreach ($this->_em->getRepository(Ploeg::class)
-                         ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
-                         ->setParameter('seizoen', $seizoen)->getQuery()->getArrayResult() as $ploeg) {
-                $subQPoints->setParameter('p', $ploeg['id']);
-                $subRes = $subQPoints->getQuery()->getArrayResult();
-                // results are grouped by rider. all riders can score the max amounts of maxPointsPerRider.
-                $ploeg['punten'] = array_sum(array_map(function ($item) use ($maxPointsPerRider) {
-                    return (int)min($maxPointsPerRider, reset($item));
-                }, $subRes));
-                $res[] = $ploeg;
-            }
-            static::puntenSort($res, 'afkorting');
-            $item->set($res);
-            $this->cache->save($item);
+        if ($item->isHit()) {
+            return $item->get();
         }
+        $subQ = $this->_em->getRepository(Renner::class)->createQueryBuilder('r');
+        $subQ->innerJoin('App\Entity\Transfer', 't', 'WITH',
+            't.renner = r AND t.transferType = :draft AND t.seizoen = :seizoen')->andWhere('t.ploegNaar = :p');
+        $subQ->select('DISTINCT r.id');
+        $subQPoints = $this->_em->getRepository(Uitslag::class)->createQueryBuilder('u');
+        $subQPoints->select('IFNULL(SUM(u.rennerPunten),0)')
+            ->groupBy('u.renner')
+            ->innerJoin('u.wedstrijd', 'w')
+            ->where('w.seizoen = :seizoen')
+            ->andWhere($subQ->expr()->in('u.renner', $subQ->getDQL()));
+        $subQPoints->setParameter('draft', Transfer::DRAFTTRANSFER)->setParameter('seizoen', $seizoen);
+        if ($ploeg) {
+            $retPloeg = $this->_em->getRepository(Ploeg::class)
+                ->createQueryBuilder('p')->where($subQ->expr()->eq('p', $ploeg->getId()))->getQuery()->getArrayResult();
+            $subRes = $subQPoints->setParameter('p', $ploeg)->getQuery()->getScalarResult();
+            $retPloeg['punten'] = array_sum(array_map(function ($item) {
+                return (int)reset($item);
+            }, $subRes));
+            return [$retPloeg];
+        }
+        $res = [];
+        $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : pow(8, 8);
+        foreach ($this->_em->getRepository(Ploeg::class)
+                     ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
+                     ->setParameter('seizoen', $seizoen)->getQuery()->getArrayResult() as $ploeg) {
+            $subQPoints->setParameter('p', $ploeg['id']);
+            $subRes = $subQPoints->getQuery()->getArrayResult();
+            // results are grouped by rider. all riders can score the max amounts of maxPointsPerRider.
+            $ploeg['punten'] = array_sum(array_map(function ($item) use ($maxPointsPerRider) {
+                return (int)min($maxPointsPerRider, reset($item));
+            }, $subRes));
+            $res[] = $ploeg;
+        }
+        static::puntenSort($res, 'afkorting');
+        $item->set($res);
+        $this->cache->save($item);
         return $item->get();
     }
 
@@ -309,28 +327,29 @@ class UitslagRepository extends ServiceEntityRepository
     {
         $key = 'getPuntenByPloegForUserTransfersWithoutLoss_' . $seizoen->getId() . $start?->format('Ymd') . $end?->format('Ymd');
         $item = $this->cache->getItem($key);
-        $item->tag(self::CACHE_TAG);
-        if (!$item->isHit()) {
-            $params = [':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER];
-            $startEndWhere = null;
-            if ($start && $end) {
-                $startEndWhere = ' AND (w.datum >= :start AND w.datum <= :end)';
-                $start = clone $start;
-                $start->setTime(0, 0, 0);
-                $end = clone $end;
-                $end->setTime(0, 0, 0);
-                $params['start'] = $start->format('Y-m-d H:i:s');
-                $params['end'] = $end->format('Y-m-d H:i:s');
-            }
-            // TODO DQL'en net als getCountForPosition
-            $transfers = 'SELECT DISTINCT t.renner_id FROM transfer t
+        if ($item->isHit()) {
+            return $item->get();
+        }
+        $params = [':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER];
+        $startEndWhere = null;
+        if ($start && $end) {
+            $startEndWhere = ' AND (w.datum >= :start AND w.datum <= :end)';
+            $start = clone $start;
+            $start->setTime(0, 0, 0);
+            $end = clone $end;
+            $end->setTime(0, 0, 0);
+            $params['start'] = $start->format('Y-m-d H:i:s');
+            $params['end'] = $end->format('Y-m-d H:i:s');
+        }
+        // TODO DQL'en net als getCountForPosition
+        $transfers = 'SELECT DISTINCT t.renner_id FROM transfer t
             WHERE t.transferType != ' . Transfer::DRAFTTRANSFER . ' AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
                 AND t.renner_id NOT IN
                 (SELECT t.renner_id FROM transfer t
                 WHERE t.transferType = ' . Transfer::DRAFTTRANSFER . ' AND t.ploegNaar_id = p.id
                 AND t.seizoen_id = :seizoen_id)';
 
-            $sql = sprintf('
+        $sql = sprintf('
                 SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 100 AS b,
                 (
 
@@ -344,12 +363,12 @@ class UitslagRepository extends ServiceEntityRepository
                 FROM ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
                 ', $startEndWhere, $transfers);
-            $conn = $this->getEntityManager()->getConnection();
-            $stmt = $conn->prepare($sql);
-            $res = $stmt->executeQuery($params)->fetchAllAssociative();
-            $item->set($res);
-            $this->cache->save($item);
-        }
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $res = $stmt->executeQuery($params)->fetchAllAssociative();
+        $item->set($res);
+        $this->cache->save($item);
+        $item->tag(self::CACHE_TAG);
         return $item->get();
     }
 
@@ -361,6 +380,11 @@ class UitslagRepository extends ServiceEntityRepository
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
+        }
+        $key = __FUNCTION__ . $seizoen->getId() . $start?->format('YmdHis') . $end?->format('YmdHis');
+        $item = $this->cache->getItem($key);
+        if ($item->isHit()) {
+            return $item->get();
         }
         $res = [];
         $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : pow(8, 8);
@@ -384,6 +408,9 @@ class UitslagRepository extends ServiceEntityRepository
             $res[] = $ploeg;
         }
         static::puntenSort($res);
+        $item->tag(self::CACHE_TAG);
+        $item->set($res);
+        $this->cache->save($item);
         return $res;
     }
 
@@ -396,6 +423,11 @@ class UitslagRepository extends ServiceEntityRepository
     {
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
+        }
+        $key = __FUNCTION__ . $seizoen->getId();
+        $item = $this->cache->getItem($key);
+        if ($item->isHit()) {
+            return $item->get();
         }
         $this->_em->getRepository(Transfer::class)->generateTempTableWithDraftRiders($seizoen);
 
@@ -424,7 +456,11 @@ class UitslagRepository extends ServiceEntityRepository
                 ', $transfers);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
-        return $stmt->executeQuery([':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER])->fetchAllAssociative();
+        $ret = $stmt->executeQuery([':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER])->fetchAllAssociative();
+        $item->set($ret);
+        $item->tag(self::CACHE_TAG);
+        $this->cache->save($item);
+        return $ret;
     }
 
     /**
@@ -455,6 +491,7 @@ class UitslagRepository extends ServiceEntityRepository
 
     /**
      * @param null $seizoen
+     * @param mixed $ploeg
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen = null, \DateTime $start = null, \DateTime $end = null)

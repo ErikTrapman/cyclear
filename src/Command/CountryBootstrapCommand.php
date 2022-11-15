@@ -16,23 +16,16 @@ class CountryBootstrapCommand extends Command
         parent::__construct($name);
     }
 
-    /**
-     * @return void
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('cyclear:country-bootstrap')
             ->setDescription('Add countries in locales nl_NL and en_GB');
     }
 
-    /**
-     * @return void
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // add ISO-list of countries
-        $yaml = Yaml::parse(file_get_contents(
-            __DIR__ . '/../Resources/files/umpirsky/country-list/cldr.country.nl_NL.yaml'));
+        $yaml = Yaml::parse(file_get_contents(__DIR__ . '/../Resources/files/umpirsky/country-list/cldr.country.nl_NL.yaml'));
 
         $cRepo = $this->em->getRepository(Country::class);
 
@@ -48,8 +41,7 @@ class CountryBootstrapCommand extends Command
         }
         $this->em->flush();
 
-        $yamlEN = Yaml::parse(file_get_contents(
-            __DIR__ . '../Resources/files/umpirsky/country-list/cldr.country.en_GB.yaml'));
+        $yamlEN = Yaml::parse(file_get_contents(__DIR__ . '../Resources/files/umpirsky/country-list/cldr.country.en_GB.yaml'));
         foreach ($yamlEN as $iso => $name) {
             $country = $cRepo->findOneByIso2($iso);
             if (null !== $country) {
@@ -61,5 +53,6 @@ class CountryBootstrapCommand extends Command
             }
         }
         $this->em->flush();
+        return Command::SUCCESS;
     }
 }

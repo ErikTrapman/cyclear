@@ -184,9 +184,9 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @return array|false|string[]
-     *
      * @psalm-param '/\s+/' $separator
+     * @param mixed $value
+     * @return array|false|string[]
      */
     private function assertArray($value, string $separator)
     {

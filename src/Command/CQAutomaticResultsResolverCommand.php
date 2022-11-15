@@ -26,7 +26,7 @@ class CQAutomaticResultsResolverCommand extends Command
         parent::__construct($name);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->lock()) {
             return 0;
@@ -38,7 +38,7 @@ class CQAutomaticResultsResolverCommand extends Command
             /** @var Seizoen $seizoen */
             $seizoen = $this->doctrine->getRepository(Seizoen::class)->getCurrent();
             if (!$seizoen) {
-                return 1;
+                return Command::SUCCESS;
             }
             $start = clone $seizoen->getStart();
             $end = clone $seizoen->getEnd();
@@ -52,6 +52,6 @@ class CQAutomaticResultsResolverCommand extends Command
         } finally {
             $this->release();
         }
-        return 0;
+        return Command::SUCCESS;
     }
 }
