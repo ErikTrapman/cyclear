@@ -202,11 +202,20 @@ class UitslagRepository extends ServiceEntityRepository
         if (null === $seizoen) {
             $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
         }
+        $key = __FUNCTION__ . $renner->getId() . $ploeg->getId() . $seizoen->getId();
+        $item = $this->cache->getItem($key);
+        if ($item->isHit()) {
+            return $item->get();
+        }
         $qb = $this->getPuntenForRennerQb();
         $qb->andWhere('w.seizoen = :seizoen')->andWhere('u.ploeg = :ploeg');
         $qb->setParameters(['seizoen' => $seizoen, 'ploeg' => $ploeg, 'renner' => $renner]);
         $qb->add('select', 'SUM(u.ploegPunten)');
-        return $qb->getQuery()->getSingleScalarResult();
+        $res = $qb->getQuery()->getSingleScalarResult();
+        $item->set($res);
+        $item->tag(self::CACHE_TAG);
+        $this->cache->save($item);
+        return $res;
     }
 
     private function getPuntenForRennerQb(): \Doctrine\ORM\QueryBuilder
@@ -561,6 +570,11 @@ class UitslagRepository extends ServiceEntityRepository
      */
     public function getBestTransfers(Seizoen $seizoen, \DateTime $start = null, \DateTime $end = null)
     {
+        $key = __FUNCTION__ . $seizoen->getId() . $start?->format('Ymd') . $end?->format('Ymd');
+        $item = $this->cache->getItem($key);
+        if ($item->isHit()) {
+            return $item->get();
+        }
         $res = [];
         $ploegen = $this->_em->getRepository(Ploeg::class)->findBy(['seizoen' => $seizoen]);
         foreach ($ploegen as $ploeg) {
@@ -580,6 +594,9 @@ class UitslagRepository extends ServiceEntityRepository
         uasort($res, function ($a, $b) {
             return $a['points'] > $b['points'] ? -1 : 1;
         });
+        $item->set($res);
+        $item->tag(self::CACHE_TAG);
+        $this->cache->save($item);
         return $res;
     }
 }

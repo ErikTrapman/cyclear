@@ -7,13 +7,17 @@ use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class PloegRepository extends EntityRepository
+class PloegRepository extends ServiceEntityRepository
 {
-    /**
-     * @psalm-return list<mixed>
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Ploeg::class);
+    }
+
     public function getRenners(Ploeg $ploeg): array
     {
         $renners = [];
@@ -30,7 +34,7 @@ class PloegRepository extends EntityRepository
         return $renners;
     }
 
-    public function getDraftRenners(Ploeg $ploeg)
+    public function getDraftRenners(Ploeg $ploeg): array
     {
         return $this->_em->getRepository(Renner::class)
             ->createQueryBuilder('r')
@@ -41,7 +45,7 @@ class PloegRepository extends EntityRepository
             ->setParameters(['ploeg' => $ploeg, 'seizoen' => $ploeg->getSeizoen()])->getQuery()->getResult();
     }
 
-    public function getRennersWithPunten(Ploeg $ploeg)
+    public function getRennersWithPunten(Ploeg $ploeg): array
     {
         $renners = $this->getRenners($ploeg);
         $ret = [];
@@ -54,7 +58,7 @@ class PloegRepository extends EntityRepository
         return $ret;
     }
 
-    public function getDraftRennersWithPunten(Ploeg $ploeg, $sort = true)
+    public function getDraftRennersWithPunten(Ploeg $ploeg, $sort = true): array
     {
         $ret = [];
         $seizoen = $ploeg->getSeizoen();

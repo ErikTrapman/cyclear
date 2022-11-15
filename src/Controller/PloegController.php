@@ -3,15 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Ploeg;
-use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
-use App\Entity\Uitslag;
+use App\Repository\PloegRepository;
+use App\Repository\RennerRepository;
+use App\Repository\TransferRepository;
+use App\Repository\UitslagRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -22,64 +26,52 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PloegController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge(['knp_paginator' => PaginatorInterface::class],
-            parent::getSubscribedServices());
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly PaginatorInterface $paginator,
+        private readonly PloegRepository $ploegRepository,
+        private readonly UitslagRepository $uitslagRepository,
+        private readonly TransferRepository $transferRepository,
+        private readonly RennerRepository $rennerRepository,
+    ) {
     }
 
     /**
-     * Finds and displays a Ploeg entity.
-     *
      * @Route ("/{id}/show", name="ploeg_show")
-     *
      * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     *
      * @Template ()
-     *
-     * @return (Ploeg|Seizoen|\Doctrine\Persistence\ObjectRepository|\Symfony\Component\Form\FormView|float|int|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Ploeg, renners: mixed, uitslagen: mixed, seizoen: Seizoen, transfers: mixed, rennerRepo: \Doctrine\Persistence\ObjectRepository<Renner>, transferUitslagen: mixed, lostDrafts: mixed, zeges: mixed, punten: mixed, draftRenners: mixed, draftPunten: float|int, form: \Symfony\Component\Form\FormView}
      */
-    public function showAction(Request $request, Seizoen $seizoen, Ploeg $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function showAction(Request $request, Seizoen $seizoen, Ploeg $id): array|RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
-
         $entity = $id;
-        if (null === $entity) {
-            throw $this->createNotFoundException('Unable to find Ploeg entity.');
-        }
-        $ploegRepo = $em->getRepository(Ploeg::class);
-        $renners = $ploegRepo->getRennersWithPunten($entity);
-        $uitslagRepo = $em->getRepository(Uitslag::class);
-        $paginator = $this->get('knp_paginator');
+        $renners = $this->ploegRepository->getRennersWithPunten($entity);
 
-        $uitslagen = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('page', 1), 20
+        $uitslagen = $this->paginator->paginate(
+            $this->uitslagRepository->getUitslagenForPloegQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('page', 1), 20
         );
-        $transfers = $paginator->paginate($em->getRepository(Transfer::class)->getLatest(
+        $transfers = $this->paginator->paginate($this->transferRepository->getLatest(
             $seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER], 9999, $entity), $request->query->get('transferPage', 1), 20, ['pageParameterName' => 'transferPage']);
-        $transferUitslagen = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('transferResultsPage', 1), 20, ['pageParameterName' => 'transferResultsPage']
+        $transferUitslagen = $this->paginator->paginate(
+            $this->uitslagRepository->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('transferResultsPage', 1), 20, ['pageParameterName' => 'transferResultsPage']
         );
-        $lostDrafts = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegForLostDraftsQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('page', 1), 20
+        $lostDrafts = $this->paginator->paginate(
+            $this->uitslagRepository->getUitslagenForPloegForLostDraftsQb($entity, $seizoen)->getQuery()->getResult(), $request->query->get('page', 1), 20
         );
-        $zeges = $paginator->paginate(
-            $uitslagRepo->getUitslagenForPloegByPositionQb($entity, 1, $seizoen)->getQuery()->getResult(), $request->query->get('zegeResultsPage', 1), 20, ['pageParameterName' => 'zegeResultsPage']
+        $zeges = $this->paginator->paginate(
+            $this->uitslagRepository->getUitslagenForPloegByPositionQb($entity, 1, $seizoen)->getQuery()->getResult(), $request->query->get('zegeResultsPage', 1), 20, ['pageParameterName' => 'zegeResultsPage']
         );
 
-        $rennerRepo = $em->getRepository(Renner::class);
-        $punten = $uitslagRepo->getPuntenByPloeg($seizoen, $entity);
-        $draftRenners = $ploegRepo->getDraftRennersWithPunten($entity, false);
+        $punten = $this->uitslagRepository->getPuntenByPloeg($seizoen, $entity);
+        $draftRenners = $this->ploegRepository->getDraftRennersWithPunten($entity, false);
 
         $form = $this->createFormBuilder($entity)
             ->add('memo', null, ['attr' => ['placeholder' => '...', 'rows' => 16]])
             ->add('save', SubmitType::class)
             ->getForm();
+
         if ('POST' === $request->getMethod()) {
             if ($form->handleRequest($request)->isValid()) {
-                $em->flush();
+                $this->doctrine->getManager()->flush();
                 return $this->redirect($this->generateUrl('ploeg_show', ['id' => $entity->getId(), 'seizoen' => $seizoen->getSlug()]));
             }
         }
@@ -90,7 +82,7 @@ class PloegController extends AbstractController
             'uitslagen' => $uitslagen,
             'seizoen' => $seizoen,
             'transfers' => $transfers,
-            'rennerRepo' => $rennerRepo,
+            'rennerRepo' => $this->rennerRepository,
             'transferUitslagen' => $transferUitslagen,
             'lostDrafts' => $lostDrafts,
             'zeges' => $zeges,

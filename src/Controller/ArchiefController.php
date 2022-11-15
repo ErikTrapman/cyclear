@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Seizoen;
+use App\Repository\SeizoenRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,31 +14,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ArchiefController extends AbstractController
 {
+    public function __construct(
+        private readonly SeizoenRepository $seizoenRepository
+    ) {
+    }
+
     /**
      * @Route ("/", name="archief_index")
-     *
      * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     *
      * @Template ()
-     *
-     * @return (array|mixed)[]
-     *
-     * @psalm-return array{seizoenen: array<empty, empty>|mixed}
      */
     public function indexAction(Seizoen $seizoen): array
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $current = $em->getRepository(Seizoen::class)->getCurrent();
-        if (null !== $current) {
-            $seizoenen = $em->getRepository(Seizoen::class)->createQueryBuilder('s')
-                ->where('s != :current')->andWhere('s.closed = 1')
-                ->setParameters(['current' => $current]);
-            $res = $seizoenen->getQuery()->getResult();
-        } else {
-            $res = [];
-        }
-
-        return ['seizoenen' => $res];
+        return ['seizoenen' => $this->seizoenRepository->getArchived()];
     }
 }

@@ -74,7 +74,7 @@ class DefaultController extends AbstractController
             'transferpuntenPeriode' => $transferSaldo,
             'transferRepo' => $this->transferRepository,
             'transfers' => $this->transferRepository->getLatest($seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER], 20),
-            'wedstrijden' => $this->wedstrijdRepository->getLatest($seizoen, 10),
+            'wedstrijden' => $this->wedstrijdRepository->getLatest($seizoen, 12),
             'zegesInPeriode' => $zegesInPeriode,
             'zegestand' => $this->uitslagRepository->getCountForPosition($seizoen, 1),
         ];

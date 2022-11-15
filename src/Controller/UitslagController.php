@@ -118,14 +118,8 @@ class UitslagController extends AbstractController
 
     /**
      * @Route ("/overzicht", name="uitslag_overview")
-     *
      * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     *
      * @Template ()
-     *
-     * @return (Seizoen|\Doctrine\ORM\EntityRepository|array|mixed)[]
-     *
-     * @psalm-return array{seizoen: Seizoen, transfer: mixed, shadowgained: array, shadowlost: array, stand: mixed, draft: mixed, transferRepo: \Doctrine\ORM\EntityRepository<Transfer>, bestTransfers: array}
      */
     public function overviewAction(Request $request, Seizoen $seizoen): array
     {

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Seizoen;
 use App\Entity\Spelregels;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,28 +16,23 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SpelregelsController extends AbstractController
 {
+    public function __construct(
+        private readonly ManagerRegistry $doctrine
+    ) {
+    }
+
     /**
      * @Route ("/", name="spelregels_index")
-     *
      * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     *
      * @Template ()
-     *
-     * @return (Seizoen|mixed|null)[]
-     *
-     * @psalm-return array{spelregels: mixed|null, seizoen: Seizoen}
      */
     public function indexAction(Request $request, Seizoen $seizoen): array
     {
-        $spelregels = $this->getDoctrine()->getRepository(Spelregels::class)->createQueryBuilder('s')
+        $spelregels = $this->doctrine->getRepository(Spelregels::class)->createQueryBuilder('s')
             ->where('s.seizoen = :seizoen')->orderBy('s.id', 'DESC')->setMaxResults(1)
             ->setParameter('seizoen', $seizoen)
-            ->getQuery()->getResult();
-        if (array_key_exists(0, $spelregels)) {
-            $spelregels = $spelregels[0];
-        } else {
-            $spelregels = null;
-        }
+            ->getQuery()->getResult()[0] ?? null;
+
         return ['spelregels' => $spelregels, 'seizoen' => $seizoen];
     }
 }
