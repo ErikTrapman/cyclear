@@ -6,8 +6,10 @@ use App\CQRanking\Parser\Crawler\CrawlerManager;
 
 class MatchParser
 {
-    public function __construct(private CrawlerManager $crawlerManager, private string $matchesFeed)
-    {
+    public function __construct(
+        private readonly CrawlerManager $crawlerManager,
+        private readonly string $matchesFeed
+    ) {
     }
 
     public function getMatches(): array

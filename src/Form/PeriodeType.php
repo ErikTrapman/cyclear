@@ -19,9 +19,4 @@ class PeriodeType extends AbstractType
             ->add('transfers', null, ['label' => 'Aantal transfers'])
             ->add('seizoen', SeizoenSelectorType::class);
     }
-
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_periodetype';
-    }
 }

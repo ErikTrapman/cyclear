@@ -8,6 +8,10 @@ use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
+use App\Repository\RennerRepository;
+use App\Repository\SeizoenRepository;
+use App\Repository\TransferRepository;
+use App\Repository\UitslagRepository;
 use Doctrine\ORM\QueryBuilder;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
@@ -26,14 +30,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RennerController extends AbstractController
 {
-    private PaginatorInterface $knpPaginator;
-
-    private SerializerInterface $serializer;
-
-    public function __construct(PaginatorInterface $knpPaginator, SerializerInterface $serializer)
-    {
-        $this->knpPaginator = $knpPaginator;
-        $this->serializer = $serializer;
+    public function __construct(
+        private readonly PaginatorInterface $knpPaginator,
+        private readonly SerializerInterface $serializer,
+        private readonly RennerRepository $rennerRepository,
+        private readonly TransferRepository $transferRepository,
+        private readonly UitslagRepository $uitslagRepository,
+        private readonly SeizoenRepository $seizoenRepository,
+    ) {
     }
 
     public static function getSubscribedServices()
@@ -56,22 +60,19 @@ class RennerController extends AbstractController
      */
     public function indexAction(Request $request, Seizoen $seizoen): array|Response
     {
-        $em = $this->getDoctrine()->getManager();
         $exclude = $request->query->get('excludeWithTeam') === 'true';
-        $renners = $em->getRepository(Renner::class)->getRennersWithPunten($seizoen, $exclude);
-        $paginator = $this->get('knp_paginator');
+        $renners = $this->rennerRepository->getRennersWithPunten($seizoen, $exclude);
 
         $this->appendQuery($renners, $this->assertArray($request->query->get('filter'), "/\s+/"), ['r.naam']);
 
-        $pagination = $paginator->paginate($renners, (int)$request->query->get('page', 1), 20);
+        $pagination = $this->knpPaginator->paginate($renners, (int)$request->query->get('page', 1), 20);
 
         $ret = [];
         foreach ($pagination as $r) {
             $ret[] = (new RiderSearchView())->serialize($r);
         }
         $pagination->setItems($ret);
-        $serializer = $this->get('jms_serializer');
-        $entities = $serializer->serialize($pagination, 'json');
+        $entities = $this->serializer->serialize($pagination, 'json');
 
         if ('json' === $request->getRequestFormat()) {
             return new Response($entities);
@@ -85,19 +86,16 @@ class RennerController extends AbstractController
      */
     public function getAction(Request $request): Response
     {
-        $em = $this->getDoctrine()->getManager();
-        $paginator = $this->knpPaginator;
-        $qb = $em->getRepository(Renner::class)->createQueryBuilder('r')->orderBy('r.naam', 'ASC');
+        $qb = $this->rennerRepository->createQueryBuilder('r')->orderBy('r.naam', 'ASC');
         $this->appendQuery($qb, $this->assertArray($request->query->get('query'), "/\s+/"), ['r.cqranking_id', 'r.naam', 'r.slug']);
-        $entities = $paginator->paginate(
+        $entities = $this->knpPaginator->paginate(
             $qb, $request->query->get('page') !== null ? $request->query->get('page') : 1, 20
         );
-        $serializer = $this->serializer;
         $ret = [];
         foreach ($entities->getItems() as $item) {
             $ret[] = (new BloodHoundRiderView())->serialize($item);
         }
-        return new Response($serializer->serialize($ret, 'json', SerializationContext::create()->setGroups(['small'])));
+        return new Response($this->serializer->serialize($ret, 'json', SerializationContext::create()->setGroups(['small'])));
     }
 
     /**
@@ -114,30 +112,25 @@ class RennerController extends AbstractController
      */
     public function showAction(Request $request, Seizoen $seizoen, Renner $renner): array
     {
-        $doctrine = $this->getDoctrine();
-        $transferrepo = $doctrine->getRepository(Transfer::class);
-        $uitslagRepo = $doctrine->getRepository(Uitslag::class);
-        $seizoenRepo = $doctrine->getRepository(Seizoen::class);
-
-        $transfers = $transferrepo->findByRenner($renner, $seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER]);
-        $uitslagen = $uitslagRepo->getPuntenForRenner($renner, $seizoen, true);
+        $transfers = $this->transferRepository->findByRenner($renner, $seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER]);
+        $uitslagen = $this->uitslagRepository->getPuntenForRenner($renner, $seizoen, true);
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $uitslagen, $request->query->get('page', 1), 20
         );
 
-        $ploeg = $doctrine->getRepository(Renner::class)->getPloeg($renner, $seizoen);
+        $ploeg = $this->rennerRepository->getPloeg($renner, $seizoen);
 
-        $punten = $uitslagRepo->getTotalPuntenForRenner($renner, $seizoen);
+        $punten = $this->uitslagRepository->getTotalPuntenForRenner($renner, $seizoen);
         // create archive links
         $puntenPerSeizoen = [];
-        foreach ($seizoenRepo->findBy([], ['id' => 'ASC']) as $archivedSeizoen) {
+        foreach ($this->seizoenRepository->findBy([], ['id' => 'ASC']) as $archivedSeizoen) {
             if ($archivedSeizoen === $seizoen) {
                 continue;
             }
             $puntenPerSeizoen[] = [
                 'seizoen' => $archivedSeizoen,
-                'punten' => $uitslagRepo->getTotalPuntenForRenner($renner, $archivedSeizoen),
+                'punten' => $this->uitslagRepository->getTotalPuntenForRenner($renner, $archivedSeizoen),
             ];
         }
 
@@ -146,9 +139,9 @@ class RennerController extends AbstractController
             'renner' => $renner,
             'transfers' => $transfers,
             'uitslagen' => $pagination,
-            'transferrepo' => $transferrepo,
+            'transferrepo' => $this->transferRepository,
             'ploeg' => $ploeg,
-            'rennerPunten' => intval($punten),
+            'rennerPunten' => $punten,
             'puntenPerSeizoen' => $puntenPerSeizoen,
         ];
     }

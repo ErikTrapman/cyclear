@@ -8,32 +8,36 @@ use App\CQRanking\Parser\CQParser;
 use App\CQRanking\Parser\Twitter\TwitterParser;
 use App\Entity\Country;
 use App\Entity\Renner;
+use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\UitslagType;
 use App\Entity\Wedstrijd;
+use App\Repository\RennerRepository;
+use App\Repository\TransferRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Translatable\Entity\Translation;
+use Symfony\Component\DomCrawler\Crawler;
 
 class UitslagManager
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private CQParser $cqParser,
-        private PuntenCalculator $puntenCalculator,
-        private RennerManager $rennerManager,
-        private TwitterParser $twitterParser
+        private readonly EntityManagerInterface $entityManager,
+        private readonly CQParser $cqParser,
+        private readonly PuntenCalculator $puntenCalculator,
+        private readonly RennerManager $rennerManager,
+        private readonly TwitterParser $twitterParser,
+        private readonly RennerRepository $rennerRepository,
+        private readonly TransferRepository $transferRepository,
     ) {
     }
 
-    public function prepareUitslagen(UitslagType $uitslagType, $crawler, Wedstrijd $wedstrijd, $seizoen, $puntenReferentieDatum = null)
+    public function prepareUitslagen(UitslagType $uitslagType, Crawler $crawler, Wedstrijd $wedstrijd, Seizoen $seizoen, \DateTime $puntenReferentieDatum = null): array
     {
         $parseStrategy = $uitslagType->getCqParsingStrategy();
         $uitslagregels = $this->cqParser->getResultRows($crawler, $parseStrategy);
         $rows = 0;
         $maxResults = $uitslagType->getMaxResults();
         $uitslagen = [];
-        $rennerRepo = $this->entityManager->getRepository(Renner::class);
-        $transferRepo = $this->entityManager->getRepository(Transfer::class);
         $rennerManager = $this->rennerManager;
         foreach ($uitslagregels as $uitslagregel) {
             if (strcmp(strtolower($uitslagregel['pos']), 'leader') === 0) {
@@ -44,10 +48,10 @@ class UitslagManager
             $row['positie'] = $uitslagregel['pos'];
             $row['rennerPunten'] = $uitslagregel['points'];
             $row['ploeg'] = null;
-            $renner = $rennerRepo->findOneByCQId($uitslagregel['cqranking_id']);
+            $renner = $this->rennerRepository->findOneByCQId($uitslagregel['cqranking_id']);
             if (null !== $renner) {
                 $row['renner'] = $rennerManager->getRennerSelectorTypeStringFromRenner($renner);
-                $transfer = $transferRepo->findLastTransferForDate($renner, $wedstrijd->getDatum(), $seizoen);
+                $transfer = $this->transferRepository->findLastTransferForDate($renner, $wedstrijd->getDatum(), $seizoen);
                 if (null !== $transfer) {
                     $row['ploeg'] = (null !== $transfer->getPloegNaar()) ? $transfer->getPloegNaar()->getId() : null;
                     if (null !== $row['ploeg'] && $this->puntenCalculator->canGetTeamPoints($renner, $wedstrijd->getDatum(), $seizoen, $puntenReferentieDatum)) {

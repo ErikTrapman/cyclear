@@ -7,9 +7,18 @@
 
 namespace App\Repository;
 
-class ContractRepository extends \Doctrine\ORM\EntityRepository
+use App\Entity\Contract;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+
+class ContractRepository extends ServiceEntityRepository
 {
-    public function getCurrentContract($renner, $seizoen)
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Contract::class);
+    }
+
+    public function getCurrentContract($renner, $seizoen): ?Contract
     {
         $qb = $this->createQueryBuilder('c')
             ->where('c.renner = :renner')

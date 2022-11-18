@@ -30,16 +30,6 @@ class MatchSelectorType extends AbstractType
         $resolver->setDefaults($options);
     }
 
-    public function getName(): string
-    {
-        return 'eriktrapman_cqrankingmatchselector_type';
-    }
-
-    public function getBlockPrefix()
-    {
-        return $this->getName();
-    }
-
     public function getParent()
     {
         return ChoiceType::class;

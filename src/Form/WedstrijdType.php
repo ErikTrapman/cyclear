@@ -36,9 +36,4 @@ class WedstrijdType extends AbstractType
             'default_date' => null,
         ]);
     }
-
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_wedstrijdtype';
-    }
 }

@@ -2,7 +2,10 @@
 
 namespace App\Form;
 
+use App\CQRanking\Parser\Crawler\CrawlerManager;
 use App\Entity\Wedstrijd;
+use App\EntityManager\UitslagManager;
+use App\EntityManager\WedstrijdManager;
 use App\Form\Helper\PreBindValueTransformer;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -15,14 +18,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UitslagCreateType extends AbstractType
 {
+    public function __construct(
+        private readonly WedstrijdManager $wedstrijdManager,
+        private readonly UitslagManager $uitslagManager,
+        private readonly CrawlerManager $crawlerManager,
+    ) {
+    }
+
     /**
      * @return void
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $wedstrijdManager = $options['wedstrijd_manager'];
-        $uitslagManager = $options['uitslag_manager'];
-        $crawlerManager = $options['crawler_manager'];
         $request = $options['request'];
         $seizoen = $options['seizoen'];
         $builder
@@ -41,7 +48,8 @@ class UitslagCreateType extends AbstractType
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $e) use (
             $factory,
-            $wedstrijdManager, $uitslagManager, $crawlerManager, $request, $seizoen
+            $request,
+            $seizoen
         ) {
             $form = $e->getForm();
             $data = $e->getData();
@@ -52,21 +60,27 @@ class UitslagCreateType extends AbstractType
             $uitslagType = $helper->transformPostedValue($data['wedstrijd']['uitslagtype'], $form->get('wedstrijd')->get('uitslagtype'));
             $referentieWedstrijd = $helper->transformPostedValue($data['referentiewedstrijd'], $form->get('referentiewedstrijd'));
             $datum = $helper->transformPostedValue($data['wedstrijd']['datum'], $form->get('wedstrijd')->get('datum'));
-            $form->add($factory->createNamed('uitslag', CollectionType::class, null, ['entry_type' => UitslagType::class,
-                'allow_add' => true,
-                'auto_initialize' => false,
-                'by_reference' => false,
-                'entry_options' => [
-                    'use_wedstrijd' => false,
-                    'seizoen' => $seizoen, ], ]));
+            $form->add(
+                $factory->createNamed('uitslag', CollectionType::class, null, [
+                        'entry_type' => UitslagType::class,
+                        'allow_add' => true,
+                        'auto_initialize' => false,
+                        'by_reference' => false,
+                        'entry_options' => [
+                            'use_wedstrijd' => false,
+                            'seizoen' => $seizoen,
+                        ],
+                    ]
+                )
+            );
             if ($request->isXmlHttpRequest()) {
                 $url = $data['url'] ? $data['url'] : $data['url_manual'];
-                $crawler = $crawlerManager->getCrawler($url);
-                $wedstrijd = $wedstrijdManager->createWedstrijdFromCrawler($crawler, $datum);
+                $crawler = $this->crawlerManager->getCrawler($url);
+                $wedstrijd = $this->wedstrijdManager->createWedstrijdFromCrawler($crawler, $datum);
                 $data['wedstrijd']['naam'] = $wedstrijd->getNaam();
                 $data['wedstrijd']['uitslagtype'] = $uitslagType;
                 $refDatum = (null !== $referentieWedstrijd) ? $referentieWedstrijd->getDatum() : null;
-                $data['uitslag'] = $uitslagManager->prepareUitslagen($uitslagType, $crawler, $wedstrijd, $seizoen, $refDatum);
+                $data['uitslag'] = $this->uitslagManager->prepareUitslagen($uitslagType, $crawler, $wedstrijd, $seizoen, $refDatum);
                 $e->setData($data);
             }
         });
@@ -88,21 +102,12 @@ class UitslagCreateType extends AbstractType
         });
     }
 
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_uitslagcreatetype';
-    }
-
     /**
      * @return void
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'wedstrijd_manager' => null,
-            'uitslag_manager' => null,
-            'crawler_manager' => null,
-            'renner_manager' => null,
             'request' => null,
             'seizoen' => null,
             'default_date' => null,

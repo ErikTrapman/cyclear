@@ -5,6 +5,7 @@ namespace App\Command;
 use App\CQRanking\CQAutomaticResultsResolver;
 use App\CQRanking\Parser\RecentRaces\RecentRacesParser;
 use App\Entity\Seizoen;
+use App\Repository\SeizoenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\LockableTrait;
@@ -21,6 +22,7 @@ class CQAutomaticResultsResolverCommand extends Command
         private readonly CQAutomaticResultsResolver $resolver,
         private readonly RecentRacesParser $parser,
         private readonly ManagerRegistry $doctrine,
+        private readonly SeizoenRepository $seizoenRepository,
         string $name = null
     ) {
         parent::__construct($name);
@@ -35,8 +37,7 @@ class CQAutomaticResultsResolverCommand extends Command
         $em = $this->doctrine->getManager();
 
         try {
-            /** @var Seizoen $seizoen */
-            $seizoen = $this->doctrine->getRepository(Seizoen::class)->getCurrent();
+            $seizoen = $this->seizoenRepository->getCurrent();
             if (!$seizoen) {
                 return Command::SUCCESS;
             }

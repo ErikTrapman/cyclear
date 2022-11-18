@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Seizoen;
 use App\Entity\Wedstrijd;
 use App\Repository\UitslagRepository;
+use App\Repository\WedstrijdRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,21 +18,20 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class WedstrijdController extends AbstractController
 {
+    public function __construct(
+        private readonly WedstrijdRepository $wedstrijdRepository,
+        private readonly PaginatorInterface $paginator,
+    ) {
+    }
+
     /**
      * @Route ("/latest", name="wedstrijd_latest")
-     *
      * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     *
      * @Template ()
-     *
-     * @return (Seizoen|mixed)[]
-     *
-     * @psalm-return array{wedstrijden: mixed, seizoen: Seizoen}
      */
     public function latestAction(Request $request, Seizoen $seizoen): array
     {
-        $em = $this->getDoctrine()->getManager();
-        $uitslagenQb = $em->getRepository(Wedstrijd::class)->createQueryBuilder('w')
+        $uitslagenQb = $this->wedstrijdRepository->createQueryBuilder('w')
             ->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
             ->orderBy('w.datum', 'DESC')
             ->setMaxResults(20);
@@ -39,17 +40,11 @@ class WedstrijdController extends AbstractController
 
     /**
      * @Route ("/{wedstrijd}", name="wedstrijd_show")
-     *
      * @Template ()
-     *
-     * @return (Wedstrijd|array|mixed)[]
-     *
-     * @psalm-return array{wedstrijd: Wedstrijd, uitslagen: array, allstages: mixed}
      */
     public function showAction(Request $request, Wedstrijd $wedstrijd): array
     {
-        $em = $this->getDoctrine()->getManager();
-        $refStages = $em->getRepository(Wedstrijd::class)->getRefStages($wedstrijd, $wedstrijd);
+        $refStages = $this->wedstrijdRepository->getRefStages($wedstrijd, $wedstrijd);
         $allStages = [];
         /** @var Wedstrijd $refStage */
         foreach (array_merge($refStages, [$wedstrijd]) as $refStage) {
@@ -73,26 +68,17 @@ class WedstrijdController extends AbstractController
     }
 
     /**
-     * @Route ("en", name="wedstrijd_list")
-     *
+     * @Route("en", name="wedstrijd_list")
      * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     *
      * @Template ()
-     *
-     * @return (Seizoen|mixed)[]
-     *
-     * @psalm-return array{pagination: mixed, seizoen: Seizoen}
      */
     public function indexAction(Request $request, Seizoen $seizoen): array
     {
-        $em = $this->get('doctrine');
-
-        $qb = $em->getRepository(Wedstrijd::class)->createQueryBuilder('n')
+        $qb = $this->wedstrijdRepository->createQueryBuilder('n')
             ->where('n.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
             ->orderBy('n.id', 'DESC');
 
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
+        $pagination = $this->paginator->paginate(
             $qb, $request->query->get('page', 1), 20
         );
         return ['pagination' => $pagination, 'seizoen' => $seizoen];

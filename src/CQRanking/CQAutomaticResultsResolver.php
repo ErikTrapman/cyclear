@@ -9,18 +9,21 @@ use App\Entity\Uitslag;
 use App\Entity\Wedstrijd;
 use App\EntityManager\UitslagManager;
 use App\Form\DataTransformer\RennerNameToRennerIdTransformer;
+use App\Repository\PloegRepository;
+use App\Repository\WedstrijdRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 
 class CQAutomaticResultsResolver
 {
     public function __construct(
-        private readonly EntityManagerInterface $em,
         private readonly RaceCategoryMatcher $categoryMatcher,
         private readonly UitslagManager $uitslagManager,
         private readonly CrawlerManager $crawlerManager,
         private readonly RennerNameToRennerIdTransformer $transformer,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly WedstrijdRepository $wedstrijdRepository,
+        private readonly PloegRepository $ploegRepository,
     ) {
     }
 
@@ -30,12 +33,10 @@ class CQAutomaticResultsResolver
         $start->setTime(0, 0, 0);
         $end = clone $end;
         $end->setTime(0, 0, 0);
-        $repo = $this->em->getRepository(Wedstrijd::class);
-        $ploegRepo = $this->em->getRepository(Ploeg::class);
         $ret = [];
         foreach ($races as $race) {
             // we simply use the url as external identifier
-            $wedstrijd = $repo->findOneBy(['externalIdentifier' => $race->url]);
+            $wedstrijd = $this->wedstrijdRepository->findOneBy(['externalIdentifier' => $race->url]);
             if ($wedstrijd) {
                 continue;
             }
@@ -87,7 +88,7 @@ class CQAutomaticResultsResolver
             foreach ($uitslagen as $uitslagRow) {
                 $uitslag = new Uitslag();
                 $uitslag->setWedstrijd($wedstrijd);
-                $uitslag->setPloeg($uitslagRow['ploeg'] ? $ploegRepo->find($uitslagRow['ploeg']) : null);
+                $uitslag->setPloeg($uitslagRow['ploeg'] ? $this->ploegRepository->find($uitslagRow['ploeg']) : null);
                 $uitslag->setRennerPunten($uitslagRow['rennerPunten']);
                 $uitslag->setPloegPunten($uitslagRow['ploegPunten']);
                 $uitslag->setPositie($uitslagRow['positie']);

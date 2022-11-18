@@ -15,9 +15,4 @@ class RennerFilterType extends \Symfony\Component\Form\AbstractType
             'required' => false,
             'label' => 'Naam / CQ-id', ]);
     }
-
-    public function getName(): string
-    {
-        return 'renner_filter';
-    }
 }

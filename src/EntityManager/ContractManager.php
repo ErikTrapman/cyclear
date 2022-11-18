@@ -6,23 +6,21 @@ use App\Entity\Contract;
 use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ContractRepository;
 
 class ContractManager
 {
-    public function __construct(private EntityManagerInterface $em)
-    {
+    public function __construct(
+        private readonly ContractRepository $contractRepository,
+    ) {
     }
 
-    public function releaseRenner(Renner $renner, Seizoen $seizoen, \DateTime $einddatum): bool
+    public function releaseRenner(Renner $renner, Seizoen $seizoen, \DateTime $einddatum): ?Contract
     {
-        $currentContract = $this->em->getRepository(Contract::class)->getCurrentContract($renner, $seizoen);
-        if (null === $currentContract) {
-            return true;
+        if ($currentContract = $this->contractRepository->getCurrentContract($renner, $seizoen)) {
+            $currentContract->setEind($einddatum);
         }
-        $currentContract->setEind($einddatum);
-        $this->em->persist($currentContract);
-        return true;
+        return $currentContract;
     }
 
     public function createContract(Renner $renner, Ploeg $ploeg, Seizoen $seizoen, \DateTime $datum): Contract
@@ -32,7 +30,6 @@ class ContractManager
         $c->setRenner($renner);
         $c->setSeizoen($seizoen);
         $c->setStart($datum);
-        $this->em->persist($c);
         return $c;
     }
 }

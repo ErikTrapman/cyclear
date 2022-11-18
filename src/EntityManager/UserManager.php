@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserManager
 {
-    public function __construct(private AclProviderInterface $aclprovider)
+    public function __construct(private readonly AclProviderInterface $aclprovider)
     {
     }
 

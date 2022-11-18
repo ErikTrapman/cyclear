@@ -24,9 +24,4 @@ class RennerType extends AbstractType
                 }, ])
             ->add('twitter', null, ['required' => false]);
     }
-
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_rennertype';
-    }
 }

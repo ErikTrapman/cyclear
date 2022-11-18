@@ -18,16 +18,6 @@ class StrategySelectorType extends AbstractType
         $builder->addModelTransformer(new ConstantToStrategyClassTransformer());
     }
 
-    public function getBlockPrefix()
-    {
-        return $this->getName();
-    }
-
-    public function getName(): string
-    {
-        return 'eriktrapman_cqparser_strategy';
-    }
-
     /**
      * @return void
      */

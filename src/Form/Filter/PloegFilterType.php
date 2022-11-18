@@ -14,13 +14,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class PloegFilterType extends AbstractType
 {
-    private $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
-
     /**
      * @return void
      */
@@ -28,15 +21,5 @@ class PloegFilterType extends AbstractType
     {
         $builder
             ->add('naam', TextType::class, ['required' => false]);
-    }
-
-    public function getBlockPrefix()
-    {
-        return 'ploeg_filter';
-    }
-
-    public function getName(): string
-    {
-        return 'ploeg_filter';
     }
 }

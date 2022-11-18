@@ -6,11 +6,6 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractStrategy implements ParserStrategyInterface
 {
-    public function __toString()
-    {
-        return get_class($this);
-    }
-
     protected function parseResultsFromExpression(Crawler $crawler, string $expr): array
     {
         $data = $crawler->filter($expr)->filter('tr')->each(function ($node, $i) {
@@ -49,5 +44,10 @@ abstract class AbstractStrategy implements ParserStrategyInterface
         });
         // array_values to generate new keys, starting from 0
         return array_values(array_filter($data, fn ($a) => !empty($a)));
+    }
+
+    public function __toString()
+    {
+        return get_class($this);
     }
 }

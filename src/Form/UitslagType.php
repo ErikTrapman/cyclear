@@ -38,11 +38,6 @@ class UitslagType extends AbstractType
             ->add('renner', RennerSelectorType::class);
     }
 
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_uitslagtype';
-    }
-
     /**
      * @return void
      */

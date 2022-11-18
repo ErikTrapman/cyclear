@@ -15,9 +15,4 @@ class UserType extends BaseType
         parent::buildForm($builder, $options);
         $builder->remove('plainPassword');
     }
-
-    public function getName(): string
-    {
-        return 'admin_user_new';
-    }
 }

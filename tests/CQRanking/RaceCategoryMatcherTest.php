@@ -5,9 +5,11 @@ namespace App\Tests\CQRanking;
 use App\CQRanking\RaceCategoryMatcher;
 use App\Entity\UitslagType;
 use App\Entity\Wedstrijd;
+use App\Repository\WedstrijdRepository;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class RaceCategoryMatcherTest extends WebTestCase
+class RaceCategoryMatcherTest extends TestCase
 {
     private function getEm(): \PHPUnit\Framework\MockObject\MockObject
     {
@@ -30,7 +32,7 @@ class RaceCategoryMatcherTest extends WebTestCase
         $em->expects($this->once())->method('getRepository')->with(UitslagType::class)->willReturn($repo);
         $repo->expects($this->once())->method('findAll')->willReturn([$t]);
 
-        $matcher = new RaceCategoryMatcher($em);
+        $matcher = new RaceCategoryMatcher($em, $this->getMockBuilder(WedstrijdRepository::class)->disableOriginalConstructor()->getMock());
         $res = $matcher->getUitslagTypeAccordingToCategory($lookup);
         $this->assertSame($t, $res);
     }
@@ -65,7 +67,7 @@ class RaceCategoryMatcherTest extends WebTestCase
         $em->expects($this->once())->method('getRepository')->with(UitslagType::class)->willReturn($repo);
         $repo->expects($this->once())->method('findAll')->willReturn([$t]);
 
-        $matcher = new RaceCategoryMatcher($em);
+        $matcher = new RaceCategoryMatcher($em, $this->getMockBuilder(WedstrijdRepository::class)->disableOriginalConstructor()->getMock());
         $this->assertNull($matcher->getUitslagTypeAccordingToCategory($lookup));
     }
 
@@ -94,7 +96,7 @@ class RaceCategoryMatcherTest extends WebTestCase
     public function testNeedsRefStage($name, $res): void
     {
         $em = $this->getEm();
-        $matcher = new RaceCategoryMatcher($em);
+        $matcher = new RaceCategoryMatcher($em, $this->getMockBuilder(WedstrijdRepository::class)->disableOriginalConstructor()->getMock());
         $wedstrijd = new Wedstrijd();
         $wedstrijd->setNaam($name);
         $this->assertEquals($res, $matcher->needsRefStage($wedstrijd));

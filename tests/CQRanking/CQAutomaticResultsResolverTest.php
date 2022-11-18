@@ -10,6 +10,7 @@ use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\UitslagType;
 use App\Entity\Wedstrijd;
+use App\Repository\PloegRepository;
 use Monolog\Logger;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -23,18 +24,9 @@ class CQAutomaticResultsResolverTest extends WebTestCase
         $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'recentraces-20151029.html');
         $races = $parser->getRecentRaces($content, new \DateTime(date('Y') . '-12-31'));
 
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
         $wedstrijdRepo = $this->getMockBuilder('App\Repository\WedstrijdRepository')->disableOriginalConstructor()->getMock();
-        // $em->expects($this->at(0))->method('getRepository')->with(Wedstrijd::class)->willReturn($wedstrijdRepo);
-        // $wedstrijdRepo->method('findOneByExternalIdentifier')->willReturn(null);
 
-        $ploegRepo = $this->getMockBuilder('Doctrine\ORM\EntityRepository')->disableOriginalConstructor()->getMock();
-        // $em->expects($this->at(1))->method('getRepository')->with(Ploeg::class)->willReturn($ploegRepo);
-
-        $em->expects($this->exactly(2))->method('getRepository')->withConsecutive([Wedstrijd::class], [Ploeg::class])->willReturnOnConsecutiveCalls(
-            $wedstrijdRepo,
-            $ploegRepo
-        );
+        $ploegRepo = $this->getMockBuilder(PloegRepository::class)->disableOriginalConstructor()->getMock();
 
         $ploeg = new Ploeg();
         $ploegRepo->method('find')->willReturn($ploeg);
@@ -56,7 +48,7 @@ class CQAutomaticResultsResolverTest extends WebTestCase
         $renner = new Renner();
         $transformer = $this->getMockBuilder('App\Form\DataTransformer\RennerNameToRennerIdTransformer')->disableOriginalConstructor()->getMock();
         $transformer->method('reverseTransform')->willReturn($renner);
-        $resolver = new CQAutomaticResultsResolver($em, $categoryMatcher, $uitslagManager, new CrawlerManager(), $transformer, $logger);
+        $resolver = new CQAutomaticResultsResolver($categoryMatcher, $uitslagManager, new CrawlerManager(), $transformer, $logger, $wedstrijdRepo, $ploegRepo);
         $seizoen = new Seizoen();
         // cqranking parses recent races as per this year (see http://cqranking.com/men/asp/gen/RacesRecent.asp?changed=0)
         // as there is no indication of what year the race has been held in.

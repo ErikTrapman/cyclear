@@ -21,9 +21,4 @@ class SeizoenType extends AbstractType
             ->add('end')
             ->add('maxPointsPerRider');
     }
-
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_seizoentype';
-    }
 }

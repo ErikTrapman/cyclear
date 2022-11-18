@@ -7,7 +7,7 @@ use App\Entity\Wedstrijd;
 
 class WedstrijdManager
 {
-    public function __construct(private CQParser $cqParser)
+    public function __construct(private readonly CQParser $cqParser)
     {
     }
 

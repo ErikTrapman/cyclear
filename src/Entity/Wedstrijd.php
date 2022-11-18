@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * App\Entity\Wedstrijd
  *
- * @ORM\Table(name="wedstrijd")
+ * @ORM\Table(
+ *     name="wedstrijd",
+ *     indexes={
+ *          @ORM\Index(columns={"externalIdentifier"})
+ *      }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\WedstrijdRepository")
  */
 class Wedstrijd

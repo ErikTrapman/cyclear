@@ -18,9 +18,4 @@ class NieuwsType extends AbstractType
             ->add('titel')
             ->add('content', TextareaType::class, ['attr' => ['rows' => 32, 'cols' => 32]]);
     }
-
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_nieuwstype';
-    }
 }

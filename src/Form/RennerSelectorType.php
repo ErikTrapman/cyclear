@@ -66,14 +66,4 @@ class RennerSelectorType extends AbstractType
     {
         return TextType::class;
     }
-
-    public function getBlockPrefix()
-    {
-        return 'renner_selector';
-    }
-
-    public function getName(): string
-    {
-        return 'renner_selector';
-    }
 }

@@ -37,9 +37,4 @@ class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
     {
         return EntityType::class;
     }
-
-    public function getName(): string
-    {
-        return 'seizoen_selector';
-    }
 }

@@ -30,7 +30,7 @@ class SlugRidersCommand extends Command
             $renner = $repo->find($renner['id']);
             $renner->setSlug(\Gedmo\Sluggable\Util\Urlizer::urlize($renner->getNaam()));
             if ($i % 250 == 0 && $i != 0) {
-                $output->writeln(memory_get_usage(1));
+                $output->writeln(memory_get_usage(true));
                 $output->writeln("$i; have to flush");
                 $this->em->flush();
                 $this->em->clear();

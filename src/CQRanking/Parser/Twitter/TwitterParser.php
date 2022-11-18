@@ -6,8 +6,10 @@ use App\CQRanking\Parser\Crawler\CrawlerManager;
 
 class TwitterParser
 {
-    public function __construct(private CrawlerManager $crawlerManager, private string $baseUrl)
-    {
+    public function __construct(
+        private readonly CrawlerManager $crawlerManager,
+        private readonly string $baseUrl
+    ) {
     }
 
     public function getTwitterHandle($cqId): ?string

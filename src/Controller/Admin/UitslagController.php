@@ -121,17 +121,9 @@ class UitslagController extends AbstractController
     public function createAction(Request $request): array|Response
     {
         $em = $this->getDoctrine()->getManager();
-        $uitslagManager = $this->get('cyclear_game.manager.uitslag');
-        $wedstrijdManager = $this->get('cyclear_game.manager.wedstrijd');
-        $crawlerManager = $this->get('eriktrapman_cqparser.crawler_manager');
-        $rennerManager = $this->get('cyclear_game.manager.renner');
         $options = [];
-        $options['crawler_manager'] = $crawlerManager;
-        $options['wedstrijd_manager'] = $wedstrijdManager;
-        $options['uitslag_manager'] = $uitslagManager;
         $options['request'] = $request;
         $options['seizoen'] = $em->getRepository(Seizoen::class)->getCurrent();
-        $options['renner_manager'] = $rennerManager;
         $options['default_date'] = new \DateTime();
         $form = $this->createForm(UitslagCreateType::class, null, $options);
         if ($request->isXmlHttpRequest()) {

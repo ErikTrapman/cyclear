@@ -41,11 +41,6 @@ class TransferUserType extends AbstractType
         $builder->add('userComment', null, ['label' => 'Commentaar', 'attr' => ['placeholder' => 'Commentaar...']]);
     }
 
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_transferusertype';
-    }
-
     /**
      * @return void
      */

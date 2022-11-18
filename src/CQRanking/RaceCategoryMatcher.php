@@ -4,12 +4,15 @@ namespace App\CQRanking;
 
 use App\Entity\UitslagType;
 use App\Entity\Wedstrijd;
+use App\Repository\WedstrijdRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class RaceCategoryMatcher
 {
-    public function __construct(private EntityManagerInterface $em)
-    {
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private readonly WedstrijdRepository $wedstrijdRepository,
+    ) {
     }
 
     public function getUitslagTypeAccordingToCategory(string $category): ?UitslagType
@@ -37,18 +40,12 @@ class RaceCategoryMatcher
         return false;
     }
 
-    /**
-     * @return Wedstrijd
-     */
-    public function getRefStage(Wedstrijd $wedstrijd)
+    public function getRefStage(Wedstrijd $wedstrijd): ?Wedstrijd
     {
-        return $this->em->getRepository(Wedstrijd::class)->getRefStage($wedstrijd);
+        return $this->wedstrijdRepository->getRefStage($wedstrijd);
     }
 
-    /**
-     * @param string $string
-     */
-    public function getPregPattern($string): string
+    public function getPregPattern(string $string): string
     {
         return implode('|', explode(',', str_replace(' ', '', $string)));
     }

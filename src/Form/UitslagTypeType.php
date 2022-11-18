@@ -18,9 +18,4 @@ class UitslagTypeType extends \Symfony\Component\Form\AbstractType
             ->add('cqParsingStrategy', StrategySelectorType::class, ['property_path' => 'cqParsingStrategy'])
             ->add('automaticResolvingCategories');
     }
-
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_uitslagtypetype';
-    }
 }

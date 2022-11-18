@@ -7,11 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContractType extends \Symfony\Component\Form\AbstractType
 {
-    public function getName(): string
-    {
-        return 'admin_contract';
-    }
-
     /**
      * @return void
      */

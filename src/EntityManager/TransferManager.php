@@ -27,11 +27,13 @@ class TransferManager
             $ploeg = $this->em->getRepository(Renner::class)->getPloeg($renner, $seizoen);
             if (null !== $ploeg) {
                 $releaseTransfer = $this->createReleaseTransfer($transfer, $ploeg);
-                $this->contractManager->releaseRenner($renner, $seizoen, $datum);
+                $currentContract = $this->contractManager->releaseRenner($renner, $seizoen, $datum);
+                $this->em->persist($currentContract);
                 $transfer->setInversionTransfer($releaseTransfer);
                 $this->em->persist($releaseTransfer);
             }
-            $this->contractManager->createContract($renner, $transfer->getPloegNaar(), $seizoen, $datum);
+            $contract = $this->contractManager->createContract($renner, $transfer->getPloegNaar(), $seizoen, $datum);
+            $this->em->persist($contract);
             $this->em->persist($transfer);
             $this->em->commit();
         } catch (\Exception $e) {
@@ -79,10 +81,12 @@ class TransferManager
 
                 $releaseTransfer1 = $this->createReleaseTransfer($t1, $ploeg1);
                 $this->em->persist($releaseTransfer1);
-                $this->contractManager->releaseRenner($renner1, $seizoen, $datum);
+                $cc1 = $this->contractManager->releaseRenner($renner1, $seizoen, $datum);
+                $this->em->persist($cc1);
 
                 $releaseTransfer2 = $this->createReleaseTransfer($t2, $ploeg2);
-                $this->contractManager->releaseRenner($renner2, $seizoen, $datum);
+                $cc2 = $this->contractManager->releaseRenner($renner2, $seizoen, $datum);
+                $this->em->persist($cc2);
                 $this->em->persist($releaseTransfer2);
 
                 $releaseTransfer1->setInversionTransfer($t2);
@@ -91,9 +95,10 @@ class TransferManager
                 $releaseTransfer2->setInversionTransfer($t1);
                 $t1->setInversionTransfer($releaseTransfer2);
 
-                $this->contractManager->createContract($renner1, $t1->getPloegNaar(), $seizoen, $datum);
-                $this->contractManager->createContract($renner2, $t2->getPloegNaar(), $seizoen, $datum);
-
+                $c1 = $this->contractManager->createContract($renner1, $t1->getPloegNaar(), $seizoen, $datum);
+                $this->em->persist($c1);
+                $c2 = $this->contractManager->createContract($renner2, $t2->getPloegNaar(), $seizoen, $datum);
+                $this->em->persist($c2);
                 $this->em->persist($t1);
                 $this->em->persist($t2);
 
@@ -126,7 +131,8 @@ class TransferManager
             $transferUit->setTransferType(Transfer::USERTRANSFER);
             $transferUit->setSeizoen($seizoen);
             $this->em->persist($transferUit);
-            $this->contractManager->releaseRenner($rennerUit, $seizoen, $datum);
+            $cc = $this->contractManager->releaseRenner($rennerUit, $seizoen, $datum);
+            $this->em->persist($cc);
             // de binnenkomende transfer
             $transferIn = new Transfer();
             $transferIn->setRenner($rennerIn);
@@ -137,7 +143,8 @@ class TransferManager
             $transferIn->setSeizoen($seizoen);
             $transferIn->setUserComment($msg);
             $this->em->persist($transferIn);
-            $this->contractManager->createContract($rennerIn, $ploeg, $seizoen, $datum);
+            $contract = $this->contractManager->createContract($rennerIn, $ploeg, $seizoen, $datum);
+            $this->em->persist($contract);
             // $transferUit->setInversionTransfer($transferIn);
             $transferIn->setInversionTransfer($transferUit);
             $transferUit->setInversionTransfer($transferIn);

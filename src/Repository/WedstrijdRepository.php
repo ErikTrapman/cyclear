@@ -18,13 +18,10 @@ class WedstrijdRepository extends ServiceEntityRepository
     /**
      * Gets refstage for given $wedstrijd.
      * refStage is the first registered stage for a multiple-days race.
-     * Typically the Wedstrijd has a name like 'Dubai Tour, General classification'
+     * Typically, the Wedstrijd has a name like 'Dubai Tour, General classification'
      * We use that to lookup 'Dubai Tour, Stage 1' or 'Dubai Tour, Prologue'.
-     *
-     * @return Wedstrijd
-     * @throws CyclearGameBundleCQException
      */
-    public function getRefStage(Wedstrijd $wedstrijd)
+    public function getRefStage(Wedstrijd $wedstrijd): ?Wedstrijd
     {
         $parts = explode(',', $wedstrijd->getNaam());
         if (empty($parts)) {

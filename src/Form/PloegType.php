@@ -25,9 +25,4 @@ class PloegType extends AbstractType
                 },
             ]);
     }
-
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_ploegtype';
-    }
 }

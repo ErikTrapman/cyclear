@@ -9,6 +9,9 @@ use App\EntityManager\TransferManager;
 use App\EntityManager\UserManager;
 use App\Form\Entity\UserTransfer;
 use App\Form\TransferUserType;
+use App\Repository\PloegRepository;
+use App\Repository\RennerRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,23 +27,21 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class TransferController extends AbstractController
 {
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly RennerRepository $rennerRepository,
+        private readonly PloegRepository $ploegRepository,
+    ) {
+    }
+
     /**
-     * My team.
-     *
      * @Route ("/ploeg/{id}/renner/{renner}", name="user_transfer")
-     *
      * @Template ()
-     *
      * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @ParamConverter ("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
-     *
-     * @return (Ploeg|Renner|Seizoen|\Symfony\Component\Form\FormView|int[])[]|RedirectResponse
-     *
-     * @psalm-return RedirectResponse|array{ploeg: Ploeg, renner: Renner, form: \Symfony\Component\Form\FormView, seizoen: Seizoen, transferInfo: array{count: int, left: int}}
      */
     public function indexAction(UserManager $userManager, TransferManager $transferManager, Request $request, Seizoen $seizoen, Ploeg $ploeg, Renner $renner): array|RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
         if (!$userManager->isOwner($this->getUser(), $ploeg)) {
             throw new AccessDeniedHttpException('Dit is niet jouw ploeg');
         }
@@ -50,7 +51,7 @@ class TransferController extends AbstractController
         $transferUser->setDatum(new \DateTime());
 
         $options = [];
-        $rennerPloeg = $em->getRepository(Renner::class)->getPloeg($renner, $seizoen);
+        $rennerPloeg = $this->rennerRepository->getPloeg($renner, $seizoen);
         if ($rennerPloeg !== $ploeg) {
             if (null !== $rennerPloeg) {
                 throw new AccessDeniedHttpException('Renner is niet in je ploeg');
@@ -62,7 +63,7 @@ class TransferController extends AbstractController
             $options['renner_uit'] = $renner;
             $transferUser->setRennerUit($renner);
         }
-        $options['ploegRenners'] = $this->getDoctrine()->getRepository(Ploeg::class)->getRenners($ploeg);
+        $options['ploegRenners'] = $this->ploegRepository->getRenners($ploeg);
         $options['ploeg'] = $ploeg;
         $form = $this->createForm(TransferUserType::class, $transferUser, $options);
         if ($request->getMethod() == 'POST') {
@@ -73,7 +74,7 @@ class TransferController extends AbstractController
                 } else {
                     $transferManager->doUserTransfer($ploeg, $renner, $form->get('renner_in')->getData(), $seizoen, $form->get('userComment')->getData());
                 }
-                $em->flush();
+                $this->doctrine->getManager()->flush();
                 return new RedirectResponse($this->generateUrl('ploeg_show', ['seizoen' => $seizoen->getSlug(), 'id' => $ploeg->getId()]));
             }
         }
@@ -87,7 +88,8 @@ class TransferController extends AbstractController
                 'seizoen' => $seizoen,
                 'transferInfo' => [
                     'count' => $transferInfo,
-                    'left' => $ttlTransfersAtm - $transferInfo, ],
+                    'left' => $ttlTransfersAtm - $transferInfo,
+                ],
             ];
     }
 }

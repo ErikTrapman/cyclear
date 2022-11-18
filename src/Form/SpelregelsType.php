@@ -17,9 +17,4 @@ class SpelregelsType extends AbstractType
             ->add('seizoen', SeizoenSelectorType::class)
             ->add('content', TextareaType::class, ['attr' => ['rows' => 32, 'cols' => 32]]);
     }
-
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_spelregelstype';
-    }
 }

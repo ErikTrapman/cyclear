@@ -8,7 +8,8 @@ use App\CQRanking\Parser\Exception\CQParserException;
 
 class RecentRacesParser
 {
-    public function __construct(private CrawlerManager $crawlerManager)
+    public function __construct(
+        private readonly CrawlerManager $crawlerManager)
     {
     }
 

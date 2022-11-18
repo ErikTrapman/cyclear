@@ -32,9 +32,4 @@ class UserEditType extends BaseType
     {
         $resolver->setDefaults(['user' => null]);
     }
-
-    public function getName(): string
-    {
-        return 'admin_user_edit';
-    }
 }

@@ -10,11 +10,6 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class TransferEditType extends \Symfony\Component\Form\AbstractType
 {
-    public function getName(): string
-    {
-        return 'cyclear_gamebundle_transferedittype';
-    }
-
     /**
      * @return void
      */
