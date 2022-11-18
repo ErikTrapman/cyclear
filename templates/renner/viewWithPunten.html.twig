@@ -8,12 +8,11 @@
             <th class="text-right">Punten</th>
         </tr>
 
-
         {% for renner in listWithPunten %}
             {% set rennerploeg = rennerRepo.getPloeg(renner[0], seizoen) %}
             <tr>
                 <td>{{ "%02d"|format(loop.index) }}</td>
-                <td nowrap>{% include "renner/_singleRow.html.twig" with {"renner":renner[0],"seizoen":seizoen } %}</td>
+                <td nowrap>{% include "renner/_singleRow.html.twig" with {"renner": renner[0], "seizoen": seizoen} %}</td>
                 <td>{% if rennerploeg %}{{ rennerploeg.afkorting }}{% else %}-{% endif %}</td>
                 <td class="text-right">{{ renner.punten }}</td>
             </tr>

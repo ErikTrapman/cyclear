@@ -12,13 +12,12 @@
         <div class="row">
             <div class="col-lg-12">
 
-
                 <div id="navigation">
                     {{ knp_pagination_render(pagination, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'transfer_list'}) }}
                 </div>
 
-                {% include 'transfer/_listWithInversion.html.twig' with {"listWithInversion":pagination, 'firstPageRoute':'transfer_list', 'includePagination': false } %}
-                
+                {% include 'transfer/_listWithInversion.html.twig' with {"listWithInversion": pagination, 'firstPageRoute': 'transfer_list', 'includePagination': false} %}
+
             </div>
         </div>
     </div>

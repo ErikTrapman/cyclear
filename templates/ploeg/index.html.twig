@@ -11,10 +11,9 @@
             <th>Punten</th>
         </tr>
 
-
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('ploeg_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td><a href="{{ path('ploeg_show', {'id': entity.id}) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.naam }}</td>
                 <td>{{ entity.punten }}</td>
             </tr>

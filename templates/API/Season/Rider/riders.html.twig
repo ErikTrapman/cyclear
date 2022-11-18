@@ -5,7 +5,7 @@
 {% block content %}
     <div class="span5">
 
-        <form action="{{ path('get_season_riders',{seizoen:seizoen.slug}) }}" method="get">
+        <form action="{{ path('get_season_riders', {seizoen: seizoen.slug}) }}" method="get">
             <input type="text" name="query">
             <button class="btn" type="submit">Zoek</button>
         </form>
@@ -18,15 +18,14 @@
                 <th/>
             </tr>
 
-
             {% for entity in entities %}
                 {% set rennerploegIndex = rennerRepo.getPloeg(entity.id, seizoen) %}
                 {% set ingelogdPloeg = app.request.attributes.get('seizoen-ploeg') %}
                 <tr>
-                    <td nowrap>{% include "renner/_singleRow.html.twig" with {'renner':rennerRepo.find(entity.id),'seizoen':seizoen } %}</td>
+                    <td nowrap>{% include "renner/_singleRow.html.twig" with {'renner': rennerRepo.find(entity.id), 'seizoen': seizoen} %}</td>
                     <td>{% if rennerploegIndex %}{{ rennerploegIndex.afkorting }}{% else %}-{% endif %}</td>
                     <td>
-                        {% include "renner/_singleRowActions.html.twig" with {"ploeg":app.request.attributes.get('seizoen-ploeg'), "renner":entity,"seizoen":seizoen } %}
+                        {% include "renner/_singleRowActions.html.twig" with {"ploeg": app.request.attributes.get('seizoen-ploeg'), "renner": entity, "seizoen": seizoen} %}
                     </td>
                 </tr>
             {% endfor %}
@@ -37,9 +36,7 @@
         </div>
     </div>
 
-
     <div class="span6">
-
 
         <ul class="nav nav-tabs" id="tabs">
             <li class="active"><a data-toggle="tab" href="#leaderboard">Leaderboard</a></li>
@@ -48,13 +45,12 @@
 
         <div class="tab-content">
             <div class="tab-pane active" id="leaderboard">
-                {% include 'renner/viewWithPunten.html.twig' with { listWithPunten: with_team} %}
+                {% include 'renner/viewWithPunten.html.twig' with {listWithPunten: with_team} %}
             </div>
             <div class="tab-pane" id="available">
-                {% include 'renner/viewWithPunten.html.twig' with { listWithPunten: without_team } %}
+                {% include 'renner/viewWithPunten.html.twig' with {listWithPunten: without_team} %}
             </div>
         </div>
     </div>
-
 
 {% endblock %}

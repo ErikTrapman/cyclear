@@ -4,7 +4,6 @@
         <th colspan="99">{{ entity }}</th>
     </tr>
 
-
     {%- for renner in renners -%}
         <tr>
             <td nowrap>
@@ -14,10 +13,10 @@
                 {% endif %}
             </td>
             {% if showActions is defined and showActions %}
-                {% include "renner/_singleRowActions.html.twig" with {"ploeg":entity, "renner":renner[0],"seizoen":seizoen, "rennerPloeg":entity } %}
+                {% include "renner/_singleRowActions.html.twig" with {"ploeg": entity, "renner": renner[0], "seizoen": seizoen, "rennerPloeg": entity} %}
             {% endif %}
             <td>
-                {% include "renner/_singleRow.html.twig" with {"renner":renner[0],"seizoen":seizoen } %}
+                {% include "renner/_singleRow.html.twig" with {"renner": renner[0], "seizoen": seizoen} %}
             </td>
             <td style="text-align:right;">{{ renner.punten }}</td>
             {% if showContract is defined and showContract and renner[0].latestContract is not null %}

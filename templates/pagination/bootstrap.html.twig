@@ -77,7 +77,7 @@
                         </li>
                     {% else %}
                         <li>
-                            <a href="{{ path(otherPagesRoute, query|merge({(pageParameterName): (pageCount - 1)})) }}">{{ pageCount -1 }}</a>
+                            <a href="{{ path(otherPagesRoute, query|merge({(pageParameterName): (pageCount - 1)})) }}">{{ pageCount - 1 }}</a>
                         </li>
                     {% endif %}
                 {% endif %}

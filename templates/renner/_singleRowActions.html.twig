@@ -1,12 +1,12 @@
 {% set ingelogdPloeg = app.request.attributes.get('seizoen-ploeg') %}
 
-{% set rennerPloeg = ( rennerPloeg is defined ) ? rennerPloeg : null %}
+{% set rennerPloeg = (rennerPloeg is defined) ? rennerPloeg : null %}
 
 {# TODO move securitychecks to twig-extensoin cyclear_security #}
 {% if rennerPloeg and is_granted("ROLE_USER") and is_granted('OWNER', ploeg) and rennerPloeg == ingelogdPloeg %}
     <td class="col-sm-1">
         <a style="color: red"
-           href="{{ path('user_transfer', {'id':rennerPloeg.id,'renner':renner.slug,'seizoen':seizoen.slug} ) }}">
+           href="{{ path('user_transfer', {'id': rennerPloeg.id, 'renner': renner.slug, 'seizoen': seizoen.slug}) }}">
         <span style="margin:0; padding:0; width: 16px; height:16px;" data-toggle="tooltip" data-placement="top"
               class="glyphicon glyphicon-transfer"
               title="Transfereer {{ renner.naam }}"></span></a>
@@ -16,7 +16,7 @@
 {% if is_granted("ROLE_USER") and ingelogdPloeg is not null and rennerPloeg is null %}
     <td class="col-sm-1">
         <a style="color: green"
-           href="{{ path('user_transfer', { seizoen:seizoen.slug, id:app.request.attributes.get('seizoen-ploeg').id, renner:renner.slug} ) }}">
+           href="{{ path('user_transfer', {seizoen: seizoen.slug, id: app.request.attributes.get('seizoen-ploeg').id, renner: renner.slug}) }}">
         <span style="margin:0; padding:0; width: 16px; height:16px;"
               data-toggle="tooltip" data-placement="top" title="Transfereer {{ renner.naam }}"
               class="glyphicon glyphicon-transfer"></span></a>

@@ -8,16 +8,15 @@
             <th/>
         </tr>
 
-
         {% for renner in listWithPuntenNoPloeg %}
             <tr>
                 <td>{{ "%02d"|format(loop.index) }}</td>
                 <td nowrap>
-                    {% include "renner/_singleRow.html.twig" with {"renner":renner[0],"seizoen":seizoen } %}
+                    {% include "renner/_singleRow.html.twig" with {"renner": renner[0], "seizoen": seizoen} %}
                 </td>
                 <td>{{ renner.punten }}</td>
                 <td>
-                    {% include "renner/_singleRowActions.html.twig" with {"seizoen":seizoen,"renner":renner[0]} %}
+                    {% include "renner/_singleRowActions.html.twig" with {"seizoen": seizoen, "renner": renner[0]} %}
                 </td>
             </tr>
         {% endfor %}

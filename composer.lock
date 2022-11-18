@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8acb1d1a8b552ff04ce86c1fffa0f98",
+    "content-hash": "f17262f8ea876bbfddd3fd1dc910e57a",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -11542,6 +11542,77 @@
                 "source": "https://github.com/vimeo/psalm/tree/4.30.0"
             },
             "time": "2022-11-06T20:37:08+00:00"
+        },
+        {
+            "name": "vincentlanglet/twig-cs-fixer",
+            "version": "0.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/VincentLanglet/Twig-CS-Fixer.git",
+                "reference": "8b04afee8909a51a48b5f8b78b5f2b8ad68735fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/8b04afee8909a51a48b5f8b78b5f2b8ad68735fe",
+                "reference": "8b04afee8909a51a48b5f8b78b5f2b8ad68735fe",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=7.4",
+                "symfony/console": "^5.4.9 || ^6.0",
+                "symfony/finder": "^5.4 || ^6.0",
+                "symfony/twig-bridge": "^5.4 || ^6.0",
+                "twig/twig": "^2.13.1 || ^3.0.5",
+                "webmozart/assert": "^1.7"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.9.5",
+                "infection/infection": "^0.26.6",
+                "phpstan/phpstan": "^1.8.2",
+                "phpstan/phpstan-phpunit": "^1.1.1",
+                "phpstan/phpstan-strict-rules": "^1.3.0",
+                "phpstan/phpstan-symfony": "^1.2.9",
+                "phpstan/phpstan-webmozart-assert": "^1.2",
+                "phpunit/phpunit": "^9.5.21",
+                "psalm/plugin-phpunit": "^0.16.1",
+                "psalm/plugin-symfony": "^3.1.8",
+                "rector/rector": "^0.13.10",
+                "twig/cache-extra": "^3.2",
+                "vimeo/psalm": "^4.25.0"
+            },
+            "bin": [
+                "bin/twig-cs-fixer"
+            ],
+            "type": "coding-standard",
+            "autoload": {
+                "psr-4": {
+                    "TwigCsFixer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vincent Langlet"
+                }
+            ],
+            "description": "A tool to automatically fix Twig code style",
+            "homepage": "https://github.com/VincentLanglet/Twig-CS-Fixer",
+            "support": {
+                "issues": "https://github.com/VincentLanglet/Twig-CS-Fixer/issues",
+                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/0.6.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/VincentLanglet",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-11-11T14:43:54+00:00"
         },
         {
             "name": "webmozart/assert",

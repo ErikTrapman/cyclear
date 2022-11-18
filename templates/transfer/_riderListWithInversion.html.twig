@@ -9,7 +9,6 @@
             <th/>
         </tr>
 
-
         {%- for transfer in listWithInversion %}
             <tr>
                 <td>{% if transfer.ploegNaar %}{{ transfer.ploegNaar.afkorting }}
@@ -18,18 +17,18 @@
                 </td>
                 <td>
                     {% if transfer.ploegNaar %}
-                        {% include "renner/_singleRow.html.twig" with {"renner":transfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}
+                        {% include "renner/_singleRow.html.twig" with {"renner": transfer.renner, "rennerPloeg": null, "seizoen": transfer.seizoen} %}
                     {% else %}
                         {% if transfer.inversionTransfer %}
-                            {% include "renner/_singleRow.html.twig" with {"renner":transfer.inversionTransfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}
+                            {% include "renner/_singleRow.html.twig" with {"renner": transfer.inversionTransfer.renner, "rennerPloeg": null, "seizoen": transfer.seizoen} %}
                         {% endif %}
                     {% endif %}
                 </td>
                 <td>{% if transfer.ploegVan %}
-                        {% include "renner/_singleRow.html.twig" with {"renner":transfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}
+                        {% include "renner/_singleRow.html.twig" with {"renner": transfer.renner, "rennerPloeg": null, "seizoen": transfer.seizoen} %}
                     {% else %}
                         {% if transfer.inversionTransfer %}
-                            {% include "renner/_singleRow.html.twig" with {"renner":transfer.inversionTransfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}
+                            {% include "renner/_singleRow.html.twig" with {"renner": transfer.inversionTransfer.renner, "rennerPloeg": null, "seizoen": transfer.seizoen} %}
                         {% endif %}
                     {% endif %}</td>
                 <td>

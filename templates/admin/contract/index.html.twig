@@ -8,7 +8,6 @@
         <button class="btn btn-default" type="submit">Zoek</button>
     </form>
 
-
     <table class="table table-bordered table-striped">
 
         <tr>
@@ -20,18 +19,17 @@
             <th/>
         </tr>
 
-
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('admin_contract_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td><a href="{{ path('admin_contract_edit', {'id': entity.id}) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.renner }}</td>
-                <td>{{ entity.start | date('d-m-Y H:i:s') }}</td>
-                <td>{% if entity.eind %}{{ entity.eind | date('d-m-Y H:i:s') }}{% endif %}</td>
+                <td>{{ entity.start|date('d-m-Y H:i:s') }}</td>
+                <td>{% if entity.eind %}{{ entity.eind|date('d-m-Y H:i:s') }}{% endif %}</td>
                 <td>{{ entity.seizoen }}</td>
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('admin_contract_edit', { 'id': entity.id }) }}">edit</a>
+                            <a href="{{ path('admin_contract_edit', {'id': entity.id}) }}">edit</a>
                         </li>
                     </ul>
                 </td>

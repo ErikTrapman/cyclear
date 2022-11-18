@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
 
-
 {% block content %}
     <div class="big-header hidden-xs hidden-sm">
         <h2>Renners {{ seizoen }}</h2>
@@ -70,7 +69,7 @@
                             {% verbatim %}
                     <td>
                         <img ng-if="initialLoad" style="margin-right:3px; margin-bottom:2px;" width="16" height="16"
-                             ng-src="/icons/flags/16/{{ r.country.iso2 | lowercase }}.png"
+                             ng-src="/icons/flags/16/{{ r.country.iso2|lowercase }}.png"
                              alt="{{ r.country.name }}">
                         <a ng-href="{{ getUrl(r.slug) }}">{{ r.naam }}</a>
                     </td>

@@ -12,12 +12,11 @@
         <div class="row">
             <div class="col-lg-12">
                 {% include "uitslag/viewByUserTransfer.html.twig" with {
-                "list": transfer,'gained': shadowgained,'lost':shadowlost,'transferRepo': transferRepo } %}
+                "list": transfer, 'gained': shadowgained, 'lost': shadowlost, 'transferRepo': transferRepo} %}
             </div>
 
         </div>
     </div>
-
 
     <div class="big-header">
         <h2>Draft</h2>
@@ -26,7 +25,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                {% include "uitslag/viewByDraftTransfer.html.twig" with {"list": draft } %}
+                {% include "uitslag/viewByDraftTransfer.html.twig" with {"list": draft} %}
             </div>
         </div>
     </div>
@@ -48,18 +47,17 @@
                         <th>Punten</th>
                     </tr>
 
-
                     {% for row in bestTransfers %}
                         <tr>
                             <td>{{ "%02d"|format(loop.index) }}</td>
                             <td class="hidden-xs hidden-sm">
-                                <a href="{{ path('ploeg_show',{id:row.team.id, seizoen:seizoen.slug}) }}">{{ row.team.naam }}</a>
+                                <a href="{{ path('ploeg_show', {id: row.team.id, seizoen: seizoen.slug}) }}">{{ row.team.naam }}</a>
                             </td>
                             <td>
-                                <a href="{{ path('ploeg_show', {id: row.team.id, seizoen:seizoen.slug}) }}">{{ row.team.afkorting }}</a>
+                                <a href="{{ path('ploeg_show', {id: row.team.id, seizoen: seizoen.slug}) }}">{{ row.team.afkorting }}</a>
                             </td>
                             <td>
-                                {% include 'renner/_singleRow.html.twig' with {renner: row.rider } %}
+                                {% include 'renner/_singleRow.html.twig' with {renner: row.rider} %}
                             </td>
                             <td>{{ row.points }}</td>
                         </tr>

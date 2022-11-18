@@ -5,15 +5,15 @@
                 <td>{{ "%02d"|format(loop.index) }}</td>
                 <td class="hidden-xs hidden-sm">
                     {% if uitslag.ploeg %}
-                        <a href="{{ path('ploeg_show',{id:uitslag.ploeg.id, seizoen:seizoen.slug}) }}">{{ uitslag.ploeg.naam }}</a>
+                        <a href="{{ path('ploeg_show', {id: uitslag.ploeg.id, seizoen: seizoen.slug}) }}">{{ uitslag.ploeg.naam }}</a>
                     {% endif %}
                 </td>
                 <td>
                     {% if uitslag.ploeg %}
-                        <a href="{{ path('ploeg_show', {id: uitslag.ploeg.id, seizoen:seizoen.slug}) }}">{{ uitslag.ploeg.afkorting }}</a>
+                        <a href="{{ path('ploeg_show', {id: uitslag.ploeg.id, seizoen: seizoen.slug}) }}">{{ uitslag.ploeg.afkorting }}</a>
                     {% endif %}
                 </td>
-                <td colspan="2">{% include "renner/_singleRow.html.twig" with {renner:uitslag.renner,seizoen:uitslag.wedstrijd.seizoen } %}</td>
+                <td colspan="2">{% include "renner/_singleRow.html.twig" with {renner: uitslag.renner, seizoen: uitslag.wedstrijd.seizoen} %}</td>
                 <td>{% include 'uitslag/_singlePoints.html.twig' with {uitslag: uitslag} %}</td>
             </tr>
         {% endfor %}

@@ -16,10 +16,10 @@
                 {% if not fromTeamPage %}
                     <td>{% if transfer.ploegNaar %}{{ transfer.ploegNaar.afkorting }}{% endif %}</td>
                 {% endif %}
-                <td>{% include "renner/_singleRow.html.twig" with {"renner":transfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}
+                <td>{% include "renner/_singleRow.html.twig" with {"renner": transfer.renner, "rennerPloeg": null, "seizoen": transfer.seizoen} %}
                 </td>
                 <td>{% if transfer.inversionTransfer %}
-                        {% include "renner/_singleRow.html.twig" with {"renner":transfer.inversionTransfer.renner,"rennerPloeg":null, "seizoen":transfer.seizoen } %}
+                        {% include "renner/_singleRow.html.twig" with {"renner": transfer.inversionTransfer.renner, "rennerPloeg": null, "seizoen": transfer.seizoen} %}
                     {% endif %}</td>
                 <td>
                     <span data-toggle="tooltip" data-placement="top"

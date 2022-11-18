@@ -14,10 +14,9 @@
             <th>&nbsp;</th>
         </tr>
 
-
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('admin_periode_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td><a href="{{ path('admin_periode_edit', {'id': entity.id}) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.start|date('Y-m-d H:i:s') }}</td>
                 <td>{{ entity.eind|date('Y-m-d H:i:s') }}</td>
                 <td>{{ entity.transfers }}</td>
@@ -25,7 +24,7 @@
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('admin_periode_edit', { 'id': entity.id }) }}">edit</a>
+                            <a href="{{ path('admin_periode_edit', {'id': entity.id}) }}">edit</a>
                         </li>
                     </ul>
                 </td>

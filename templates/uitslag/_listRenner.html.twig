@@ -28,7 +28,7 @@
                 {% endif %}
                 <td>{{ uitslag.positie }}</td>
                 <td>
-                    {% include "wedstrijd/_singleRow.html.twig" with {wedstrijd:uitslag.wedstrijd, seizoen:uitslag.wedstrijd.seizoen } %}
+                    {% include "wedstrijd/_singleRow.html.twig" with {wedstrijd: uitslag.wedstrijd, seizoen: uitslag.wedstrijd.seizoen} %}
                 </td>
                 <td>{{ uitslag.wedstrijd.datum|date('d M') }}</td>
             </tr>

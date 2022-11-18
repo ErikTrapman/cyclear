@@ -12,7 +12,7 @@
                 {% set curpos = "%02d"|format(loop.index) %}
                 {% set tdclass = loop.index == 1 ? 'success' : null %}
                 {% if shadowlist %}
-                    {% set prevpos =  shadowlist[ploeg[0].id].position %}
+                    {% set prevpos = shadowlist[ploeg[0].id].position %}
                     {% set posdiff = prevpos - curpos %}
                     <td>
                         {% apply spaceless %}
@@ -30,13 +30,12 @@
                     <td>{{ curpos }}</td>
                 {% endif %}
 
-
                 <td class="hidden-xs hidden-sm">
-                    <a href="{{ path('ploeg_show', { "seizoen": seizoen.slug, id:ploeg[0].id}) }}#!ploeg">{{ ploeg[0].naam }}</a>
+                    <a href="{{ path('ploeg_show', {"seizoen": seizoen.slug, id: ploeg[0].id}) }}#!ploeg">{{ ploeg[0].naam }}</a>
                 </td>
                 <td class="hidden-sm hidden-xs">{{ ploeg[0].afkorting }}</td>
                 <td class="hidden-lg hidden-md">
-                    <a href="{{ path('ploeg_show', { "seizoen": seizoen.slug, id:ploeg[0].id}) }}#!ploeg">{{ ploeg[0].afkorting }}</a>
+                    <a href="{{ path('ploeg_show', {"seizoen": seizoen.slug, id: ploeg[0].id}) }}#!ploeg">{{ ploeg[0].afkorting }}</a>
                 </td>
                 {% if shadowlist %}
                     <td>{{ ploeg.punten }}</td>

@@ -16,10 +16,9 @@
             <th>&nbsp;</th>
         </tr>
 
-
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('admin_transfer_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td><a href="{{ path('admin_transfer_edit', {'id': entity.id}) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.renner.naam }}</td>
                 <td>{% if entity.ploegVan is not null %}{{ entity.ploegVan.afkorting }}{% endif %}</td>
                 <td>{% if entity.ploegNaar is not null %}{{ entity.ploegNaar.afkorting }}{% endif %}</td>
@@ -28,7 +27,7 @@
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('admin_transfer_edit', { 'id': entity.id }) }}">edit</a>
+                            <a href="{{ path('admin_transfer_edit', {'id': entity.id}) }}">edit</a>
                         </li>
                     </ul>
                 </td>

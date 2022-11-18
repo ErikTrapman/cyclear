@@ -14,7 +14,7 @@
                 <ul class="nav nav-pills" style="margin-bottom: 10px;">
                     {% for p in periodes %}
                         <li {% if p.id == periode.id %} class="active" {% endif %}><a
-                                    href="{{ path('uitslag_periodes', {'seizoen':seizoen.slug,'periode':p.id}) }}">Periode {{ "%02d"|format(loop.index) }}</a>
+                                    href="{{ path('uitslag_periodes', {'seizoen': seizoen.slug, 'periode': p.id}) }}">Periode {{ "%02d"|format(loop.index) }}</a>
                         </li>
                     {% endfor %}
                 </ul>

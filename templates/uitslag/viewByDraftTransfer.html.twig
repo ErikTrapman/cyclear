@@ -7,14 +7,13 @@
             <th>Punten</th>
         </tr>
 
-
         {% for ploeg in list %}
             <tr>
                 <td>{{ "%02d"|format(loop.index) }}</td>
                 <td class="hidden-xs hidden-sm">
-                    <a href="{{ path('ploeg_show',{id:ploeg.id,seizoen:seizoen.slug}) }}">{{ ploeg.naam }}</a></td>
+                    <a href="{{ path('ploeg_show', {id: ploeg.id, seizoen: seizoen.slug}) }}">{{ ploeg.naam }}</a></td>
                 <td>
-                    <a href="{{ path('ploeg_show', {id: ploeg.id, seizoen:seizoen.slug}) }}">{{ ploeg.afkorting }}</a>
+                    <a href="{{ path('ploeg_show', {id: ploeg.id, seizoen: seizoen.slug}) }}">{{ ploeg.afkorting }}</a>
                 </td>
                 <td>{{ ploeg.punten }}</td>
             </tr>

@@ -12,7 +12,7 @@
                     {% for seizoen in seizoenen %}
                         <li style="margin:12px;">
                             <a class="btn btn-default"
-                               href="{{ path('game' , {'seizoen':seizoen.slug}) }}">{{ seizoen.identifier }}</a>
+                               href="{{ path('game', {'seizoen': seizoen.slug}) }}">{{ seizoen.identifier }}</a>
                         </li>
                     {% endfor %}
                 </ul>

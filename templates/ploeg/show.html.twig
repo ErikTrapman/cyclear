@@ -6,7 +6,6 @@
 
 {% block content %}
 
-
     <div class="big-header" style="margin-bottom: 0;">
         <h2>{{ entity.naam }}</h2>
     </div>
@@ -35,16 +34,15 @@
 
                 </div>
 
-
                 <div class="tab-content">
                     <div class="tab-pane active" id="ploeg">
                         {% include "ploeg/_singleRenners.html.twig"
                             with {
-                            'renners':renners,'showTotal':false,'showContract':true, 'showActions':true
+                            'renners': renners, 'showTotal': false, 'showContract': true, 'showActions': true
                             } %}
 
                         {% if isMyTeam(entity) %}
-                            <form method="post" action="{{ path('ploeg_show',{id: entity.id,seizoen: seizoen.slug}) }}">
+                            <form method="post" action="{{ path('ploeg_show', {id: entity.id, seizoen: seizoen.slug}) }}">
                                 {{ form_widget(form) }}
                             </form>
                         {% endif %}
@@ -52,28 +50,28 @@
                     </div>
                     <div class="tab-pane" id="punten">
                         <div class="table-responsive">
-                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen':uitslagen} %}
+                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen': uitslagen} %}
                         </div>
                     </div>
                     <div class="tab-pane" id="transfers">
-                        {% include "transfer/_listWithInversion.html.twig" with {'fromTeamPage': true, 'listWithInversion':transfers, 'firstPageRoute' : 'ploeg_show','includePagination': true} %}
+                        {% include "transfer/_listWithInversion.html.twig" with {'fromTeamPage': true, 'listWithInversion': transfers, 'firstPageRoute': 'ploeg_show', 'includePagination': true} %}
                     </div>
                     <div class="tab-pane" id="transferpunten">
                         <div class="table-responsive">
-                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen':transferUitslagen} %}
+                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen': transferUitslagen} %}
                         </div>
                     </div>
                     <div class="tab-pane" id="zeges">
                         <div class="table-responsive">
-                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen':zeges} %}
+                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen': zeges} %}
                         </div>
                     </div>
                     <div class="tab-pane" id="draft">
-                        {% include "ploeg/_singleRenners.html.twig" with {'renners':draftRenners,'showTotal': true,'total': draftPunten, 'showContract': false,'showActions':false } %}
+                        {% include "ploeg/_singleRenners.html.twig" with {'renners': draftRenners, 'showTotal': true, 'total': draftPunten, 'showContract': false, 'showActions': false} %}
                     </div>
                     <div class="tab-pane" id="lostdrafts">
                         <div class="table-responsive">
-                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen':lostDrafts,'show':'rennerPunten' } %}
+                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen': lostDrafts, 'show': 'rennerPunten'} %}
                         </div>
                     </div>
                 </div>

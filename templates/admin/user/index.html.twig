@@ -16,10 +16,9 @@
             <th colspan="2">Admin</th>
         </tr>
 
-
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('admin_user_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td><a href="{{ path('admin_user_edit', {'id': entity.id}) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.username }}</td>
                 <td>{{ entity.email }}</td>
                 <td>{{ entity.enabled }}</td>
@@ -28,7 +27,7 @@
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('admin_user_edit', { 'id': entity.id }) }}">edit</a>
+                            <a href="{{ path('admin_user_edit', {'id': entity.id}) }}">edit</a>
                         </li>
                     </ul>
                 </td>

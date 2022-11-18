@@ -1,5 +1,5 @@
 {% if app.request.isXmlHttpRequest %}
-    {{ form_row(form.wedstrijd.naam,{ 'attr':{'class':'span6'} }) }}
+    {{ form_row(form.wedstrijd.naam, {'attr': {'class': 'span6'}}) }}
 
     {% if form.uitslag is defined %}
         <table style="width: 100%">
@@ -14,19 +14,19 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {{ form_widget(rows.renner, { 'attr': {'class': 'col-lg-8'} }) }}
+                                    {{ form_widget(rows.renner, {'attr': {'class': 'col-lg-8'}}) }}
                                 </td>
                                 <td>
-                                    {{ form_widget(rows.rennerPunten, { 'attr': {'class': 'col-sm-1'} }) }}
+                                    {{ form_widget(rows.rennerPunten, {'attr': {'class': 'col-sm-1'}}) }}
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    {{ form_widget(rows.ploeg, { 'attr': {'class': 'col-lg-8'} }) }}
-                                    {{ form_widget(rows.positie, { 'attr': {'class': 'col-sm-1'} }) }}
+                                    {{ form_widget(rows.ploeg, {'attr': {'class': 'col-lg-8'}}) }}
+                                    {{ form_widget(rows.positie, {'attr': {'class': 'col-sm-1'}}) }}
                                 </td>
                                 <td>
-                                    {{ form_widget(rows.ploegPunten, { 'attr': {'class': 'col-sm-1'} }) }}
+                                    {{ form_widget(rows.ploegPunten, {'attr': {'class': 'col-sm-1'}}) }}
                                 </td>
                             </tr>
                         </table>

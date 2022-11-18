@@ -52,7 +52,8 @@
         "symfony/phpunit-bridge": "^6.1",
         "symfony/stopwatch": "^5.4.10",
         "symfony/web-profiler-bundle": "^5.4.10",
-        "vimeo/psalm": "^4.29"
+        "vimeo/psalm": "^4.29",
+        "vincentlanglet/twig-cs-fixer": "^0.6.1"
     },
     "config": {
         "preferred-install": {
@@ -101,7 +102,8 @@
         ],
         "lint": "php-cs-fixer fix --dry-run --diff -vvv",
         "lint-fix": "php-cs-fixer fix",
-        "lint-twig": "php bin/console lint:twig --show-deprecations templates/ --ansi",
+        "lint-twig": "php bin/console lint:twig --show-deprecations templates/ --ansi && vendor/bin/twig-cs-fixer lint templates/",
+        "lint-twig-fix": "vendor/bin/twig-cs-fixer lint --fix templates/",
         "lint-yaml": "php bin/console lint:yaml translations/ config/ --parse-tags",
         "psalm": "psalm --no-cache",
         "test": "APP_ENV=test vendor/bin/phpunit -c . tests/"
