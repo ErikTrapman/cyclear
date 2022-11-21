@@ -3,21 +3,15 @@
 namespace App\Twig;
 
 use App\Entity\Seizoen;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\SeizoenRepository;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class TemplateExtension extends AbstractExtension
 {
-    /**
-     * @var EntityManager
-     */
-    private $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
+    public function __construct(
+        private readonly SeizoenRepository $seizoenRepository
+    ) {
     }
 
     public function getFunctions()
@@ -29,6 +23,6 @@ class TemplateExtension extends AbstractExtension
 
     public function currentSeason(): Seizoen|null
     {
-        return $this->em->getRepository(Seizoen::class)->findOneBy(['current' => true]);
+        return $this->seizoenRepository->findOneBy(['current' => true]);
     }
 }

@@ -2,17 +2,18 @@
 
 namespace App\Listener;
 
-use App\Entity\Seizoen;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\SeizoenRepository;
+use FOS\UserBundle\Model\UserInterface as FOSUserInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class RequestListener
 {
-    public function __construct(private EntityManagerInterface $em, private TokenStorageInterface $tokenStorage)
-    {
+    public function __construct(
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly SeizoenRepository $seizoenRepository
+    ) {
     }
 
     /**
@@ -20,7 +21,7 @@ class RequestListener
      */
     public function onKernelRequest(RequestEvent $event)
     {
-        if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
+        if (HttpKernel::MAIN_REQUEST != $event->getRequestType()) {
             // don't do anything if it's not the master request
             return;
         }
@@ -31,22 +32,20 @@ class RequestListener
         }
 
         if (null !== $request->get('seizoen')) {
-            $seizoen = $this->em->getRepository(Seizoen::class)->findBySlug($request->get('seizoen'));
-            if (empty($seizoen)) {
-                throw new NotFoundHttpException('Unknown season `' . $request->get('seizoen') . '`');
+            if (!$seizoen = $this->seizoenRepository->findOneBy(['slug' => $request->get('seizoen')])) {
+                throw new \UnexpectedValueException('Cannot locate Seizoen');
             }
-            $seizoen = $seizoen[0];
         } else {
-            $seizoen = $this->em->getRepository(Seizoen::class)->getCurrent();
+            $seizoen = $this->seizoenRepository->getCurrent();
             if (null === $seizoen) {
                 return;
             }
         }
         $request->attributes->set('seizoen', $seizoen);
-        $request->attributes->set('current-seizoen', $this->em->getRepository(Seizoen::class)->getCurrent());
+        $request->attributes->set('current-seizoen', $this->seizoenRepository->getCurrent());
         if (null !== $token = $this->tokenStorage->getToken()) {
             $user = $token->getUser();
-            if ($user instanceof \App\Entity\User) {
+            if ($user instanceof FOSUserInterface) {
                 $request->attributes->set('seizoen-ploeg', $user->getPloegBySeizoen($seizoen));
             }
         }

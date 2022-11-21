@@ -3,20 +3,14 @@
 namespace App\Form;
 
 use App\Entity\Seizoen;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\SeizoenRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
 {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
-
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(private readonly SeizoenRepository $seizoenRepository)
     {
-        $this->em = $em;
     }
 
     /**
@@ -27,10 +21,11 @@ class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
         $resolver->setDefaults(
             [
                 'class' => Seizoen::class,
-                'preferred_choices' => [$this->em->getRepository(Seizoen::class)->getCurrent()],
+                'preferred_choices' => [$this->seizoenRepository->getCurrent()],
                 'query_builder' => function (\Doctrine\ORM\EntityRepository $e) {
-                    return $e->createQueryBuilder('s')->orderBy('s.id', 'DESC'); // ->where('s.current = 1');
-                }, ]);
+                    return $e->createQueryBuilder('s')->orderBy('s.id', 'DESC');
+                }
+            ]);
     }
 
     public function getParent()
