@@ -703,7 +703,7 @@ class Twitter
             $search = ['+', ' ', '%7E', '%'];
             $replace = ['%20', '%20', '~', '%25'];
 
-            return str_replace($search, $replace, urlencode($value));
+            return str_replace($search, $replace, urlencode((string)$value));
         }
     }
 

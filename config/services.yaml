@@ -19,7 +19,7 @@ services:
         # fetching services directly from the container via $container->get() won't work.
         # The best practice is to be explicit about your dependencies anyway.
         bind:
-            $enableTwitter: '%env(ENABLE_TWITTER)%'
+            $enableTwitter: '%env(bool:ENABLE_TWITTER)%'
             $maxTransfers: '%max_transfers%'
             $matchesFeed: 'https://cqranking.com/men/asp/gen/RacesRecent.asp?changed=0'
             $cqRankingWedstrijdUrl: 'https://cqranking.com/men/asp/gen/race.asp?raceid='
