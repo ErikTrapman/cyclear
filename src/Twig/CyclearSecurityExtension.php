@@ -12,8 +12,10 @@ use Twig\TwigFunction;
 
 class CyclearSecurityExtension extends AbstractExtension
 {
-    public function __construct(private EntityManagerInterface $em, private RequestStack $requestStack)
-    {
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private readonly RequestStack $requestStack
+    ) {
     }
 
     public function getFunctions()
@@ -24,10 +26,7 @@ class CyclearSecurityExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * @return bool
-     */
-    public function isMyTeam(Ploeg $ploeg)
+    public function isMyTeam(Ploeg $ploeg): bool
     {
         // no team in request?
         if (null === $requestTeam = $this->getLoggedInTeam()) {
@@ -36,18 +35,12 @@ class CyclearSecurityExtension extends AbstractExtension
         return $requestTeam === $ploeg;
     }
 
-    /**
-     * @return Seizoen|null
-     */
-    private function getSeason()
+    private function getSeason(): ?Seizoen
     {
         return $this->requestStack->getMainRequest()->attributes->get('seizoen');
     }
 
-    /**
-     * @return Ploeg|null
-     */
-    private function getLoggedInTeam()
+    private function getLoggedInTeam(): ?Ploeg
     {
         return $this->requestStack->getMainRequest()->attributes->get('seizoen-ploeg');
     }
@@ -65,10 +58,5 @@ class CyclearSecurityExtension extends AbstractExtension
         $requestTeam = $this->getLoggedInTeam();
         $riderTeam = $this->em->getRepository(Renner::class)->getPloeg($renner, $season);
         return $requestTeam === $riderTeam;
-    }
-
-    public function getName(): string
-    {
-        return 'cycleargame_security';
     }
 }

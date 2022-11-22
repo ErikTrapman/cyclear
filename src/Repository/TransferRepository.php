@@ -14,16 +14,18 @@ class TransferRepository extends ServiceEntityRepository
 {
     public const CACHE_TAG = 'TransferRepository';
 
-    public function __construct(ManagerRegistry $registry, private readonly TagAwareCacheInterface $cache)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly TagAwareCacheInterface $cache,
+        private readonly SeizoenRepository $seizoenRepository,
+        private readonly PloegRepository $ploegRepository,
+    ) {
         parent::__construct($registry, Transfer::class);
     }
 
     public function findByRenner(Renner $renner, $seizoen = null, $types = [])
     {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
-        }
+        $seizoen = $this->resolveSeizoen($seizoen);
 
         $qb = $this->getQueryBuilderForRenner($renner);
         $qb->andWhere('t.seizoen = ?2');
@@ -43,12 +45,9 @@ class TransferRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    // TODO: teveel argumenten. maak losse methoden!
     public function getLatest($seizoen = null, $types = [], $limit = 20, $ploegNaar = null, $renner = null)
     {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
-        }
+        $seizoen = $this->resolveSeizoen($seizoen);
         $qb = $this
             ->createQueryBuilder('t')
             ->where('t.ploegNaar IS NOT NULL')
@@ -76,7 +75,7 @@ class TransferRepository extends ServiceEntityRepository
     public function getTransferCountByType($ploeg, $start, $end, array $type): int
     {
         if (is_numeric($ploeg)) {
-            $ploeg = $this->_em->getRepository(Ploeg::class)->find($ploeg);
+            $ploeg = $this->ploegRepository->find($ploeg);
         }
         $key = __FUNCTION__ . $ploeg->getId() . $start?->format('YmdHis') . $end?->format('YmdHis') . implode('', $type);
         $item = $this->cache->getItem($key);
@@ -117,20 +116,17 @@ class TransferRepository extends ServiceEntityRepository
 
     public function getTransferredInNonDraftRenners($ploeg, $seizoen = null)
     {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
-        }
-        $tQb = $this->_em->getRepository(Transfer::class)->createQueryBuilder('t');
+        $seizoen = $this->resolveSeizoen($seizoen);
+        $tQb = $this->createQueryBuilder('t');
 
-        $draftrenners = $this->_em->getRepository(Ploeg::class)->getDraftRenners($ploeg);
+        $draftrenners = $this->ploegRepository->getDraftRenners($ploeg);
         $params = [
             'drafttransfer' => Transfer::DRAFTTRANSFER,
             'ploeg' => $ploeg,
             'seizoen' => $seizoen,
         ];
 
-        $qb2 = $this->_em->getRepository(Transfer::class)
-            ->createQueryBuilder('t2')
+        $qb2 = $this->createQueryBuilder('t2')
             ->where('t2.transferType = :drafttransfer')
             ->andWhere('t2.ploegNaar = :ploeg')
             ->andWhere('t2.seizoen = :seizoen');
@@ -188,5 +184,13 @@ class TransferRepository extends ServiceEntityRepository
             ->setParameters(['rider' => $renner, 'team' => $ploeg, 'type' => Transfer::DRAFTTRANSFER])
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    private function resolveSeizoen(Seizoen $seizoen = null): Seizoen
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->seizoenRepository->getCurrent();
+        }
+        return $seizoen;
     }
 }

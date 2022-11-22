@@ -9,7 +9,6 @@ use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\UitslagType;
-use App\Entity\Wedstrijd;
 use App\Repository\PloegRepository;
 use Monolog\Logger;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

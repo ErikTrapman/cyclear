@@ -9,7 +9,6 @@ use App\CQRanking\Parser\Twitter\TwitterParser;
 use App\Entity\Country;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
-use App\Entity\Transfer;
 use App\Entity\UitslagType;
 use App\Entity\Wedstrijd;
 use App\Repository\RennerRepository;

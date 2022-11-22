@@ -7,9 +7,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class UserType extends BaseType
 {
-    /**
-     * @return void
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);

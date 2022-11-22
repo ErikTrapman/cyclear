@@ -10,17 +10,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class StrategySelectorType extends AbstractType
 {
-    /**
-     * @return void
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addModelTransformer(new ConstantToStrategyClassTransformer());
     }
 
-    /**
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

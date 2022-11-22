@@ -3,7 +3,6 @@
 namespace App\CQRanking;
 
 use App\CQRanking\Parser\Crawler\CrawlerManager;
-use App\Entity\Ploeg;
 use App\Entity\Seizoen;
 use App\Entity\Uitslag;
 use App\Entity\Wedstrijd;
@@ -11,7 +10,6 @@ use App\EntityManager\UitslagManager;
 use App\Form\DataTransformer\RennerNameToRennerIdTransformer;
 use App\Repository\PloegRepository;
 use App\Repository\WedstrijdRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 
 class CQAutomaticResultsResolver

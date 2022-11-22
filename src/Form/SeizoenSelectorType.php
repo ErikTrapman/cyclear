@@ -13,9 +13,6 @@ class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
     {
     }
 
-    /**
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -24,7 +21,7 @@ class SeizoenSelectorType extends \Symfony\Component\Form\AbstractType
                 'preferred_choices' => [$this->seizoenRepository->getCurrent()],
                 'query_builder' => function (\Doctrine\ORM\EntityRepository $e) {
                     return $e->createQueryBuilder('s')->orderBy('s.id', 'DESC');
-                }
+                },
             ]);
     }
 

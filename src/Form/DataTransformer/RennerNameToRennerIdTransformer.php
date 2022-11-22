@@ -14,12 +14,6 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface
     {
     }
 
-    /* (non-PHPdoc)
-     * @see Symfony\Component\Form.DataTransformerInterface::transform()
-     * // transforms the Issue object to a string
-     * @param Renner $value
-     */
-
     public function transform($value)
     {
         if ($value === null) {
@@ -30,11 +24,6 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface
         }
         return 'unrecognised value';
     }
-
-    /* (non-PHPdoc)
-     * @see Symfony\Component\Form.DataTransformerInterface::reverseTransform()
-     *
-     */
 
     public function reverseTransform($value)
     {

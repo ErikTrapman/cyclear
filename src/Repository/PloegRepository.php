@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Contract;
 use App\Entity\Ploeg;
-use App\Entity\Renner;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class PloegRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly ContractRepository $contractRepository,
+        private readonly RennerRepository $rennerRepository,
+    ) {
         parent::__construct($registry, Ploeg::class);
     }
 
     public function getRenners(Ploeg $ploeg): array
     {
         $renners = [];
-        foreach ($this->_em->getRepository(Contract::class)
+        foreach ($this->contractRepository
                      ->createQueryBuilder('c')
                      ->where('c.ploeg = :ploeg')
                      ->andWhere('c.seizoen = :seizoen')
@@ -36,7 +36,7 @@ class PloegRepository extends ServiceEntityRepository
 
     public function getDraftRenners(Ploeg $ploeg): array
     {
-        return $this->_em->getRepository(Renner::class)
+        return $this->rennerRepository
             ->createQueryBuilder('r')
             ->innerJoin("App\Entity\Transfer", 't', 'WITH', 't.renner = r')
             ->where('t.transferType = ' . Transfer::DRAFTTRANSFER)

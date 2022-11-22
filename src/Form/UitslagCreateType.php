@@ -25,9 +25,6 @@ class UitslagCreateType extends AbstractType
     ) {
     }
 
-    /**
-     * @return void
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $request = $options['request'];
@@ -102,9 +99,6 @@ class UitslagCreateType extends AbstractType
         });
     }
 
-    /**
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

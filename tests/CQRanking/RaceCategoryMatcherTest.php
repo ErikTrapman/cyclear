@@ -7,7 +7,6 @@ use App\Entity\UitslagType;
 use App\Entity\Wedstrijd;
 use App\Repository\WedstrijdRepository;
 use PHPUnit\Framework\TestCase;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RaceCategoryMatcherTest extends TestCase
 {

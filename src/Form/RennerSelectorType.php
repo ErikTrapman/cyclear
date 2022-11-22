@@ -37,18 +37,12 @@ class RennerSelectorType extends AbstractType
         $this->router = $router;
     }
 
-    /**
-     * @return void
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $transformer = new DataTransformer\RennerNameToRennerIdTransformer($this->em, $this->rennerManager);
         $builder->addViewTransformer($transformer);
     }
 
-    /**
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $url = $this->router->generate('get_riders', ['_format' => 'json']);

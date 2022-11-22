@@ -12,9 +12,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TransferType extends AbstractType
 {
-    /**
-     * @return void
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $seizoen = $options['seizoen'];
@@ -39,9 +36,6 @@ class TransferType extends AbstractType
             ->add('seizoen', SeizoenSelectorType::class);
     }
 
-    /**
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(

@@ -10,9 +10,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WedstrijdType extends AbstractType
 {
-    /**
-     * @return void
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $dateOptions = ['format' => 'dd-MM-y'];
@@ -26,9 +23,6 @@ class WedstrijdType extends AbstractType
             ->add('seizoen', SeizoenSelectorType::class);
     }
 
-    /**
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

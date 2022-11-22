@@ -2,8 +2,6 @@
 
 namespace App\EntityManager;
 
-use App\Entity\Contract;
-use App\Entity\Periode;
 use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Seizoen;

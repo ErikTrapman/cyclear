@@ -4,7 +4,6 @@ namespace App\Command;
 
 use App\CQRanking\CQAutomaticResultsResolver;
 use App\CQRanking\Parser\RecentRaces\RecentRacesParser;
-use App\Entity\Seizoen;
 use App\Repository\SeizoenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;

@@ -2,26 +2,20 @@
 
 namespace App\Validator\Constraints;
 
-use App\Entity\Renner;
-use App\Entity\Transfer;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\RennerRepository;
+use App\Repository\TransferRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 class UserTransferFixedValidator extends ConstraintValidator
 {
-    /**
-     * TODO write tests!!
-     */
-    public function __construct(private EntityManagerInterface $em, private int $maxTransfers)
-    {
+    public function __construct(
+        private readonly RennerRepository $rennerRepository,
+        private readonly TransferRepository $transferRepository,
+        private readonly int $maxTransfers
+    ) {
     }
 
-    /**
-     * @param \App\Form\Entity\UserTransfer $value
-     *
-     * @return void
-     */
     public function validate($value, Constraint $constraint)
     {
         if (null === $value->getRennerIn() || null === $value->getRennerUit()) {
@@ -32,8 +26,7 @@ class UserTransferFixedValidator extends ConstraintValidator
             $this->context->addViolation('Het seizoen ' . $value->getSeizoen() . ' is gesloten.');
             return;
         }
-        $rennerPloeg = $this->em->getRepository(Renner::class)
-            ->getPloeg($value->getRennerIn(), $value->getSeizoen());
+        $rennerPloeg = $this->rennerRepository->getPloeg($value->getRennerIn(), $value->getSeizoen());
         if (null !== $rennerPloeg) {
             $this->context->addViolation($value->getRennerIn()->getNaam() . ' heeft al een ploeg.');
         }
@@ -57,8 +50,7 @@ class UserTransferFixedValidator extends ConstraintValidator
         if ($now > $seasonEnd) {
             $this->context->addViolation('Het huidige seizoen staat geen transfers meer toe.');
         }
-        $transferCount = $this->em->getRepository(Transfer::class)
-            ->getTransferCountForUserTransfer($value->getPloeg(), $seasonStart, $seasonEnd);
+        $transferCount = $this->transferRepository->getTransferCountForUserTransfer($value->getPloeg(), $seasonStart, $seasonEnd);
         if ($transferCount >= $this->maxTransfers) {
             $this->context->addViolation('Je zit op het maximaal aantal transfers van ' . $this->maxTransfers . '.');
         }

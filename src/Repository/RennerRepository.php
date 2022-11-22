@@ -2,20 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\Contract;
 use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Entity\Uitslag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class RennerRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly SeizoenRepository $seizoenRepository,
+        private readonly ContractRepository $contractRepository,
+    ) {
         parent::__construct($registry, Renner::class);
     }
 
@@ -24,34 +25,18 @@ class RennerRepository extends ServiceEntityRepository
         return $this->findOneBy(['naam' => $naam]);
     }
 
-    /**
-     * @param mixed $id
-     * @return object|Renner|null
-     */
     public function findOneByCQId($id)
     {
         return $this->findOneBy(['cqranking_id' => $id]);
     }
 
-    public function findOneBySelectorString($rennerString): object|null
-    {
-        $firstBracket = strpos($rennerString, '[');
-        $lastBracket = strpos($rennerString, ']');
-        $cqId = trim(substr($rennerString, 0, $firstBracket));
-        $name = substr($rennerString, $firstBracket + 1, $lastBracket - $firstBracket - 1);
-
-        return $this->findOneBy(['naam' => $name, 'cqranking_id' => $cqId]);
-    }
-
     public function getPloeg($renner, $seizoen = null)
     {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
-        }
+        $seizoen = $this->resolveSeizoen($seizoen);
         if (is_numeric($renner)) {
-            $renner = $this->_em->getRepository(Renner::class)->find($renner);
+            $renner = $this->find($renner);
         }
-        $contract = $this->_em->getRepository(Contract::class)->getCurrentContract($renner, $seizoen);
+        $contract = $this->contractRepository->getCurrentContract($renner, $seizoen);
         if (null === $contract) {
             return null;
         }
@@ -66,36 +51,9 @@ class RennerRepository extends ServiceEntityRepository
         return (bool)$this->_em->getRepository(Transfer::class)->hasDraftTransfer($renner, $ploeg);
     }
 
-    /**
-     * @psalm-return list<mixed>
-     * @param mixed|null $seizoen
-     */
-    public function getRennersWithPloeg($seizoen = null): array
-    {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
-        }
-        $rennersWithPloeg = [];
-        foreach ($this->_em->getRepository(Contract::class)
-                     ->createQueryBuilder('c')
-                     ->where('c.seizoen = :seizoen')
-                     ->andWhere('c.eind IS NULL')->setParameter('seizoen', $seizoen)
-                     ->getQuery()->getResult() as $contract) {
-            $rennersWithPloeg[] = $contract->getRenner();
-        }
-        return $rennersWithPloeg;
-    }
-
-    /**
-     * @param null $seizoen
-     * @param bool $excludeWithTeam
-     * @return \Doctrine\ORM\QueryBuilder
-     */
     public function getRennersWithPunten($seizoen = null, $excludeWithTeam = false)
     {
-        if (null === $seizoen) {
-            $seizoen = $this->_em->getRepository(Seizoen::class)->getCurrent();
-        }
+        $this->resolveSeizoen($seizoen);
         $puntenQb = $this->_em->getRepository(Uitslag::class)
             ->createQueryBuilder('u')
             ->select('SUM(u.rennerPunten)')
@@ -103,7 +61,7 @@ class RennerRepository extends ServiceEntityRepository
             ->where('u.renner = r')
             ->andWhere('w.seizoen = :seizoen')//    ->setParameter('seizoen', $seizoen)
         ;
-        $teamQb = $this->_em->getRepository(Contract::class)
+        $teamQb = $this->contractRepository
             ->createQueryBuilder('c')
             ->select('p.afkorting')
             ->innerJoin('c.ploeg', 'p')
@@ -121,5 +79,13 @@ class RennerRepository extends ServiceEntityRepository
             $qb->addSelect('(' . $teamQb->getDQL() . ') AS team');
         }
         return $qb->setParameter('seizoen', $seizoen); // ->setMaxResults(20)->getQuery()->getResult();
+    }
+
+    private function resolveSeizoen(Seizoen $seizoen = null): Seizoen
+    {
+        if (null === $seizoen) {
+            $seizoen = $this->seizoenRepository->getCurrent();
+        }
+        return $seizoen;
     }
 }

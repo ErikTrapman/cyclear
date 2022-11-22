@@ -12,14 +12,8 @@ use Symfony\Component\Form\FormFactoryInterface;
  */
 class IsAdminFieldSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var FormFactoryInterface
-     */
-    private $factory;
-
-    public function __construct(FormFactoryInterface $factory)
+    public function __construct(private readonly FormFactoryInterface $factory)
     {
-        $this->factory = $factory;
     }
 
     /**

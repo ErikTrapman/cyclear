@@ -7,7 +7,6 @@ use App\DataView\RiderSearchView;
 use App\Entity\Renner;
 use App\Entity\Seizoen;
 use App\Entity\Transfer;
-use App\Entity\Uitslag;
 use App\Repository\RennerRepository;
 use App\Repository\SeizoenRepository;
 use App\Repository\TransferRepository;

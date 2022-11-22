@@ -10,7 +10,6 @@ use App\Entity\Uitslag;
 use App\Repository\PeriodeRepository;
 use App\Repository\TransferRepository;
 use App\Repository\UitslagRepository;
-use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -75,6 +74,7 @@ class UitslagController extends AbstractController
      * @Route ("/posities/{positie}", name="uitslag_posities")
      * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template ()
+     * @param mixed $positie
      */
     public function positiesAction(Request $request, Seizoen $seizoen, $positie = 1): array
     {

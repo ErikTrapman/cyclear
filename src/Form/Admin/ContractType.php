@@ -7,9 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContractType extends \Symfony\Component\Form\AbstractType
 {
-    /**
-     * @return void
-     */
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         $seizoen = $options['seizoen'];
@@ -25,9 +22,6 @@ class ContractType extends \Symfony\Component\Form\AbstractType
             ->add('seizoen');
     }
 
-    /**
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(

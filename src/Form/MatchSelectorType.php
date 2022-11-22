@@ -9,19 +9,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MatchSelectorType extends AbstractType
 {
-    /**
-     * @var MatchParser
-     */
-    private $matchParser;
-
-    public function __construct(MatchParser $matchParser)
+    public function __construct(private readonly MatchParser $matchParser)
     {
-        $this->matchParser = $matchParser;
     }
 
-    /**
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $options = [];

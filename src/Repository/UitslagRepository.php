@@ -431,7 +431,7 @@ class UitslagRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getUitslagenForPloegQb($ploeg, $seizoen = null): \Doctrine\ORM\QueryBuilder
+    public function getUitslagenForPloegQb($ploeg, $seizoen = null): QueryBuilder
     {
         $seizoen = $this->resolveSeizoen($seizoen);
         $parameters = ['ploeg' => $ploeg, 'seizoen' => $seizoen];
@@ -444,7 +444,7 @@ class UitslagRepository extends ServiceEntityRepository
             ->orderBy('w.datum DESC, u.id', 'DESC');
     }
 
-    public function getUitslagenForPloegByPositionQb($ploeg, $position, $seizoen = null): \Doctrine\ORM\QueryBuilder
+    public function getUitslagenForPloegByPositionQb($ploeg, $position, $seizoen = null): QueryBuilder
     {
         $seizoen = $this->resolveSeizoen($seizoen);
         $parameters = ['ploeg' => $ploeg, 'seizoen' => $seizoen, 'position' => $position];

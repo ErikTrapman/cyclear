@@ -14,9 +14,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class TransferUserType extends AbstractType
 {
-    /**
-     * @return void
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if (null !== $options['renner_uit']) {
@@ -41,9 +38,6 @@ class TransferUserType extends AbstractType
         $builder->add('userComment', null, ['label' => 'Commentaar', 'attr' => ['placeholder' => 'Commentaar...']]);
     }
 
-    /**
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
