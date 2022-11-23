@@ -1,31 +1,31 @@
-[LOCAL]
-DONE @SecureParam(name="id", permissions="OWNER")
-DONE cqranking-bundle kopieren in src
+[CODE]
 Mails versturen testen via fos-user (opzoeken huidige credentials voor sendgrid)
 Fully fix lost-drafts scenario verwerkt in 3.x ? En andere bugfixes commits
 admin/default/ vs default/admin - deze hebben dezelfde bestanden
 in public/css en public/js staan alle bestanden hardcoded gekopieerd
 ddev gaan gebruiken
+JMS serializer vervangen - Alleen RennerController.php ?
+Github QA
+Cannot count query that uses a HAVING clause. Use the output walkers for pagination - renners beschikbaar paginatie
+Alle CQRanking urls parametriseren
+$this->get('' in Controllers wegwerken
+DONE fix iconen op allerlei plekken (TW , EURO)
+DONE cqranking.xml leegmaken
+DONE @SecureParam(name="id", permissions="OWNER")
+DONE cqranking-bundle kopieren in src
 DONE tests fixen
 DONE services.xml leegmaken
-cqranking.xml leegmaken
-Github QA
 DONE --lint-fix
-JMS serializer vervangen - Alleen RennerController.php ?
 DONE Commands herschrijven
 DONE recipes
-uitslag_type kolom voor strategie herschrijven (via migration?)
-query cache voor resultaten op homepage (let op invalidatie!!)
+DOONE uitslag_type kolom voor strategie herschrijven (via migration?)
+DONE query cache voor resultaten op homepage (let op invalidatie!!)
 DONE Samson Dataview wegwerken
 DONE - $naming->expects($this->at(0))->method('normalize')->willReturn('foo.png');
     -  $naming->expects($this->at(1))->method('normalize')->willReturn('foo-1.png');
     +  $naming->expects($this->exactly(2))->method('normalize')->willReturnOnConsecutiveCalls('foo.png', 'foo-1.png');
             ->withConsecutive(['/media/someentity/someField/foo.png'], ['/media/someentity/someField/foo-1.png'])
             ->willReturnOnConsecutiveCalls($this->returnValue(true), $this->returnValue(false));
-Cannot count query that uses a HAVING clause. Use the output walkers for pagination - renners beschikbaar paginatie
-Alle CQRanking urls parametriseren
-$this->get('' in Controllers wegwerken
-fix iconen op allerlei plekken (TW , EURO)
 
 [BIG]
 * Hosting: terraform + ansible
