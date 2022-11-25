@@ -70,7 +70,7 @@ class CQAutomaticResultsResolver
                 }
                 $uitslagen = $this->uitslagManager->prepareUitslagen(
                     $type,
-                    $this->crawlerManager->getCrawler('http://cqranking.com/men/asp/gen/' . $race->url),
+                    $this->crawlerManager->getCrawler('https://cqranking.com/men/asp/gen/' . $race->url),
                     $wedstrijd,
                     $seizoen,
                     $wedstrijdRefDate);

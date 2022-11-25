@@ -11,4 +11,4 @@ fos_user:
         sender_name:    Cyclear
 
     service:
-        mailer: 'fos_user.mailer.noop'
+        mailer: App\Mailer\FOSUserBundleMailer

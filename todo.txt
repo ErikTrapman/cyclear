@@ -2,7 +2,7 @@
 Mails versturen testen via fos-user (opzoeken huidige credentials voor sendgrid)
 Fully fix lost-drafts scenario verwerkt in 3.x ? En andere bugfixes commits
 admin/default/ vs default/admin - deze hebben dezelfde bestanden
-in public/css en public/js staan alle bestanden hardcoded gekopieerd
+DONE in public/css en public/js staan alle bestanden hardcoded gekopieerd
 ddev gaan gebruiken
 JMS serializer vervangen - Alleen RennerController.php ?
 Github QA

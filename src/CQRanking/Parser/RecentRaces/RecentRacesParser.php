@@ -49,7 +49,6 @@ class RecentRacesParser
                 if (7 === $index) {
                     $row->name = trim($td->nodeValue);
                     $aEl = $td->getElementsByTagName('a')->item(0);
-                    // $a = 'http://cqranking.com/men/asp/gen/' . ;
                     $row->url = $aEl->getAttribute('href');
                 }
             }
