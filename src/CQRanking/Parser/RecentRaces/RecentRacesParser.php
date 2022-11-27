@@ -9,16 +9,17 @@ use App\CQRanking\Parser\Exception\CQParserException;
 class RecentRacesParser
 {
     public function __construct(
-        private readonly CrawlerManager $crawlerManager)
-    {
+        private readonly CrawlerManager $crawlerManager,
+        private readonly string $matchesFeed,
+    ) {
     }
 
     public function getRecentRaces(string $content = null, \DateTime $refDate = null): array
     {
         if (null === $content) {
-            $content = @file_get_contents('https://cqranking.com/men/asp/gen/RacesRecent.asp?changed=0');
+            $content = @file_get_contents($this->matchesFeed);
             if (false === $content) {
-                throw new CQParserException('Unable to fetch content for RecentRaces on http://cqranking.com/men/asp/gen/RacesRecent.asp?changed=0');
+                throw new CQParserException('Unable to fetch content for RecentRaces on ' . $this->matchesFeed);
             }
         }
         $ret = [];

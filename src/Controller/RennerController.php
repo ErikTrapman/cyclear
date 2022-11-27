@@ -60,11 +60,11 @@ class RennerController extends AbstractController
     public function indexAction(Request $request, Seizoen $seizoen): array|Response
     {
         $exclude = $request->query->get('excludeWithTeam') === 'true';
-        $renners = $this->rennerRepository->getRennersWithPunten($seizoen, $exclude);
+        $qb = $this->rennerRepository->getRennersWithPuntenQueryBuilder($seizoen, $exclude);
 
-        $this->appendQuery($renners, $this->assertArray($request->query->get('filter'), "/\s+/"), ['r.naam']);
+        $this->appendQuery($qb, $this->assertArray($request->query->get('filter'), "/\s+/"), ['r.naam']);
 
-        $pagination = $this->knpPaginator->paginate($renners, (int)$request->query->get('page', 1), 20);
+        $pagination = $this->knpPaginator->paginate($qb, (int)$request->query->get('page', 1), 20);
 
         $ret = [];
         foreach ($pagination as $r) {

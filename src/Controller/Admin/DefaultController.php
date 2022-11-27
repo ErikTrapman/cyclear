@@ -12,18 +12,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DefaultController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge(['knp_paginator' => PaginatorInterface::class],
-            parent::getSubscribedServices());
-    }
-
     /**
      * @Route ("/", name="admin_index")
-     *
      * @Template ()
-     *
-     * @psalm-return array<empty, empty>
      */
     public function indexAction(\Symfony\Component\HttpFoundation\Request $request): array
     {

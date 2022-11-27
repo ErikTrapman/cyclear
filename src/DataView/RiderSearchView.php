@@ -10,7 +10,7 @@ class RiderSearchView
             'naam' => $data[0]->getNaam(),
             'slug' => $data[0]->getSlug(),
             'punten' => $data['punten'],
-            'team' => ($data['team'] ?? false) == -1 ? null : $data['team'],
+            'team' => array_key_exists('team', $data) ? $data['team'] : null,
             'country' => [
                 'name' => $data[0]->getCountry()->getName(),
                 'iso2' => $data[0]->getCountry()->getIso2(),

@@ -51,7 +51,7 @@ class RennerRepository extends ServiceEntityRepository
         return (bool)$this->_em->getRepository(Transfer::class)->hasDraftTransfer($renner, $ploeg);
     }
 
-    public function getRennersWithPunten($seizoen = null, $excludeWithTeam = false)
+    public function getRennersWithPuntenQueryBuilder($seizoen = null, $excludeWithTeam = false)
     {
         $this->resolveSeizoen($seizoen);
         $puntenQb = $this->_em->getRepository(Uitslag::class)
@@ -74,7 +74,7 @@ class RennerRepository extends ServiceEntityRepository
             ->leftJoin('r.country', 'cty')->addSelect('cty')
             ->orderBy('punten', 'DESC, r.naam ASC');
         if (true === $excludeWithTeam) {
-            $qb->andHaving('IFNULL((' . $teamQb->getDQL() . '), -1) < 0');
+            $qb->andWhere('IFNULL((' . $teamQb->getDQL() . '), -1) < 0');
         } else {
             $qb->addSelect('(' . $teamQb->getDQL() . ') AS team');
         }
