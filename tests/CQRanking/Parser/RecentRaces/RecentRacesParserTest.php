@@ -10,8 +10,8 @@ class RecentRacesParserTest extends WebTestCase
 {
     public function testRecentRacesParsesCorrect(): void
     {
-        static::createClient();
-        $parser = new RecentRacesParser(new CrawlerManager());
+        $client = static::createClient();
+        $parser = $client->getContainer()->get(RecentRacesParser::class);
 
         $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'recentraces-20151029.html');
         $ret = $parser->getRecentRaces($content);

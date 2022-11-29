@@ -9,6 +9,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,16 +21,12 @@ class WedstrijdController extends AbstractController
     public function __construct(
         private readonly PaginatorInterface $paginator,
         private readonly ManagerRegistry $doctrine,
-    ){
-
+    ) {
     }
 
     /**
-     * @Route ("/", name="admin_wedstrijd")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{pagination: mixed}
+     * @Route("/", name="admin_wedstrijd")
+     * @Template()
      */
     public function indexAction(Request $request): array
     {
@@ -44,15 +41,8 @@ class WedstrijdController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new Periode entity.
-     *
-     * @Route ("/new", name="admin_wedstrijd_new")
-     *
-     * @Template ()
-     *
-     * @return (Wedstrijd|\Symfony\Component\Form\FormView)[]
-     *
-     * @psalm-return array{entity: Wedstrijd, form: \Symfony\Component\Form\FormView}
+     * @Route("/new", name="admin_wedstrijd_new")
+     * @Template()
      */
     public function newAction(): array
     {
@@ -66,15 +56,9 @@ class WedstrijdController extends AbstractController
     }
 
     /**
-     * Creates a new Periode entity.
-     *
-     * @Route ("/create", name="admin_wedstrijd_create", methods={"POST"})
-     *
-     * @return (Wedstrijd|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Wedstrijd, form: \Symfony\Component\Form\FormView}
+     * @Route("/create", name="admin_wedstrijd_create", methods={"POST"})
      */
-    public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function createAction(Request $request): array|RedirectResponse
     {
         $entity = new Wedstrijd();
         $form = $this->createForm(WedstrijdType::class, $entity);
@@ -95,15 +79,9 @@ class WedstrijdController extends AbstractController
     }
 
     /**
-     * Displays a form to edit an existing Periode entity.
-     *
-     * @Route ("/{id}/edit", name="admin_wedstrijd_edit")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{entity: Wedstrijd, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @Route("/{id}/edit", name="admin_wedstrijd_edit")
+     * @Template()
      * @param mixed $id
-     * @return (Wedstrijd|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
@@ -126,15 +104,10 @@ class WedstrijdController extends AbstractController
     }
 
     /**
-     * Edits an existing Periode entity.
-     *
-     * @Route ("/{id}/update", name="admin_wedstrijd_update", methods={"POST"})
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Wedstrijd, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @Route("/{id}/update", name="admin_wedstrijd_update", methods={"POST"})
      * @param mixed $id
-     * @return (Wedstrijd|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function updateAction(Request $request, $id): array|RedirectResponse
     {
         $em = $this->doctrine->getManager();
 
@@ -166,10 +139,10 @@ class WedstrijdController extends AbstractController
     /**
      * Deletes a Periode entity.
      *
-     * @Route ("/{id}/delete", name="admin_wedstrijd_delete", methods={"POST"})
+     * @Route("/{id}/delete", name="admin_wedstrijd_delete", methods={"POST"})
      * @param mixed $id
      */
-    public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function deleteAction(Request $request, $id): RedirectResponse
     {
         $form = $this->createDeleteForm($id);
 

@@ -2,13 +2,9 @@
 
 namespace App\Controller\Admin;
 
-use App\CQRanking\Parser\Crawler\CrawlerManager;
 use App\Entity\Seizoen;
 use App\Entity\Uitslag;
 use App\Entity\Wedstrijd;
-use App\EntityManager\RennerManager;
-use App\EntityManager\UitslagManager;
-use App\EntityManager\WedstrijdManager;
 use App\Form\UitslagCreateType;
 use App\Form\UitslagType;
 use Doctrine\Persistence\ManagerRegistry;
@@ -29,16 +25,12 @@ class UitslagController extends AbstractController
         private readonly ManagerRegistry $doctrine,
         private readonly PaginatorInterface $paginator,
         private readonly Environment $twig,
-    ){
-
+    ) {
     }
 
     /**
-     * @Route ("/", name="admin_uitslag")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{pagination: mixed, seizoen: mixed}
+     * @Route("/", name="admin_uitslag")
+     * @Template()
      */
     public function indexAction(Request $request): array
     {
@@ -54,13 +46,8 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * @Route ("/{uitslag}/edit", name="admin_uitslag_edit")
-     *
-     * @Template ()
-     *
-     * @return (Uitslag|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{form: \Symfony\Component\Form\FormView, entity: Uitslag}
+     * @Route("/{uitslag}/edit", name="admin_uitslag_edit")
+     * @Template()
      */
     public function editAction(Request $request, Uitslag $uitslag): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -79,13 +66,8 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * @Route ("/new", name="admin_uitslag_new")
-     *
-     * @Template ()
-     *
-     * @return \Symfony\Component\Form\FormView[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{form: \Symfony\Component\Form\FormView}
+     * @Route("/new", name="admin_uitslag_new")
+     * @Template()
      */
     public function newAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -105,15 +87,8 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new Periode entity.
-     *
-     * @Route ("/create", name="admin_uitslag_create")
-     *
-     * @Template ()
-     *
-     * @return Response|\Symfony\Component\Form\FormView[]
-     *
-     * @psalm-return Response|array{form: \Symfony\Component\Form\FormView}
+     * @Route("/create", name="admin_uitslag_create")
+     * @Template()
      */
     public function createAction(Request $request): array|Response
     {

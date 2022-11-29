@@ -37,9 +37,9 @@ class PloegController extends AbstractController
     }
 
     /**
-     * @Route ("/{id}/show", name="ploeg_show")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template ()
+     * @Route("/{id}/show", name="ploeg_show")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Template()
      */
     public function showAction(Request $request, Seizoen $seizoen, Ploeg $id): array|RedirectResponse
     {

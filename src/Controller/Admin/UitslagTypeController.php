@@ -5,10 +5,10 @@ namespace App\Controller\Admin;
 use App\Entity\UitslagType;
 use App\Form\UitslagTypeType;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -19,20 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UitslagTypeController extends AbstractController
 {
-    public function __construct(private readonly ManagerRegistry $doctrine){
-
+    public function __construct(private readonly ManagerRegistry $doctrine)
+    {
     }
 
     /**
-     * Lists all UitslagType entities.
-     *
-     * @Route ("/", name="admin_uitslagtype")
-     *
-     * @Template ()
-     *
-     * @return UitslagType[][]
-     *
-     * @psalm-return array{entities: array<UitslagType>}
+     * @Route("/", name="admin_uitslagtype")
+     * @Template()
      */
     public function indexAction(): array
     {
@@ -44,15 +37,8 @@ class UitslagTypeController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new UitslagType entity.
-     *
-     * @Route ("/new", name="admin_uitslagtype_new")
-     *
-     * @Template ()
-     *
-     * @return (UitslagType|\Symfony\Component\Form\FormView)[]
-     *
-     * @psalm-return array{entity: UitslagType, form: \Symfony\Component\Form\FormView}
+     * @Route("/new", name="admin_uitslagtype_new")
+     * @Template()
      */
     public function newAction(): array
     {
@@ -66,15 +52,9 @@ class UitslagTypeController extends AbstractController
     }
 
     /**
-     * Creates a new UitslagType entity.
-     *
-     * @Route ("/create", name="admin_uitslagtype_create", methods={"POST"})
-     *
-     * @return (UitslagType|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: UitslagType, form: \Symfony\Component\Form\FormView}
+     * @Route("/create", name="admin_uitslagtype_create", methods={"POST"})
      */
-    public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function createAction(Request $request): array|RedirectResponse
     {
         $entity = new UitslagType();
         $form = $this->createForm(UitslagTypeType::class, $entity);
@@ -95,15 +75,9 @@ class UitslagTypeController extends AbstractController
     }
 
     /**
-     * Displays a form to edit an existing UitslagType entity.
-     *
-     * @Route ("/{id}/edit", name="admin_uitslagtype_edit")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{entity: UitslagType, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @Route("/{id}/edit", name="admin_uitslagtype_edit")
+     * @Template()
      * @param mixed $id
-     * @return (UitslagType|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
@@ -126,15 +100,10 @@ class UitslagTypeController extends AbstractController
     }
 
     /**
-     * Edits an existing UitslagType entity.
-     *
-     * @Route ("/{id}/update", name="admin_uitslagtype_update", methods={"POST"})
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: UitslagType, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @Route("/{id}/update", name="admin_uitslagtype_update", methods={"POST"})
      * @param mixed $id
-     * @return (UitslagType|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function updateAction(Request $request, $id): array|RedirectResponse
     {
         $em = $this->doctrine->getManager();
 
@@ -166,10 +135,10 @@ class UitslagTypeController extends AbstractController
     /**
      * Deletes a UitslagType entity.
      *
-     * @Route ("/{id}/delete", name="admin_uitslagtype_delete", methods={"POST"})
+     * @Route("/{id}/delete", name="admin_uitslagtype_delete", methods={"POST"})
      * @param mixed $id
      */
-    public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function deleteAction(Request $request, $id): RedirectResponse
     {
         $form = $this->createDeleteForm($id);
 

@@ -41,23 +41,11 @@ class RennerController extends AbstractController
     ) {
     }
 
-    public static function getSubscribedServices()
-    {
-        return array_merge(['knp_paginator' => PaginatorInterface::class, 'jms_serializer' => SerializerInterface::class],
-            parent::getSubscribedServices());
-    }
-
     /**
-     * @Route ("/{seizoen}/renners.{_format}", name="rider_index", options={"_format"="json|html","expose"=true}, defaults={"_format":"html"})
-     * @Route ("/api/v1/{seizoen}/riders.{_format}", name="api_season_rider_index", options={"_format"="json"}, defaults={"_format":"json"})
-     *
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     *
+     * @Route("/{seizoen}/renners.{_format}", name="rider_index", options={"_format"="json|html","expose"=true}, defaults={"_format":"html"})
+     * @Route("/api/v1/{seizoen}/riders.{_format}", name="api_season_rider_index", options={"_format"="json"}, defaults={"_format":"json"})
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template
-     *
-     * @return Response|Seizoen[]
-     *
-     * @psalm-return Response|array{seizoen: Seizoen}
      */
     public function indexAction(Request $request, Seizoen $seizoen): array|Response
     {
@@ -83,7 +71,7 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route ("/renners/get.{_format}", name="get_riders", options={"_format"="json"}, defaults={"_format"="json"})
+     * @Route("/renners/get.{_format}", name="get_riders", options={"_format"="json"}, defaults={"_format"="json"})
      */
     public function getAction(Request $request): Response
     {
@@ -100,16 +88,10 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route ("/{seizoen}/renner/{renner}", name="renner_show", options={"expose"=true})
-     *
-     * @Template ()
-     *
-     * @ParamConverter ("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     *
-     * @return ((Seizoen|mixed)[][]|Renner|Seizoen|\Doctrine\Persistence\ObjectRepository|int|mixed)[]
-     *
-     * @psalm-return array{seizoen: Seizoen, renner: Renner, transfers: mixed, uitslagen: mixed, transferrepo: \Doctrine\Persistence\ObjectRepository<Transfer>, ploeg: mixed, rennerPunten: int, puntenPerSeizoen: list<array{seizoen: Seizoen, punten: mixed}>}
+     * @Route("/{seizoen}/renner/{renner}", name="renner_show", options={"expose"=true})
+     * @Template()
+     * @ParamConverter("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      */
     public function showAction(Request $request, Seizoen $seizoen, Renner $renner): array
     {
@@ -148,9 +130,9 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route ("/{seizoen}/download", name="renner_download")
+     * @Route("/{seizoen}/download", name="renner_download")
      *
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      */
     public function csvDownloadAction(Request $request, Seizoen $seizoen): StreamedResponse
     {

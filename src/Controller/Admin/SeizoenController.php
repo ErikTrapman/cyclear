@@ -5,10 +5,10 @@ namespace App\Controller\Admin;
 use App\Entity\Seizoen;
 use App\Form\SeizoenType;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -24,15 +24,8 @@ class SeizoenController extends AbstractController
     }
 
     /**
-     * Lists all Seizoen entities.
-     *
-     * @Route ("/", name="admin_seizoen")
-     *
-     * @Template ()
-     *
-     * @return Seizoen[][]
-     *
-     * @psalm-return array{entities: array<Seizoen>}
+     * @Route("/", name="admin_seizoen")
+     * @Template()
      */
     public function indexAction(): array
     {
@@ -44,15 +37,8 @@ class SeizoenController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new Seizoen entity.
-     *
-     * @Route ("/new", name="admin_seizoen_new")
-     *
-     * @Template ()
-     *
-     * @return (Seizoen|\Symfony\Component\Form\FormView)[]
-     *
-     * @psalm-return array{entity: Seizoen, form: \Symfony\Component\Form\FormView}
+     * @Route("/new", name="admin_seizoen_new")
+     * @Template()
      */
     public function newAction(): array
     {
@@ -66,15 +52,9 @@ class SeizoenController extends AbstractController
     }
 
     /**
-     * Creates a new Seizoen entity.
-     *
-     * @Route ("/create", name="admin_seizoen_create", methods={"POST"})
-     *
-     * @return (Seizoen|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Seizoen, form: \Symfony\Component\Form\FormView}
+     * @Route("/create", name="admin_seizoen_create", methods={"POST"})
      */
-    public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function createAction(Request $request): array|RedirectResponse
     {
         $entity = new Seizoen();
         $form = $this->createForm(SeizoenType::class, $entity);
@@ -103,15 +83,9 @@ class SeizoenController extends AbstractController
     }
 
     /**
-     * Displays a form to edit an existing Seizoen entity.
-     *
-     * @Route ("/{id}/edit", name="admin_seizoen_edit")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{entity: Seizoen, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @Route("/{id}/edit", name="admin_seizoen_edit")
+     * @Template()
      * @param mixed $id
-     * @return (Seizoen|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
@@ -134,15 +108,10 @@ class SeizoenController extends AbstractController
     }
 
     /**
-     * Edits an existing Seizoen entity.
-     *
-     * @Route ("/{id}/update", name="admin_seizoen_update", methods={"POST"})
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Seizoen, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @Route("/{id}/update", name="admin_seizoen_update", methods={"POST"})
      * @param mixed $id
-     * @return (Seizoen|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function updateAction(Request $request, $id): array|RedirectResponse
     {
         $em = $this->doctrine->getManager();
 
@@ -174,10 +143,10 @@ class SeizoenController extends AbstractController
     /**
      * Deletes a Seizoen entity.
      *
-     * @Route ("/{id}/delete", name="admin_seizoen_delete", methods={"POST"})
+     * @Route("/{id}/delete", name="admin_seizoen_delete", methods={"POST"})
      * @param mixed $id
      */
-    public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function deleteAction(Request $request, $id): RedirectResponse
     {
         $form = $this->createDeleteForm($id);
 

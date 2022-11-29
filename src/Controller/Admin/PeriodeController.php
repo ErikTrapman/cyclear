@@ -10,6 +10,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -28,8 +29,8 @@ class PeriodeController extends AbstractController
     }
 
     /**
-     * @Route ("/", name="admin_periode")
-     * @Template ()
+     * @Route("/", name="admin_periode")
+     * @Template()
      */
     public function indexAction(Request $request): array
     {
@@ -43,15 +44,8 @@ class PeriodeController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new Periode entity.
-     *
-     * @Route ("/new", name="admin_periode_new")
-     *
-     * @Template ()
-     *
-     * @return (Periode|\Symfony\Component\Form\FormView)[]
-     *
-     * @psalm-return array{entity: Periode, form: \Symfony\Component\Form\FormView}
+     * @Route("/new", name="admin_periode_new")
+     * @Template()
      */
     public function newAction(): array
     {
@@ -65,15 +59,9 @@ class PeriodeController extends AbstractController
     }
 
     /**
-     * Creates a new Periode entity.
-     *
-     * @Route ("/create", name="admin_periode_create", methods={"POST"})
-     *
-     * @return (Periode|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Periode, form: \Symfony\Component\Form\FormView}
+     * @Route("/create", name="admin_periode_create", methods={"POST"})
      */
-    public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function createAction(Request $request): array|RedirectResponse
     {
         $entity = new Periode();
         $form = $this->createForm(PeriodeType::class, $entity);
@@ -94,15 +82,9 @@ class PeriodeController extends AbstractController
     }
 
     /**
-     * Displays a form to edit an existing Periode entity.
-     *
-     * @Route ("/{id}/edit", name="admin_periode_edit")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{entity: Periode, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @Route("/{id}/edit", name="admin_periode_edit")
+     * @Template()
      * @param mixed $id
-     * @return (Periode|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
@@ -127,8 +109,9 @@ class PeriodeController extends AbstractController
     /**
      * @Route("/{id}/update", name="admin_periode_update", methods={"POST"})
      * @Template("admin/periode/edit.html.twig")
+     * @param mixed $id
      */
-    public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function updateAction(Request $request, $id): array|RedirectResponse
     {
         $em = $this->doctrine->getManager();
 
@@ -160,10 +143,10 @@ class PeriodeController extends AbstractController
     /**
      * Deletes a Periode entity.
      *
-     * @Route ("/{id}/delete", name="admin_periode_delete", methods={"POST"})
+     * @Route("/{id}/delete", name="admin_periode_delete", methods={"POST"})
      * @param mixed $id
      */
-    public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function deleteAction(Request $request, $id): RedirectResponse
     {
         $form = $this->createDeleteForm($id);
 

@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,8 +12,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route ("/", name="admin_index")
-     * @Template ()
+     * @Route("/", name="admin_index")
+     * @Template()
      */
     public function indexAction(\Symfony\Component\HttpFoundation\Request $request): array
     {

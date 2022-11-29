@@ -53,8 +53,8 @@ class UitslagRepository extends ServiceEntityRepository
 
     public function getPuntenByPloeg($seizoen = null, $ploeg = null, \DateTime $maxDate = null)
     {
-        $item = $this->cache->getItem(__FUNCTION__ . $seizoen?->getId() . $ploeg?->getId() . $maxDate?->format('YmdHis'));
-        $item->tag(self::CACHE_TAG);
+        $key = __FUNCTION__ . $seizoen?->getId() . $ploeg?->getId() . $maxDate?->format('YmdHis');
+        $item = $this->cache->getItem($key);
         if ($item->isHit()) {
             return $item->get();
         }
@@ -82,6 +82,7 @@ class UitslagRepository extends ServiceEntityRepository
         $qb->setParameters($params);
         $value = $qb->getQuery()->getResult();
         $item->set($value);
+        $item->tag(self::CACHE_TAG);
         $this->cache->save($item);
         return $value;
     }
@@ -208,7 +209,6 @@ class UitslagRepository extends ServiceEntityRepository
     public function getPuntenByPloegForDraftTransfers(Seizoen $seizoen, Ploeg $ploeg = null): array
     {
         $item = $this->cache->getItem('getPuntenByPloegForDraftTransfers' . $seizoen->getId() . $ploeg?->getId());
-        $item->tag(self::CACHE_TAG);
         if ($item->isHit()) {
             return $item->get();
         }
@@ -246,6 +246,7 @@ class UitslagRepository extends ServiceEntityRepository
         }
         static::puntenSort($res, 'afkorting');
         $item->set($res);
+        $item->tag(self::CACHE_TAG);
         $this->cache->save($item);
         return $item->get();
     }
@@ -294,8 +295,8 @@ class UitslagRepository extends ServiceEntityRepository
         $stmt = $conn->prepare($sql);
         $res = $stmt->executeQuery($params)->fetchAllAssociative();
         $item->set($res);
-        $this->cache->save($item);
         $item->tag(self::CACHE_TAG);
+        $this->cache->save($item);
         return $item->get();
     }
 
@@ -329,8 +330,8 @@ class UitslagRepository extends ServiceEntityRepository
             $res[] = $ploeg;
         }
         static::puntenSort($res);
-        $item->tag(self::CACHE_TAG);
         $item->set($res);
+        $item->tag(self::CACHE_TAG);
         $this->cache->save($item);
         return $res;
     }

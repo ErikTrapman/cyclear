@@ -22,9 +22,9 @@ class SpelregelsController extends AbstractController
     }
 
     /**
-     * @Route ("/", name="spelregels_index")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template ()
+     * @Route("/", name="spelregels_index")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Template()
      */
     public function indexAction(Request $request, Seizoen $seizoen): array
     {

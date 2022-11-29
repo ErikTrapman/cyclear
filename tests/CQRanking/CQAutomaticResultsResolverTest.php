@@ -17,8 +17,8 @@ class CQAutomaticResultsResolverTest extends WebTestCase
 {
     public function testResolvingBetweenDates(): void
     {
-        static::createClient();
-        $parser = new RecentRacesParser(new CrawlerManager());
+        $client = static::createClient();
+        $parser = $client->getContainer()->get(RecentRacesParser::class);
 
         $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'recentraces-20151029.html');
         $races = $parser->getRecentRaces($content, new \DateTime(date('Y') . '-12-31'));

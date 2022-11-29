@@ -6,11 +6,10 @@ use App\Entity\User;
 use App\Form\UserEditType;
 use App\Form\UserType;
 use Doctrine\Persistence\ManagerRegistry;
-use FOS\UserBundle\Doctrine\UserManager;
 use FOS\UserBundle\Model\UserManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -28,15 +27,8 @@ class UserController extends AbstractController
     }
 
     /**
-     * Lists all User entities.
-     *
-     * @Route ("/", name="admin_user")
-     *
-     * @Template ()
-     *
-     * @return User[][]
-     *
-     * @psalm-return array{entities: array<User>}
+     * @Route("/", name="admin_user")
+     * @Template()
      */
     public function indexAction(): array
     {
@@ -48,15 +40,8 @@ class UserController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new Ploeg entity.
-     *
-     * @Route ("/new", name="admin_user_new")
-     *
-     * @Template ()
-     *
-     * @return \Symfony\Component\Form\FormView[]
-     *
-     * @psalm-return array{form: \Symfony\Component\Form\FormView}
+     * @Route("/new", name="admin_user_new")
+     * @Template()
      */
     public function newAction(): array
     {
@@ -68,15 +53,9 @@ class UserController extends AbstractController
     }
 
     /**
-     * Creates a new User entity.
-     *
-     * @Route ("/create", name="admin_user_create", methods={"POST"})
-     *
-     * @return \Symfony\Component\Form\FormView[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{form: \Symfony\Component\Form\FormView}
+     * @Route("/create", name="admin_user_create", methods={"POST"})
      */
-    public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function createAction(Request $request): array|RedirectResponse
     {
         $form = $this->createForm(UserType::class);
         $userManager = $this->userManager;
@@ -99,15 +78,9 @@ class UserController extends AbstractController
     }
 
     /**
-     * Displays a form to edit an existing User entity.
-     *
-     * @Route ("/{id}/edit", name="admin_user_edit")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{entity: User, edit_form: \Symfony\Component\Form\FormView}
+     * @Route("/{id}/edit", name="admin_user_edit")
+     * @Template()
      * @param mixed $id
-     * @return (User|\Symfony\Component\Form\FormView)[]
      */
     public function editAction($id): array
     {
@@ -127,17 +100,11 @@ class UserController extends AbstractController
     }
 
     /**
-     * Edits an existing User entity.
-     *
-     * @Route ("/{id}/update", name="admin_user_update", methods={"POST"})
-     *
-     * @Template ()
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: User, edit_form: \Symfony\Component\Form\FormView}
+     * @Route("/{id}/update", name="admin_user_update", methods={"POST"})
+     * @Template("admin/user/edit.html.twig")
      * @param mixed $id
-     * @return (User|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function updateAction(Request $request, $id): array|RedirectResponse
     {
         $em = $this->doctrine->getManager();
 

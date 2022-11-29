@@ -25,9 +25,9 @@ class WedstrijdController extends AbstractController
     }
 
     /**
-     * @Route ("/latest", name="wedstrijd_latest")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template ()
+     * @Route("/latest", name="wedstrijd_latest")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Template()
      */
     public function latestAction(Request $request, Seizoen $seizoen): array
     {
@@ -39,14 +39,13 @@ class WedstrijdController extends AbstractController
     }
 
     /**
-     * @Route ("/{wedstrijd}", name="wedstrijd_show")
-     * @Template ()
+     * @Route("/{wedstrijd}", name="wedstrijd_show")
+     * @Template()
      */
     public function showAction(Request $request, Wedstrijd $wedstrijd): array
     {
-        $refStages = $this->wedstrijdRepository->getRefStages($wedstrijd, $wedstrijd);
+        $refStages = $this->wedstrijdRepository->getRefStages($wedstrijd);
         $allStages = [];
-        /** @var Wedstrijd $refStage */
         foreach (array_merge($refStages, [$wedstrijd]) as $refStage) {
             foreach ($refStage->getUitslagenGrouped(true) as $team => $resultInfo) {
                 if (array_key_exists($team, $allStages)) {
@@ -69,8 +68,8 @@ class WedstrijdController extends AbstractController
 
     /**
      * @Route("en", name="wedstrijd_list")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template ()
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Template()
      */
     public function indexAction(Request $request, Seizoen $seizoen): array
     {

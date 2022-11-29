@@ -35,10 +35,10 @@ class TransferController extends AbstractController
     }
 
     /**
-     * @Route ("/ploeg/{id}/renner/{renner}", name="user_transfer")
-     * @Template ()
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @ParamConverter ("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
+     * @Route("/ploeg/{id}/renner/{renner}", name="user_transfer")
+     * @Template()
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @ParamConverter("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
      */
     public function indexAction(UserManager $userManager, TransferManager $transferManager, Request $request, Seizoen $seizoen, Ploeg $ploeg, Renner $renner): array|RedirectResponse
     {

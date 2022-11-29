@@ -30,8 +30,8 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route ("/", name="game")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Route("/", name="game")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      * @Template()
      */
     public function indexAction(Seizoen $seizoen): array

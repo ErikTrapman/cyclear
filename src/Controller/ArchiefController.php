@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Seizoen;
 use App\Repository\SeizoenRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,11 +18,10 @@ class ArchiefController extends AbstractController
     }
 
     /**
-     * @Route ("/", name="archief_index")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template ()
+     * @Route("/", name="archief_index")
+     * @Template()
      */
-    public function indexAction(Seizoen $seizoen): array
+    public function indexAction(): array
     {
         return ['seizoenen' => $this->seizoenRepository->getArchived()];
     }

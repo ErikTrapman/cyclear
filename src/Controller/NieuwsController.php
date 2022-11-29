@@ -24,9 +24,9 @@ class NieuwsController extends AbstractController
     }
 
     /**
-     * @Route ("", name="nieuws")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template ()
+     * @Route("", name="nieuws")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Template()
      */
     public function indexAction(Request $request, Seizoen $seizoen): array
     {

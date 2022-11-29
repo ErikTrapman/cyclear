@@ -24,9 +24,9 @@ class TransferController extends AbstractController
     }
 
     /**
-     * @Route ("s", name="transfer_list")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template ()
+     * @Route("s", name="transfer_list")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Template()
      */
     public function indexAction(Request $request, Seizoen $seizoen): array
     {

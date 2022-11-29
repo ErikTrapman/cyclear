@@ -117,12 +117,7 @@ class Transfer
         return $this->transferType;
     }
 
-    /**
-     * @return string|null
-     *
-     * @psalm-return 'admin-transfer'|'draft'|'gebruiker'|null
-     */
-    public function getTransferTypeFormatted()
+    public function getTransferTypeFormatted(): string
     {
         switch ($this->transferType) {
             case self::ADMINTRANSFER:

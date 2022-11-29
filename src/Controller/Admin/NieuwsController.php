@@ -26,13 +26,8 @@ class NieuwsController extends AbstractController
     }
 
     /**
-     * Lists all Nieuws entities.
-     *
-     * @Route ("/", name="admin_nieuws")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{entities: mixed}
+     * @Route("/", name="admin_nieuws")
+     * @Template()
      */
     public function indexAction(Request $request): array
     {
@@ -48,15 +43,8 @@ class NieuwsController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new Nieuws entity.
-     *
-     * @Route ("/new", name="admin_nieuws_new")
-     *
-     * @Template ()
-     *
-     * @return (Nieuws|\Symfony\Component\Form\FormView)[]
-     *
-     * @psalm-return array{entity: Nieuws, form: \Symfony\Component\Form\FormView}
+     * @Route("/new", name="admin_nieuws_new")
+     * @Template()
      */
     public function newAction(): array
     {
@@ -70,13 +58,7 @@ class NieuwsController extends AbstractController
     }
 
     /**
-     * Creates a new Nieuws entity.
-     *
-     * @Route ("/create", name="admin_nieuws_create", methods={"POST"})
-     *
-     * @return (Nieuws|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Nieuws, form: \Symfony\Component\Form\FormView}
+     * @Route("/create", name="admin_nieuws_create", methods={"POST"})
      */
     public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -99,19 +81,13 @@ class NieuwsController extends AbstractController
     }
 
     /**
-     * Displays a form to edit an existing Nieuws entity.
-     *
-     * @Route ("/{id}/edit", name="admin_nieuws_edit")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{entity: Nieuws, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @Route("/{id}/edit", name="admin_nieuws_edit")
+     * @Template()
      * @param mixed $id
-     * @return (Nieuws|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Nieuws::class)->find($id);
 
@@ -130,8 +106,9 @@ class NieuwsController extends AbstractController
     }
 
     /**
-     * @Route ("/{id}/update", name="admin_nieuws_update", methods={"POST"})
+     * @Route("/{id}/update", name="admin_nieuws_update", methods={"POST"})
      * @Template("admin/nieuws/edit.html.twig")
+     * @param mixed $id
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -165,7 +142,7 @@ class NieuwsController extends AbstractController
     /**
      * Deletes a Nieuws entity.
      *
-     * @Route ("/{id}/delete", name="admin_nieuws_delete", methods={"POST"})
+     * @Route("/{id}/delete", name="admin_nieuws_delete", methods={"POST"})
      * @param mixed $id
      */
     public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse

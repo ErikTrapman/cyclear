@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\EntityManager\TransferManager;
 use App\Form\Admin\Transfer\TransferEditType;
@@ -14,6 +13,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -53,13 +53,8 @@ class TransferController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new Transfer entity.
-     *
-     * @Route ("/new", name="admin_transfer_new")
-     *
-     * @Template ()
-     *
-     * @psalm-return array<empty, empty>
+     * @Route("/new", name="admin_transfer_new")
+     * @Template()
      */
     public function newAction(): array
     {
@@ -67,15 +62,10 @@ class TransferController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new Transfer entity.
-     *
-     * @Route ("/new-draft", name="admin_transfer_new_draft")
-     *
-     * @Template ()
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{form: mixed}
+     * @Route("/new-draft", name="admin_transfer_new_draft")
+     * @Template()
      */
-    public function newDraftAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function newDraftAction(Request $request): array|RedirectResponse
     {
         $entity = new Transfer();
         $entity->setTransferType(Transfer::DRAFTTRANSFER);
@@ -94,15 +84,10 @@ class TransferController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new Transfer entity.
-     *
-     * @Route ("/new-exchange", name="admin_transfer_new_exchange")
-     *
-     * @Template ()
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{form: mixed}
+     * @Route("/new-exchange", name="admin_transfer_new_exchange")
+     * @Template()
      */
-    public function newExchangeAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function newExchangeAction(Request $request): array|RedirectResponse
     {
         $entity = new Transfer();
         $entity->setTransferType(Transfer::ADMINTRANSFER);
@@ -130,15 +115,9 @@ class TransferController extends AbstractController
     }
 
     /**
-     * Displays a form to edit an existing Transfer entity.
-     *
-     * @Route ("/{id}/edit", name="admin_transfer_edit")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{entity: Transfer, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @Route("/{id}/edit", name="admin_transfer_edit")
+     * @Template()
      * @param mixed $id
-     * @return (Transfer|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
@@ -158,15 +137,10 @@ class TransferController extends AbstractController
     }
 
     /**
-     * Edits an existing Transfer entity.
-     *
-     * @Route ("/{id}/update", name="admin_transfer_update", methods={"POST"})
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Transfer, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @Route("/{id}/update", name="admin_transfer_update", methods={"POST"})
      * @param mixed $id
-     * @return (Transfer|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function updateAction(Request $request, $id): array|RedirectResponse
     {
         $em = $this->doctrine->getManager();
 
@@ -198,10 +172,10 @@ class TransferController extends AbstractController
     /**
      * Deletes a Transfer entity.
      *
-     * @Route ("/{id}/delete", name="admin_transfer_delete", methods={"POST"})
+     * @Route("/{id}/delete", name="admin_transfer_delete", methods={"POST"})
      * @param mixed $id
      */
-    public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function deleteAction(Request $request, $id): RedirectResponse
     {
         $form = $this->createDeleteForm($id);
 

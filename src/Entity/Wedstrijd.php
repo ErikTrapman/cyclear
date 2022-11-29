@@ -205,16 +205,7 @@ class Wedstrijd
         }
     }
 
-    /**
-     * Fetch the Uitslagen, grouped and totalled per team.
-     *
-     * @param mixed $keepRiders
-     *
-     * @return ((Uitslag|int|mixed)[][]|int|mixed)[][]
-     *
-     * @psalm-return array<array{total: 0|mixed, hits: 0|positive-int, ploeg: mixed, renners: array<array{renner: mixed, hits: int, total: 0|mixed, result?: Uitslag}>}>
-     */
-    public function getUitslagenGrouped($keepRiders = false): array
+    public function getUitslagenGrouped(bool $keepRiders = false): array
     {
         $group = [];
         foreach ($this->uitslagen as $uitslag) {
@@ -259,7 +250,7 @@ class Wedstrijd
         return $ret;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getNaam();
     }

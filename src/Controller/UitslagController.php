@@ -29,9 +29,9 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * @Route ("/periodes/{periode}", name="uitslag_periodes")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template ()
+     * @Route("/periodes/{periode}", name="uitslag_periodes")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Template()
      */
     public function periodesAction(Seizoen $seizoen, Periode $periode): array
     {
@@ -71,9 +71,9 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * @Route ("/posities/{positie}", name="uitslag_posities")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template ()
+     * @Route("/posities/{positie}", name="uitslag_posities")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Template()
      * @param mixed $positie
      */
     public function positiesAction(Request $request, Seizoen $seizoen, $positie = 1): array
@@ -83,8 +83,8 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * @Route ("/draft-klassement", name="uitslag_draft")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Route("/draft-klassement", name="uitslag_draft")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      */
     public function viewByDraftTransferAction(Seizoen $seizoen): array
     {
@@ -93,8 +93,8 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * @Route ("/transfer-klassement", name="uitslag_transfers")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Route("/transfer-klassement", name="uitslag_transfers")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
      */
     public function viewByUserTransferAction(Seizoen $seizoen): array
     {
@@ -103,9 +103,9 @@ class UitslagController extends AbstractController
     }
 
     /**
-     * @Route ("/overzicht", name="uitslag_overview")
-     * @ParamConverter ("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template ()
+     * @Route("/overzicht", name="uitslag_overview")
+     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
+     * @Template()
      */
     public function overviewAction(Request $request, Seizoen $seizoen): array
     {

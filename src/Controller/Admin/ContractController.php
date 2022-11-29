@@ -25,13 +25,12 @@ class ContractController extends AbstractController
         private readonly PaginatorInterface $paginator,
         private readonly ManagerRegistry $doctrine,
         private readonly ContractRepository $contractRepository,
-    ){
-
+    ) {
     }
 
     /**
-     * @Route ("/", name="admin_contract")
-     * @Template ()
+     * @Route("/", name="admin_contract")
+     * @Template()
      */
     public function indexAction(Request $request): array
     {
@@ -61,15 +60,8 @@ class ContractController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new Contract entity.
-     *
-     * @Route ("/new", name="admin_contract_new")
-     *
-     * @Template ()
-     *
-     * @return (Contract|\Symfony\Component\Form\FormView)[]
-     *
-     * @psalm-return array{entity: Contract, form: \Symfony\Component\Form\FormView}
+     * @Route("/new", name="admin_contract_new")
+     * @Template()
      */
     public function newAction(): array
     {
@@ -83,13 +75,7 @@ class ContractController extends AbstractController
     }
 
     /**
-     * Creates a new Contract entity.
-     *
-     * @Route ("/create", name="admin_contract_create", methods={"POST"})
-     *
-     * @return (Contract|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Contract, form: \Symfony\Component\Form\FormView}
+     * @Route("/create", name="admin_contract_create", methods={"POST"})
      */
     public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -112,15 +98,9 @@ class ContractController extends AbstractController
     }
 
     /**
-     * Displays a form to edit an existing Contract entity.
-     *
-     * @Route ("/{id}/edit", name="admin_contract_edit")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{entity: Contract, edit_form: \Symfony\Component\Form\FormView}
+     * @Route("/{id}/edit", name="admin_contract_edit")
+     * @Template()
      * @param mixed $id
-     * @return (Contract|\Symfony\Component\Form\FormView)[]
      */
     public function editAction($id): array
     {
@@ -144,6 +124,7 @@ class ContractController extends AbstractController
     /**
      * @Route("/{id}/update", name="admin_contract_update", methods={"POST"})
      * @Template("admin/contract/edit.html.twig")
+     * @param mixed $id
      */
     public function updateAction(Request $request, $id)
     {

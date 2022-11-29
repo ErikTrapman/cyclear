@@ -29,19 +29,11 @@ class PloegController extends AbstractController
         private readonly PaginatorInterface $paginator,
         private readonly UserManager $userManager,
     ) {
-
     }
 
     /**
-     * Lists all Ploeg entities.
-     *
-     * @Route ("/", name="admin_ploeg")
-     *
-     * @Template ()
-     *
-     * @return (\Symfony\Component\Form\FormView|mixed)[]
-     *
-     * @psalm-return array{entities: mixed, filter: \Symfony\Component\Form\FormView}
+     * @Route("/", name="admin_ploeg")
+     * @Template()
      */
     public function indexAction(Request $request): array
     {
@@ -69,15 +61,8 @@ class PloegController extends AbstractController
     }
 
     /**
-     * Displays a form to create a new Ploeg entity.
-     *
-     * @Route ("/new", name="admin_ploeg_new")
-     *
-     * @Template ()
-     *
-     * @return (Ploeg|\Symfony\Component\Form\FormView)[]
-     *
-     * @psalm-return array{entity: Ploeg, form: \Symfony\Component\Form\FormView}
+     * @Route("/new", name="admin_ploeg_new")
+     * @Template()
      */
     public function newAction(): array
     {
@@ -91,15 +76,9 @@ class PloegController extends AbstractController
     }
 
     /**
-     * Creates a new Ploeg entity.
-     *
-     * @Route ("/create", name="admin_ploeg_create", methods={"POST"})
-     *
-     * @return (Ploeg|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Ploeg, form: \Symfony\Component\Form\FormView}
+     * @Route("/create", name="admin_ploeg_create", methods={"POST"})
      */
-    public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function createAction(Request $request): array|RedirectResponse
     {
         $entity = new Ploeg();
         $form = $this->createForm(PloegType::class, $entity);
@@ -122,15 +101,9 @@ class PloegController extends AbstractController
     }
 
     /**
-     * Displays a form to edit an existing Ploeg entity.
-     *
-     * @Route ("/{id}/edit", name="admin_ploeg_edit")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{entity: Ploeg, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @Route("/{id}/edit", name="admin_ploeg_edit")
+     * @Template()
      * @param mixed $id
-     * @return (Ploeg|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction($id): array
     {
@@ -155,6 +128,7 @@ class PloegController extends AbstractController
     /**
      * @Route("/{id}/update", name="admin_ploeg_update", methods={"POST"})
      * @Template("admin/ploeg/edit.html.twig")
+     * @param mixed $id
      */
     public function updateAction(Request $request, $id): array|RedirectResponse
     {
@@ -190,10 +164,10 @@ class PloegController extends AbstractController
     /**
      * Deletes a Ploeg entity.
      *
-     * @Route ("/{id}/delete", name="admin_ploeg_delete", methods={"POST"})
+     * @Route("/{id}/delete", name="admin_ploeg_delete", methods={"POST"})
      * @param mixed $id
      */
-    public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function deleteAction(Request $request, $id): RedirectResponse
     {
         $form = $this->createDeleteForm($id);
 

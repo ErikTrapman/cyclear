@@ -12,6 +12,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Exception\ValidatorException;
@@ -57,13 +58,9 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route ("/{id}/edit", name="admin_renner_edit")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{entity: Renner, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
+     * @Route("/{id}/edit", name="admin_renner_edit")
+     * @Template()
      * @param mixed $id
-     * @return (Renner|\Symfony\Component\Form\FormView|mixed)[]
      */
     public function editAction(Request $request, $id): array
     {
@@ -94,13 +91,8 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route ("/new", name="admin_renner_new")
-     *
-     * @Template ()
-     *
-     * @return (Renner|\Symfony\Component\Form\FormView)[]
-     *
-     * @psalm-return array{entity: Renner, form: \Symfony\Component\Form\FormView}
+     * @Route("/new", name="admin_renner_new")
+     * @Template()
      */
     public function newAction(): array
     {
@@ -111,13 +103,9 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route ("/create", name="admin_renner_create", methods={"POST"})
-     *
-     * @return (Renner|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Renner, form: \Symfony\Component\Form\FormView}
+     * @Route("/create", name="admin_renner_create", methods={"POST"})
      */
-    public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function createAction(Request $request): array|RedirectResponse
     {
         $entity = new Renner();
         $form = $this->createForm(RennerType::class, $entity);
@@ -135,10 +123,10 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route ("/{id}/delete", name="admin_renner_delete", methods={"POST"})
+     * @Route("/{id}/delete", name="admin_renner_delete", methods={"POST"})
      * @param mixed $id
      */
-    public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function deleteAction(Request $request, $id): RedirectResponse
     {
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
