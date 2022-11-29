@@ -8,10 +8,12 @@ use App\Form\Filter\PloegFilterType;
 use App\Form\PloegType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -22,15 +24,12 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PloegController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge(
-            [
-                'knp_paginator' => PaginatorInterface::class,
-                'cyclear_game.manager.user' => UserManager::class,
-            ],
-            parent::getSubscribedServices()
-        );
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly PaginatorInterface $paginator,
+        private readonly UserManager $userManager,
+    ) {
+
     }
 
     /**
@@ -48,7 +47,7 @@ class PloegController extends AbstractController
     {
         $filter = $this->createForm(PloegFilterType::class);
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $query = $em->createQuery("SELECT p FROM App\Entity\Ploeg p ORDER BY p.id DESC");
 
         $config = $em->getConfiguration();
@@ -63,8 +62,7 @@ class PloegController extends AbstractController
                 }
             }
         }
-        $paginator = $this->get('knp_paginator');
-        $entities = $paginator->paginate(
+        $entities = $this->paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         return ['entities' => $entities, 'filter' => $filter->createView()];
@@ -108,7 +106,7 @@ class PloegController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -136,7 +134,7 @@ class PloegController extends AbstractController
      */
     public function editAction($id): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Ploeg::class)->find($id);
 
@@ -155,17 +153,12 @@ class PloegController extends AbstractController
     }
 
     /**
-     * Edits an existing Ploeg entity.
-     *
-     * @Route ("/{id}/update", name="admin_ploeg_update", methods={"POST"})
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Ploeg, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
-     * @param mixed $id
-     * @return (Ploeg|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/{id}/update", name="admin_ploeg_update", methods={"POST"})
+     * @Template("admin/ploeg/edit.html.twig")
      */
-    public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function updateAction(Request $request, $id): array|RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Ploeg::class)->find($id);
 
@@ -207,7 +200,7 @@ class PloegController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $entity = $em->getRepository(Ploeg::class)->find($id);
 
             if (!$entity) {
@@ -237,10 +230,9 @@ class PloegController extends AbstractController
         if (!$user) {
             return;
         }
-        $usermanager = $this->get('cyclear_game.manager.user');
-        $usermanager->setOwnerAcl($user, $ploeg);
+        $this->userManager->setOwnerAcl($user, $ploeg);
         $ploeg->setUser($user);
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $em->flush();
     }
 }

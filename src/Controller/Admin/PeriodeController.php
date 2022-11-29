@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Periode;
 use App\Form\PeriodeType;
+use App\Repository\PeriodeRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,29 +20,22 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PeriodeController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge(['knp_paginator' => PaginatorInterface::class],
-            parent::getSubscribedServices());
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly PaginatorInterface $paginator,
+        private readonly PeriodeRepository $periodeRepository,
+    ) {
     }
 
     /**
-     * Lists all Periode entities.
-     *
      * @Route ("/", name="admin_periode")
-     *
      * @Template ()
-     *
-     * @psalm-return array{entities: mixed}
      */
     public function indexAction(Request $request): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $entities = $this->periodeRepository->createQueryBuilder('p')->orderBy('p.eind', 'DESC');
 
-        $entities = $em->getRepository(Periode::class)->createQueryBuilder('p')->orderBy('p.eind', 'DESC');
-
-        $paginator = $this->get('knp_paginator');
-        $entities = $paginator->paginate(
+        $entities = $this->paginator->paginate(
             $entities, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
 
@@ -111,7 +106,7 @@ class PeriodeController extends AbstractController
      */
     public function editAction($id): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Periode::class)->find($id);
 
@@ -130,17 +125,12 @@ class PeriodeController extends AbstractController
     }
 
     /**
-     * Edits an existing Periode entity.
-     *
-     * @Route ("/{id}/update", name="admin_periode_update", methods={"POST"})
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Periode, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
-     * @param mixed $id
-     * @return (Periode|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/{id}/update", name="admin_periode_update", methods={"POST"})
+     * @Template("admin/periode/edit.html.twig")
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Periode::class)->find($id);
 
@@ -180,7 +170,7 @@ class PeriodeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $entity = $em->getRepository(Periode::class)->find($id);
 
             if (!$entity) {

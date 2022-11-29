@@ -6,6 +6,8 @@ use App\Entity\Contract;
 use App\Entity\Seizoen;
 use App\Form\Admin\ContractType;
 use App\Form\Filter\RennerIdFilterType;
+use App\Repository\ContractRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,31 +21,26 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ContractController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge(['knp_paginator' => PaginatorInterface::class],
-            parent::getSubscribedServices());
+    public function __construct(
+        private readonly PaginatorInterface $paginator,
+        private readonly ManagerRegistry $doctrine,
+        private readonly ContractRepository $contractRepository,
+    ){
+
     }
 
     /**
-     * Lists all Contract entities.
-     *
      * @Route ("/", name="admin_contract")
-     *
      * @Template ()
-     *
-     * @return (\Symfony\Component\Form\FormView|mixed)[]
-     *
-     * @psalm-return array{entities: mixed, filter: \Symfony\Component\Form\FormView}
      */
     public function indexAction(Request $request): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $filter = $this->createForm(RennerIdFilterType::class);
         $config = $em->getConfiguration();
         $config->addFilter('renner', "App\Filter\RennerIdFilter");
-        $entities = $em->getRepository(Contract::class)->createQueryBuilder('c')->orderBy('c.id', 'DESC');
+        $entities = $this->contractRepository->createQueryBuilder('c')->orderBy('c.id', 'DESC');
         if ($request->getMethod() == 'POST') {
             $filter->handleRequest($request);
             if ($filter->isValid()) {
@@ -56,8 +53,7 @@ class ContractController extends AbstractController
             }
         }
 
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
+        $pagination = $this->paginator->paginate(
             $entities, $request->query->get('page', 1), 20
         );
 
@@ -102,7 +98,7 @@ class ContractController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -128,7 +124,7 @@ class ContractController extends AbstractController
      */
     public function editAction($id): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Contract::class)->find($id);
 
@@ -146,17 +142,12 @@ class ContractController extends AbstractController
     }
 
     /**
-     * Edits an existing Contract entity.
-     *
-     * @Route ("/{id}/update", name="admin_contract_update", methods={"POST"})
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Contract, edit_form: \Symfony\Component\Form\FormView}
-     * @param mixed $id
-     * @return (Contract|\Symfony\Component\Form\FormView)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/{id}/update", name="admin_contract_update", methods={"POST"})
+     * @Template("admin/contract/edit.html.twig")
      */
-    public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Contract::class)->find($id);
 
@@ -164,7 +155,8 @@ class ContractController extends AbstractController
             throw $this->createNotFoundException('Unable to find entity.');
         }
 
-        $editForm = $this->createForm(ContractType::class, $entity);
+        $seizoen = $em->getRepository(Seizoen::class)->getCurrent();
+        $editForm = $this->createForm(ContractType::class, $entity, ['seizoen' => $seizoen]);
 
         $editForm->handleRequest($request);
 

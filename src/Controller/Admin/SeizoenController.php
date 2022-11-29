@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Seizoen;
 use App\Form\SeizoenType;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,10 +19,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SeizoenController extends AbstractController
 {
-    public static function getSubscribedServices()
+    public function __construct(private readonly ManagerRegistry $doctrine)
     {
-        return array_merge(['knp_paginator' => PaginatorInterface::class],
-            parent::getSubscribedServices());
     }
 
     /**
@@ -37,7 +36,7 @@ class SeizoenController extends AbstractController
      */
     public function indexAction(): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entities = $em->getRepository(Seizoen::class)->findAll();
 
@@ -82,7 +81,7 @@ class SeizoenController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $em->persist($entity);
             if ($entity->isCurrent()) {
                 // find other seasons that are also current
@@ -116,7 +115,7 @@ class SeizoenController extends AbstractController
      */
     public function editAction($id): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Seizoen::class)->find($id);
 
@@ -145,7 +144,7 @@ class SeizoenController extends AbstractController
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Seizoen::class)->find($id);
 
@@ -185,7 +184,7 @@ class SeizoenController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $entity = $em->getRepository(Seizoen::class)->find($id);
 
             if ($entity->isCurrent()) {

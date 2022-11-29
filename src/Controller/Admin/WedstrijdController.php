@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Wedstrijd;
 use App\Form\WedstrijdType;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,10 +17,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class WedstrijdController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge(['knp_paginator' => PaginatorInterface::class],
-            parent::getSubscribedServices());
+    public function __construct(
+        private readonly PaginatorInterface $paginator,
+        private readonly ManagerRegistry $doctrine,
+    ){
+
     }
 
     /**
@@ -31,12 +33,11 @@ class WedstrijdController extends AbstractController
      */
     public function indexAction(Request $request): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $query = $em->createQuery('SELECT w FROM App\Entity\Wedstrijd w ORDER BY w.id DESC');
 
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
+        $pagination = $this->paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         return ['pagination' => $pagination];
@@ -80,7 +81,7 @@ class WedstrijdController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -106,7 +107,7 @@ class WedstrijdController extends AbstractController
      */
     public function editAction($id): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Wedstrijd::class)->find($id);
 
@@ -135,7 +136,7 @@ class WedstrijdController extends AbstractController
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Wedstrijd::class)->find($id);
 
@@ -175,7 +176,7 @@ class WedstrijdController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $entity = $em->getRepository(Wedstrijd::class)->find($id);
 
             if (!$entity) {

@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Form\UserEditType;
 use App\Form\UserType;
+use Doctrine\Persistence\ManagerRegistry;
+use FOS\UserBundle\Doctrine\UserManager;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -19,13 +21,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge([
-            'knp_paginator' => PaginatorInterface::class,
-            'fos_user.user_manager' => UserManagerInterface::class,
-        ],
-            parent::getSubscribedServices());
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserManagerInterface $userManager,
+    ) {
     }
 
     /**
@@ -41,7 +40,7 @@ class UserController extends AbstractController
      */
     public function indexAction(): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entities = $em->getRepository(User::class)->findAll();
 
@@ -80,7 +79,7 @@ class UserController extends AbstractController
     public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $form = $this->createForm(UserType::class);
-        $userManager = $this->container->get('fos_user.user_manager');
+        $userManager = $this->userManager;
 
         $user = $userManager->createUser();
         $user->setEnabled(true);
@@ -112,8 +111,7 @@ class UserController extends AbstractController
      */
     public function editAction($id): array
     {
-        // TODO: rollen in formulier.
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(User::class)->find($id);
 
@@ -141,7 +139,7 @@ class UserController extends AbstractController
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(User::class)->find($id);
 

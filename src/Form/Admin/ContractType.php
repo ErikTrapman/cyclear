@@ -10,7 +10,7 @@ class ContractType extends \Symfony\Component\Form\AbstractType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         $seizoen = $options['seizoen'];
-        $timeoptions = ['widget' => 'single_text', 'format' => 'd-M-yyyy k:m'];
+        $timeoptions = ['widget' => 'single_text', 'format' => 'd-M-yyyy k:m', 'html5' => false];
         $builder
             // ->add('ploeg')
             ->add('renner', RennerSelectorType::class)

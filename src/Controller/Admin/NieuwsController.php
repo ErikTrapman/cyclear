@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Nieuws;
 use App\Form\NieuwsType;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,10 +19,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class NieuwsController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge(['knp_paginator' => PaginatorInterface::class],
-            parent::getSubscribedServices());
+    public function __construct(
+        private readonly PaginatorInterface $paginator,
+        private readonly ManagerRegistry $doctrine,
+    ) {
     }
 
     /**
@@ -35,12 +36,11 @@ class NieuwsController extends AbstractController
      */
     public function indexAction(Request $request): array
     {
-        $em = $this->get('doctrine');
+        $em = $this->doctrine->getManager();
 
         $entities = $em->getRepository(Nieuws::class)->createQueryBuilder('n')->orderBy('n.id', 'DESC');
 
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
+        $pagination = $this->paginator->paginate(
             $entities, $request->query->get('page', 1), 20
         );
 
@@ -85,7 +85,7 @@ class NieuwsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -130,17 +130,12 @@ class NieuwsController extends AbstractController
     }
 
     /**
-     * Edits an existing Nieuws entity.
-     *
      * @Route ("/{id}/update", name="admin_nieuws_update", methods={"POST"})
-     *
-     * @psalm-return \Symfony\Component\HttpFoundation\RedirectResponse|array{entity: Nieuws, edit_form: \Symfony\Component\Form\FormView, delete_form: mixed}
-     * @param mixed $id
-     * @return (Nieuws|\Symfony\Component\Form\FormView|mixed)[]|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @Template("admin/nieuws/edit.html.twig")
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Nieuws::class)->find($id);
 
@@ -180,7 +175,7 @@ class NieuwsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $entity = $em->getRepository(Nieuws::class)->find($id);
 
             if (!$entity) {

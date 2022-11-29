@@ -12,6 +12,7 @@ use App\Repository\SeizoenRepository;
 use App\Repository\TransferRepository;
 use App\Repository\UitslagRepository;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -30,12 +31,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class RennerController extends AbstractController
 {
     public function __construct(
-        private readonly PaginatorInterface $knpPaginator,
+        private readonly PaginatorInterface $paginator,
         private readonly SerializerInterface $serializer,
         private readonly RennerRepository $rennerRepository,
         private readonly TransferRepository $transferRepository,
         private readonly UitslagRepository $uitslagRepository,
         private readonly SeizoenRepository $seizoenRepository,
+        private readonly ManagerRegistry $doctrine,
     ) {
     }
 
@@ -64,7 +66,7 @@ class RennerController extends AbstractController
 
         $this->appendQuery($qb, $this->assertArray($request->query->get('filter'), "/\s+/"), ['r.naam']);
 
-        $pagination = $this->knpPaginator->paginate($qb, (int)$request->query->get('page', 1), 20);
+        $pagination = $this->paginator->paginate($qb, (int)$request->query->get('page', 1), 20);
 
         $ret = [];
         foreach ($pagination as $r) {
@@ -87,7 +89,7 @@ class RennerController extends AbstractController
     {
         $qb = $this->rennerRepository->createQueryBuilder('r')->orderBy('r.naam', 'ASC');
         $this->appendQuery($qb, $this->assertArray($request->query->get('query'), "/\s+/"), ['r.cqranking_id', 'r.naam', 'r.slug']);
-        $entities = $this->knpPaginator->paginate(
+        $entities = $this->paginator->paginate(
             $qb, $request->query->get('page') !== null ? $request->query->get('page') : 1, 20
         );
         $ret = [];
@@ -113,7 +115,7 @@ class RennerController extends AbstractController
     {
         $transfers = $this->transferRepository->findByRenner($renner, $seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER]);
         $uitslagen = $this->uitslagRepository->getPuntenForRenner($renner, $seizoen, true);
-        $paginator = $this->get('knp_paginator');
+        $paginator = $this->paginator;
         $pagination = $paginator->paginate(
             $uitslagen, $request->query->get('page', 1), 20
         );
@@ -156,7 +158,7 @@ class RennerController extends AbstractController
             INNER JOIN wedstrijd w ON u.wedstrijd_id = w.id WHERE u.renner_id = r.id AND w.seizoen_id = %d ) AS pts
             FROM renner r HAVING pts > 0 ORDER BY pts DESC, r.naam', $seizoen->getId());
 
-        $em = $this->get('doctrine');
+        $em = $this->doctrine->getManager();
         $delimiter = ';';
         $filename = 'riders-' . $seizoen->getSlug() . date('-dmYHis') . '_65001utf8';
 

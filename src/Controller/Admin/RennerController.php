@@ -7,6 +7,7 @@ use App\Form\Filter\RennerFilterType;
 use App\Form\RennerType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,26 +23,19 @@ use Symfony\Component\Validator\Exception\ValidatorException;
  */
 class RennerController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge(['knp_paginator' => PaginatorInterface::class],
-            parent::getSubscribedServices());
+    public function __construct(
+        private readonly PaginatorInterface $paginator,
+        private readonly ManagerRegistry $doctrine,
+    ) {
     }
 
     /**
-     * Lists all Renner entities.
-     *
-     * @Route ("/", name="admin_renner")
-     *
-     * @Template ()
-     *
-     * @return (\Symfony\Component\Form\FormView|mixed)[]
-     *
-     * @psalm-return array{pagination: mixed, filter: \Symfony\Component\Form\FormView}
+     * @Route("/", name="admin_renner")
+     * @Template()
      */
     public function indexAction(Request $request): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $query = $em->createQuery('SELECT r FROM App\Entity\Renner r ORDER BY r.id DESC');
         $filter = $this->createForm(RennerFilterType::class);
@@ -56,8 +50,7 @@ class RennerController extends AbstractController
             }
         }
 
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
+        $pagination = $this->paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         return ['pagination' => $pagination, 'filter' => $filter->createView()];
@@ -74,7 +67,7 @@ class RennerController extends AbstractController
      */
     public function editAction(Request $request, $id): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(Renner::class)->findOneBy(['cqranking_id' => $id]);
 

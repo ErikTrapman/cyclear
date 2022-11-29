@@ -7,11 +7,15 @@ use App\Entity\Transfer;
 use App\EntityManager\TransferManager;
 use App\Form\Admin\Transfer\TransferEditType;
 use App\Form\Admin\Transfer\TransferType;
+use App\Repository\SeizoenRepository;
+use App\Repository\TransferRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -21,31 +25,26 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class TransferController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge([
-            'knp_paginator' => PaginatorInterface::class,
-            'cyclear_game.manager.transfer' => TransferManager::class,
-        ],
-            parent::getSubscribedServices());
+    public function __construct(
+        private readonly PaginatorInterface $paginator,
+        private readonly ManagerRegistry $doctrine,
+        private readonly TransferManager $transferManager,
+        private readonly SessionInterface $session,
+        private readonly SeizoenRepository $seizoenRepository,
+        private readonly TransferRepository $transferRepository,
+    ) {
     }
 
     /**
-     * Lists all Transfer entities.
-     *
-     * @Route ("/", name="admin_transfer")
-     *
-     * @Template ()
-     *
-     * @psalm-return array{entities: mixed}
+     * @Route("/", name="admin_transfer")
+     * @Template()
      */
     public function indexAction(Request $request): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $query = $em->createQuery('SELECT t FROM App\Entity\Transfer t ORDER BY t.id DESC');
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
+        $pagination = $this->paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         // $entities = $query->getResult();
@@ -86,8 +85,7 @@ class TransferController extends AbstractController
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $form->get('datum')->getData()->setTime((int)date('H'), (int)date('i'), 0);
-                $transferManager = $this->get('cyclear_game.manager.transfer');
-                $transferManager->doDraftTransfer($entity);
+                $this->transferManager->doDraftTransfer($entity);
                 $this->getDoctrine()->getManager()->flush();
                 return $this->redirect($this->generateUrl('admin_transfer'));
             }
@@ -115,8 +113,7 @@ class TransferController extends AbstractController
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $form->get('datum')->getData()->setTime(date('H'), date('i'), date('s'));
-                $transferManager = $this->get('cyclear_game.manager.transfer');
-                $transferManager->doExchangeTransfer(
+                $this->transferManager->doExchangeTransfer(
                     $form->get('renner')->getData(), $form->get('renner2')->getData(), $form->get('datum')->getData(), $form->get('seizoen')->getData());
                 $this->getDoctrine()->getManager()->flush();
                 return $this->redirect($this->generateUrl('admin_transfer'));
@@ -127,7 +124,7 @@ class TransferController extends AbstractController
 
     private function getTransferForm(Transfer $entity): \Symfony\Component\Form\FormInterface
     {
-        $seizoen = $this->getDoctrine()->getRepository(Seizoen::class)->getCurrent();
+        $seizoen = $this->seizoenRepository->getCurrent();
         $form = $this->createForm(TransferType::class, $entity, ['transfertype' => $entity->getTransferType(), 'seizoen' => $seizoen]);
         return $form;
     }
@@ -145,9 +142,7 @@ class TransferController extends AbstractController
      */
     public function editAction($id): array
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository(Transfer::class)->find($id);
+        $entity = $this->transferRepository->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Transfer entity.');
@@ -173,9 +168,9 @@ class TransferController extends AbstractController
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
-        $entity = $em->getRepository(Transfer::class)->find($id);
+        $entity = $this->transferRepository->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Transfer entity.');
@@ -213,17 +208,16 @@ class TransferController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository(Transfer::class)->find($id);
+            $em = $this->doctrine->getManager();
+            $entity = $this->transferRepository->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Transfer entity.');
             }
 
-            $transferManager = $this->get('cyclear_game.manager.transfer');
-            $res = $transferManager->revertTransfer($entity);
+            $res = $this->transferManager->revertTransfer($entity);
             if (!$res) {
-                $this->get('session')->getFlashBag()->add('error', 'Transfer kon niet verwijderd worden');
+                $this->session->getFlashBag()->add('error', 'Transfer kon niet verwijderd worden');
             }
 
             $em->flush();

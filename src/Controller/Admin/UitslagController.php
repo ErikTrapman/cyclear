@@ -11,27 +11,26 @@ use App\EntityManager\UitslagManager;
 use App\EntityManager\WedstrijdManager;
 use App\Form\UitslagCreateType;
 use App\Form\UitslagType;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 /**
  * @Route("admin/uitslag")
  */
 class UitslagController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge(['knp_paginator' => PaginatorInterface::class,
-            'cyclear_game.manager.uitslag' => UitslagManager::class,
-            'cyclear_game.manager.wedstrijd' => WedstrijdManager::class,
-            'cyclear_game.manager.renner' => RennerManager::class,
-            'eriktrapman_cqparser.crawler_manager' => CrawlerManager::class,
-        ],
-            parent::getSubscribedServices());
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly PaginatorInterface $paginator,
+        private readonly Environment $twig,
+    ){
+
     }
 
     /**
@@ -43,12 +42,11 @@ class UitslagController extends AbstractController
      */
     public function indexAction(Request $request): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $query = $em->createQuery('SELECT w FROM App\Entity\Uitslag w ORDER BY w.id DESC');
 
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
+        $pagination = $this->paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         $seizoen = $em->getRepository(Seizoen::class)->getCurrent();
@@ -66,7 +64,7 @@ class UitslagController extends AbstractController
      */
     public function editAction(Request $request, Uitslag $uitslag): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $seizoen = $uitslag->getWedstrijd()->getSeizoen();
         $form = $this->createForm(UitslagType::class, $uitslag, ['seizoen' => $seizoen]);
         if ('POST' === $request->getMethod()) {
@@ -92,9 +90,8 @@ class UitslagController extends AbstractController
     public function newAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $uitslag = new Uitslag();
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $seizoen = $em->getRepository(Seizoen::class)->getCurrent();
-        $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(UitslagType::class, $uitslag, ['seizoen' => $seizoen]);
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
@@ -120,7 +117,7 @@ class UitslagController extends AbstractController
      */
     public function createAction(Request $request): array|Response
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $options = [];
         $options['request'] = $request;
         $options['seizoen'] = $em->getRepository(Seizoen::class)->getCurrent();
@@ -128,10 +125,8 @@ class UitslagController extends AbstractController
         $form = $this->createForm(UitslagCreateType::class, null, $options);
         if ($request->isXmlHttpRequest()) {
             $form->handleRequest($request);
-            $twig = $this->get('twig');
-            $templateFile = 'admin/uitslag/_ajaxTemplate.html.twig';
             // Render the whole template including any layouts etc
-            $body = $twig->render($templateFile, ['form' => $form->createView()]);
+            $body = $this->twig->render('admin/uitslag/_ajaxTemplate.html.twig', ['form' => $form->createView()]);
             return new Response($body);
         }
         if ($request->getMethod() == 'POST') {

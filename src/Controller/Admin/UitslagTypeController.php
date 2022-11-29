@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\UitslagType;
 use App\Form\UitslagTypeType;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,10 +19,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UitslagTypeController extends AbstractController
 {
-    public static function getSubscribedServices()
-    {
-        return array_merge(['knp_paginator' => PaginatorInterface::class],
-            parent::getSubscribedServices());
+    public function __construct(private readonly ManagerRegistry $doctrine){
+
     }
 
     /**
@@ -37,7 +36,7 @@ class UitslagTypeController extends AbstractController
      */
     public function indexAction(): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entities = $em->getRepository(UitslagType::class)->findAll();
 
@@ -82,7 +81,7 @@ class UitslagTypeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -108,7 +107,7 @@ class UitslagTypeController extends AbstractController
      */
     public function editAction($id): array
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(UitslagType::class)->find($id);
 
@@ -137,7 +136,7 @@ class UitslagTypeController extends AbstractController
      */
     public function updateAction(Request $request, $id): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $entity = $em->getRepository(UitslagType::class)->find($id);
 
@@ -177,7 +176,7 @@ class UitslagTypeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $entity = $em->getRepository(UitslagType::class)->find($id);
 
             if (!$entity) {
