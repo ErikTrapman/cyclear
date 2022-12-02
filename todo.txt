@@ -1,15 +1,15 @@
 [CODE]
-Fully fix lost-drafts scenario verwerkt in 3.x ? En andere bugfixes commits
 ddev gaan gebruiken
 JMS serializer vervangen - Alleen RennerController.php ?
-$this->get('' in Controllers wegwerken
 Github QA
+Mails versturen testen via fos-user en Sendgrid
 
+DONE $this->get('' in Controllers wegwerken
+DONE Fully fix lost-drafts scenario verwerkt in 3.x ? En andere bugfixes commits
 DONE admin/default/ vs default/admin - deze hebben dezelfde bestanden
 DONE base_xmlhttp wegwerken
 DONE Cannot count query that uses a HAVING clause. Use the output walkers for pagination - renners beschikbaar paginatie
 DONE in public/css en public/js staan alle bestanden hardcoded gekopieerd
-DONE Mails versturen testen via fos-user (opzoeken huidige credentials voor sendgrid)
 DONE fix iconen op allerlei plekken (TW , EURO)
 DONE cqranking.xml leegmaken
 DONE @SecureParam(name="id", permissions="OWNER")
