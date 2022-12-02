@@ -112,7 +112,7 @@ class RennerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -131,7 +131,7 @@ class RennerController extends AbstractController
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $renner = $em->getRepository(Renner::class)->findOneByCQId($id);
             $em->remove($renner);
             $em->flush();

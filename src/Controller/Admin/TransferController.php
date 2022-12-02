@@ -76,7 +76,7 @@ class TransferController extends AbstractController
             if ($form->isValid()) {
                 $form->get('datum')->getData()->setTime((int)date('H'), (int)date('i'), 0);
                 $this->transferManager->doDraftTransfer($entity);
-                $this->getDoctrine()->getManager()->flush();
+                $this->doctrine->getManager()->flush();
                 return $this->redirect($this->generateUrl('admin_transfer'));
             }
         }
@@ -100,7 +100,7 @@ class TransferController extends AbstractController
                 $form->get('datum')->getData()->setTime(date('H'), date('i'), date('s'));
                 $this->transferManager->doExchangeTransfer(
                     $form->get('renner')->getData(), $form->get('renner2')->getData(), $form->get('datum')->getData(), $form->get('seizoen')->getData());
-                $this->getDoctrine()->getManager()->flush();
+                $this->doctrine->getManager()->flush();
                 return $this->redirect($this->generateUrl('admin_transfer'));
             }
         }

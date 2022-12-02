@@ -68,7 +68,7 @@ class PeriodeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->doctrine->getManager();
             $em->persist($entity);
             $em->flush();
 
