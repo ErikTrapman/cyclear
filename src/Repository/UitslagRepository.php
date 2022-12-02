@@ -313,6 +313,12 @@ class UitslagRepository extends ServiceEntityRepository
         foreach ($this->ploegRepository
                      ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
                      ->setParameter('seizoen', $seizoen)->getQuery()->getResult() as $ploeg) {
+
+            $ploegDraftRenners = [];
+            foreach ($this->ploegRepository->getDraftRennersWithPunten($ploeg) as $draftRenner) {
+                $ploegDraftRenners[$draftRenner[0]->getId()] = (int)$draftRenner['punten'];
+            }
+
             $teamResults = $this->getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen, $start, $end);
             $teamPointsPerRider = [];
             /** @var Uitslag $teamResult */
@@ -321,12 +327,15 @@ class UitslagRepository extends ServiceEntityRepository
                 if (!array_key_exists($riderId, $teamPointsPerRider)) {
                     $teamPointsPerRider[$riderId] = 0;
                 }
+                // If a drafted rider has > maxPoints we do not calculate the points as "lost"
+                // This rider has a valid reason to be transferred and should not be taken into account.
+                // This might not be a waterproof solution because a rider can be transferred early and get maxPoints at another team.
+                if (array_key_exists($riderId, $ploegDraftRenners) && $ploegDraftRenners[$riderId] >= $maxPointsPerRider) {
+                    continue;
+                }
                 $teamPointsPerRider[$riderId] += $teamResult->getRennerPunten();
             }
-            // make sure the lost draftpoints are never more than the max points a rider can get.
-            $ploeg->setPunten(array_sum(array_map(function ($item) use ($maxPointsPerRider) {
-                return (int)min($maxPointsPerRider, $item);
-            }, $teamPointsPerRider)));
+            $ploeg->setPunten(array_sum($teamPointsPerRider));
             $res[] = $ploeg;
         }
         static::puntenSort($res);
@@ -355,14 +364,6 @@ class UitslagRepository extends ServiceEntityRepository
                 FROM uitslag u
                 INNER JOIN wedstrijd w ON u.wedstrijd_id = w.id
                 WHERE w.seizoen_id = :seizoen_id AND u.ploeg_id = p.id AND u.renner_id IN (%s))
-
-                -
-
-                (SELECT IFNULL(SUM(u.rennerPunten),0)
-                FROM uitslag u
-                INNER JOIN wedstrijd w ON u.wedstrijd_id = w.id AND w.seizoen_id = :seizoen_id
-                INNER JOIN draftriders dr ON u.renner_id = dr.renner_id
-                WHERE dr.ploeg_id = p.id AND (u.ploeg_id IS NULL OR u.ploeg_id <> p.id OR u.ploeg_id = p.id AND u.ploegPunten = 0))
 
                 ) AS punten
 

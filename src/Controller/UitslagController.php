@@ -123,6 +123,16 @@ class UitslagController extends AbstractController
                 $lost[$teamResult['id']] = $teamResult['punten'];
             }
         }
+        // postprocess $transfer
+        foreach ($transfer as &$item) {
+            $ploegId = (int)$item['id'];
+            $lostPoints = array_key_exists($ploegId, $lost) ? $lost[$ploegId] : 0;
+            $item['punten_calculated'] = $item['punten'] - $lostPoints;
+        }
+        uasort($transfer, function ($a, $b) {
+            return $b['punten_calculated'] <=> $a['punten_calculated'];
+        });
+
         $stand = $this->uitslagRepository->getPuntenByPloeg($seizoen);
         $draft = $this->uitslagRepository->getPuntenByPloegForDraftTransfers($seizoen);
 

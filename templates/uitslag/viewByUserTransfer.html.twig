@@ -23,7 +23,7 @@
                 <td>
                     <a href="{{ path('ploeg_show', {id: ploeg.id, seizoen: seizoen.slug}) }}">{{ ploeg.afkorting }}</a>
                 </td>
-                <td>{{ ploeg.punten }}</td>
+                <td>{{ ploeg.punten_calculated }}</td>
 
                 <td style="color:green;">
                     +{{ shadowgained[id] }}</td>
