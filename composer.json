@@ -33,6 +33,7 @@
         "symfony/process": "^5.4",
         "symfony/property-access": "^5.4",
         "symfony/runtime": "5.4.*",
+        "symfony/sendgrid-mailer": "5.4.*",
         "symfony/serializer": "^5.4",
         "symfony/templating": "5.4.*",
         "symfony/validator": "^5.4",
