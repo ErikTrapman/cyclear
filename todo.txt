@@ -1,9 +1,9 @@
 [CODE]
 ddev gaan gebruiken
-JMS serializer vervangen - Alleen RennerController.php ?
 Github QA
 Mails versturen testen via fos-user en Sendgrid
 
+ENOD JMS serializer vervangen - Alleen RennerController.php ?
 DONE $this->get('' in Controllers wegwerken
 DONE Fully fix lost-drafts scenario verwerkt in 3.x ? En andere bugfixes commits
 DONE admin/default/ vs default/admin - deze hebben dezelfde bestanden

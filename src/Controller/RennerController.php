@@ -99,7 +99,7 @@ class RennerController extends AbstractController
         $uitslagen = $this->uitslagRepository->getPuntenForRenner($renner, $seizoen, true);
         $paginator = $this->paginator;
         $pagination = $paginator->paginate(
-            $uitslagen, $request->query->get('page', 1), 20
+            $uitslagen, $request->query->get('page', 1), 999
         );
 
         $ploeg = $this->rennerRepository->getPloeg($renner, $seizoen);

@@ -9,7 +9,7 @@
             {{ renner.naam }}{% if rennerPunten is defined %} - {{ rennerPunten }}{% endif %}
         </h2>
     </div>
-    <div class="big-header-ext" style="">
+    <div class="big-header-ext">
         <div class="container">
             <div class="col-lg-12">
                 {% if ploeg is not null %}
@@ -34,22 +34,21 @@
         </div>
     </div>
     <div class="container">
-
         <div class="row">
             <div class="col-lg-12">
-
                 <div class="tab-content">
                     <div class="tab-pane active" id="uitslagen">
-
                         <div id="filters">
                             <ul id="tabs" class="list-group list-inline">
                                 <li>
-                                    <a href="https://www.procyclingstats.com/search.php?term={{ renner.naam }}">
+                                    <a href="https://www.procyclingstats.com/search.php?term={{ renner.naam }}"
+                                       target="_blank" rel="noopener">
                                         <h5><img src="/icons/pcs-icon.png" width="16"
                                                  height="16"></h5></a>
                                 </li>
                                 <li>
-                                    <a href="https://cqranking.com/men/asp/gen/rider.asp?riderid={{ renner.cqranking_id }}">
+                                    <a href="https://cqranking.com/men/asp/gen/rider.asp?riderid={{ renner.cqranking_id }}"
+                                       target="_blank" rel="noopener">
                                         <h5><img src="/icons/cqlogo.jpg" width="16" height="16">
                                         </h5></a>
                                 </li>
@@ -86,23 +85,36 @@
                         <div id="navigation">
                             {{ knp_pagination_render(uitslagen, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'renner_show'}) }}
                         </div>
-
                         {% include "transfer/_riderListWithInversion.html.twig" with {'listWithInversion': transfers} %}
-
                     </div>
-
                 </div>
-
             </div>
         </div>
+    </div>
+    <div class="big-header">
+        <h2 style="margin-bottom: 0px;">
+            Seizoenen
+            <a href="#cyclear"><span style="vertical-align: bottom"
+                                     class="glyphicon glyphicon-chevron-up"></span></a>
+        </h2>
+    </div>
+    <div class="container">
         <div class="row">
             <div class="col-lg-12">
-
-                <div class="btn-group btn-group-justified">
-                    {% for p in puntenPerSeizoen %}
-                        <a class="btn btn-default" href={{ path('renner_show', {seizoen: p.seizoen.slug, renner: renner.slug}) }}>{{ p.seizoen }} - {{ p.punten|default(0) }}</a>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Seizoen</th>
+                        <th>Punten</th>
+                    </tr>
+                    {% for row in puntenPerSeizoen|filter(r => r.punten|default)|reverse %}
+                        <tr>
+                            <td><a class="btn btn-default"
+                                   href={{ path('renner_show', {seizoen: row.seizoen.slug, renner: renner.slug}) }}>{{ row.seizoen }}</a>
+                            </td>
+                            <td>{{ row.punten }}</td>
+                        </tr>
                     {% endfor %}
-                </div>
+                </table>
             </div>
         </div>
     </div>
