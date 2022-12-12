@@ -1,6 +1,6 @@
 <?php
 
-echo "another one bites the dust";
+echo "another one bites the dust 19:51";
 die;
 
 use App\Kernel;
