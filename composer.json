@@ -44,6 +44,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "typo3/surf": "dev-upd-monolog as 3.3.5",
         "friendsofphp/php-cs-fixer": "^3",
         "liip/functional-test-bundle": "^4.5",
         "liip/test-fixtures-bundle": "^2.4",
@@ -121,5 +122,11 @@
             "require": "5.4.*",
             "docker": false
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@github.com:ErikTrapman/Surf.git"
+        }
+    ]
 }
