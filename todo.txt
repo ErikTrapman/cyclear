@@ -4,6 +4,7 @@ Github QA
 
 DONE |date nalopen en vervangen
 DONE "Datum" header in tabel van renner-transfers voor dit seizoen
+DONE Mails versturen testen via fos-user en Sendgrid
 ENOD JMS serializer vervangen - Alleen RennerController.php ?
 DONE Mails versturen testen via fos-user en Sendgrid
 DONE $this->get('' in Controllers wegwerken
@@ -32,8 +33,16 @@ DONE - $naming->expects($this->at(0))->method('normalize')->willReturn('foo.png'
 
 [BIG]
 * Hosting: terraform + ansible
-* Backups Google Drive via cyclear-backup
-* Deploys... GH Actions + Surf?
+DONE Backups Google Drive via cyclear-backup
+
+[Deploys]
+DONE Surf
+Github actions
+doctrine migrations remote shell task
+
+
+
+
 * Easyadmin?
 
 [DEPLOY UPGRADE 2023]

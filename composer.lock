@@ -12699,12 +12699,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ErikTrapman/Surf.git",
-                "reference": "8647ade5cfde4854ddff580da152f8577104a69e"
+                "reference": "f56c789f2942d79d057a8be29953ed6046c001ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ErikTrapman/Surf/zipball/8647ade5cfde4854ddff580da152f8577104a69e",
-                "reference": "8647ade5cfde4854ddff580da152f8577104a69e",
+                "url": "https://api.github.com/repos/ErikTrapman/Surf/zipball/f56c789f2942d79d057a8be29953ed6046c001ed",
+                "reference": "f56c789f2942d79d057a8be29953ed6046c001ed",
                 "shasum": ""
             },
             "require": {
@@ -12799,7 +12799,7 @@
                     "url": "https://github.com/t3easy"
                 }
             ],
-            "time": "2022-12-07T14:36:07+00:00"
+            "time": "2022-12-21T19:08:57+00:00"
         },
         {
             "name": "vimeo/psalm",
