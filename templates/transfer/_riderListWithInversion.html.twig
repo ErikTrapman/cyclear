@@ -3,10 +3,10 @@
     <table class="table table-bordered table-striped">
 
         <tr>
-            <th/>
+            <th>Ploeg</th>
             <th>IN</th>
             <th>UIT</th>
-            <th/>
+            <th>Datum</th>
         </tr>
 
         {%- for transfer in listWithInversion %}
@@ -33,7 +33,7 @@
                     {% endif %}</td>
                 <td>
                 <span data-toggle="tooltip" data-placement="top"
-                      title="{{ transfer.datum|date('H:i') }}">{{ transfer.datum|date('d M') }}</span>
+                      title="{{ transfer.datum|date('H:i') }}">{{ transfer.datum|format_datetime(pattern='dd MMM') }}</span>
                 </td>
             </tr>
         {% endfor -%}

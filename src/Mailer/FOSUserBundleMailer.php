@@ -27,7 +27,7 @@ class FOSUserBundleMailer implements FOSMailerInterface
     {
         $url = $this->router->generate('fos_user_resetting_reset', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
         $email = (new TemplatedEmail())
-            ->from(new Address('noreply@cyclear.nl', 'Cyclear'))
+            ->from(new Address('veggatron+cyclear@gmail.com', 'Cyclear'))
             ->to(new Address($user->getEmail()))
             ->subject('Wachtwoord vergeten')
             ->htmlTemplate('mail/reset.html.twig')

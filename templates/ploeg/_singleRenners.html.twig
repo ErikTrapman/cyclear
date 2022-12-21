@@ -22,7 +22,7 @@
             {% if showContract is defined and showContract and renner[0].latestContract is not null %}
                 <td class="hidden-xs hidden-sm">
                     <span data-toggle="tooltip"
-                          title="In de ploeg sinds {{ renner[0].latestContract.start|date('d M Y') }} ">{{ renner[0].latestContract.start|date('d M') }}</span>
+                          title="In de ploeg sinds {{ renner[0].latestContract.start|date('d M Y') }} ">{{ renner[0].latestContract.start|format_datetime(pattern='dd MMM') }}</span>
                 </td>
             {% endif %}
         </tr>

@@ -23,7 +23,7 @@
                     {% endif %}</td>
                 <td>
                     <span data-toggle="tooltip" data-placement="top"
-                          title="{{ transfer.datum|date('H:i') }}">{{ transfer.datum|date('d M') }}</span>
+                          title="{{ transfer.datum|date('H:i') }}">{{ transfer.datum|ormat_datetime(pattern='dd MMM') }}</span>
                 </td>
             </tr>
             {% if transfer.userComment %}

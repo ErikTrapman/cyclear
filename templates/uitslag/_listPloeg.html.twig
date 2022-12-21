@@ -23,7 +23,7 @@
                     {% include "wedstrijd/_singleRow.html.twig" with {wedstrijd: uitslag.wedstrijd, seizoen: uitslag.wedstrijd.seizoen} %}
                     {# <a href="{{ path('wedstrijd_show',{wedstrijd:uitslag.wedstrijd.id,seizoen:uitslag.wedstrijd.seizoen}) }}">{{ uitslag.wedstrijd.naam }}</a> #}
                 </td>
-                <td class="hidden-xs hidden-sm">{{ uitslag.wedstrijd.datum|date('d M') }}</td>
+                <td class="hidden-xs hidden-sm">{{ uitslag.wedstrijd.datum|format_datetime(pattern='dd MMM') }}</td>
 
             </tr>
         {% endfor %}

@@ -79,7 +79,7 @@
                 <a href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a>
             </h2>
 
-            <p class="text-center">{{ periode.start|date('d M') }} - {{ periode.eind|date('d M') }}</p>
+            <p class="text-center">{{ periode.start|format_datetime(pattern='dd MMM') }} - {{ periode.eind|format_datetime(pattern='dd MMM') }}</p>
         </div>
         <div class="container">
             <div class="row">

@@ -14,7 +14,7 @@
         {% for wedstrijd in wedstrijden %}
             <tr>
                 <td class="hidden-xs hidden-sm">
-                    {{ wedstrijd.datum|date('d M') }}
+                    {{ wedstrijd.datum|format_datetime(pattern='dd MMM') }}
                 </td>
                 <td colspan="{% if wedstrijd.generalClassification %}4{% else %}6{% endif %}">
                     <a href="javascript:void(0);"

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ wedstrijd.naam }} - {{ wedstrijd.datum|date('d-m-Y') }}{% endblock %}
+{% block title %}{{ wedstrijd.naam }} - {{ wedstrijd.datum|format_datetime(pattern='dd MMM yyyy') }}{% endblock %}
 
 {% block content %}
 
