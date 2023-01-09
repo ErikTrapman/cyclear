@@ -674,6 +674,15 @@
             "config/packages/vich_uploader.yaml"
         ]
     },
+    "vincentlanglet/twig-cs-fixer": {
+        "version": "0.6",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "0.6",
+            "ref": "e4da12a48e8138479bd24a675321bcfd84950266"
+        }
+    },
     "webimpress/safe-writer": {
         "version": "2.0.1"
     },

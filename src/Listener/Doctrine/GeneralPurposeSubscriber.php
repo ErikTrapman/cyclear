@@ -52,17 +52,19 @@ class GeneralPurposeSubscriber implements EventSubscriberInterface
                     $rennerUit = $inversion->getRenner();
                 }
                 $rennerIn = $entity->getRenner();
-                $rennerInDisplay = $rennerIn->getTwitter() ? '@' . $rennerIn->getTwitter() : $rennerIn->getNaam();
-                $rennerUitDisplay = '';
-                if ($rennerUit) {
-                    $rennerUitDisplay = $rennerUit->getTwitter() ? '@' . $rennerUit->getTwitter() : $rennerUit->getNaam();
-                }
-                $params = ['%team%' => $ploegNaar, '%in%' => $rennerInDisplay, '%out%' => $rennerUitDisplay];
-                $msg = $this->translator->trans($this->getRandomTweet(), $params);
-                try {
-                    $this->tweeter->sendTweet($msg);
-                } catch (\Exception $e) {
-                    // do nothing. Exception is logged
+                if ($rennerIn->getTwitter() && $rennerUit->getTwitter()) {
+                    $rennerInDisplay = $rennerIn->getTwitter() ? '@' . $rennerIn->getTwitter() : $rennerIn->getNaam();
+                    $rennerUitDisplay = '';
+                    if ($rennerUit) {
+                        $rennerUitDisplay = $rennerUit->getTwitter() ? '@' . $rennerUit->getTwitter() : $rennerUit->getNaam();
+                    }
+                    $params = ['%team%' => $ploegNaar, '%in%' => $rennerInDisplay, '%out%' => $rennerUitDisplay];
+                    $msg = $this->translator->trans($this->getRandomTweet(), $params);
+                    try {
+                        $this->tweeter->sendTweet($msg);
+                    } catch (\Exception $e) {
+                        // do nothing. Exception is logged
+                    }
                 }
             }
         }
