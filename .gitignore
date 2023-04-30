@@ -1,6 +1,7 @@
 /.idea
 /*.sql*
 /data
+/docker-compose.yaml
 
 ###> symfony/framework-bundle ###
 /.env.local
