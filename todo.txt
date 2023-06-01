@@ -1,11 +1,9 @@
 [CODE]
-ddev gaan gebruiken
-Github QA
-
+GitHub QA
+JMS serializer vervangen - Alleen RennerController.php ?
 DONE |date nalopen en vervangen
 DONE "Datum" header in tabel van renner-transfers voor dit seizoen
 DONE Mails versturen testen via fos-user en Sendgrid
-ENOD JMS serializer vervangen - Alleen RennerController.php ?
 DONE Mails versturen testen via fos-user en Sendgrid
 DONE $this->get('' in Controllers wegwerken
 DONE Fully fix lost-drafts scenario verwerkt in 3.x ? En andere bugfixes commits
@@ -32,18 +30,16 @@ DONE - $naming->expects($this->at(0))->method('normalize')->willReturn('foo.png'
             ->willReturnOnConsecutiveCalls($this->returnValue(true), $this->returnValue(false));
 
 [BIG]
-* Hosting: terraform + ansible
+DONE * Hosting: terraform + ansible
 DONE Backups Google Drive via cyclear-backup
+Easyadmin
 
 [Deploys]
 DONE Surf
-Github actions
-doctrine migrations remote shell task
+DONE doctrine migrations remote shell task
 
 
 
-
-* Easyadmin?
 
 [DEPLOY UPGRADE 2023]
 - Handmatig tabellen renamen lokaal
