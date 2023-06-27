@@ -12,18 +12,16 @@ use App\Repository\UitslagRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Ploeg controller.
- *
- * @Route("/{seizoen}/ploeg")
  */
+#[Route(path: '/{seizoen}/ploeg')]
 class PloegController extends AbstractController
 {
     public function __construct(
@@ -36,12 +34,8 @@ class PloegController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/{id}/show", name="ploeg_show")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
-     */
-    public function showAction(Request $request, Seizoen $seizoen, Ploeg $id): array|RedirectResponse
+    #[Route(path: '/{id}/show', name: 'ploeg_show')]
+    public function showAction(Request $request, #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen, Ploeg $id): \Symfony\Component\HttpFoundation\Response
     {
         $entity = $id;
         $renners = $this->ploegRepository->getRennersWithPunten($entity);
@@ -76,7 +70,7 @@ class PloegController extends AbstractController
             }
         }
 
-        return [
+        return $this->render('Ploeg/show.html.twig', [
             'entity' => $entity,
             'renners' => $renners,
             'uitslagen' => $uitslagen,
@@ -92,6 +86,6 @@ class PloegController extends AbstractController
                 return $el['punten'];
             }, $draftRenners)),
             'form' => $form->createView(),
-        ];
+        ]);
     }
 }

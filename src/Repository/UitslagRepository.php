@@ -313,7 +313,6 @@ class UitslagRepository extends ServiceEntityRepository
         foreach ($this->ploegRepository
                      ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
                      ->setParameter('seizoen', $seizoen)->getQuery()->getResult() as $ploeg) {
-
             $ploegDraftRenners = [];
             foreach ($this->ploegRepository->getDraftRennersWithPunten($ploeg) as $draftRenner) {
                 $ploegDraftRenners[$draftRenner[0]->getId()] = (int)$draftRenner['punten'];

@@ -13,18 +13,16 @@ use App\Repository\PloegRepository;
 use App\Repository\RennerRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Transfer controller.
- *
- * @Route("/user/{seizoen}/transfer")
  */
+#[Route(path: '/user/{seizoen}/transfer')]
 class TransferController extends AbstractController
 {
     public function __construct(
@@ -34,13 +32,9 @@ class TransferController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/ploeg/{id}/renner/{renner}", name="user_transfer")
-     * @Template()
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @ParamConverter("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
-     */
-    public function indexAction(UserManager $userManager, TransferManager $transferManager, Request $request, Seizoen $seizoen, Ploeg $ploeg, Renner $renner): array|RedirectResponse
+    #[Route(path: '/ploeg/{id}/renner/{renner}', name: 'user_transfer')]
+    public function indexAction(UserManager $userManager, TransferManager $transferManager, Request $request, #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen, Ploeg $ploeg,
+                                #[MapEntity(mapping: ['renner' => 'slug'])] Renner $renner): \Symfony\Component\HttpFoundation\Response
     {
         if (!$userManager->isOwner($this->getUser(), $ploeg)) {
             throw new AccessDeniedHttpException('Dit is niet jouw ploeg');
@@ -75,13 +69,13 @@ class TransferController extends AbstractController
                     $transferManager->doUserTransfer($ploeg, $renner, $form->get('renner_in')->getData(), $seizoen, $form->get('userComment')->getData());
                 }
                 $this->doctrine->getManager()->flush();
-                return new RedirectResponse($this->generateUrl('ploeg_show', ['seizoen' => $seizoen->getSlug(), 'id' => $ploeg->getId()]));
+                return $this->render('User/Transfer/index.html.twig');
             }
         }
         $transferInfo = $transferManager->getTtlTransfersDoneByPloeg($ploeg);
         $ttlTransfersAtm = $transferManager->getTtlTransfersAtm($seizoen);
         return
-            [
+            $this->render('User/Transfer/index.html.twig', [
                 'ploeg' => $ploeg,
                 'renner' => $renner,
                 'form' => $form->createView(),
@@ -90,6 +84,6 @@ class TransferController extends AbstractController
                     'count' => $transferInfo,
                     'left' => $ttlTransfersAtm - $transferInfo,
                 ],
-            ];
+            ]);
     }
 }

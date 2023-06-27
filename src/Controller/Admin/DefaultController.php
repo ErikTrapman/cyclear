@@ -2,21 +2,15 @@
 
 namespace App\Controller\Admin;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/admin")
- */
+#[Route(path: '/admin')]
 class DefaultController extends AbstractController
 {
-    /**
-     * @Route("/", name="admin_index")
-     * @Template()
-     */
-    public function indexAction(\Symfony\Component\HttpFoundation\Request $request): array
+    #[Route(path: '/', name: 'admin_index')]
+    public function indexAction(\Symfony\Component\HttpFoundation\Request $request): \Symfony\Component\HttpFoundation\Response
     {
-        return [];
+        return $this->render('Admin/Default/index.html.twig');
     }
 }

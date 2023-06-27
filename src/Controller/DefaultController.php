@@ -11,13 +11,12 @@ use App\Repository\UitslagRepository;
 use App\Repository\WedstrijdRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/{seizoen}")
- */
+#[Route(path: '/{seizoen}')]
 class DefaultController extends AbstractController
 {
     public function __construct(
@@ -29,13 +28,10 @@ class DefaultController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/", name="game")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
-     */
-    public function indexAction(Seizoen $seizoen): array
+    #[Route(path: '/', name: 'game')]
+    public function indexAction(Request $request): \Symfony\Component\HttpFoundation\Response
     {
+        $seizoen = $request->attributes->get('seizoen');
         $periode = $this->periodeRepository->getCurrentPeriode($seizoen);
         $refDate = $periode ? $periode->getStart() : new \DateTime('today');
 
@@ -63,7 +59,7 @@ class DefaultController extends AbstractController
             $transferSaldo[$teamId] = $gainedPoints - $lostDraftPoints[$teamId];
         }
 
-        return [
+        return $this->render('default/index.html.twig', [
             'drafts' => $this->uitslagRepository->getPuntenByPloegForDraftTransfers($seizoen),
             'nieuws' => $this->doctrine->getRepository(Nieuws::class)->findBy(['seizoen' => $seizoen], ['id' => 'DESC'], 1)[0] ?? null,
             'periode' => $periode,
@@ -77,6 +73,6 @@ class DefaultController extends AbstractController
             'wedstrijden' => $this->wedstrijdRepository->getLatest($seizoen, 12),
             'zegesInPeriode' => $zegesInPeriode,
             'zegestand' => $this->uitslagRepository->getCountForPosition($seizoen, 1),
-        ];
+        ]);
     }
 }

@@ -8,14 +8,12 @@ use App\Repository\UitslagRepository;
 use App\Repository\WedstrijdRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/{seizoen}/wedstrijd")
- */
+#[Route(path: '/{seizoen}/wedstrijd')]
 class WedstrijdController extends AbstractController
 {
     public function __construct(
@@ -24,25 +22,18 @@ class WedstrijdController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/latest", name="wedstrijd_latest")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
-     */
-    public function latestAction(Request $request, Seizoen $seizoen): array
+    #[Route(path: '/latest', name: 'wedstrijd_latest')]
+    public function latestAction(Request $request, #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen): \Symfony\Component\HttpFoundation\Response
     {
         $uitslagenQb = $this->wedstrijdRepository->createQueryBuilder('w')
             ->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
             ->orderBy('w.datum', 'DESC')
             ->setMaxResults(20);
-        return ['wedstrijden' => $uitslagenQb->getQuery()->getResult(), 'seizoen' => $seizoen];
+        return $this->render('Wedstrijd/latest.html.twig', ['wedstrijden' => $uitslagenQb->getQuery()->getResult(), 'seizoen' => $seizoen]);
     }
 
-    /**
-     * @Route("/{wedstrijd}", name="wedstrijd_show")
-     * @Template()
-     */
-    public function showAction(Request $request, Wedstrijd $wedstrijd): array
+    #[Route(path: '/{wedstrijd}', name: 'wedstrijd_show')]
+    public function showAction(Request $request, Wedstrijd $wedstrijd): \Symfony\Component\HttpFoundation\Response
     {
         $refStages = $this->wedstrijdRepository->getRefStages($wedstrijd);
         $allStages = [];
@@ -59,19 +50,15 @@ class WedstrijdController extends AbstractController
         }
         UitslagRepository::puntenSort($allStages, 'hits', 'total');
 
-        return [
+        return $this->render('Wedstrijd/show.html.twig', [
             'wedstrijd' => $wedstrijd,
             'uitslagen' => array_merge($refStages, [$wedstrijd]),
             'allstages' => $allStages,
-        ];
+        ]);
     }
 
-    /**
-     * @Route("en", name="wedstrijd_list")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
-     */
-    public function indexAction(Request $request, Seizoen $seizoen): array
+    #[Route(path: 'en', name: 'wedstrijd_list')]
+    public function indexAction(Request $request, #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen): \Symfony\Component\HttpFoundation\Response
     {
         $qb = $this->wedstrijdRepository->createQueryBuilder('n')
             ->where('n.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
@@ -80,6 +67,6 @@ class WedstrijdController extends AbstractController
         $pagination = $this->paginator->paginate(
             $qb, $request->query->get('page', 1), 20
         );
-        return ['pagination' => $pagination, 'seizoen' => $seizoen];
+        return $this->render('Wedstrijd/index.html.twig', ['pagination' => $pagination, 'seizoen' => $seizoen]);
     }
 }

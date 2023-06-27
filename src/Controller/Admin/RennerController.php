@@ -9,7 +9,6 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,9 +18,8 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 
 /**
  * Renner controller.
- *
- * @Route("/admin/renner")
  */
+#[Route(path: '/admin/renner')]
 class RennerController extends AbstractController
 {
     public function __construct(
@@ -30,11 +28,8 @@ class RennerController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/", name="admin_renner")
-     * @Template()
-     */
-    public function indexAction(Request $request): array
+    #[Route(path: '/', name: 'admin_renner')]
+    public function indexAction(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -54,15 +49,14 @@ class RennerController extends AbstractController
         $pagination = $this->paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
-        return ['pagination' => $pagination, 'filter' => $filter->createView()];
+        return $this->render('Admin/Renner/index.html.twig', ['pagination' => $pagination, 'filter' => $filter->createView()]);
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_renner_edit")
-     * @Template()
      * @param mixed $id
      */
-    public function editAction(Request $request, $id): array
+    #[Route(path: '/{id}/edit', name: 'admin_renner_edit')]
+    public function editAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -82,7 +76,7 @@ class RennerController extends AbstractController
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return ['entity' => $entity, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()];
+        return $this->render('Admin/Renner/edit.html.twig', ['entity' => $entity, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
     }
 
     public function createDeleteForm($id): \Symfony\Component\Form\FormInterface
@@ -90,21 +84,16 @@ class RennerController extends AbstractController
         return $this->createFormBuilder(['id' => $id])->add('id', HiddenType::class)->getForm();
     }
 
-    /**
-     * @Route("/new", name="admin_renner_new")
-     * @Template()
-     */
-    public function newAction(): array
+    #[Route(path: '/new', name: 'admin_renner_new')]
+    public function newAction(): \Symfony\Component\HttpFoundation\Response
     {
         $entity = new Renner();
         $form = $this->createForm(RennerType::class, $entity);
 
-        return ['entity' => $entity, 'form' => $form->createView()];
+        return $this->render('Admin/Renner/new.html.twig', ['entity' => $entity, 'form' => $form->createView()]);
     }
 
-    /**
-     * @Route("/create", name="admin_renner_create", methods={"POST"})
-     */
+    #[Route(path: '/create', name: 'admin_renner_create', methods: ['POST'])]
     public function createAction(Request $request): array|RedirectResponse
     {
         $entity = new Renner();
@@ -123,9 +112,9 @@ class RennerController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/delete", name="admin_renner_delete", methods={"POST"})
      * @param mixed $id
      */
+    #[Route(path: '/{id}/delete', name: 'admin_renner_delete', methods: ['POST'])]
     public function deleteAction(Request $request, $id): RedirectResponse
     {
         $form = $this->createDeleteForm($id);

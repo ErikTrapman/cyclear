@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\Seizoen;
 use App\Form\SeizoenType;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -14,46 +13,37 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Seizoen controller.
- *
- * @Route("/admin/seizoen")
  */
+#[Route(path: '/admin/seizoen')]
 class SeizoenController extends AbstractController
 {
     public function __construct(private readonly ManagerRegistry $doctrine)
     {
     }
 
-    /**
-     * @Route("/", name="admin_seizoen")
-     * @Template()
-     */
-    public function indexAction(): array
+    #[Route(path: '/', name: 'admin_seizoen')]
+    public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
         $entities = $em->getRepository(Seizoen::class)->findAll();
 
-        return ['entities' => $entities];
+        return $this->render('Admin/Seizoen/index.html.twig', ['entities' => $entities]);
     }
 
-    /**
-     * @Route("/new", name="admin_seizoen_new")
-     * @Template()
-     */
-    public function newAction(): array
+    #[Route(path: '/new', name: 'admin_seizoen_new')]
+    public function newAction(): \Symfony\Component\HttpFoundation\Response
     {
         $entity = new Seizoen();
         $form = $this->createForm(SeizoenType::class, $entity);
 
-        return [
+        return $this->render('Admin/Seizoen/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
-        ];
+        ]);
     }
 
-    /**
-     * @Route("/create", name="admin_seizoen_create", methods={"POST"})
-     */
+    #[Route(path: '/create', name: 'admin_seizoen_create', methods: ['POST'])]
     public function createAction(Request $request): array|RedirectResponse
     {
         $entity = new Seizoen();
@@ -83,11 +73,10 @@ class SeizoenController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_seizoen_edit")
-     * @Template()
      * @param mixed $id
      */
-    public function editAction($id): array
+    #[Route(path: '/{id}/edit', name: 'admin_seizoen_edit')]
+    public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -100,17 +89,17 @@ class SeizoenController extends AbstractController
         $editForm = $this->createForm(SeizoenType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return [
+        return $this->render('Admin/Seizoen/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        ];
+        ]);
     }
 
     /**
-     * @Route("/{id}/update", name="admin_seizoen_update", methods={"POST"})
      * @param mixed $id
      */
+    #[Route(path: '/{id}/update', name: 'admin_seizoen_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): array|RedirectResponse
     {
         $em = $this->doctrine->getManager();
@@ -143,9 +132,9 @@ class SeizoenController extends AbstractController
     /**
      * Deletes a Seizoen entity.
      *
-     * @Route("/{id}/delete", name="admin_seizoen_delete", methods={"POST"})
      * @param mixed $id
      */
+    #[Route(path: '/{id}/delete', name: 'admin_seizoen_delete', methods: ['POST'])]
     public function deleteAction(Request $request, $id): RedirectResponse
     {
         $form = $this->createDeleteForm($id);

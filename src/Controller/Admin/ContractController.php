@@ -9,16 +9,14 @@ use App\Form\Filter\RennerIdFilterType;
 use App\Repository\ContractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Contract controller.
- *
- * @Route("/admin/contract")
  */
+#[Route(path: '/admin/contract')]
 class ContractController extends AbstractController
 {
     public function __construct(
@@ -28,11 +26,8 @@ class ContractController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/", name="admin_contract")
-     * @Template()
-     */
-    public function indexAction(Request $request): array
+    #[Route(path: '/', name: 'admin_contract')]
+    public function indexAction(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -56,27 +51,22 @@ class ContractController extends AbstractController
             $entities, $request->query->get('page', 1), 20
         );
 
-        return ['entities' => $pagination, 'filter' => $filter->createView()];
+        return $this->render('Admin/Contract/index.html.twig', ['entities' => $pagination, 'filter' => $filter->createView()]);
     }
 
-    /**
-     * @Route("/new", name="admin_contract_new")
-     * @Template()
-     */
-    public function newAction(): array
+    #[Route(path: '/new', name: 'admin_contract_new')]
+    public function newAction(): \Symfony\Component\HttpFoundation\Response
     {
         $entity = new Contract();
         $form = $this->createForm(ContractType::class, $entity);
 
-        return [
+        return $this->render('Admin/Contract/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
-        ];
+        ]);
     }
 
-    /**
-     * @Route("/create", name="admin_contract_create", methods={"POST"})
-     */
+    #[Route(path: '/create', name: 'admin_contract_create', methods: ['POST'])]
     public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
         $entity = new Contract();
@@ -98,11 +88,10 @@ class ContractController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_contract_edit")
-     * @Template()
      * @param mixed $id
      */
-    public function editAction($id): array
+    #[Route(path: '/{id}/edit', name: 'admin_contract_edit')]
+    public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -115,18 +104,17 @@ class ContractController extends AbstractController
         $seizoen = $em->getRepository(Seizoen::class)->getCurrent();
         $editForm = $this->createForm(ContractType::class, $entity, ['seizoen' => $seizoen]);
 
-        return [
+        return $this->render('Admin/Contract/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
-        ];
+        ]);
     }
 
     /**
-     * @Route("/{id}/update", name="admin_contract_update", methods={"POST"})
-     * @Template("admin/contract/edit.html.twig")
      * @param mixed $id
      */
-    public function updateAction(Request $request, $id)
+    #[Route(path: '/{id}/update', name: 'admin_contract_update', methods: ['POST'])]
+    public function updateAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -148,9 +136,9 @@ class ContractController extends AbstractController
             return $this->redirect($this->generateUrl('admin_contract_edit', ['id' => $id]));
         }
 
-        return [
+        return $this->render('admin/contract/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
-        ];
+        ]);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Tests\CQRanking\Parser\RecentRaces;
 
-use App\CQRanking\Parser\Crawler\CrawlerManager;
 use App\CQRanking\Parser\RecentRaces\RecentRacesParser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
