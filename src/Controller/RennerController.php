@@ -20,6 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -31,39 +32,40 @@ use Symfony\Component\Routing\Annotation\Route;
 class RennerController extends AbstractController
 {
     public function __construct(
-        private readonly PaginatorInterface $paginator,
+        private readonly PaginatorInterface  $paginator,
         private readonly SerializerInterface $serializer,
-        private readonly RennerRepository $rennerRepository,
-        private readonly TransferRepository $transferRepository,
-        private readonly UitslagRepository $uitslagRepository,
-        private readonly SeizoenRepository $seizoenRepository,
-        private readonly ManagerRegistry $doctrine,
-    ) {
+        private readonly RennerRepository    $rennerRepository,
+        private readonly TransferRepository  $transferRepository,
+        private readonly UitslagRepository   $uitslagRepository,
+        private readonly SeizoenRepository   $seizoenRepository,
+        private readonly ManagerRegistry     $doctrine,
+    )
+    {
     }
 
     #[Route(path: '/{seizoen}/renners.{_format}', name: 'rider_index', options: ['_format' => 'json|html', 'expose' => true], defaults: ['_format' => 'html'])]
     #[Route(path: '/api/v1/{seizoen}/riders.{_format}', name: 'api_season_rider_index', options: ['_format' => 'json'], defaults: ['_format' => 'json'])]
-    public function indexAction(Request $request, #[MapEntity(expr: 'repository.findBySlug(seizoen)')] Seizoen $seizoen): Response
+    public function indexAction(Request $request, Seizoen $seizoen): Response
     {
-        $exclude = $request->query->get('excludeWithTeam') === 'true';
-        $qb = $this->rennerRepository->getRennersWithPuntenQueryBuilder($seizoen, $exclude);
-
-        $this->appendQuery($qb, $this->assertArray($request->query->get('filter'), "/\s+/"), ['r.naam']);
-
-        $pagination = $this->paginator->paginate($qb, (int)$request->query->get('page', 1), 20);
-
-        $ret = [];
-        foreach ($pagination as $r) {
-            $ret[] = (new RiderSearchView())->serialize($r);
-        }
-        $pagination->setItems($ret);
-        $entities = $this->serializer->serialize($pagination, 'json');
-
         if ('json' === $request->getRequestFormat()) {
-            return $this->render('Renner/index.html.twig');
+            $exclude = $request->query->get('excludeWithTeam') === 'true';
+            $qb = $this->rennerRepository->getRennersWithPuntenQueryBuilder($seizoen, $exclude);
+
+            $this->appendQuery($qb, $this->assertArray($request->query->get('filter'), "/\s+/"), ['r.naam']);
+
+            $pagination = $this->paginator->paginate($qb, (int)$request->query->get('page', 1), 20);
+
+            $ret = [];
+            foreach ($pagination as $r) {
+                $ret[] = (new RiderSearchView())->serialize($r);
+            }
+            $pagination->setItems($ret);
+
+            $entities = $this->serializer->serialize($pagination, 'json');
+            return new JsonResponse($entities);
         }
 
-        return $this->render('Renner/index.html.twig', ['seizoen' => $seizoen]);
+        return $this->render('renner/index.html.twig', ['seizoen' => $seizoen]);
     }
 
     #[Route(path: '/renners/get.{_format}', name: 'get_riders', options: ['_format' => 'json'], defaults: ['_format' => 'json'])]
@@ -82,8 +84,7 @@ class RennerController extends AbstractController
     }
 
     #[Route(path: '/{seizoen}/renner/{renner}', name: 'renner_show', options: ['expose' => true])]
-    public function showAction(Request $request, #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen,
-                               #[MapEntity(mapping: ['renner' => 'slug'])] Renner $renner): Response
+    public function showAction(Request $request, Seizoen $seizoen, #[MapEntity(mapping: ['renner' => 'slug'])] Renner $renner): Response
     {
         $transfers = $this->transferRepository->findByRenner($renner, $seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER]);
         $uitslagen = $this->uitslagRepository->getPuntenForRenner($renner, $seizoen, true);
@@ -107,7 +108,7 @@ class RennerController extends AbstractController
             ];
         }
 
-        return $this->render('Renner/show.html.twig', [
+        return $this->render('renner/show.html.twig', [
             'seizoen' => $seizoen,
             'renner' => $renner,
             'transfers' => $transfers,

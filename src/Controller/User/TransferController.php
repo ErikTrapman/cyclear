@@ -22,19 +22,24 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Transfer controller.
  */
-#[Route(path: '/user/{seizoen}/transfer')]
 class TransferController extends AbstractController
 {
     public function __construct(
-        private readonly ManagerRegistry $doctrine,
+        private readonly ManagerRegistry  $doctrine,
         private readonly RennerRepository $rennerRepository,
-        private readonly PloegRepository $ploegRepository,
-    ) {
+        private readonly PloegRepository  $ploegRepository,
+    )
+    {
     }
 
-    #[Route(path: '/ploeg/{id}/renner/{renner}', name: 'user_transfer')]
-    public function indexAction(UserManager $userManager, TransferManager $transferManager, Request $request, #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen, Ploeg $ploeg,
-                                #[MapEntity(mapping: ['renner' => 'slug'])] Renner $renner): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/user/{seizoen}/transfer/ploeg/{id}/renner/{renner}', name: 'user_transfer')]
+    public function indexAction(
+        UserManager                                        $userManager,
+        TransferManager                                    $transferManager,
+        Request                                            $request,
+        Seizoen                                            $seizoen,
+        Ploeg                                              $ploeg,
+        #[MapEntity(mapping: ['renner' => 'slug'])] Renner $renner): \Symfony\Component\HttpFoundation\Response
     {
         if (!$userManager->isOwner($this->getUser(), $ploeg)) {
             throw new AccessDeniedHttpException('Dit is niet jouw ploeg');
@@ -69,13 +74,13 @@ class TransferController extends AbstractController
                     $transferManager->doUserTransfer($ploeg, $renner, $form->get('renner_in')->getData(), $seizoen, $form->get('userComment')->getData());
                 }
                 $this->doctrine->getManager()->flush();
-                return $this->render('User/Transfer/index.html.twig');
+                return $this->render('user/transfer/index.html.twig');
             }
         }
         $transferInfo = $transferManager->getTtlTransfersDoneByPloeg($ploeg);
         $ttlTransfersAtm = $transferManager->getTtlTransfersAtm($seizoen);
         return
-            $this->render('User/Transfer/index.html.twig', [
+            $this->render('user/transfer/index.html.twig', [
                 'ploeg' => $ploeg,
                 'renner' => $renner,
                 'form' => $form->createView(),

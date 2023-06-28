@@ -14,7 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/{seizoen}/uitslag')]
 class UitslagController extends AbstractController
 {
     public function __construct(
@@ -24,8 +23,8 @@ class UitslagController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/periodes/{periode}', name: 'uitslag_periodes')]
-    public function periodesAction(#[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen, Periode $periode): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/{seizoen}/uitslag/periodes/{periode}', name: 'uitslag_periodes')]
+    public function periodesAction(Seizoen $seizoen, Periode $periode): \Symfony\Component\HttpFoundation\Response
     {
         $list = $this->uitslagRepository->getPuntenByPloegForPeriode($periode, $seizoen);
         $periodes = $this->periodeRepository->findBy(['seizoen' => $seizoen]);
@@ -51,7 +50,7 @@ class UitslagController extends AbstractController
             $zegesInPeriode[$teamResult[0]->getId()] = $teamResult['freqByPos'];
         }
 
-        return $this->render('Uitslag/periodes.html.twig', [
+        return $this->render('uitslag/periodes.html.twig', [
             'list' => $list,
             'seizoen' => $seizoen,
             'periodes' => $periodes,
@@ -62,29 +61,29 @@ class UitslagController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/posities/{positie}', name: 'uitslag_posities')]
-    public function positiesAction(Request $request, #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen, $positie = 1): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/{seizoen}/uitslag/posities/{positie}', name: 'uitslag_posities')]
+    public function positiesAction(Request $request, Seizoen $seizoen, $positie = 1): \Symfony\Component\HttpFoundation\Response
     {
         $list = $this->uitslagRepository->getCountForPosition($seizoen, $positie);
-        return $this->render('Uitslag/posities.html.twig', ['list' => $list, 'seizoen' => $seizoen, 'positie' => $positie]);
+        return $this->render('uitslag/posities.html.twig', ['list' => $list, 'seizoen' => $seizoen, 'positie' => $positie]);
     }
+//
+//    #[Route(path: '/{seizoen}/uitslag/draft-klassement', name: 'uitslag_draft')]
+//    public function viewByDraftTransferAction(Seizoen $seizoen): array
+//    {
+//        $list = $this->uitslagRepository->getPuntenByPloegForDraftTransfers($seizoen);
+//        return ['list' => $list, 'seizoen' => $seizoen];
+//    }
+//
+//    #[Route(path: '/{seizoen}/uitslag/transfer-klassement', name: 'uitslag_transfers')]
+//    public function viewByUserTransferAction(Seizoen $seizoen): array
+//    {
+//        $list = $this->uitslagRepository->getPuntenByPloegForUserTransfers($seizoen);
+//        return ['list' => $list, 'seizoen' => $seizoen];
+//    }
 
-    #[Route(path: '/draft-klassement', name: 'uitslag_draft')]
-    public function viewByDraftTransferAction(#[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen): array
-    {
-        $list = $this->uitslagRepository->getPuntenByPloegForDraftTransfers($seizoen);
-        return ['list' => $list, 'seizoen' => $seizoen];
-    }
-
-    #[Route(path: '/transfer-klassement', name: 'uitslag_transfers')]
-    public function viewByUserTransferAction(#[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen): array
-    {
-        $list = $this->uitslagRepository->getPuntenByPloegForUserTransfers($seizoen);
-        return ['list' => $list, 'seizoen' => $seizoen];
-    }
-
-    #[Route(path: '/overzicht', name: 'uitslag_overview')]
-    public function overviewAction(Request $request, #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/{seizoen}/uitslag/overzicht', name: 'uitslag_overview')]
+    public function overviewAction(Request $request, Seizoen $seizoen): \Symfony\Component\HttpFoundation\Response
     {
         $transfer = $this->uitslagRepository->getPuntenByPloegForUserTransfers($seizoen);
 
@@ -115,7 +114,7 @@ class UitslagController extends AbstractController
 
         $bestTransfers = array_slice($this->uitslagRepository->getBestTransfers($seizoen), 0, 50);
 
-        return $this->render('Uitslag/overview.html.twig', [
+        return $this->render('uitslag/overview.html.twig', [
             'seizoen' => $seizoen,
             'transfer' => $transfer,
             'shadowgained' => $gained,

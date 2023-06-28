@@ -18,10 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Ploeg controller.
- */
-#[Route(path: '/{seizoen}/ploeg')]
 class PloegController extends AbstractController
 {
     public function __construct(
@@ -34,8 +30,8 @@ class PloegController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/{id}/show', name: 'ploeg_show')]
-    public function showAction(Request $request, #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen, Ploeg $id): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/{seizoen}/ploeg/{id}/show', name: 'ploeg_show')]
+    public function showAction(Request $request, Seizoen $seizoen, Ploeg $id): \Symfony\Component\HttpFoundation\Response
     {
         $entity = $id;
         $renners = $this->ploegRepository->getRennersWithPunten($entity);
@@ -70,7 +66,7 @@ class PloegController extends AbstractController
             }
         }
 
-        return $this->render('Ploeg/show.html.twig', [
+        return $this->render('ploeg/show.html.twig', [
             'entity' => $entity,
             'renners' => $renners,
             'uitslagen' => $uitslagen,
