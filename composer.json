@@ -133,11 +133,5 @@
             "require": "5.4.*",
             "docker": false
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "git@github.com:ErikTrapman/Surf.git"
-        }
-    ]
+    }
 }
