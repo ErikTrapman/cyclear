@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="nl" ng-app="Cyclear">
+<html lang="nl">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,8 +23,7 @@
     {% endblock %}
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}"/>
     <script type="text/javascript">
-        var seizoenSlug = {% if app.request.attributes.has('seizoen') %}'{{ app.request.attributes.get('seizoen').slug }}'
-        {% else %}'null'{% endif %};
+        var seizoenSlug = {% if app.request.attributes.has('seizoen') %}'{{ app.request.attributes.get('seizoen').slug }}'{% else %}'null'{% endif %};
 
     </script>
 </head>

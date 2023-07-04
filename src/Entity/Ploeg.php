@@ -3,14 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
 
 /**
  * App\Entity\Ploeg
  *
  * @ORM\Table(name="ploeg")
  * @ORM\Entity(repositoryClass="App\Repository\PloegRepository")
- * @Serializer\ExclusionPolicy("all")
  */
 class Ploeg
 {
@@ -18,9 +16,6 @@ class Ploeg
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @Serializer\Expose
-     * @Serializer\Groups({"small","medium"})
      */
     private $id;
 
@@ -31,17 +26,11 @@ class Ploeg
 
     /**
      * @ORM\Column(name="naam", type="string", length=255)
-     *
-     * @Serializer\Expose
-     * @Serializer\Groups({"small","medium"})
      */
     private $naam;
 
     /**
      * @ORM\Column(name="afkorting", type="string", length=6)
-     *
-     * @Serializer\Expose
-     * @Serializer\Groups({"small","medium"})
      */
     private $afkorting;
 
@@ -115,10 +104,6 @@ class Ploeg
         return $this->getNaam() . ' [' . $this->getSeizoen()->getIdentifier() . ']';
     }
 
-    /**
-     * @Serializer\Groups({"small","medium"})
-     * @Serializer\VirtualProperty()
-     */
     public function getPunten()
     {
         return $this->punten;

@@ -14,8 +14,6 @@
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.11",
         "friendsofsymfony/user-bundle": "^3",
-        "jms/serializer": "^3.18",
-        "jms/serializer-bundle": "^5.0",
         "knplabs/knp-paginator-bundle": "^5",
         "stof/doctrine-extensions-bundle": "*",
         "symfony/acl-bundle": "^2.3",

@@ -13,12 +13,11 @@ use App\Repository\TransferRepository;
 use App\Repository\UitslagRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -31,7 +30,6 @@ class RennerController extends AbstractController
 {
     public function __construct(
         private readonly PaginatorInterface $paginator,
-        private readonly SerializerInterface $serializer,
         private readonly RennerRepository $rennerRepository,
         private readonly TransferRepository $transferRepository,
         private readonly UitslagRepository $uitslagRepository,
@@ -71,7 +69,7 @@ class RennerController extends AbstractController
         foreach ($entities->getItems() as $item) {
             $ret[] = (new BloodHoundRiderView())->serialize($item);
         }
-        return new Response($this->serializer->serialize($ret, 'json', SerializationContext::create()->setGroups(['small'])));
+        return new JsonResponse($ret);
     }
 
     #[Route(path: '/{seizoen}/renner/{renner}', name: 'renner_show', options: ['expose' => true])]
