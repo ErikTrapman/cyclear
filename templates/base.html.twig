@@ -21,8 +21,6 @@
     {% block javascripts %}
         <script type="text/javascript" src="{{ asset('js/cyclear.js') }}"></script>
     {% endblock %}
-    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}"/>
     <script type="text/javascript">
         var seizoenSlug = {% if app.request.attributes.has('seizoen') %}'{{ app.request.attributes.get('seizoen').slug }}'

@@ -35,7 +35,7 @@ class PeriodeController extends AbstractController
             $entities, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
 
-        return $this->render('Admin/Periode/index.html.twig', ['entities' => $entities]);
+        return $this->render('admin/periode/index.html.twig', ['entities' => $entities]);
     }
 
     #[Route(path: '/new', name: 'admin_periode_new')]
@@ -44,7 +44,7 @@ class PeriodeController extends AbstractController
         $entity = new Periode();
         $form = $this->createForm(PeriodeType::class, $entity);
 
-        return $this->render('Admin/Periode/new.html.twig', [
+        return $this->render('admin/periode/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -88,7 +88,7 @@ class PeriodeController extends AbstractController
         $editForm = $this->createForm(PeriodeType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('Admin/Periode/edit.html.twig', [
+        return $this->render('admin/periode/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

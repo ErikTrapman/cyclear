@@ -43,29 +43,23 @@ class RennerController extends AbstractController
     {
     }
 
-    #[Route(path: '/{seizoen}/renners.{_format}', name: 'rider_index', options: ['_format' => 'json|html', 'expose' => true], defaults: ['_format' => 'html'])]
-    #[Route(path: '/api/v1/{seizoen}/riders.{_format}', name: 'api_season_rider_index', options: ['_format' => 'json'], defaults: ['_format' => 'json'])]
+    #[Route(path: '/{seizoen}/renners', name: 'rider_index', methods: ['GET', 'POST'])]
     public function indexAction(Request $request, Seizoen $seizoen): Response
     {
-        if ('json' === $request->getRequestFormat()) {
-            $exclude = $request->query->get('excludeWithTeam') === 'true';
-            $qb = $this->rennerRepository->getRennersWithPuntenQueryBuilder($seizoen, $exclude);
+        $exclude = $request->query->get('excludeWithTeam') === 'on';
+        $qb = $this->rennerRepository->getRennersWithPuntenQueryBuilder($seizoen, $exclude);
 
-            $this->appendQuery($qb, $this->assertArray($request->query->get('filter'), "/\s+/"), ['r.naam']);
+        $this->appendQuery($qb, $this->assertArray($request->query->get('filter'), "/\s+/"), ['r.naam']);
 
-            $pagination = $this->paginator->paginate($qb, (int)$request->query->get('page', 1), 20);
+        $pagination = $this->paginator->paginate($qb, (int)$request->query->get('page', 1), 20);
 
-            $ret = [];
-            foreach ($pagination as $r) {
-                $ret[] = (new RiderSearchView())->serialize($r);
-            }
-            $pagination->setItems($ret);
-
-            $entities = $this->serializer->serialize($pagination, 'json');
-            return new JsonResponse($entities);
+        $ret = [];
+        foreach ($pagination as $r) {
+            $ret[] = (new RiderSearchView())->serialize($r);
         }
+        $pagination->setItems($ret);
 
-        return $this->render('renner/index.html.twig', ['seizoen' => $seizoen]);
+        return $this->render('renner/index.html.twig', ['seizoen' => $seizoen, 'pagination' => $pagination]);
     }
 
     #[Route(path: '/renners/get.{_format}', name: 'get_riders', options: ['_format' => 'json'], defaults: ['_format' => 'json'])]
@@ -121,7 +115,7 @@ class RennerController extends AbstractController
     }
 
     #[Route(path: '/{seizoen}/download', name: 'renner_download')]
-    public function csvDownloadAction(Request $request, #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen): StreamedResponse
+    public function csvDownloadAction(Request $request, Seizoen $seizoen): StreamedResponse
     {
         $q = sprintf('SELECT r.id, r.naam, (SELECT SUM(rennerPunten) FROM uitslag u
             INNER JOIN wedstrijd w ON u.wedstrijd_id = w.id WHERE u.renner_id = r.id AND w.seizoen_id = %d ) AS pts

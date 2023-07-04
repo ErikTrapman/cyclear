@@ -33,8 +33,5 @@ fos_user_security_logout:
     prefix: /
     path: /logout
 
-fos_js_routing:
-    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing-sf4.xml"
-
 _welcome:
     path: /

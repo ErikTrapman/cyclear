@@ -28,7 +28,7 @@ class UitslagTypeController extends AbstractController
 
         $entities = $em->getRepository(UitslagType::class)->findAll();
 
-        return $this->render('Admin/Uitsla1_Type/index.html.twig', ['entities' => $entities]);
+        return $this->render('admin/uitslag_type/index.html.twig', ['entities' => $entities]);
     }
 
     #[Route(path: '/new', name: 'admin_uitslagtype_new')]
@@ -37,7 +37,7 @@ class UitslagTypeController extends AbstractController
         $entity = new UitslagType();
         $form = $this->createForm(UitslagTypeType::class, $entity);
 
-        return $this->render('Admin/Uitsla1_Type/new.html.twig', [
+        return $this->render('admin/uitslag_type/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -81,7 +81,7 @@ class UitslagTypeController extends AbstractController
         $editForm = $this->createForm(UitslagTypeType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('Admin/Uitsla1_Type/edit.html.twig', [
+        return $this->render('admin/uitslag_type/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

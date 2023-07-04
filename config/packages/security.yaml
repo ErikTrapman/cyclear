@@ -19,6 +19,7 @@ security:
             security: false
         main:
             pattern: ^/
+            user_checker: fos_user.user_checker
             form_login:
                 provider: fos_userbundle
                 login_path:  /login-user/login

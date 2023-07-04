@@ -49,7 +49,7 @@ class RennerController extends AbstractController
         $pagination = $this->paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
-        return $this->render('Admin/Renner/index.html.twig', ['pagination' => $pagination, 'filter' => $filter->createView()]);
+        return $this->render('admin/renner/index.html.twig', ['pagination' => $pagination, 'filter' => $filter->createView()]);
     }
 
     /**
@@ -76,7 +76,7 @@ class RennerController extends AbstractController
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('Admin/Renner/edit.html.twig', ['entity' => $entity, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
+        return $this->render('admin/renner/edit.html.twig', ['entity' => $entity, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
     }
 
     public function createDeleteForm($id): \Symfony\Component\Form\FormInterface
@@ -90,7 +90,7 @@ class RennerController extends AbstractController
         $entity = new Renner();
         $form = $this->createForm(RennerType::class, $entity);
 
-        return $this->render('Admin/Renner/new.html.twig', ['entity' => $entity, 'form' => $form->createView()]);
+        return $this->render('admin/renner/new.html.twig', ['entity' => $entity, 'form' => $form->createView()]);
     }
 
     #[Route(path: '/create', name: 'admin_renner_create', methods: ['POST'])]

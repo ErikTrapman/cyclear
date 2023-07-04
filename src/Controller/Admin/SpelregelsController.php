@@ -28,7 +28,7 @@ class SpelregelsController extends AbstractController
 
         $entities = $em->getRepository(Spelregels::class)->findAll();
 
-        return $this->render('Admin/Spelregels/index.html.twig', ['entities' => $entities]);
+        return $this->render('admin/spelregels/index.html.twig', ['entities' => $entities]);
     }
 
     #[Route(path: '/new', name: 'admin_spelregels_new')]
@@ -37,7 +37,7 @@ class SpelregelsController extends AbstractController
         $entity = new Spelregels();
         $form = $this->createForm(SpelregelsType::class, $entity);
 
-        return $this->render('Admin/Spelregels/new.html.twig', [
+        return $this->render('admin/spelregels/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -81,7 +81,7 @@ class SpelregelsController extends AbstractController
         $editForm = $this->createForm(SpelregelsType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('Admin/Spelregels/edit.html.twig', [
+        return $this->render('admin/spelregels/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

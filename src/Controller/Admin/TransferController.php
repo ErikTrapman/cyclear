@@ -42,13 +42,13 @@ class TransferController extends AbstractController
         );
         // $entities = $query->getResult();
 
-        return $this->render('Admin/Transfer/index.html.twig', ['entities' => $pagination]);
+        return $this->render('admin/transfer/index.html.twig', ['entities' => $pagination]);
     }
 
     #[Route(path: '/new', name: 'admin_transfer_new')]
     public function newAction(): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('Admin/Transfer/new.html.twig');
+        return $this->render('admin/transfer/new.html.twig');
     }
 
     #[Route(path: '/new-draft', name: 'admin_transfer_new_draft')]
@@ -67,7 +67,7 @@ class TransferController extends AbstractController
                 return $this->redirect($this->generateUrl('admin_transfer'));
             }
         }
-        return $this->render('Admin/Transfer/newDraft.html.twig', ['form' => $form->createView()]);
+        return $this->render('admin/transfer/new_draft.html.twig', ['form' => $form->createView()]);
     }
 
     #[Route(path: '/new-exchange', name: 'admin_transfer_new_exchange')]
@@ -88,7 +88,7 @@ class TransferController extends AbstractController
                 return $this->redirect($this->generateUrl('admin_transfer'));
             }
         }
-        return $this->render('Admin/Transfer/newExchange.html.twig', ['form' => $form->createView()]);
+        return $this->render('admin/transfer/new_exchange.html.twig', ['form' => $form->createView()]);
     }
 
     private function getTransferForm(Transfer $entity): \Symfony\Component\Form\FormInterface
@@ -112,7 +112,7 @@ class TransferController extends AbstractController
 
         $editForm = $this->createForm(TransferEditType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
-        return $this->render('Admin/Transfer/edit.html.twig', [
+        return $this->render('admin/transfer/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

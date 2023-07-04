@@ -11,6 +11,6 @@ class DefaultController extends AbstractController
     #[Route(path: '/', name: 'admin_index')]
     public function indexAction(\Symfony\Component\HttpFoundation\Request $request): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('Admin/Default/index.html.twig');
+        return $this->render('admin/default/index.html.twig');
     }
 }

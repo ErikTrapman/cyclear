@@ -88,7 +88,7 @@ class UitslagCreateType extends AbstractType
             if (null === $data) {
                 return;
             }
-            $postData = $request->request->get($form->getName());
+            $postData = $_POST[$form->getName()]; //$request->request->get($form->getName());
             if (array_key_exists('uitslag', $postData)) {
                 $wedstrijd = $data['wedstrijd'];
                 foreach ($data['uitslag'] as $uitslag) {

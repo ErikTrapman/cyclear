@@ -34,7 +34,7 @@ class NieuwsController extends AbstractController
             $entities, $request->query->get('page', 1), 20
         );
 
-        return $this->render('Admin/Nieuws/index.html.twig', ['entities' => $pagination]);
+        return $this->render('admin/nieuws/index.html.twig', ['entities' => $pagination]);
     }
 
     #[Route(path: '/new', name: 'admin_nieuws_new')]
@@ -43,7 +43,7 @@ class NieuwsController extends AbstractController
         $entity = new Nieuws();
         $form = $this->createForm(NieuwsType::class, $entity);
 
-        return $this->render('Admin/Nieuws/new.html.twig', [
+        return $this->render('admin/nieuws/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -87,7 +87,7 @@ class NieuwsController extends AbstractController
         $editForm = $this->createForm(NieuwsType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('Admin/Nieuws/edit.html.twig', [
+        return $this->render('admin/nieuws/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

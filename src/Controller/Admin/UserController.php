@@ -31,7 +31,7 @@ class UserController extends AbstractController
 
         $entities = $em->getRepository(User::class)->findAll();
 
-        return $this->render('Admin/User/index.html.twig', ['entities' => $entities]);
+        return $this->render('admin/user/index.html.twig', ['entities' => $entities]);
     }
 
     #[Route(path: '/new', name: 'admin_user_new')]
@@ -39,7 +39,7 @@ class UserController extends AbstractController
     {
         $form = $this->createForm(UserType::class);
 
-        return $this->render('Admin/User/new.html.twig', [
+        return $this->render('admin/user/new.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -82,7 +82,7 @@ class UserController extends AbstractController
         }
         $editForm = $this->createForm(UserEditType::class, $entity);
 
-        return $this->render('Admin/User/edit.html.twig', [
+        return $this->render('admin/user/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
         ]);

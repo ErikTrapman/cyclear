@@ -37,7 +37,7 @@ class UitslagController extends AbstractController
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         $seizoen = $em->getRepository(Seizoen::class)->getCurrent();
-        return $this->render('Admin/Uitslag/index.html.twig', ['pagination' => $pagination, 'seizoen' => $seizoen]);
+        return $this->render('admin/uitslag/index.html.twig', ['pagination' => $pagination, 'seizoen' => $seizoen]);
     }
 
     #[Route(path: '/{uitslag}/edit', name: 'admin_uitslag_edit')]
@@ -54,7 +54,7 @@ class UitslagController extends AbstractController
             }
         }
 
-        return $this->render('Admin/Uitslag/edit.html.twig', ['form' => $form->createView(), 'entity' => $uitslag]);
+        return $this->render('admin/uitslag/edit.html.twig', ['form' => $form->createView(), 'entity' => $uitslag]);
     }
 
     #[Route(path: '/new', name: 'admin_uitslag_new')]
@@ -72,7 +72,7 @@ class UitslagController extends AbstractController
                 return $this->redirect($this->generateUrl('admin_uitslag'));
             }
         }
-        return $this->render('Admin/Uitslag/new.html.twig', ['form' => $form->createView()]);
+        return $this->render('admin/uitslag/new.html.twig', ['form' => $form->createView()]);
     }
 
     #[Route(path: '/create', name: 'admin_uitslag_create')]
@@ -87,8 +87,8 @@ class UitslagController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $form->handleRequest($request);
             // Render the whole template including any layouts etc
-            $body = $this->twig->render('admin/uitslag/_ajaxTemplate.html.twig', ['form' => $form->createView()]);
-            return $this->render('Admin/Uitslag/create.html.twig');
+            // $body = $this->twig->render('admin/uitslag/_ajaxTemplate.html.twig', ['form' => $form->createView()]);
+            return $this->render('admin/uitslag/_ajaxTemplate.html.twig', ['form' => $form->createView()]);
         }
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
@@ -109,6 +109,6 @@ class UitslagController extends AbstractController
             $em->flush();
             return $this->redirect($this->generateUrl('admin_uitslag_create'));
         }
-        return $this->render('Admin/Uitslag/create.html.twig', ['form' => $form->createView()]);
+        return $this->render('admin/uitslag/create.html.twig', ['form' => $form->createView()]);
     }
 }

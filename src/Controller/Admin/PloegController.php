@@ -52,7 +52,7 @@ class PloegController extends AbstractController
         $entities = $this->paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
-        return $this->render('Admin/Ploeg/index.html.twig', ['entities' => $entities, 'filter' => $filter->createView()]);
+        return $this->render('admin/ploeg/index.html.twig', ['entities' => $entities, 'filter' => $filter->createView()]);
     }
 
     #[Route(path: '/new', name: 'admin_ploeg_new')]
@@ -61,7 +61,7 @@ class PloegController extends AbstractController
         $entity = new Ploeg();
         $form = $this->createForm(PloegType::class, $entity);
 
-        return $this->render('Admin/Ploeg/new.html.twig', [
+        return $this->render('admin/ploeg/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -107,7 +107,7 @@ class PloegController extends AbstractController
         $editForm = $this->createForm(PloegType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('Admin/Ploeg/edit.html.twig', [
+        return $this->render('admin/ploeg/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

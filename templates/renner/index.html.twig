@@ -5,7 +5,7 @@
         <h2>Renners {{ seizoen }}</h2>
     </div>
 
-    <div class="container" ng-controller="riderlistCtrl" ng-cloak>
+    <div class="container">
         <div class="row">
 
             <div class="col-lg-12">
@@ -13,49 +13,36 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Filter <a href="{{ path('renner_download', {seizoen: seizoen.slug}) }}"><span
-                                        class="glyphicon glyphicon-download-alt"></span></a></h3>
+                                    class="glyphicon glyphicon-download-alt"></span></a></h3>
                     </div>
                     <div class="panel-body">
 
-                        <form class="form-horizontal">
+                        <form class="form-horizontal" method="GET" action="{{ path('rider_index', {seizoen: seizoen.slug}) }}">
 
                             <div class="form-group">
                                 <label for="filter_naam" class="col-sm-2 control-label">Renner</label>
 
                                 <div class="col-sm-10">
-                                    <input class="form-control" id="filter_naam" type="text"
-                                           ng-model="filter.name"
-                                           placeholder="Zoek...">
+                                    <input class="form-control" name="filter" type="text" value="{{ app.request.query.get('filter') }}" placeholder="Zoek...">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" id="filter_hasteam"
-                                                   ng-model="filter.excludeWithTeam">Beschikbaar
+                                            <input type="checkbox" {% if app.request.query.get('excludeWithTeam') is same as('on') %}checked{% endif%} name="excludeWithTeam">Beschikbaar
                                         </label>
                                     </div>
                                 </div>
                             </div>
+                            <input type="submit" class="btn btn-default" value="Zoek">
                         </form>
                     </div>
                 </div>
-                {% verbatim %}
+
                 <div id="navigation">
-                    <ul class="pagination" ng-if="true == initialLoad && pages.length > 1">
-                        <li ng-class="{ disabled: 1 == pagination.currentPage}">
-                            <a ng-href="#" ng-click="setPage(pagination.currentPage - 1)">&laquo;&nbsp;Previous</a></li>
-                        <li ng-class="{ active: 1 == pagination.currentPage }">
-                            <a ng-href="#" ng-click="setPage(1)">1</a></li>
-                        <li ng-repeat="page in pagination.options"
-                            ng-class="{ active: page == pagination.currentPage }">
-                            <a ng-href="#" ng-click="setPage(page)">{{ page }}</a>
-                        </li>
-                        <li><a ng-href="#" ng-click="setPage(pagination.currentPage + 1)">Next&nbsp;&raquo;</a></li>
-                    </ul>
+                    {{ knp_pagination_render(pagination, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'renner_index'}) }}
                 </div>
-                {% endverbatim %}
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped">
@@ -65,25 +52,22 @@
                             <th>Ploeg</th>
                         </tr>
 
-                        <tr ng-repeat="r in riders">
-                            {% verbatim %}
-                    <td>
-                        <img ng-if="initialLoad" style="margin-right:3px; margin-bottom:2px;" width="16" height="16"
-                             ng-src="/icons/flags/16/{{ r.country.iso2|lowercase }}.png"
-                             alt="{{ r.country.name }}">
-                        <a ng-href="{{ getUrl(r.slug) }}">{{ r.naam }}</a>
-                    </td>
-                    <td>{{ r.punten }}</td>
-                    <td>{{ r.team }}</td>
-                    {% endverbatim %}
-                        </tr>
-
+                        {% for rider_search_view in pagination %}
+                            <tr>
+                                <td>
+                                    {% include "renner/_singleRow.html.twig" with {"renner": rider_search_view, "rennerPloeg": null, "seizoen": seizoen} %}
+                                </td>
+                                <td>{{ rider_search_view.punten }}</td>
+                                <td>{{ rider_search_view.team }}</td>
+                            </tr>
+                        {% endfor %}
                     </table>
                 </div>
 
+                <div id="navigation">
+                    {{ knp_pagination_render(pagination, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'renner_index'}) }}
+                </div>
             </div>
-
         </div>
-
     </div>
 {% endblock %}

@@ -31,7 +31,7 @@ class WedstrijdController extends AbstractController
         $pagination = $this->paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
-        return $this->render('Admin/Wedstrijd/index.html.twig', ['pagination' => $pagination]);
+        return $this->render('admin/wedstrijd/index.html.twig', ['pagination' => $pagination]);
     }
 
     #[Route(path: '/new', name: 'admin_wedstrijd_new')]
@@ -40,7 +40,7 @@ class WedstrijdController extends AbstractController
         $entity = new Wedstrijd();
         $form = $this->createForm(WedstrijdType::class, $entity);
 
-        return $this->render('Admin/Wedstrijd/new.html.twig', [
+        return $this->render('admin/wedstrijd/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -84,7 +84,7 @@ class WedstrijdController extends AbstractController
         $editForm = $this->createForm(WedstrijdType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('Admin/Wedstrijd/edit.html.twig', [
+        return $this->render('admin/wedstrijd/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

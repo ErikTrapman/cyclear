@@ -51,7 +51,7 @@ class ContractController extends AbstractController
             $entities, $request->query->get('page', 1), 20
         );
 
-        return $this->render('Admin/Contract/index.html.twig', ['entities' => $pagination, 'filter' => $filter->createView()]);
+        return $this->render('admin/contract/index.html.twig', ['entities' => $pagination, 'filter' => $filter->createView()]);
     }
 
     #[Route(path: '/new', name: 'admin_contract_new')]
@@ -60,7 +60,7 @@ class ContractController extends AbstractController
         $entity = new Contract();
         $form = $this->createForm(ContractType::class, $entity);
 
-        return $this->render('Admin/Contract/new.html.twig', [
+        return $this->render('admin/contract/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -104,7 +104,7 @@ class ContractController extends AbstractController
         $seizoen = $em->getRepository(Seizoen::class)->getCurrent();
         $editForm = $this->createForm(ContractType::class, $entity, ['seizoen' => $seizoen]);
 
-        return $this->render('Admin/Contract/edit.html.twig', [
+        return $this->render('admin/contract/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
         ]);

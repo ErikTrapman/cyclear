@@ -28,7 +28,7 @@ class SeizoenController extends AbstractController
 
         $entities = $em->getRepository(Seizoen::class)->findAll();
 
-        return $this->render('Admin/Seizoen/index.html.twig', ['entities' => $entities]);
+        return $this->render('admin/seizoen/index.html.twig', ['entities' => $entities]);
     }
 
     #[Route(path: '/new', name: 'admin_seizoen_new')]
@@ -37,7 +37,7 @@ class SeizoenController extends AbstractController
         $entity = new Seizoen();
         $form = $this->createForm(SeizoenType::class, $entity);
 
-        return $this->render('Admin/Seizoen/new.html.twig', [
+        return $this->render('admin/seizoen/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -89,7 +89,7 @@ class SeizoenController extends AbstractController
         $editForm = $this->createForm(SeizoenType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('Admin/Seizoen/edit.html.twig', [
+        return $this->render('admin/seizoen/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
