@@ -40,7 +40,7 @@ class PloegController extends AbstractController
         $config = $em->getConfiguration();
         $config->addFilter('naam', "App\Filter\Ploeg\PloegNaamFilter");
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $filter->handleRequest($request);
             // $data = $filter->get('user')->getData();
             if ($filter->isValid()) {

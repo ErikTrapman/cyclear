@@ -44,7 +44,7 @@ class GeneralPurposeSubscriber implements EventSubscriberInterface
     {
         $entity = $args->getObject();
         if ($entity instanceof Transfer) {
-            if (null !== $entity->getPloegNaar() && $entity->getTransferType() != Transfer::DRAFTTRANSFER) {
+            if (null !== $entity->getPloegNaar() && Transfer::DRAFTTRANSFER != $entity->getTransferType()) {
                 $inversion = $entity->getInversionTransfer();
                 $ploegNaar = $entity->getPloegNaar()->getAfkorting();
                 $rennerUit = null;

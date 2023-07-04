@@ -9,7 +9,7 @@ class PloegNaamFilter extends SQLFilter
 {
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias, $targetTable = '')
     {
-        if ($targetEntity->name != 'App\Entity\Ploeg') {
+        if ('App\Entity\Ploeg' != $targetEntity->name) {
             return '';
         }
         return $targetTableAlias . '.naam LIKE \'%' . trim($this->getParameter('naam'), "'") . '%\'';

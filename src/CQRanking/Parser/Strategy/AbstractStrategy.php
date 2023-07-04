@@ -11,14 +11,14 @@ abstract class AbstractStrategy implements ParserStrategyInterface
         $data = $crawler->filter($expr)->filter('tr')->each(function ($node, $i) {
             $returnValues = [];
             foreach ($node->filter('td') as $key => $currentResult) {
-                if ($key == 1) {
+                if (1 == $key) {
                     $pos = trim($currentResult->nodeValue, '.');
                     if (0 !== strcmp('leader', $pos) && !is_numeric($pos)) {
                         break;
                     }
                     $returnValues['pos'] = $pos;
                 }
-                if ($key == 3) {
+                if (3 == $key) {
                     $img = $currentResult->getElementsByTagName('img');
                     if ($img->length) {
                         $gif = $img->item(0)->getAttribute('src');
@@ -28,7 +28,7 @@ abstract class AbstractStrategy implements ParserStrategyInterface
                         $returnValues['nat'] = null;
                     }
                 }
-                if ($key == 5) {
+                if (5 == $key) {
                     $returnValues['name'] = $currentResult->nodeValue;
                     $hyperlink = $currentResult->getElementsByTagName('a');
                     $riderHref = $hyperlink->item(0)->getAttribute('href');
@@ -36,7 +36,7 @@ abstract class AbstractStrategy implements ParserStrategyInterface
                     $riderId = substr($riderHref, strpos($riderHref, '=') + 1);
                     $returnValues['cqranking_id'] = $riderId;
                 }
-                if ($key == 11) {
+                if (11 == $key) {
                     $returnValues['points'] = $currentResult->nodeValue;
                 }
             }

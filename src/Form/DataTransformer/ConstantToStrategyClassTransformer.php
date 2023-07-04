@@ -10,7 +10,7 @@ class ConstantToStrategyClassTransformer implements DataTransformerInterface
 {
     public function transform($value): ?string
     {
-        if ($value === null) {
+        if (null === $value) {
             return $value;
         }
         if ($value instanceof AbstractStrategy) {
@@ -21,7 +21,7 @@ class ConstantToStrategyClassTransformer implements DataTransformerInterface
 
     public function reverseTransform($value): ?AbstractStrategy
     {
-        if ($value === null) {
+        if (null === $value) {
             return null;
         }
         if (!class_exists($value)) {

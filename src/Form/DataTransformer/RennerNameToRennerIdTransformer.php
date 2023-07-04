@@ -16,7 +16,7 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface
 
     public function transform($value)
     {
-        if ($value === null) {
+        if (null === $value) {
             return '';
         }
         if ($value instanceof \App\Entity\Renner) {
@@ -27,7 +27,7 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface
 
     public function reverseTransform($value)
     {
-        if ($value === null) {
+        if (null === $value) {
             return '';
         }
         if (is_numeric($value)) {
@@ -37,7 +37,7 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface
         }
         $em = $this->em;
         $renner = $em->getRepository(Renner::class)->findOneByCQId($cqId);
-        if ($renner === null) {
+        if (null === $renner) {
             throw new TransformationFailedException('Renner ' . $value . ' niet gevonden');
         }
         return $renner;

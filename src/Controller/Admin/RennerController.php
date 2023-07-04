@@ -37,7 +37,7 @@ class RennerController extends AbstractController
         $filter = $this->createForm(RennerFilterType::class);
         $config = $em->getConfiguration();
         $config->addFilter('naam', "App\Filter\RennerNaamFilter");
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $filter->handleRequest($request);
             if ($filter->isValid()) {
                 if ($filter->get('naam')->getData()) {
@@ -68,7 +68,7 @@ class RennerController extends AbstractController
 
         $editForm = $this->createForm(RennerType::class, $entity);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $editForm->handleRequest($request);
             $em->persist($entity);
             $em->flush();

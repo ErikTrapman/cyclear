@@ -90,7 +90,7 @@ class UitslagController extends AbstractController
             // $body = $this->twig->render('admin/uitslag/_ajaxTemplate.html.twig', ['form' => $form->createView()]);
             return $this->render('admin/uitslag/_ajaxTemplate.html.twig', ['form' => $form->createView()]);
         }
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
             /** @var Wedstrijd $wedstrijd */
             $wedstrijd = $form->get('wedstrijd')->getData();

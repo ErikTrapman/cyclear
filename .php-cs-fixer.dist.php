@@ -29,7 +29,6 @@ return (new PhpCsFixer\Config())
         'phpdoc_separation' => false,
         'phpdoc_summary' => false,
         'phpdoc_to_comment' => ['ignored_tags' => ['var', 'see', 'todo', 'psalm-suppress']],
-        'yoda_style' => false,
     ])
     ->setFinder($finder)
 ;

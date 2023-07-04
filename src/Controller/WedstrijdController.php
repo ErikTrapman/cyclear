@@ -7,7 +7,6 @@ use App\Entity\Wedstrijd;
 use App\Repository\UitslagRepository;
 use App\Repository\WedstrijdRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

@@ -35,7 +35,7 @@ class ContractController extends AbstractController
         $config = $em->getConfiguration();
         $config->addFilter('renner', "App\Filter\RennerIdFilter");
         $entities = $this->contractRepository->createQueryBuilder('c')->orderBy('c.id', 'DESC');
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $filter->handleRequest($request);
             if ($filter->isValid()) {
                 if ($filter->get('renner')->getData()) {

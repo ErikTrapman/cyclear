@@ -16,11 +16,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -32,21 +30,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class RennerController extends AbstractController
 {
     public function __construct(
-        private readonly PaginatorInterface  $paginator,
+        private readonly PaginatorInterface $paginator,
         private readonly SerializerInterface $serializer,
-        private readonly RennerRepository    $rennerRepository,
-        private readonly TransferRepository  $transferRepository,
-        private readonly UitslagRepository   $uitslagRepository,
-        private readonly SeizoenRepository   $seizoenRepository,
-        private readonly ManagerRegistry     $doctrine,
-    )
-    {
+        private readonly RennerRepository $rennerRepository,
+        private readonly TransferRepository $transferRepository,
+        private readonly UitslagRepository $uitslagRepository,
+        private readonly SeizoenRepository $seizoenRepository,
+        private readonly ManagerRegistry $doctrine,
+    ) {
     }
 
     #[Route(path: '/{seizoen}/renners', name: 'rider_index', methods: ['GET', 'POST'])]
     public function indexAction(Request $request, Seizoen $seizoen): Response
     {
-        $exclude = $request->query->get('excludeWithTeam') === 'on';
+        $exclude = 'on' === $request->query->get('excludeWithTeam');
         $qb = $this->rennerRepository->getRennersWithPuntenQueryBuilder($seizoen, $exclude);
 
         $this->appendQuery($qb, $this->assertArray($request->query->get('filter'), "/\s+/"), ['r.naam']);
@@ -68,7 +65,7 @@ class RennerController extends AbstractController
         $qb = $this->rennerRepository->createQueryBuilder('r')->orderBy('r.naam', 'ASC');
         $this->appendQuery($qb, $this->assertArray($request->query->get('query'), "/\s+/"), ['r.cqranking_id', 'r.naam', 'r.slug']);
         $entities = $this->paginator->paginate(
-            $qb, $request->query->get('page') !== null ? $request->query->get('page') : 1, 20
+            $qb, null !== $request->query->get('page') ? $request->query->get('page') : 1, 20
         );
         $ret = [];
         foreach ($entities->getItems() as $item) {
@@ -154,7 +151,7 @@ class RennerController extends AbstractController
             return [];
         }
 
-        if ($separator[0] == '/') {
+        if ('/' == $separator[0]) {
             return preg_split($separator, $value);
         }
         return explode($separator, $value);

@@ -3,15 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Nieuws;
-use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Repository\PeriodeRepository;
 use App\Repository\TransferRepository;
 use App\Repository\UitslagRepository;
 use App\Repository\WedstrijdRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

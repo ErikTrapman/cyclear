@@ -8,8 +8,6 @@ use App\Entity\Seizoen;
 use App\Repository\PeriodeRepository;
 use App\Repository\TransferRepository;
 use App\Repository\UitslagRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

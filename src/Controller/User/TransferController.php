@@ -12,7 +12,6 @@ use App\Form\TransferUserType;
 use App\Repository\PloegRepository;
 use App\Repository\RennerRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,20 +24,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class TransferController extends AbstractController
 {
     public function __construct(
-        private readonly ManagerRegistry  $doctrine,
+        private readonly ManagerRegistry $doctrine,
         private readonly RennerRepository $rennerRepository,
-        private readonly PloegRepository  $ploegRepository,
-    )
-    {
+        private readonly PloegRepository $ploegRepository,
+    ) {
     }
 
     #[Route(path: '/user/{seizoen}/transfer/ploeg/{id}/renner/{renner}', name: 'user_transfer')]
     public function indexAction(
-        UserManager                                        $userManager,
-        TransferManager                                    $transferManager,
-        Request                                            $request,
-        Seizoen                                            $seizoen,
-        Ploeg                                              $ploeg,
+        UserManager $userManager,
+        TransferManager $transferManager,
+        Request $request,
+        Seizoen $seizoen,
+        Ploeg $ploeg,
         #[MapEntity(mapping: ['renner' => 'slug'])] Renner $renner): \Symfony\Component\HttpFoundation\Response
     {
         if (!$userManager->isOwner($this->getUser(), $ploeg)) {
@@ -65,7 +63,7 @@ class TransferController extends AbstractController
         $options['ploegRenners'] = $this->ploegRepository->getRenners($ploeg);
         $options['ploeg'] = $ploeg;
         $form = $this->createForm(TransferUserType::class, $transferUser, $options);
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 if ($rennerPloeg !== $ploeg) {

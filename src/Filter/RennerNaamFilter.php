@@ -9,7 +9,7 @@ class RennerNaamFilter extends SQLFilter
 {
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
     {
-        if ($targetEntity->name != 'App\Entity\Renner') {
+        if ('App\Entity\Renner' != $targetEntity->name) {
             return '';
         }
 
