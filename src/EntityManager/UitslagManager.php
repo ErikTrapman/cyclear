@@ -39,7 +39,7 @@ class UitslagManager
         $uitslagen = [];
         $rennerManager = $this->rennerManager;
         foreach ($uitslagregels as $uitslagregel) {
-            if (strcmp(strtolower($uitslagregel['pos']), 'leader') === 0) {
+            if (0 === strcmp(strtolower($uitslagregel['pos']), 'leader')) {
                 continue;
             }
             $row = [];

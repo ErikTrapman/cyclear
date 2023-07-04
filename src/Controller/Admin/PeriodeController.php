@@ -7,7 +7,6 @@ use App\Form\PeriodeType;
 use App\Repository\PeriodeRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -16,9 +15,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Periode controller.
- *
- * @Route("/admin/periode")
  */
+#[Route(path: '/admin/periode')]
 class PeriodeController extends AbstractController
 {
     public function __construct(
@@ -28,11 +26,8 @@ class PeriodeController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/", name="admin_periode")
-     * @Template()
-     */
-    public function indexAction(Request $request): array
+    #[Route(path: '/', name: 'admin_periode')]
+    public function indexAction(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $entities = $this->periodeRepository->createQueryBuilder('p')->orderBy('p.eind', 'DESC');
 
@@ -40,27 +35,22 @@ class PeriodeController extends AbstractController
             $entities, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
 
-        return ['entities' => $entities];
+        return $this->render('admin/periode/index.html.twig', ['entities' => $entities]);
     }
 
-    /**
-     * @Route("/new", name="admin_periode_new")
-     * @Template()
-     */
-    public function newAction(): array
+    #[Route(path: '/new', name: 'admin_periode_new')]
+    public function newAction(): \Symfony\Component\HttpFoundation\Response
     {
         $entity = new Periode();
         $form = $this->createForm(PeriodeType::class, $entity);
 
-        return [
+        return $this->render('admin/periode/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
-        ];
+        ]);
     }
 
-    /**
-     * @Route("/create", name="admin_periode_create", methods={"POST"})
-     */
+    #[Route(path: '/create', name: 'admin_periode_create', methods: ['POST'])]
     public function createAction(Request $request): array|RedirectResponse
     {
         $entity = new Periode();
@@ -82,11 +72,10 @@ class PeriodeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_periode_edit")
-     * @Template()
      * @param mixed $id
      */
-    public function editAction($id): array
+    #[Route(path: '/{id}/edit', name: 'admin_periode_edit')]
+    public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -99,19 +88,18 @@ class PeriodeController extends AbstractController
         $editForm = $this->createForm(PeriodeType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return [
+        return $this->render('admin/periode/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        ];
+        ]);
     }
 
     /**
-     * @Route("/{id}/update", name="admin_periode_update", methods={"POST"})
-     * @Template("admin/periode/edit.html.twig")
      * @param mixed $id
      */
-    public function updateAction(Request $request, $id): array|RedirectResponse
+    #[Route(path: '/{id}/update', name: 'admin_periode_update', methods: ['POST'])]
+    public function updateAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -133,19 +121,19 @@ class PeriodeController extends AbstractController
             return $this->redirect($this->generateUrl('admin_periode_edit', ['id' => $id]));
         }
 
-        return [
+        return $this->render('admin/periode/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        ];
+        ]);
     }
 
     /**
      * Deletes a Periode entity.
      *
-     * @Route("/{id}/delete", name="admin_periode_delete", methods={"POST"})
      * @param mixed $id
      */
+    #[Route(path: '/{id}/delete', name: 'admin_periode_delete', methods: ['POST'])]
     public function deleteAction(Request $request, $id): RedirectResponse
     {
         $form = $this->createDeleteForm($id);

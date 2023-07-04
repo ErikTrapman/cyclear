@@ -6,15 +6,10 @@ use App\Entity\Nieuws;
 use App\Entity\Seizoen;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/{seizoen}/nieuws")
- */
 class NieuwsController extends AbstractController
 {
     public function __construct(
@@ -23,12 +18,8 @@ class NieuwsController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("", name="nieuws")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
-     */
-    public function indexAction(Request $request, Seizoen $seizoen): array
+    #[Route(path: '/{seizoen}/nieuws', name: 'nieuws')]
+    public function indexAction(Request $request, Seizoen $seizoen): \Symfony\Component\HttpFoundation\Response
     {
         $qb = $this->doctrine->getRepository(Nieuws::class)->createQueryBuilder('n')
             ->where('n.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
@@ -37,6 +28,6 @@ class NieuwsController extends AbstractController
         $pagination = $this->paginator->paginate(
             $qb, $request->query->get('page', 1), 20
         );
-        return ['pagination' => $pagination, 'seizoen' => $seizoen];
+        return $this->render('nieuws/index.html.twig', ['pagination' => $pagination, 'seizoen' => $seizoen]);
     }
 }

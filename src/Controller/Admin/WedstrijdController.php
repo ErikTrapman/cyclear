@@ -6,16 +6,13 @@ use App\Entity\Wedstrijd;
 use App\Form\WedstrijdType;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/admin/wedstrijd")
- */
+#[Route(path: '/admin/wedstrijd')]
 class WedstrijdController extends AbstractController
 {
     public function __construct(
@@ -24,11 +21,8 @@ class WedstrijdController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/", name="admin_wedstrijd")
-     * @Template()
-     */
-    public function indexAction(Request $request): array
+    #[Route(path: '/', name: 'admin_wedstrijd')]
+    public function indexAction(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -37,27 +31,22 @@ class WedstrijdController extends AbstractController
         $pagination = $this->paginator->paginate(
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
-        return ['pagination' => $pagination];
+        return $this->render('admin/wedstrijd/index.html.twig', ['pagination' => $pagination]);
     }
 
-    /**
-     * @Route("/new", name="admin_wedstrijd_new")
-     * @Template()
-     */
-    public function newAction(): array
+    #[Route(path: '/new', name: 'admin_wedstrijd_new')]
+    public function newAction(): \Symfony\Component\HttpFoundation\Response
     {
         $entity = new Wedstrijd();
         $form = $this->createForm(WedstrijdType::class, $entity);
 
-        return [
+        return $this->render('admin/wedstrijd/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
-        ];
+        ]);
     }
 
-    /**
-     * @Route("/create", name="admin_wedstrijd_create", methods={"POST"})
-     */
+    #[Route(path: '/create', name: 'admin_wedstrijd_create', methods: ['POST'])]
     public function createAction(Request $request): array|RedirectResponse
     {
         $entity = new Wedstrijd();
@@ -79,11 +68,10 @@ class WedstrijdController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_wedstrijd_edit")
-     * @Template()
      * @param mixed $id
      */
-    public function editAction($id): array
+    #[Route(path: '/{id}/edit', name: 'admin_wedstrijd_edit')]
+    public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -96,17 +84,17 @@ class WedstrijdController extends AbstractController
         $editForm = $this->createForm(WedstrijdType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return [
+        return $this->render('admin/wedstrijd/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        ];
+        ]);
     }
 
     /**
-     * @Route("/{id}/update", name="admin_wedstrijd_update", methods={"POST"})
      * @param mixed $id
      */
+    #[Route(path: '/{id}/update', name: 'admin_wedstrijd_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): array|RedirectResponse
     {
         $em = $this->doctrine->getManager();
@@ -139,9 +127,9 @@ class WedstrijdController extends AbstractController
     /**
      * Deletes a Periode entity.
      *
-     * @Route("/{id}/delete", name="admin_wedstrijd_delete", methods={"POST"})
      * @param mixed $id
      */
+    #[Route(path: '/{id}/delete', name: 'admin_wedstrijd_delete', methods: ['POST'])]
     public function deleteAction(Request $request, $id): RedirectResponse
     {
         $form = $this->createDeleteForm($id);

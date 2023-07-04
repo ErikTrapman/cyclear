@@ -5,12 +5,10 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
-use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="country")
- * @Serializer\ExclusionPolicy("all")
  */
 class Country implements Translatable
 {
@@ -20,8 +18,6 @@ class Country implements Translatable
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @Serializer\Expose
      */
     private $id;
 
@@ -33,7 +29,6 @@ class Country implements Translatable
     /**
      * @Gedmo\Translatable
      * @ORM\Column(nullable=true)
-     * @Serializer\Expose
      */
     private $name;
 

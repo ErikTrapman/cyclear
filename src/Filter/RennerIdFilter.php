@@ -7,7 +7,7 @@ class RennerIdFilter extends \Doctrine\ORM\Query\Filter\SQLFilter
     public function addFilterConstraint(\Doctrine\ORM\Mapping\ClassMetadata $targetEntity, $targetTableAlias)
     {
         // if ($targetEntity->name != "Doctrine\Tests\Models\Company\CompanyPerson") {
-        if ($targetEntity->name != "App\Entity\Renner") {
+        if ("App\Entity\Renner" != $targetEntity->name) {
             return '';
         }
 //        if($value instanceof \App\Entity\Renner){

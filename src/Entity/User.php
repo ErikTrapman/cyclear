@@ -3,12 +3,13 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
 
 /**
  * @ORM\Table(name="user")
  * @ORM\Entity()
  */
-class User extends \FOS\UserBundle\Model\User implements \Serializable
+class User extends \FOS\UserBundle\Model\User implements \Serializable, LegacyPasswordAuthenticatedUserInterface
 {
     /**
      * @var int

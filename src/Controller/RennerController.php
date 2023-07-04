@@ -13,13 +13,11 @@ use App\Repository\TransferRepository;
 use App\Repository\UitslagRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -32,7 +30,6 @@ class RennerController extends AbstractController
 {
     public function __construct(
         private readonly PaginatorInterface $paginator,
-        private readonly SerializerInterface $serializer,
         private readonly RennerRepository $rennerRepository,
         private readonly TransferRepository $transferRepository,
         private readonly UitslagRepository $uitslagRepository,
@@ -41,15 +38,10 @@ class RennerController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/{seizoen}/renners.{_format}", name="rider_index", options={"_format"="json|html","expose"=true}, defaults={"_format":"html"})
-     * @Route("/api/v1/{seizoen}/riders.{_format}", name="api_season_rider_index", options={"_format"="json"}, defaults={"_format":"json"})
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template
-     */
-    public function indexAction(Request $request, Seizoen $seizoen): array|Response
+    #[Route(path: '/{seizoen}/renners', name: 'rider_index', methods: ['GET', 'POST'])]
+    public function indexAction(Request $request, Seizoen $seizoen): Response
     {
-        $exclude = $request->query->get('excludeWithTeam') === 'true';
+        $exclude = 'on' === $request->query->get('excludeWithTeam');
         $qb = $this->rennerRepository->getRennersWithPuntenQueryBuilder($seizoen, $exclude);
 
         $this->appendQuery($qb, $this->assertArray($request->query->get('filter'), "/\s+/"), ['r.naam']);
@@ -61,39 +53,27 @@ class RennerController extends AbstractController
             $ret[] = (new RiderSearchView())->serialize($r);
         }
         $pagination->setItems($ret);
-        $entities = $this->serializer->serialize($pagination, 'json');
 
-        if ('json' === $request->getRequestFormat()) {
-            return new Response($entities);
-        }
-
-        return ['seizoen' => $seizoen];
+        return $this->render('renner/index.html.twig', ['seizoen' => $seizoen, 'pagination' => $pagination]);
     }
 
-    /**
-     * @Route("/renners/get.{_format}", name="get_riders", options={"_format"="json"}, defaults={"_format"="json"})
-     */
+    #[Route(path: '/renners/get.{_format}', name: 'get_riders', options: ['_format' => 'json'], defaults: ['_format' => 'json'])]
     public function getAction(Request $request): Response
     {
         $qb = $this->rennerRepository->createQueryBuilder('r')->orderBy('r.naam', 'ASC');
         $this->appendQuery($qb, $this->assertArray($request->query->get('query'), "/\s+/"), ['r.cqranking_id', 'r.naam', 'r.slug']);
         $entities = $this->paginator->paginate(
-            $qb, $request->query->get('page') !== null ? $request->query->get('page') : 1, 20
+            $qb, null !== $request->query->get('page') ? $request->query->get('page') : 1, 20
         );
         $ret = [];
         foreach ($entities->getItems() as $item) {
             $ret[] = (new BloodHoundRiderView())->serialize($item);
         }
-        return new Response($this->serializer->serialize($ret, 'json', SerializationContext::create()->setGroups(['small'])));
+        return new JsonResponse($ret);
     }
 
-    /**
-     * @Route("/{seizoen}/renner/{renner}", name="renner_show", options={"expose"=true})
-     * @Template()
-     * @ParamConverter("renner", class="App\Entity\Renner", options={"mapping": {"renner": "slug"}});
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     */
-    public function showAction(Request $request, Seizoen $seizoen, Renner $renner): array
+    #[Route(path: '/{seizoen}/renner/{renner}', name: 'renner_show', options: ['expose' => true])]
+    public function showAction(Request $request, Seizoen $seizoen, #[MapEntity(mapping: ['renner' => 'slug'])] Renner $renner): Response
     {
         $transfers = $this->transferRepository->findByRenner($renner, $seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER, Transfer::DRAFTTRANSFER]);
         $uitslagen = $this->uitslagRepository->getPuntenForRenner($renner, $seizoen, true);
@@ -117,7 +97,7 @@ class RennerController extends AbstractController
             ];
         }
 
-        return [
+        return $this->render('renner/show.html.twig', [
             'seizoen' => $seizoen,
             'renner' => $renner,
             'transfers' => $transfers,
@@ -126,14 +106,10 @@ class RennerController extends AbstractController
             'ploeg' => $ploeg,
             'rennerPunten' => $punten,
             'puntenPerSeizoen' => $puntenPerSeizoen,
-        ];
+        ]);
     }
 
-    /**
-     * @Route("/{seizoen}/download", name="renner_download")
-     *
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     */
+    #[Route(path: '/{seizoen}/download', name: 'renner_download')]
     public function csvDownloadAction(Request $request, Seizoen $seizoen): StreamedResponse
     {
         $q = sprintf('SELECT r.id, r.naam, (SELECT SUM(rennerPunten) FROM uitslag u
@@ -173,7 +149,7 @@ class RennerController extends AbstractController
             return [];
         }
 
-        if ($separator[0] == '/') {
+        if ('/' == $separator[0]) {
             return preg_split($separator, $value);
         }
         return explode($separator, $value);

@@ -38,7 +38,7 @@ class CrawlerManager
     private function getContent($feed): string
     {
         $content = file_get_contents($feed);
-        if ($content === false) {
+        if (false === $content) {
             throw new CQParserException('Unable to get content from ' . $feed);
         }
         return $content;

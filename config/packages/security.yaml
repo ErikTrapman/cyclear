@@ -1,12 +1,11 @@
 security:
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    encoders:
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    password_hashers:
         App\Entity\User:
             algorithm: sha512
             encode-as-base64: true
             iterations: 10
     enable_authenticator_manager: true
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         fos_userbundle:
@@ -20,6 +19,7 @@ security:
             security: false
         main:
             pattern: ^/
+            user_checker: fos_user.user_checker
             form_login:
                 provider: fos_userbundle
                 login_path:  /login-user/login

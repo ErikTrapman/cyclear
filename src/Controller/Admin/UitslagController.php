@@ -16,9 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
-/**
- * @Route("admin/uitslag")
- */
+#[Route(path: 'admin/uitslag')]
 class UitslagController extends AbstractController
 {
     public function __construct(
@@ -28,11 +26,8 @@ class UitslagController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/", name="admin_uitslag")
-     * @Template()
-     */
-    public function indexAction(Request $request): array
+    #[Route(path: '/', name: 'admin_uitslag')]
+    public function indexAction(Request $request): Response
     {
         $em = $this->doctrine->getManager();
 
@@ -42,14 +37,11 @@ class UitslagController extends AbstractController
             $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         $seizoen = $em->getRepository(Seizoen::class)->getCurrent();
-        return ['pagination' => $pagination, 'seizoen' => $seizoen];
+        return $this->render('admin/uitslag/index.html.twig', ['pagination' => $pagination, 'seizoen' => $seizoen]);
     }
 
-    /**
-     * @Route("/{uitslag}/edit", name="admin_uitslag_edit")
-     * @Template()
-     */
-    public function editAction(Request $request, Uitslag $uitslag): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    #[Route(path: '/{uitslag}/edit', name: 'admin_uitslag_edit')]
+    public function editAction(Request $request, Uitslag $uitslag): Response
     {
         $em = $this->doctrine->getManager();
         $seizoen = $uitslag->getWedstrijd()->getSeizoen();
@@ -62,14 +54,11 @@ class UitslagController extends AbstractController
             }
         }
 
-        return ['form' => $form->createView(), 'entity' => $uitslag];
+        return $this->render('admin/uitslag/edit.html.twig', ['form' => $form->createView(), 'entity' => $uitslag]);
     }
 
-    /**
-     * @Route("/new", name="admin_uitslag_new")
-     * @Template()
-     */
-    public function newAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
+    #[Route(path: '/new', name: 'admin_uitslag_new')]
+    public function newAction(Request $request): Response
     {
         $uitslag = new Uitslag();
         $em = $this->doctrine->getManager();
@@ -83,14 +72,11 @@ class UitslagController extends AbstractController
                 return $this->redirect($this->generateUrl('admin_uitslag'));
             }
         }
-        return ['form' => $form->createView()];
+        return $this->render('admin/uitslag/new.html.twig', ['form' => $form->createView()]);
     }
 
-    /**
-     * @Route("/create", name="admin_uitslag_create")
-     * @Template()
-     */
-    public function createAction(Request $request): array|Response
+    #[Route(path: '/create', name: 'admin_uitslag_create')]
+    public function createAction(Request $request): Response
     {
         $em = $this->doctrine->getManager();
         $options = [];
@@ -101,10 +87,10 @@ class UitslagController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $form->handleRequest($request);
             // Render the whole template including any layouts etc
-            $body = $this->twig->render('admin/uitslag/_ajaxTemplate.html.twig', ['form' => $form->createView()]);
-            return new Response($body);
+            // $body = $this->twig->render('admin/uitslag/_ajaxTemplate.html.twig', ['form' => $form->createView()]);
+            return $this->render('admin/uitslag/_ajaxTemplate.html.twig', ['form' => $form->createView()]);
         }
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
             /** @var Wedstrijd $wedstrijd */
             $wedstrijd = $form->get('wedstrijd')->getData();
@@ -123,6 +109,6 @@ class UitslagController extends AbstractController
             $em->flush();
             return $this->redirect($this->generateUrl('admin_uitslag_create'));
         }
-        return ['form' => $form->createView()];
+        return $this->render('admin/uitslag/create.html.twig', ['form' => $form->createView()]);
     }
 }

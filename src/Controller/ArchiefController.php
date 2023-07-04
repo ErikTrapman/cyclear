@@ -3,13 +3,10 @@
 namespace App\Controller;
 
 use App\Repository\SeizoenRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/archief")
- */
+#[Route(path: '/archief')]
 class ArchiefController extends AbstractController
 {
     public function __construct(
@@ -17,12 +14,9 @@ class ArchiefController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/", name="archief_index")
-     * @Template()
-     */
-    public function indexAction(): array
+    #[Route(path: '/', name: 'archief_index')]
+    public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
-        return ['seizoenen' => $this->seizoenRepository->getArchived()];
+        return $this->render('archief/index.html.twig', ['seizoenen' => $this->seizoenRepository->getArchived()]);
     }
 }

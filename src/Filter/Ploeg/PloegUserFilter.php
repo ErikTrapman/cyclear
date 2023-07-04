@@ -9,7 +9,7 @@ class PloegUserFilter extends SQLFilter
 {
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias, $targetTable = '')
     {
-        if ($targetEntity->name != 'App\Entity\Ploeg') {
+        if ('App\Entity\Ploeg' != $targetEntity->name) {
             return '';
         }
         return $targetTableAlias . '.user_id = ( SELECT u.id FROM User u WHERE u.username = ' . $this->getParameter('user') . ')';

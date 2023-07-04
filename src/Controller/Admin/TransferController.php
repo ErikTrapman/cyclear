@@ -10,36 +10,29 @@ use App\Repository\SeizoenRepository;
 use App\Repository\TransferRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Transfer controller.
- *
- * @Route("/admin/transfer")
  */
+#[Route(path: '/admin/transfer')]
 class TransferController extends AbstractController
 {
     public function __construct(
         private readonly PaginatorInterface $paginator,
         private readonly ManagerRegistry $doctrine,
         private readonly TransferManager $transferManager,
-        private readonly SessionInterface $session,
         private readonly SeizoenRepository $seizoenRepository,
         private readonly TransferRepository $transferRepository,
     ) {
     }
 
-    /**
-     * @Route("/", name="admin_transfer")
-     * @Template()
-     */
-    public function indexAction(Request $request): array
+    #[Route(path: '/', name: 'admin_transfer')]
+    public function indexAction(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -49,23 +42,17 @@ class TransferController extends AbstractController
         );
         // $entities = $query->getResult();
 
-        return ['entities' => $pagination];
+        return $this->render('admin/transfer/index.html.twig', ['entities' => $pagination]);
     }
 
-    /**
-     * @Route("/new", name="admin_transfer_new")
-     * @Template()
-     */
-    public function newAction(): array
+    #[Route(path: '/new', name: 'admin_transfer_new')]
+    public function newAction(): \Symfony\Component\HttpFoundation\Response
     {
-        return [];
+        return $this->render('admin/transfer/new.html.twig');
     }
 
-    /**
-     * @Route("/new-draft", name="admin_transfer_new_draft")
-     * @Template()
-     */
-    public function newDraftAction(Request $request): array|RedirectResponse
+    #[Route(path: '/new-draft', name: 'admin_transfer_new_draft')]
+    public function newDraftAction(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $entity = new Transfer();
         $entity->setTransferType(Transfer::DRAFTTRANSFER);
@@ -80,14 +67,11 @@ class TransferController extends AbstractController
                 return $this->redirect($this->generateUrl('admin_transfer'));
             }
         }
-        return ['form' => $form->createView()];
+        return $this->render('admin/transfer/new_draft.html.twig', ['form' => $form->createView()]);
     }
 
-    /**
-     * @Route("/new-exchange", name="admin_transfer_new_exchange")
-     * @Template()
-     */
-    public function newExchangeAction(Request $request): array|RedirectResponse
+    #[Route(path: '/new-exchange', name: 'admin_transfer_new_exchange')]
+    public function newExchangeAction(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $entity = new Transfer();
         $entity->setTransferType(Transfer::ADMINTRANSFER);
@@ -104,7 +88,7 @@ class TransferController extends AbstractController
                 return $this->redirect($this->generateUrl('admin_transfer'));
             }
         }
-        return ['form' => $form->createView()];
+        return $this->render('admin/transfer/new_exchange.html.twig', ['form' => $form->createView()]);
     }
 
     private function getTransferForm(Transfer $entity): \Symfony\Component\Form\FormInterface
@@ -115,11 +99,10 @@ class TransferController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_transfer_edit")
-     * @Template()
      * @param mixed $id
      */
-    public function editAction($id): array
+    #[Route(path: '/{id}/edit', name: 'admin_transfer_edit')]
+    public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
         $entity = $this->transferRepository->find($id);
 
@@ -129,17 +112,17 @@ class TransferController extends AbstractController
 
         $editForm = $this->createForm(TransferEditType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
-        return [
+        return $this->render('admin/transfer/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        ];
+        ]);
     }
 
     /**
-     * @Route("/{id}/update", name="admin_transfer_update", methods={"POST"})
      * @param mixed $id
      */
+    #[Route(path: '/{id}/update', name: 'admin_transfer_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): array|RedirectResponse
     {
         $em = $this->doctrine->getManager();
@@ -172,9 +155,9 @@ class TransferController extends AbstractController
     /**
      * Deletes a Transfer entity.
      *
-     * @Route("/{id}/delete", name="admin_transfer_delete", methods={"POST"})
      * @param mixed $id
      */
+    #[Route(path: '/{id}/delete', name: 'admin_transfer_delete', methods: ['POST'])]
     public function deleteAction(Request $request, $id): RedirectResponse
     {
         $form = $this->createDeleteForm($id);
@@ -191,7 +174,7 @@ class TransferController extends AbstractController
 
             $res = $this->transferManager->revertTransfer($entity);
             if (!$res) {
-                $this->session->getFlashBag()->add('error', 'Transfer kon niet verwijderd worden');
+                $request->getSession()->getFlashBag()->add('error', 'Transfer kon niet verwijderd worden');
             }
 
             $em->flush();

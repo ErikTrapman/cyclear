@@ -12,7 +12,7 @@ class CQParser
         $headers = $crawler->filter('table.borderNoOpac th.raceheader b');
         $values = $headers->extract(['_text', 'b']);
         $name = @$values[0][0];
-        if ($name === false) {
+        if (false === $name) {
             return 'Naam kon niet worden opgehaald. Vul zelf in.';
         }
         return trim($name);

@@ -4,14 +4,12 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation as Serializer;
 
 /**
  * App\Entity\Renner
  *
  * @ORM\Table(name="renner")
  * @ORM\Entity(repositoryClass="App\Repository\RennerRepository")
- * @Serializer\ExclusionPolicy("all")
  */
 class Renner
 {
@@ -19,17 +17,11 @@ class Renner
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @Serializer\Expose
-     * @Serializer\Groups({"small","medium"})
      */
     private $id;
 
     /**
      * @ORM\Column(name="naam", type="string", length=255)
-     * @Serializer\Expose
-     * @Serializer\Accessor(getter="__toString")
-     * @Serializer\Groups({"small","medium"})
      */
     private $naam;
 
@@ -46,18 +38,12 @@ class Renner
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Country", fetch="EAGER")
-     * @Serializer\Expose
-     * @Serializer\Groups({"small","medium"})
-     * @Serializer\Accessor(getter="getCountryIso")
-     * @Serializer\Type("string")
      */
     private $country;
 
     /**
      * @Gedmo\Slug(fields={"naam"}, updatable=true)
      * @ORM\Column(length=128, unique=true, nullable=true)
-     * @Serializer\Expose
-     * @Serializer\Groups({"small","medium"})
      */
     private $slug;
 

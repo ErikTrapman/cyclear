@@ -82,13 +82,13 @@ class UitslagCreateType extends AbstractType
             }
         });
 
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $e) use ($request) {
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $e) {
             $form = $e->getForm();
             $data = $e->getData();
             if (null === $data) {
                 return;
             }
-            $postData = $request->request->get($form->getName());
+            $postData = $_POST[$form->getName()];
             if (array_key_exists('uitslag', $postData)) {
                 $wedstrijd = $data['wedstrijd'];
                 foreach ($data['uitslag'] as $uitslag) {

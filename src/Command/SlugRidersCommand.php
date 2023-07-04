@@ -29,7 +29,7 @@ class SlugRidersCommand extends Command
         foreach ($qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY) as $i => $renner) {
             $renner = $repo->find($renner['id']);
             $renner->setSlug(\Gedmo\Sluggable\Util\Urlizer::urlize($renner->getNaam()));
-            if ($i % 250 == 0 && $i != 0) {
+            if (0 == $i % 250 && 0 != $i) {
                 $output->writeln(memory_get_usage(true));
                 $output->writeln("$i; have to flush");
                 $this->em->flush();

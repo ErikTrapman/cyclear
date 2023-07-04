@@ -108,7 +108,7 @@ class TransferRepository extends ServiceEntityRepository
             ->andWhere('t.datum <= :datum')->andWhere('t.seizoen = :seizoen')->
             setParameters($params)->orderBy('t.datum', 'DESC')->setMaxResults(1);
         $res = $qb->getQuery()->getResult();
-        if (count($res) == 0) {
+        if (0 == count($res)) {
             return null;
         }
         return $res[0];

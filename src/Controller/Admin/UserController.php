@@ -7,7 +7,6 @@ use App\Form\UserEditType;
 use App\Form\UserType;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\UserBundle\Model\UserManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,9 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * User controller.
- *
- * @Route("/admin/user")
  */
+#[Route(path: '/admin/user')]
 class UserController extends AbstractController
 {
     public function __construct(
@@ -26,35 +24,27 @@ class UserController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/", name="admin_user")
-     * @Template()
-     */
-    public function indexAction(): array
+    #[Route(path: '/', name: 'admin_user')]
+    public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
         $entities = $em->getRepository(User::class)->findAll();
 
-        return ['entities' => $entities];
+        return $this->render('admin/user/index.html.twig', ['entities' => $entities]);
     }
 
-    /**
-     * @Route("/new", name="admin_user_new")
-     * @Template()
-     */
-    public function newAction(): array
+    #[Route(path: '/new', name: 'admin_user_new')]
+    public function newAction(): \Symfony\Component\HttpFoundation\Response
     {
         $form = $this->createForm(UserType::class);
 
-        return [
+        return $this->render('admin/user/new.html.twig', [
             'form' => $form->createView(),
-        ];
+        ]);
     }
 
-    /**
-     * @Route("/create", name="admin_user_create", methods={"POST"})
-     */
+    #[Route(path: '/create', name: 'admin_user_create', methods: ['POST'])]
     public function createAction(Request $request): array|RedirectResponse
     {
         $form = $this->createForm(UserType::class);
@@ -78,11 +68,10 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_user_edit")
-     * @Template()
      * @param mixed $id
      */
-    public function editAction($id): array
+    #[Route(path: '/{id}/edit', name: 'admin_user_edit')]
+    public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -93,18 +82,17 @@ class UserController extends AbstractController
         }
         $editForm = $this->createForm(UserEditType::class, $entity);
 
-        return [
+        return $this->render('admin/user/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
-        ];
+        ]);
     }
 
     /**
-     * @Route("/{id}/update", name="admin_user_update", methods={"POST"})
-     * @Template("admin/user/edit.html.twig")
      * @param mixed $id
      */
-    public function updateAction(Request $request, $id): array|RedirectResponse
+    #[Route(path: '/{id}/update', name: 'admin_user_update', methods: ['POST'])]
+    public function updateAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
@@ -158,9 +146,9 @@ class UserController extends AbstractController
             return $this->redirect($this->generateUrl('admin_user_edit', ['id' => $id]));
         }
 
-        return [
+        return $this->render('admin/user/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
-        ];
+        ]);
     }
 }

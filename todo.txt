@@ -1,6 +1,7 @@
 [CODE]
 GitHub QA
-JMS serializer vervangen - Alleen RennerController.php ?
+
+DONE JMS serializer vervangen - Alleen RennerController.php ?
 DONE |date nalopen en vervangen
 DONE "Datum" header in tabel van renner-transfers voor dit seizoen
 DONE Mails versturen testen via fos-user en Sendgrid

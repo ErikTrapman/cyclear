@@ -18,6 +18,11 @@ class SeizoenRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')->where('s.current = 1')->getQuery()->getOneOrNullResult();
     }
 
+//    public function findBySlug(string $slug): ?Seizoen
+//    {
+//        return $this->findOneBy(['slug' => $slug]);
+//    }
+
     public function getArchived(): array
     {
         return $this->createQueryBuilder('s')

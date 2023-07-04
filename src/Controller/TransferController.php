@@ -6,15 +6,10 @@ use App\Entity\Seizoen;
 use App\Entity\Transfer;
 use App\Repository\TransferRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/{seizoen}/transfer")
- */
 class TransferController extends AbstractController
 {
     public function __construct(
@@ -23,12 +18,8 @@ class TransferController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("s", name="transfer_list")
-     * @ParamConverter("seizoen", options={"mapping": {"seizoen": "slug"}})
-     * @Template()
-     */
-    public function indexAction(Request $request, Seizoen $seizoen): array
+    #[Route(path: '/{seizoen}/transfer', name: 'transfer_list')]
+    public function indexAction(Request $request, Seizoen $seizoen): \Symfony\Component\HttpFoundation\Response
     {
         $qb = $this->transferRepository->createQueryBuilder('t')
             ->where('t.seizoen = :seizoen')
@@ -40,9 +31,9 @@ class TransferController extends AbstractController
 
         $pagination = $this->paginator->paginate($qb, (int)$request->query->get('page', 1), 20);
 
-        return [
+        return $this->render('transfer/index.html.twig', [
             'pagination' => $pagination,
             'seizoen' => $seizoen,
-        ];
+        ]);
     }
 }
