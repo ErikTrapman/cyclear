@@ -24,11 +24,9 @@
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}"/>
     <script type="text/javascript">
         var seizoenSlug = {% if app.request.attributes.has('seizoen') %}'{{ app.request.attributes.get('seizoen').slug }}'{% else %}'null'{% endif %};
-
     </script>
 </head>
 <body id="cyclear">
-
 <!--Header_section-->
 <nav id="main-navbar" class="navbar navbar-default">
     <div class="container-fluid">
@@ -48,8 +46,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
-                    <input type="text" class="ajax-typeahead form-control" placeholder="Zoek renner..."
-                           do-redirect="true">
+                    <input type="text" class="ajax-typeahead form-control" style="width: 300px;" placeholder="Zoek renner...">
                 </div>
             </form>
             <ul class="nav navbar-nav">
