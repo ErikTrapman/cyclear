@@ -107,20 +107,18 @@
         </div>
         <div class="col-lg-4">
             <ul style="text-decoration: underline">
-                {% if app.request.attributes.has('seizoen') %}
+                {% set seizoen = app.request.attributes.get('seizoen') %}
+                {% if seizoen %}
                     <li>
                         <a
                             href="{{ path('spelregels_index', {'seizoen': app.request.attributes.get('seizoen').slug}) }}">Spelregels {{ app.request.attributes.get('seizoen') }}</a>
                     </li>
-                {% endif %}
-                {% if app.request.attributes.has('seizoen') %}
                     <li>
                         <a href="{{ path('rider_index', {'seizoen': app.request.attributes.get('seizoen').slug}) }}">Renners</a>
                     </li>
                 {% endif %}
                 <li><a href="{{ path('archief_index') }}">Archief</a></li>
 
-                {% set seizoen = app.request.attributes.get('seizoen') %}
                 {% set curSeizoen = getCurrentSeason() %}
                 {%- if seizoen and curSeizoen and seizoen.id != curSeizoen.id %}
                     <li><a style="color: #860087"
@@ -136,7 +134,6 @@
                         <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
                     </li>
                 {% endif %}
-
             </ul>
         </div>
     </div>

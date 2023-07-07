@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <ul style="margin:20px; display: inline-block">
-                    {% for seizoen in seizoenen %}
+                    {% for seizoen in seizoenen|reverse %}
                         <li style="margin:12px;">
                             <a class="btn btn-default"
                                href="{{ path('game', {'seizoen': seizoen.slug}) }}">{{ seizoen.identifier }}</a>
