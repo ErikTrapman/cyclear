@@ -2,15 +2,16 @@
 
 namespace App\Controller;
 
-use App\Entity\Nieuws;
+use App\Entity\News;
 use App\Entity\Seizoen;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class NieuwsController extends AbstractController
+class NewsController extends AbstractController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
@@ -19,15 +20,15 @@ class NieuwsController extends AbstractController
     }
 
     #[Route(path: '/{seizoen}/nieuws', name: 'nieuws')]
-    public function indexAction(Request $request, Seizoen $seizoen): \Symfony\Component\HttpFoundation\Response
+    public function indexAction(Request $request, Seizoen $seizoen): Response
     {
-        $qb = $this->doctrine->getRepository(Nieuws::class)->createQueryBuilder('n')
+        $qb = $this->doctrine->getRepository(News::class)->createQueryBuilder('n')
             ->where('n.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
             ->orderBy('n.id', 'DESC');
 
         $pagination = $this->paginator->paginate(
             $qb, $request->query->get('page', 1), 20
         );
-        return $this->render('nieuws/index.html.twig', ['pagination' => $pagination, 'seizoen' => $seizoen]);
+        return $this->render('news/index.html.twig', ['pagination' => $pagination, 'seizoen' => $seizoen]);
     }
 }

@@ -11,9 +11,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Spelregels controller.
- */
 #[Route(path: '/admin/spelregels')]
 class SpelregelsController extends AbstractController
 {
@@ -64,9 +61,7 @@ class SpelregelsController extends AbstractController
         ];
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/edit', name: 'admin_spelregels_edit')]
     public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
@@ -88,9 +83,7 @@ class SpelregelsController extends AbstractController
         ]);
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/update', name: 'admin_spelregels_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): array|RedirectResponse
     {
@@ -121,11 +114,6 @@ class SpelregelsController extends AbstractController
         ];
     }
 
-    /**
-     * Deletes a Spelregels entity.
-     *
-     * @param mixed $id
-     */
     #[Route(path: '/{id}/delete', name: 'admin_spelregels_delete', methods: ['POST'])]
     public function deleteAction(Request $request, $id): RedirectResponse
     {

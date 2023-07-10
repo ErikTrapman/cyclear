@@ -13,9 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Contract controller.
- */
 #[Route(path: '/admin/contract')]
 class ContractController extends AbstractController
 {
@@ -87,9 +84,6 @@ class ContractController extends AbstractController
         ];
     }
 
-    /**
-     * @param mixed $id
-     */
     #[Route(path: '/{id}/edit', name: 'admin_contract_edit')]
     public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
@@ -110,9 +104,7 @@ class ContractController extends AbstractController
         ]);
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/update', name: 'admin_contract_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
     {

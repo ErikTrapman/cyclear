@@ -13,9 +13,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Periode controller.
- */
 #[Route(path: '/admin/periode')]
 class PeriodeController extends AbstractController
 {
@@ -71,9 +68,7 @@ class PeriodeController extends AbstractController
         ];
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/edit', name: 'admin_periode_edit')]
     public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
@@ -95,9 +90,7 @@ class PeriodeController extends AbstractController
         ]);
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/update', name: 'admin_periode_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
     {
@@ -128,11 +121,6 @@ class PeriodeController extends AbstractController
         ]);
     }
 
-    /**
-     * Deletes a Periode entity.
-     *
-     * @param mixed $id
-     */
     #[Route(path: '/{id}/delete', name: 'admin_periode_delete', methods: ['POST'])]
     public function deleteAction(Request $request, $id): RedirectResponse
     {

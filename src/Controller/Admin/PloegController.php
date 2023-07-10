@@ -90,9 +90,7 @@ class PloegController extends AbstractController
         ];
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/edit', name: 'admin_ploeg_edit')]
     public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
@@ -114,9 +112,7 @@ class PloegController extends AbstractController
         ]);
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/update', name: 'admin_ploeg_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
     {

@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Nieuws;
+use App\Entity\News;
 use App\Form\NieuwsType;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
@@ -11,11 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Nieuws controller.
- */
 #[Route(path: '/admin/nieuws')]
-class NieuwsController extends AbstractController
+class NewsController extends AbstractController
 {
     public function __construct(
         private readonly PaginatorInterface $paginator,
@@ -28,7 +25,7 @@ class NieuwsController extends AbstractController
     {
         $em = $this->doctrine->getManager();
 
-        $entities = $em->getRepository(Nieuws::class)->createQueryBuilder('n')->orderBy('n.id', 'DESC');
+        $entities = $em->getRepository(News::class)->createQueryBuilder('n')->orderBy('n.id', 'DESC');
 
         $pagination = $this->paginator->paginate(
             $entities, $request->query->get('page', 1), 20
@@ -40,7 +37,7 @@ class NieuwsController extends AbstractController
     #[Route(path: '/new', name: 'admin_nieuws_new')]
     public function newAction(): \Symfony\Component\HttpFoundation\Response
     {
-        $entity = new Nieuws();
+        $entity = new News();
         $form = $this->createForm(NieuwsType::class, $entity);
 
         return $this->render('admin/nieuws/new.html.twig', [
@@ -52,7 +49,7 @@ class NieuwsController extends AbstractController
     #[Route(path: '/create', name: 'admin_nieuws_create', methods: ['POST'])]
     public function createAction(Request $request): array|\Symfony\Component\HttpFoundation\RedirectResponse
     {
-        $entity = new Nieuws();
+        $entity = new News();
         $form = $this->createForm(NieuwsType::class, $entity);
         $form->handleRequest($request);
 
@@ -70,15 +67,12 @@ class NieuwsController extends AbstractController
         ];
     }
 
-    /**
-     * @param mixed $id
-     */
     #[Route(path: '/{id}/edit', name: 'admin_nieuws_edit')]
     public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
-        $entity = $em->getRepository(Nieuws::class)->find($id);
+        $entity = $em->getRepository(News::class)->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Nieuws entity.');
@@ -94,15 +88,12 @@ class NieuwsController extends AbstractController
         ]);
     }
 
-    /**
-     * @param mixed $id
-     */
     #[Route(path: '/{id}/update', name: 'admin_nieuws_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
     {
         $em = $this->doctrine->getManager();
 
-        $entity = $em->getRepository(Nieuws::class)->find($id);
+        $entity = $em->getRepository(News::class)->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Nieuws entity.');
@@ -127,11 +118,6 @@ class NieuwsController extends AbstractController
         ]);
     }
 
-    /**
-     * Deletes a Nieuws entity.
-     *
-     * @param mixed $id
-     */
     #[Route(path: '/{id}/delete', name: 'admin_nieuws_delete', methods: ['POST'])]
     public function deleteAction(Request $request, $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {
@@ -141,7 +127,7 @@ class NieuwsController extends AbstractController
 
         if ($form->isValid()) {
             $em = $this->doctrine->getManager();
-            $entity = $em->getRepository(Nieuws::class)->find($id);
+            $entity = $em->getRepository(News::class)->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Nieuws entity.');

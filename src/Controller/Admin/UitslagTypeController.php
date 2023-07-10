@@ -11,9 +11,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * UitslagType controller.
- */
 #[Route(path: '/admin/uitslagtype')]
 class UitslagTypeController extends AbstractController
 {
@@ -64,9 +61,7 @@ class UitslagTypeController extends AbstractController
         ];
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/edit', name: 'admin_uitslagtype_edit')]
     public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
@@ -88,9 +83,7 @@ class UitslagTypeController extends AbstractController
         ]);
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/update', name: 'admin_uitslagtype_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): array|RedirectResponse
     {
@@ -121,11 +114,6 @@ class UitslagTypeController extends AbstractController
         ];
     }
 
-    /**
-     * Deletes a UitslagType entity.
-     *
-     * @param mixed $id
-     */
     #[Route(path: '/{id}/delete', name: 'admin_uitslagtype_delete', methods: ['POST'])]
     public function deleteAction(Request $request, $id): RedirectResponse
     {

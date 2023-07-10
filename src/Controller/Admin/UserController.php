@@ -67,9 +67,7 @@ class UserController extends AbstractController
         ];
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/edit', name: 'admin_user_edit')]
     public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
@@ -88,9 +86,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/update', name: 'admin_user_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
     {

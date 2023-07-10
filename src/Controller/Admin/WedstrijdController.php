@@ -67,9 +67,7 @@ class WedstrijdController extends AbstractController
         ];
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/edit', name: 'admin_wedstrijd_edit')]
     public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
@@ -91,9 +89,7 @@ class WedstrijdController extends AbstractController
         ]);
     }
 
-    /**
-     * @param mixed $id
-     */
+
     #[Route(path: '/{id}/update', name: 'admin_wedstrijd_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): array|RedirectResponse
     {
@@ -124,11 +120,6 @@ class WedstrijdController extends AbstractController
         ];
     }
 
-    /**
-     * Deletes a Periode entity.
-     *
-     * @param mixed $id
-     */
     #[Route(path: '/{id}/delete', name: 'admin_wedstrijd_delete', methods: ['POST'])]
     public function deleteAction(Request $request, $id): RedirectResponse
     {

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Nieuws;
+use App\Entity\News;
 use App\Entity\Transfer;
 use App\Repository\PeriodeRepository;
 use App\Repository\TransferRepository;
@@ -58,7 +58,7 @@ class DefaultController extends AbstractController
 
         return $this->render('default/index.html.twig', [
             'drafts' => $this->uitslagRepository->getPuntenByPloegForDraftTransfers($seizoen),
-            'nieuws' => $this->doctrine->getRepository(Nieuws::class)->findBy(['seizoen' => $seizoen], ['id' => 'DESC'], 1)[0] ?? null,
+            'nieuws' => $this->doctrine->getRepository(News::class)->findBy(['seizoen' => $seizoen], ['id' => 'DESC'], 1)[0] ?? null,
             'periode' => $periode,
             'periodestand' => $periode ? $this->uitslagRepository->getPuntenByPloegForPeriode($periode, $seizoen) : [],
             'seizoen' => $seizoen,
