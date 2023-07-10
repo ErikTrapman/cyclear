@@ -38,7 +38,7 @@ class TransferManagerTest extends WebTestCase
     protected function setUp(): void
     {
         static::bootKernel();
-        $this->databaseTool = self::$container->get(DatabaseToolCollection::class)->get();
+        $this->databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
 
         $this->databaseTool->loadFixtures([
             'App\Tests\Fixtures\LoadPloegData',
@@ -46,8 +46,8 @@ class TransferManagerTest extends WebTestCase
             'App\Tests\Fixtures\LoadSeizoenData',
         ]);
 
-        $this->em = self::$container->get('doctrine')->getManager();
-        $this->transferManager = self::$container->get(TransferManager::class);
+        $this->em = self::getContainer()->get('doctrine')->getManager();
+        $this->transferManager = self::getContainer()->get(TransferManager::class);
         $this->ploegRepo = $this->em->getRepository(Ploeg::class);
         $this->rennerRepo = $this->em->getRepository(Renner::class);
         $this->contractRepo = $this->em->getRepository(Contract::class);
