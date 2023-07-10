@@ -2,7 +2,7 @@
 
 namespace App\EntityManager;
 
-use App\Calculator\PuntenCalculator;
+use App\Calculator\PointsCalculator;
 use App\CQRanking\Nationality\NationalityResolver;
 use App\CQRanking\Parser\CQParser;
 use App\CQRanking\Parser\Twitter\TwitterParser;
@@ -22,7 +22,7 @@ class UitslagManager
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly CQParser $cqParser,
-        private readonly PuntenCalculator $puntenCalculator,
+        private readonly PointsCalculator $puntenCalculator,
         private readonly RennerManager $rennerManager,
         private readonly TwitterParser $twitterParser,
         private readonly RennerRepository $rennerRepository,

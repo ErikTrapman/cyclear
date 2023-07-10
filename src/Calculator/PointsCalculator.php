@@ -8,7 +8,7 @@ use App\Entity\Transfer;
 use App\Repository\TransferRepository;
 use App\Repository\UitslagRepository;
 
-class PuntenCalculator
+class PointsCalculator
 {
     public function __construct(
         private readonly TransferRepository $transferRepository,
