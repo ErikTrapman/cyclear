@@ -27,41 +27,60 @@
                     </td>
                 {% endif %}
             </tr>
+            <tr class="results_match_{{ wedstrijd.id }}" style="display:none; background-color: #f9f9f9">
+                {# Punten	#	Renner  #}
+                <th>Punten</th>
+                <th>#</th>
+                <th>Renner</th>
+                <th colspan="3">Ploeg</th>
+            </tr>
             {% for uitslag in wedstrijd.uitslagen %}
                 <tr class="results_match_{{ wedstrijd.id }}" style="display: none;">
-                    <td>{{ "%02d"|format(loop.index) }}</td>
-                    <td class="hidden-xs hidden-sm">
+                    <td>
+                        {% include 'uitslag/_singlePoints.html.twig' with {uitslag: uitslag} %}
                         {% if uitslag.ploeg %}
-                            <a href="{{ path('ploeg_show', {id: uitslag.ploeg.id, seizoen: seizoen.slug}) }}">{{ uitslag.ploeg.naam }}</a>
+                            {% if not rennerRepo.isDraftTransfer(uitslag.renner, uitslag.ploeg) %}
+                                &nbsp;<i data-toggle="tooltip" title="Transfer" class="fa fa-euro"></i>
+                            {% endif %}
                         {% endif %}
                     </td>
                     <td>
+                        {{ "%02d"|format(loop.index) }}
+                    </td>
+                    <td>
+                        {% include "renner/_singleRow.html.twig" with {renner: uitslag.renner, seizoen: uitslag.wedstrijd.seizoen} %}
+                    </td>
+                    <td colspan="3">
                         {% if uitslag.ploeg %}
                             <a href="{{ path('ploeg_show', {id: uitslag.ploeg.id, seizoen: seizoen.slug}) }}">{{ uitslag.ploeg.afkorting }}</a>
                         {% endif %}
                     </td>
-                    <td colspan="2">{% include "renner/_singleRow.html.twig" with {renner: uitslag.renner, seizoen: uitslag.wedstrijd.seizoen} %}</td>
-                    <td>{% include 'uitslag/_singlePoints.html.twig' with {uitslag: uitslag} %}</td>
                 </tr>
             {% endfor %}
-            <tr class="results_match_{{ wedstrijd.id }}" style="display: none;">
-                <td colspan="99"/>
+            <tr class="results_match_{{ wedstrijd.id }}" style="display:none; background-color: #f9f9f9">
+                {# Punten	#	Renner  #}
+                <th>Punten</th>
+                <th>#</th>
+                <th>Renners</th>
+                <th colspan="3">Ploeg</th>
             </tr>
-            {% for uitslag in wedstrijd.getUitslagenGrouped %}
+            {% for uitslag in wedstrijd.getUitslagenGrouped(true) %}
                 <tr class="results_match_{{ wedstrijd.id }}" style="display: none;">
-                    <td>{{ "%02d"|format(loop.index) }}</td>
-                    <td class="hidden-xs hidden-sm">
-                        {% if uitslag.ploeg %}
-                            <a href="{{ path('ploeg_show', {id: uitslag.ploeg.id, seizoen: seizoen.slug}) }}">{{ uitslag.ploeg.naam }}</a>
+                    <td>{{ uitslag.total }}</td>
+                    <td>{{ uitslag.hits }}x</td>
+                    <td>
+                        {% if uitslag.renners %}
+                            {% for uitslag_renner in uitslag.renners %}
+                                {% include "renner/_singleRow.html.twig" with {renner: uitslag_renner.renner, seizoen: wedstrijd.seizoen} %}{% if not loop.last %}|{% endif %}
+                            {% endfor %}
+{#                            <a href="{{ path('ploeg_show', {id: uitslag.ploeg.id, seizoen: seizoen.slug}) }}">{{ uitslag.ploeg.naam }}</a>#}
                         {% endif %}
                     </td>
-                    <td>
+                    <td colspan="3">
                         {% if uitslag.ploeg %}
                             <a href="{{ path('ploeg_show', {id: uitslag.ploeg.id, seizoen: seizoen.slug}) }}">{{ uitslag.ploeg.afkorting }}</a>
                         {% endif %}
                     </td>
-                    <td colspan="2">{{ uitslag.hits }}x</td>
-                    <td>{{ uitslag.total }}</td>
                 </tr>
             {% endfor %}
         {% endfor %}

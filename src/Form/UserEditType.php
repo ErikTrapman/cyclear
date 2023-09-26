@@ -13,7 +13,7 @@ class UserEditType extends BaseType
         parent::__construct($class);
     }
 
-    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
+    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options): void
     {
         $this->buildUserForm($builder, $options);
         $builder
@@ -22,7 +22,7 @@ class UserEditType extends BaseType
         $builder->addEventSubscriber($subscriber);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['user' => null]);
     }

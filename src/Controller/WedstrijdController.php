@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Seizoen;
 use App\Entity\Wedstrijd;
+use App\Repository\RennerRepository;
 use App\Repository\UitslagRepository;
 use App\Repository\WedstrijdRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -16,8 +17,10 @@ class WedstrijdController extends AbstractController
 {
     public function __construct(
         private readonly WedstrijdRepository $wedstrijdRepository,
-        private readonly PaginatorInterface $paginator,
-    ) {
+        private readonly RennerRepository    $rennerRepository,
+        private readonly PaginatorInterface  $paginator,
+    )
+    {
     }
 
 //    #[Route(path: '/{seizoen/wedstrijd/latest', name: 'wedstrijd_latest')]
@@ -52,6 +55,7 @@ class WedstrijdController extends AbstractController
             'wedstrijd' => $wedstrijd,
             'uitslagen' => array_merge($refStages, [$wedstrijd]),
             'allstages' => $allStages,
+            'riderRepo' => $this->rennerRepository,
         ]);
     }
 

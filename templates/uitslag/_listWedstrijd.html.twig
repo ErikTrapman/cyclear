@@ -13,8 +13,17 @@
                         <a href="{{ path('ploeg_show', {id: uitslag.ploeg.id, seizoen: seizoen.slug}) }}">{{ uitslag.ploeg.afkorting }}</a>
                     {% endif %}
                 </td>
-                <td colspan="2">{% include "renner/_singleRow.html.twig" with {renner: uitslag.renner, seizoen: uitslag.wedstrijd.seizoen} %}</td>
-                <td>{% include 'uitslag/_singlePoints.html.twig' with {uitslag: uitslag} %}</td>
+                <td colspan="2">
+                    {% include "renner/_singleRow.html.twig" with {renner: uitslag.renner, seizoen: uitslag.wedstrijd.seizoen} %}
+                </td>
+                <td>
+                    {% include 'uitslag/_singlePoints.html.twig' with {uitslag: uitslag} %}
+                    {% if uitslag.ploeg %}
+                        {% if not riderRepo.isDraftTransfer(uitslag.renner, uitslag.ploeg) %}
+                            &nbsp;<i data-toggle="tooltip" title="Transfer" class="fa fa-euro"></i>
+                        {% endif %}
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </table>

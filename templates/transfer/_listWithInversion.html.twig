@@ -5,16 +5,17 @@
     <table class="table table-bordered table-striped">
         <tr>
             {% if not fromTeamPage %}
-                <th/>
+                <th>Ploeg</th>
             {% endif %}
             <th>IN</th>
             <th>UIT</th>
-            <th/>
+            <th>Datum</th>
         </tr>
         {% for transfer in listWithInversion %}
             <tr>
                 {% if not fromTeamPage %}
-                    <td>{% if transfer.ploegNaar %}{{ transfer.ploegNaar.afkorting }}{% endif %}</td>
+                    <td>{% if transfer.ploegNaar %}
+                            <a href="{{ path('ploeg_show', {id: transfer.ploegNaar.id, seizoen: seizoen.slug}) }}">{{ transfer.ploegNaar.afkorting }}<a/>{% endif %}</td>
                 {% endif %}
                 <td>{% include "renner/_singleRow.html.twig" with {"renner": transfer.renner, "rennerPloeg": null, "seizoen": transfer.seizoen} %}
                 </td>
