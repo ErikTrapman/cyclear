@@ -48,3 +48,7 @@ docker-compose.yml
 ###< vincentlanglet/twig-cs-fixer ###
 
 /.surf/builds
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
