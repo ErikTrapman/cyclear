@@ -1,6 +1,28 @@
-{% block content %}
-    <table class="table table-bordered table-striped">
+{% macro tbody(index, ploeg, seizoen, shadowgained, shadowlost, transferCount) %}
+    <tr>
+        <td>{{ "%02d"|format(index) }}</td>
+        <td class="hidden-xs hidden-sm">
+            <a href="{{ path('ploeg_show', {id: ploeg.id, seizoen: seizoen.slug}) }}">{{ ploeg.naam }}</a>
+        </td>
+        <td>
+            <a href="{{ path('ploeg_show', {id: ploeg.id, seizoen: seizoen.slug}) }}">{{ ploeg.afkorting }}</a>
+        </td>
+        <td>
+            {{ ploeg.punten_calculated }}
+        </td>
 
+        <td style="color:green;">
+            +{{ shadowgained[ploeg.id] }}</td>
+        <td style="color:red">
+            -{{ shadowlost[ploeg.id] }}</td>
+        <td>
+            {{ transferCount }}
+        </td>
+    </tr>
+{% endmacro %}
+
+{% block content %}
+    {% set header %}
         <tr>
             <th colspan="2" class="hidden-lg hidden-md">
                 Ploeg
@@ -9,37 +31,38 @@
             <th colspan="3">Punten</th>
             {% if transferRepo is defined %}
                 <th>#T</th>
-                <th>Per T</th>
             {% endif %}
         </tr>
+    {% endset %}
 
+    <table class="table table-bordered table-striped">
+        {{ header }}
+
+        {% set unactive = {} %}
         {% for ploeg in list %}
             {% set id = ploeg.id %}
-            <tr>
-                <td>{{ "%02d"|format(loop.index) }}</td>
-                <td class="hidden-xs hidden-sm">
-                    <a href="{{ path('ploeg_show', {id: ploeg.id, seizoen: seizoen.slug}) }}">{{ ploeg.naam }}</a>
-                </td>
-                <td>
-                    <a href="{{ path('ploeg_show', {id: ploeg.id, seizoen: seizoen.slug}) }}">{{ ploeg.afkorting }}</a>
-                </td>
-                <td>{{ ploeg.punten_calculated }}</td>
-
-                <td style="color:green;">
-                    +{{ shadowgained[id] }}</td>
-                <td style="color:red">
-                    -{{ shadowlost[id] }}</td>
-                {% if transferRepo is defined %}
-                    {% if seizoen.start and seizoen.end %}
-                        {% set transferCount = transferRepo.getTransferCountForUserTransfer(id, seizoen.start, seizoen.end) %}
-                        <td>{{ transferCount }}</td>
-                        <td>{% if transferCount > 0 %}{{ (ploeg.punten / transferCount)|round(2) }}{% endif %}</td>
-                    {% else %}
-                        <td colspan="2">~</td>
-                    {% endif %}
+            {% set transferCount = 0 %}
+            {% if transferRepo is defined %}
+                {% if seizoen.start and seizoen.end %}
+                    {% set transferCount = transferRepo.getTransferCountForUserTransfer(id, seizoen.start, seizoen.end) %}
                 {% endif %}
-            </tr>
-        {% endfor %}
+            {% endif %}
 
+            {% if transferCount == 0 %}
+                {% set unactive = unactive|merge([ploeg]) %}
+            {% else %}
+                {{ _self.tbody(loop.index, ploeg, seizoen, shadowgained, shadowlost, transferCount) }}
+            {% endif %}
+        {% endfor %}
+        <tr>
+            <th colspan="6" class="hidden-lg hidden-md">
+                N/A
+            </th>
+            <th class="hidden-xs hidden-sm" colspan="7">N/A</th>
+        </tr>
+
+        {% for index, ploeg in unactive %}
+            {{ _self.tbody(index, ploeg, seizoen, shadowgained, shadowlost, 0) }}
+        {% endfor %}
     </table>
 {% endblock %}

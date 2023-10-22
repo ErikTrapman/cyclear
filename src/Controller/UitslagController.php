@@ -110,7 +110,7 @@ class UitslagController extends AbstractController
         $stand = $this->uitslagRepository->getPuntenByPloeg($seizoen);
         $draft = $this->uitslagRepository->getPuntenByPloegForDraftTransfers($seizoen);
 
-        $bestTransfers = array_slice($this->uitslagRepository->getBestTransfers($seizoen), 0, 50);
+        $bestTransfers = array_slice($this->uitslagRepository->getBestTransfers($seizoen), 0, 99);
 
         return $this->render('uitslag/overview.html.twig', [
             'seizoen' => $seizoen,
