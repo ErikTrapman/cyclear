@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/admin/nieuws')]
+#[Route(path: '/admin/news')]
 class NewsController extends AbstractController
 {
     public function __construct(
@@ -31,7 +31,7 @@ class NewsController extends AbstractController
             $entities, $request->query->get('page', 1), 20
         );
 
-        return $this->render('admin/nieuws/index.html.twig', ['entities' => $pagination]);
+        return $this->render('admin/news/index.html.twig', ['entities' => $pagination]);
     }
 
     #[Route(path: '/new', name: 'admin_nieuws_new')]
@@ -40,7 +40,7 @@ class NewsController extends AbstractController
         $entity = new News();
         $form = $this->createForm(NieuwsType::class, $entity);
 
-        return $this->render('admin/nieuws/new.html.twig', [
+        return $this->render('admin/news/new.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -81,7 +81,7 @@ class NewsController extends AbstractController
         $editForm = $this->createForm(NieuwsType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('admin/nieuws/edit.html.twig', [
+        return $this->render('admin/news/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
