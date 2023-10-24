@@ -14,7 +14,7 @@
                 <div id="navigation">
                     {{ knp_pagination_render(pagination, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'wedstrijd_list'}) }}
                 </div>
-                {% include "wedstrijd/latest.html.twig" with {"wedstrijden": pagination} %}
+                {% include "wedstrijd/latest.html.twig" with {"wedstrijden": pagination, rennerRepo: rennerRepository} %}
             </div>
         </div>
     </div>
