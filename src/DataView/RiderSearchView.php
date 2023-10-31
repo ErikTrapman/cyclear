@@ -12,8 +12,8 @@ class RiderSearchView
             'punten' => $data['punten'],
             'team' => array_key_exists('team', $data) ? $data['team'] : null,
             'country' => [
-                'name' => $data[0]->getCountry()->getName(),
-                'iso2' => $data[0]->getCountry()->getIso2(),
+                'name' => $data[0]->getCountry()?->getName(),
+                'iso2' => $data[0]->getCountry()?->getIso2(),
             ],
         ];
     }
