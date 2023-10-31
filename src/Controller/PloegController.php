@@ -14,6 +14,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PloegController extends AbstractController
@@ -30,7 +31,7 @@ class PloegController extends AbstractController
     }
 
     #[Route(path: '/{seizoen}/ploeg/{id}/show', name: 'ploeg_show')]
-    public function showAction(Request $request, Seizoen $seizoen, Ploeg $id): \Symfony\Component\HttpFoundation\Response
+    public function showAction(Request $request, Seizoen $seizoen, Ploeg $id): Response
     {
         $entity = $id;
         $renners = $this->ploegRepository->getRennersWithPunten($entity);
@@ -38,20 +39,20 @@ class PloegController extends AbstractController
         $currentPage = (int)$request->query->get('page', 1);
         $uitslagen = $this->paginator->paginate(
             $this->uitslagRepository->getUitslagenForPloegQb($entity, $seizoen)->getQuery()->getResult(),
-            (int)$request->query->get('resultsPage', 1), 20, ['pageParameterName' => 'resultsPage']
+            (int)$request->query->get('resultsPage', 1), 99, ['pageParameterName' => 'resultsPage']
         );
-        $transfers = $this->paginator->paginate($this->transferRepository->getLatest(
-            $seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER], 9999, $entity), (int)$request->query->get('transferPage', 1), 20, ['pageParameterName' => 'transferPage']);
+        $transfers =$this->transferRepository->getLatest(
+            $seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER], 9999, $entity);
         $transferUitslagen = $this->paginator->paginate(
             $this->uitslagRepository->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen)->getQuery()->getResult(),
-            (int)$request->query->get('transferResultsPage', 1), 20, ['pageParameterName' => 'transferResultsPage']
+            (int)$request->query->get('transferResultsPage', 1), 999, ['pageParameterName' => 'transferResultsPage']
         );
         $lostDrafts = $this->paginator->paginate(
-            $this->uitslagRepository->getUitslagenForPloegForLostDraftsQb($entity, $seizoen)->getQuery()->getResult(), $currentPage, 20
+            $this->uitslagRepository->getUitslagenForPloegForLostDraftsQb($entity, $seizoen)->getQuery()->getResult(), $currentPage, 999
         );
         $zeges = $this->paginator->paginate(
             $this->uitslagRepository->getUitslagenForPloegByPositionQb($entity, 1, $seizoen)->getQuery()->getResult(),
-            (int)$request->query->get('zegeResultsPage', 1), 20, ['pageParameterName' => 'zegeResultsPage']
+            (int)$request->query->get('zegeResultsPage', 1), 999, ['pageParameterName' => 'zegeResultsPage']
         );
 
         $punten = $this->uitslagRepository->getPuntenByPloeg($seizoen, $entity);

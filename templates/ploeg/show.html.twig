@@ -5,56 +5,36 @@
 {% endblock %}
 
 {% block content %}
-
-    <div class="big-header" style="margin-bottom: 0;">
-        <h2>{{ entity.naam }}</h2>
+    <div class="big-header" id="header" style="margin-bottom: 0;">
+        <h2>{{ entity.naam }} - {{ punten }}</h2>
     </div>
-    <div class="big-header-ext">
-        <ul class="list-inline">
-            <li>{{ punten }} punten</li>
-        </ul>
-    </div>
-
     <div class="container">
-
         <div class="row">
             <div class="col-lg-12">
-
                 <div id="filters">
-
                     <ul id="tabs" class="list-group list-inline">
                         <li class="active"><a href="#ploeg" data-toggle="tab"><h5>Ploeg</h5></a></li>
-                        <li><a href="#punten" data-toggle="tab"><h5>Gescoorde punten</h5></a></li>
                         <li><a href="#transfers" data-toggle="tab"><h5>Transfers</h5></a></li>
                         <li><a href="#transferpunten" data-toggle="tab"><h5>Transfer punten</h5></a></li>
                         <li><a href="#zeges" data-toggle="tab"><h5>Zeges</h5></a></li>
                         <li><a href="#draft" data-toggle="tab"><h5>Draftploeg</h5></a></li>
                         <li><a href="#lostdrafts" data-toggle="tab"><h5>Draft-</h5></a></li>
                     </ul>
-
                 </div>
-
                 <div class="tab-content">
                     <div class="tab-pane active" id="ploeg">
                         {% include "ploeg/_singleRenners.html.twig"
                             with {
                             'renners': renners, 'showTotal': false, 'showContract': true, 'showActions': true
                             } %}
-
                         {% if isMyTeam(entity) %}
                             <form method="post" action="{{ path('ploeg_show', {id: entity.id, seizoen: seizoen.slug}) }}">
                                 {{ form_widget(form) }}
                             </form>
                         {% endif %}
-
-                    </div>
-                    <div class="tab-pane" id="punten">
-                        <div class="table-responsive">
-                            {% include "uitslag/_listPloeg.html.twig" with {'uitslagen': uitslagen} %}
-                        </div>
                     </div>
                     <div class="tab-pane" id="transfers">
-                        {% include "transfer/_listWithInversion.html.twig" with {'fromTeamPage': true, 'listWithInversion': transfers, 'firstPageRoute': 'ploeg_show', 'includePagination': true} %}
+                        {% include "transfer/_listWithInversion.html.twig" with {'fromTeamPage': true, 'listWithInversion': transfers, 'firstPageRoute': 'ploeg_show', 'includePagination': false} %}
                     </div>
                     <div class="tab-pane" id="transferpunten">
                         <div class="table-responsive">
@@ -77,5 +57,20 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="big-header">
+        <h2 style="margin-bottom: 0px;">
+            Punten
+        </h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                {% include "uitslag/_listPloeg.html.twig" with {'uitslagen': uitslagen} %}
+            </div>
+        </div>
+        <h2>
+            <a style="color: #2f2f2f" href="#main-navbar"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a>
+        </h2>
     </div>
 {% endblock %}
