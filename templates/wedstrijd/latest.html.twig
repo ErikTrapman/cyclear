@@ -29,7 +29,10 @@
             </tr>
             <tr class="results_match_{{ wedstrijd.id }}" style="display:none; background-color: #f9f9f9">
                 {# Punten	#	Renner  #}
-                <th>Punten</th>
+                <th>
+                    <span class="hidden-xs hidden-sm">Punten</span>
+                    <span class="hidden-md hidden-lg">P</span>
+                </th>
                 <th>#</th>
                 <th>Renner</th>
                 <th colspan="3">Ploeg</th>
@@ -38,17 +41,17 @@
                 <tr class="results_match_{{ wedstrijd.id }}" style="display: none;">
                     <td>
                         {% include 'uitslag/_singlePoints.html.twig' with {uitslag: uitslag} %}
-                        {% if uitslag.ploeg %}
-                            {% if not rennerRepo.isDraftTransfer(uitslag.renner, uitslag.ploeg) %}
-                                &nbsp;<i data-toggle="tooltip" title="Transfer" class="fa fa-euro"></i>
-                            {% endif %}
-                        {% endif %}
                     </td>
                     <td>
                         {{ "%02d"|format(loop.index) }}
                     </td>
                     <td>
                         {% include "renner/_singleRow.html.twig" with {renner: uitslag.renner, seizoen: uitslag.wedstrijd.seizoen} %}
+                        {% if uitslag.ploeg %}
+                            {% if not rennerRepo.isDraftTransfer(uitslag.renner, uitslag.ploeg) %}
+                                <sup><i data-toggle="tooltip" title="Transfer" class="fa fa-euro"></i></sup>
+                            {% endif %}
+                        {% endif %}
                     </td>
                     <td colspan="3">
                         {% if uitslag.ploeg %}
@@ -59,7 +62,10 @@
             {% endfor %}
             <tr class="results_match_{{ wedstrijd.id }}" style="display:none; background-color: #f9f9f9">
                 {# Punten	#	Renner  #}
-                <th>Punten</th>
+                <th>
+                    <span class="hidden-xs hidden-sm">Punten</span>
+                    <span class="hidden-md hidden-lg">P</span>
+                </th>
                 <th>#</th>
                 <th>Renners</th>
                 <th colspan="3">Ploeg</th>

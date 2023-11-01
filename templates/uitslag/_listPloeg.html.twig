@@ -3,7 +3,10 @@
 
     <table class="table table-bordered table-striped">
         <tr>
-            <th>Punten</th>
+            <th>
+                <span class="hidden-xs hidden-sm">Punten</span>
+                <span class="hidden-md hidden-lg">P</span>
+            </th>
             <th>#</th>
             <th>Renner</th>
             <th>Wedstrijd</th>
@@ -14,11 +17,16 @@
         {% for uitslag in uitslagen %}
 
             <tr>
-                <td>
+                <td nowrap>
                     {% if show == 'rennerPunten' %}{{ uitslag.rennerPunten }}{% else %}{{ uitslag.ploegPunten }}{% endif %}
                 </td>
                 <td>{{ uitslag.positie }}</td>
-                <td>{{ uitslag.renner.naam }}</td>
+                <td>
+                    {{ uitslag.renner.naam }}
+                    {% if not rennerRepo.isDraftTransfer(uitslag.renner, entity) %}
+                        <sup><i data-toggle="tooltip" title="Transfer" class="fa fa-euro"></i></sup>
+                    {% endif %}
+                </td>
                 <td>
                     {% include "wedstrijd/_singleRow.html.twig" with {wedstrijd: uitslag.wedstrijd, seizoen: uitslag.wedstrijd.seizoen} %}
                     {# <a href="{{ path('wedstrijd_show',{wedstrijd:uitslag.wedstrijd.id,seizoen:uitslag.wedstrijd.seizoen}) }}">{{ uitslag.wedstrijd.naam }}</a> #}

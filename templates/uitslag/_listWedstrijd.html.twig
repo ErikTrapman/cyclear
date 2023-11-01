@@ -15,14 +15,14 @@
                 </td>
                 <td colspan="2">
                     {% include "renner/_singleRow.html.twig" with {renner: uitslag.renner, seizoen: uitslag.wedstrijd.seizoen} %}
+                    {% if uitslag.ploeg %}
+                        {% if not riderRepo.isDraftTransfer(uitslag.renner, uitslag.ploeg) %}
+                            <sup><i data-toggle="tooltip" title="Transfer" class="fa fa-euro"></i></sup>
+                        {% endif %}
+                    {% endif %}
                 </td>
                 <td>
                     {% include 'uitslag/_singlePoints.html.twig' with {uitslag: uitslag} %}
-                    {% if uitslag.ploeg %}
-                        {% if not riderRepo.isDraftTransfer(uitslag.renner, uitslag.ploeg) %}
-                            &nbsp;<i data-toggle="tooltip" title="Transfer" class="fa fa-euro"></i>
-                        {% endif %}
-                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
