@@ -50,7 +50,7 @@ class PloegController extends AbstractController
             }
         }
         $entities = $this->paginator->paginate(
-            $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
+            $query, (int)$request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         return $this->render('admin/ploeg/index.html.twig', ['entities' => $entities, 'filter' => $filter->createView()]);
     }

@@ -28,7 +28,7 @@ class NewsController extends AbstractController
         $entities = $em->getRepository(News::class)->createQueryBuilder('n')->orderBy('n.id', 'DESC');
 
         $pagination = $this->paginator->paginate(
-            $entities, $request->query->get('page', 1), 20
+            $entities, (int)$request->query->get('page', 1), 20
         );
 
         return $this->render('admin/news/index.html.twig', ['entities' => $pagination]);

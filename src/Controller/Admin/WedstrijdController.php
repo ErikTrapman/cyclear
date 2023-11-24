@@ -29,7 +29,7 @@ class WedstrijdController extends AbstractController
         $query = $em->createQuery('SELECT w FROM App\Entity\Wedstrijd w ORDER BY w.id DESC');
 
         $pagination = $this->paginator->paginate(
-            $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
+            $query, (int)$request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         return $this->render('admin/wedstrijd/index.html.twig', ['pagination' => $pagination]);
     }

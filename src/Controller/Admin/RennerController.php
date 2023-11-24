@@ -47,7 +47,7 @@ class RennerController extends AbstractController
         }
 
         $pagination = $this->paginator->paginate(
-            $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
+            $query, (int)$request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         return $this->render('admin/renner/index.html.twig', ['pagination' => $pagination, 'filter' => $filter->createView()]);
     }

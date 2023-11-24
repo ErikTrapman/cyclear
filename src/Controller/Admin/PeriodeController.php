@@ -29,7 +29,7 @@ class PeriodeController extends AbstractController
         $entities = $this->periodeRepository->createQueryBuilder('p')->orderBy('p.eind', 'DESC');
 
         $entities = $this->paginator->paginate(
-            $entities, $request->query->get('page', 1)/* page number */, 20/* limit per page */
+            $entities, (int)$request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
 
         return $this->render('admin/periode/index.html.twig', ['entities' => $entities]);

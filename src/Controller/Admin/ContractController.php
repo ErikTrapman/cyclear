@@ -45,7 +45,7 @@ class ContractController extends AbstractController
         }
 
         $pagination = $this->paginator->paginate(
-            $entities, $request->query->get('page', 1), 20
+            $entities, (int)$request->query->get('page', 1), 20
         );
 
         return $this->render('admin/contract/index.html.twig', ['entities' => $pagination, 'filter' => $filter->createView()]);

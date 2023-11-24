@@ -35,7 +35,7 @@ class TransferController extends AbstractController
 
         $query = $em->createQuery('SELECT t FROM App\Entity\Transfer t ORDER BY t.id DESC');
         $pagination = $this->paginator->paginate(
-            $query, $request->query->get('page', 1)/* page number */, 20/* limit per page */
+            $query, (int)$request->query->get('page', 1)/* page number */, 20/* limit per page */
         );
         // $entities = $query->getResult();
 
