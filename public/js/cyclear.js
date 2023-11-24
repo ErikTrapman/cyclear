@@ -635,7 +635,9 @@ $(document).ready(function () {
             }
         }
     }).bind('typeahead:selected', function (event, obj) {
-        event.preventDefault();
-        window.location = `/${seizoenSlug}/renner/${obj.slug}`;
+        if (event.currentTarget.hasAttribute('do-redirect')) {
+            event.preventDefault();
+            window.location = `/${seizoenSlug}/renner/${obj.slug}`;
+        }
     });
 });
