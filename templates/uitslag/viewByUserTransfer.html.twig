@@ -39,6 +39,7 @@
         {{ header }}
 
         {% set unactive = {} %}
+        {% set index = 1 %}
         {% for ploeg in list %}
             {% set id = ploeg.id %}
             {% set transferCount = 0 %}
@@ -51,7 +52,8 @@
             {% if transferCount == 0 %}
                 {% set unactive = unactive|merge([ploeg]) %}
             {% else %}
-                {{ _self.tbody(loop.index, ploeg, seizoen, shadowgained, shadowlost, transferCount) }}
+                {{ _self.tbody(index, ploeg, seizoen, shadowgained, shadowlost, transferCount) }}
+                {% set index = index + 1 %}
             {% endif %}
         {% endfor %}
         <tr>
@@ -61,8 +63,10 @@
             <th class="hidden-xs hidden-sm" colspan="7">N/A</th>
         </tr>
 
-        {% for index, ploeg in unactive %}
+        {% set index = 1 %}
+        {% for ploeg in unactive %}
             {{ _self.tbody(index, ploeg, seizoen, shadowgained, shadowlost, 0) }}
+            {% set index = index + 1 %}
         {% endfor %}
     </table>
 {% endblock %}
