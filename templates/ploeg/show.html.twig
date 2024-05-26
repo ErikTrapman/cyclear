@@ -6,7 +6,10 @@
 
 {% block content %}
     <div class="big-header" id="header" style="margin-bottom: 0;">
-        <h2>{{ entity.naam }} - {{ punten }}</h2>
+        <h2>
+            {% if entity.user.firstName %}{{ entity.user.firstName }} &bull; {% endif %}
+            {{ entity.naam }} - {{ punten }}
+        </h2>
     </div>
     <div class="container">
         <div class="row">

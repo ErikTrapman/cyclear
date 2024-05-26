@@ -17,7 +17,8 @@ class UserEditType extends BaseType
     {
         $this->buildUserForm($builder, $options);
         $builder
-            ->add('enabled', null, ['required' => false]);
+            ->add('enabled', null, ['required' => false])
+            ->add('firstName', null, ['required' => false]);
         $subscriber = new IsAdminFieldSubscriber($builder->getFormFactory());
         $builder->addEventSubscriber($subscriber);
     }

@@ -27,6 +27,11 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable, LegacyPa
      */
     private $ploeg;
 
+    /**
+     * @ORM\Column(nullable=true)
+     */
+    private ?string $firstName = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -61,5 +66,15 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable, LegacyPa
             }
         }
         return null;
+    }
+
+    public function setFirstName(string $value = null): void
+    {
+        $this->firstName = $value;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
     }
 }
