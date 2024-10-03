@@ -131,4 +131,34 @@ class PointsCalculatorTest extends WebTestCase
 
         $this->assertFalse($c->canGetTeamPoints(new Renner(), new \DateTime('2013-05-01 11:00:00'), $seizoen));
     }
+
+    /**
+     * @dataProvider seasonalPointsDataProvider
+     */
+    public function testRiderCalculatesCorrectTeamPoints(int $current, int $max, int $given, int $expected)
+    {
+        $transferRepo = $this->getMockBuilder(TransferRepository::class)->disableOriginalConstructor()->getMock();
+        $uitslagRepo = $this->getMockBuilder(UitslagRepository::class)->disableOriginalConstructor()->getMock();
+
+        // setup a valid transfer so it will get us points
+        $t = new Transfer();
+        $t->setDatum(new \DateTime('2013-04-30 23:59:59'));
+        $transferRepo->method('findLastTransferForDate')->willReturn($t);
+        $uitslagRepo->method('getTotalPuntenForRenner')->willReturn($current);
+
+        $c = new PointsCalculator($transferRepo, $uitslagRepo);
+        $seizoen = new Seizoen();
+        $seizoen->setMaxPointsPerRider($max);
+
+        $this->assertEquals($expected, $c->calculateRiderTeamPoints(new Renner(), $seizoen, $given));
+    }
+
+    public static function seasonalPointsDataProvider()
+    {
+        return [
+            'normal' => [100, 1500, 110, 110],
+            'does not pass max' => [100, 150, 65, 50],
+            'already over' => [1500, 1500, 110, 0],
+        ];
+    }
 }

@@ -44,6 +44,20 @@ class PointsCalculator
         return $this->validateTransfer($lastTransfer, $wedstrijdDatum);
     }
 
+    public function calculateRiderTeamPoints(Renner $renner, Seizoen $seizoen, int $givenPoints): int
+    {
+        // can the rider still get points, or passed the max of this season?
+        $currentSeasonalRiderPoints = $this->uitslagRepository->getTotalPuntenForRenner($renner, $seizoen);
+
+        $newSeasonalRiderPoints = $currentSeasonalRiderPoints + $givenPoints;
+
+        if ($newSeasonalRiderPoints <= $seizoen->getMaxPointsPerRider()) {
+            return $givenPoints;
+        }
+
+        return \intval($givenPoints - ($newSeasonalRiderPoints - $seizoen->getMaxPointsPerRider()));
+    }
+
     private function validateTransfer(Transfer $transfer, \DateTime $validationDatum): bool
     {
         $transferDatum = clone $transfer->getDatum();

@@ -54,7 +54,7 @@ class UitslagManager
                 if (null !== $transfer) {
                     $row['ploeg'] = (null !== $transfer->getPloegNaar()) ? $transfer->getPloegNaar()->getId() : null;
                     if (null !== $row['ploeg'] && $this->puntenCalculator->canGetTeamPoints($renner, $wedstrijd->getDatum(), $seizoen, $puntenReferentieDatum)) {
-                        $row['ploegPunten'] = $uitslagregel['points'];
+                        $row['ploegPunten'] = $this->puntenCalculator->calculateRiderTeamPoints($renner, $seizoen, (int)$uitslagregel['points']);
                     }
                 }
             } else {
