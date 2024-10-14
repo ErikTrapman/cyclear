@@ -78,7 +78,7 @@ class TransferController extends AbstractController
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $form->get('datum')->getData()->setTime(date('H'), date('i'), date('s'));
+                $form->get('datum')->getData()->setTime((int)date('H'), (int)date('i'), (int)date('s'));
                 $this->transferManager->doExchangeTransfer(
                     $form->get('renner')->getData(), $form->get('renner2')->getData(), $form->get('datum')->getData(), $form->get('seizoen')->getData());
                 $this->doctrine->getManager()->flush();
