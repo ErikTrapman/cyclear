@@ -7,7 +7,7 @@ use Doctrine\ORM\Query\Filter\SQLFilter;
 
 class PloegNaamFilter extends SQLFilter
 {
-    public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias, $targetTable = '')
+    public function addFilterConstraint(ClassMetaData $targetEntity, $targetTableAlias, $targetTable = '')
     {
         if ('App\Entity\Ploeg' != $targetEntity->name) {
             return '';

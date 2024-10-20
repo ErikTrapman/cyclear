@@ -12,11 +12,11 @@ class PointsCalculator
 {
     public function __construct(
         private readonly TransferRepository $transferRepository,
-        private readonly UitslagRepository $uitslagRepository
+        private readonly UitslagRepository $uitslagRepository,
     ) {
     }
 
-    public function canGetTeamPoints(Renner $renner, \DateTime $wedstrijdDatum, Seizoen $seizoen, \DateTime $referentieDatum = null): bool
+    public function canGetTeamPoints(Renner $renner, \DateTime $wedstrijdDatum, Seizoen $seizoen, ?\DateTime $referentieDatum = null): bool
     {
         if (null !== $referentieDatum) {
             $transferFromRefDatum = $this->transferRepository->findLastTransferForDate($renner, $referentieDatum, $seizoen);

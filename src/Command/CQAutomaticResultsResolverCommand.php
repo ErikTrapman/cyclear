@@ -6,23 +6,23 @@ use App\CQRanking\CQAutomaticResultsResolver;
 use App\CQRanking\Parser\RecentRaces\RecentRacesParser;
 use App\Repository\SeizoenRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'cyclear:auto-results')]
 class CQAutomaticResultsResolverCommand extends Command
 {
     use LockableTrait;
-
-    protected static $defaultName = 'cyclear:auto-results';
 
     public function __construct(
         private readonly CQAutomaticResultsResolver $resolver,
         private readonly RecentRacesParser $parser,
         private readonly ManagerRegistry $doctrine,
         private readonly SeizoenRepository $seizoenRepository,
-        string $name = null
+        ?string $name = null,
     ) {
         parent::__construct($name);
     }

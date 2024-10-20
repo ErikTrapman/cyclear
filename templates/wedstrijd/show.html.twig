@@ -12,7 +12,7 @@
 
         <div class="row">
             <div class="col-lg-12">
-                {% include "uitslag/_listWedstrijd.html.twig" with {uitslagen: wedstrijd.uitslagen, riderRepo: riderRepo} %}
+                {{ include('uitslag/_listWedstrijd.html.twig', {uitslagen: wedstrijd.uitslagen, riderRepo: riderRepo}) }}
             </div>
         </div>
     </div>
@@ -35,7 +35,7 @@
 
                 {% for row in allstages %}
                     <tr>
-                        <td>{{ "%02d"|format(loop.index) }}</td>
+                        <td>{{ '%02d'|format(loop.index) }}</td>
 
                         <td class="hidden-xs hidden-sm">
                             <a href="{{ path('ploeg_show', {id: row.ploeg.id, seizoen: seizoen.slug}) }}">{{ row.ploeg.naam }}</a>

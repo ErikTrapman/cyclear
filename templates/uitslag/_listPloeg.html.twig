@@ -28,7 +28,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% include "wedstrijd/_singleRow.html.twig" with {wedstrijd: uitslag.wedstrijd, seizoen: uitslag.wedstrijd.seizoen} %}
+                    {{ include('wedstrijd/_singleRow.html.twig', {wedstrijd: uitslag.wedstrijd, seizoen: uitslag.wedstrijd.seizoen}) }}
                     {# <a href="{{ path('wedstrijd_show',{wedstrijd:uitslag.wedstrijd.id,seizoen:uitslag.wedstrijd.seizoen}) }}">{{ uitslag.wedstrijd.naam }}</a> #}
                 </td>
                 <td class="hidden-xs hidden-sm">{{ uitslag.wedstrijd.datum|format_datetime(pattern='dd MMM') }}</td>
@@ -38,6 +38,6 @@
 
     </table>
     <div id="navigation">
-        {{ knp_pagination_render(uitslagen, null, {'seizoen': seizoen.slug}) }}
+        {{ knp_pagination_render(uitslagen, null, {seizoen: seizoen.slug}) }}
     </div>
 {% endblock %}

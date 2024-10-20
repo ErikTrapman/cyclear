@@ -1,26 +1,27 @@
 <?php declare(strict_types=1);
 
-namespace App\Form;
+namespace App\Form\Extension;
 
 use App\Form\EventListener\IsAdminFieldSubscriber;
-use FOS\UserBundle\Form\Type\ProfileFormType as BaseType;
+use FOS\UserBundle\Form\Type\ProfileFormType;
+use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserEditType extends BaseType
+class ProfileFormTypeExtension extends AbstractTypeExtension
 {
-    public function __construct($class)
+    public static function getExtendedTypes(): iterable
     {
-        parent::__construct($class);
+        return [ProfileFormType::class];
     }
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options): void
     {
-        $this->buildUserForm($builder, $options);
         $builder
             ->add('enabled', null, ['required' => false])
             ->add('firstName', null, ['required' => false]);
         $subscriber = new IsAdminFieldSubscriber($builder->getFormFactory());
         $builder->addEventSubscriber($subscriber);
+        $builder->remove('current_password');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

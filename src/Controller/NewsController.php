@@ -15,7 +15,7 @@ class NewsController extends AbstractController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly PaginatorInterface $paginator
+        private readonly PaginatorInterface $paginator,
     ) {
     }
 

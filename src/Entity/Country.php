@@ -3,38 +3,29 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Mapping\Annotation\Locale;
 use Gedmo\Translatable\Translatable;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="country")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'country')]
 class Country implements Translatable
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=2)
-     */
+    #[ORM\Column(type: 'string', length: 2)]
     private $iso2; // varchar(2) NOT NULL default '',
 
-    /**
-     * @Gedmo\Translatable
-     * @ORM\Column(nullable=true)
-     */
+    #[Translatable]
+    #[ORM\Column(nullable: true)]
     private $name;
 
-    /**
-     * @Gedmo\Locale
-     */
+    #[Locale]
     private $locale;
 
     public function getId(): int

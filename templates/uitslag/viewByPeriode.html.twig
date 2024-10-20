@@ -13,10 +13,10 @@
         </tr>
         {% for ploeg in list %}
             <tr>
-                <td>{{ "%02d"|format(loop.index) }}</td>
+                <td>{{ '%02d'|format(loop.index) }}</td>
                 <td class="hidden-xs hidden-sm">{{ ploeg.naam }}</td>
                 <td class="hidden-sm hidden-xs">{{ ploeg.afkorting }}</td>
-                <td class="hidden-lg hidden-md"><a href="{{ path('ploeg_show', {"seizoen": seizoen.slug, id: ploeg.id}) }}#!ploeg">{{ ploeg.afkorting }}</a></td>
+                <td class="hidden-lg hidden-md"><a href="{{ path('ploeg_show', {seizoen: seizoen.slug, id: ploeg.id}) }}#!ploeg">{{ ploeg.afkorting }}</a></td>
                 <td>{{ ploeg.punten }} [{% if transferpoints[ploeg.id] > 0 %}+{% endif %}{{ transferpoints[ploeg.id] }}]</td>
                 {% if transferRepo is defined %}
                     <td>

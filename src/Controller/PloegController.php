@@ -20,14 +20,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class PloegController extends AbstractController
 {
     public function __construct(
-        private readonly ManagerRegistry    $doctrine,
+        private readonly ManagerRegistry $doctrine,
         private readonly PaginatorInterface $paginator,
-        private readonly PloegRepository    $ploegRepository,
-        private readonly UitslagRepository  $uitslagRepository,
+        private readonly PloegRepository $ploegRepository,
+        private readonly UitslagRepository $uitslagRepository,
         private readonly TransferRepository $transferRepository,
-        private readonly RennerRepository   $rennerRepository,
-    )
-    {
+        private readonly RennerRepository $rennerRepository,
+    ) {
     }
 
     #[Route(path: '/{seizoen}/ploeg/{id}/show', name: 'ploeg_show')]
@@ -41,7 +40,7 @@ class PloegController extends AbstractController
             $this->uitslagRepository->getUitslagenForPloegQb($entity, $seizoen)->getQuery()->getResult(),
             (int)$request->query->get('resultsPage', 1), 99, ['pageParameterName' => 'resultsPage']
         );
-        $transfers =$this->transferRepository->getLatest(
+        $transfers = $this->transferRepository->getLatest(
             $seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER], 9999, $entity);
         $transferUitslagen = $this->paginator->paginate(
             $this->uitslagRepository->getUitslagenForPloegForNonDraftTransfersQb($entity, $seizoen)->getQuery()->getResult(),

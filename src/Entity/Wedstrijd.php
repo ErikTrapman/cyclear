@@ -5,76 +5,60 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * App\Entity\Wedstrijd
- *
- * @ORM\Table(
- *     name="wedstrijd",
- *     indexes={
- *          @ORM\Index(columns={"externalIdentifier"})
- *      }
- * )
- * @ORM\Entity(repositoryClass="App\Repository\WedstrijdRepository")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\WedstrijdRepository::class)]
+#[ORM\Table(name: 'wedstrijd')]
+#[ORM\Index(columns: ['externalIdentifier'])]
 class Wedstrijd
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="datum", type="datetime")
      */
+    #[ORM\Column(name: 'datum', type: 'datetime')]
     private $datum;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="naam", type="string", length=255)
      */
+    #[ORM\Column(name: 'naam', type: 'string', length: 255)]
     private $naam;
 
     /**
      * @var Uitslag[]
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Uitslag", mappedBy="wedstrijd", cascade={"all"})
-     * @ORM\OrderBy({"positie" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: Uitslag::class, mappedBy: 'wedstrijd', cascade: ['all'])]
+    #[ORM\OrderBy(['positie' => 'ASC'])]
     private $uitslagen;
 
     /**
      * @var Seizoen
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Seizoen")
      */
+    #[ORM\ManyToOne(targetEntity: Seizoen::class)]
     private $seizoen;
 
     /**
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="generalClassification")
      */
+    #[ORM\Column(type: 'boolean', name: 'generalClassification')]
     private $generalClassification = false;
 
     /**
      * @var string
-     *
-     * @ORM\Column(nullable=true, name="externalIdentifier")
      */
+    #[ORM\Column(nullable: true, name: 'externalIdentifier')]
     private $externalIdentifier;
 
     /**
      * @var bool
-     *
-     * @ORM\Column(type="boolean", nullable=true, name="fullyProcessed")
      */
+    #[ORM\Column(type: 'boolean', nullable: true, name: 'fullyProcessed')]
     private $fullyProcessed;
 
     public function __construct()

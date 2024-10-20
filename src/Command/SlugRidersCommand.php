@@ -12,7 +12,7 @@ ini_set('memory_limit', '1G');
 
 class SlugRidersCommand extends Command
 {
-    public function __construct(private EntityManagerInterface $em, string $name = null)
+    public function __construct(private EntityManagerInterface $em, ?string $name = null)
     {
         parent::__construct($name);
     }

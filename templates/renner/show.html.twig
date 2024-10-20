@@ -5,7 +5,7 @@
 {% block content %}
 
     <div class="big-header" style="margin-bottom: 0;">
-        <h2>{% include "country/_image.html.twig" with {'size': 32, 'country': renner.country} %}
+        <h2>{{ include('country/_image.html.twig', {size: 32, country: renner.country}) }}
             {{ renner.naam }} - {{ rennerPunten|default(0) }}
         </h2>
     </div>
@@ -18,14 +18,14 @@
                             <a href="{{ path('ploeg_show', {seizoen: seizoen.slug, id: ploeg.id}) }}">{{ ploeg.naam }}</a>
                         </li>
                         <li>
-                            {% include "renner/_singleRowActions.html.twig" with {"renner": renner, "rennerPloeg": ploeg, "seizoen": seizoen} %}
+                            {{ include('renner/_singleRowActions.html.twig', {renner: renner, rennerPloeg: ploeg, seizoen: seizoen}) }}
                         </li>
                     </ul>
                 {% else %}
                     <ul class="list-inline">
                         <li>Beschikbaar</li>
                         <li>
-                            {% include "renner/_singleRowActions.html.twig" with {"renner": renner, "rennerPloeg": ploeg, "seizoen": seizoen} %}
+                            {{ include('renner/_singleRowActions.html.twig', {renner: renner, rennerPloeg: ploeg, seizoen: seizoen}) }}
                         </li>
                     </ul>
                 {% endif %}
@@ -72,18 +72,18 @@
                                 <tr>
                                     <td>{% if uitslag.ploeg %}{{ uitslag.ploeg.afkorting }}{% endif %}</td>
                                     <td>
-                                        {% include 'uitslag/_singlePoints.html.twig' with {uitslag: uitslag} %}
+                                        {{ include('uitslag/_singlePoints.html.twig', {uitslag: uitslag}) }}
                                     </td>
                                     <td>{{ uitslag.positie }}</td>
                                     <td>
-                                        {% include "wedstrijd/_singleRow.html.twig" with {wedstrijd: uitslag.wedstrijd, seizoen: uitslag.wedstrijd.seizoen} %}
+                                        {{ include('wedstrijd/_singleRow.html.twig', {wedstrijd: uitslag.wedstrijd, seizoen: uitslag.wedstrijd.seizoen}) }}
                                     </td>
                                     <td>{{ uitslag.wedstrijd.datum|format_datetime(pattern='dd MMM') }}</td>
                                 </tr>
                             {% endfor %}
                         </table>
                         <div id="navigation">
-                            {{ knp_pagination_render(uitslagen, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'renner_show'}) }}
+                            {{ knp_pagination_render(uitslagen, null, {seizoen: seizoen.slug}, {firstPageRoute: 'renner_show'}) }}
                         </div>
                     {% endif %}
                 </div>
@@ -99,7 +99,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    {% include "transfer/_riderListWithInversion.html.twig" with {'listWithInversion': transfers} %}
+                    {{ include('transfer/_riderListWithInversion.html.twig', {listWithInversion: transfers}) }}
                 </div>
             </div>
         </div>

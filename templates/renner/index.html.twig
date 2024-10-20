@@ -30,7 +30,7 @@
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" {% if app.request.query.get('excludeWithTeam') is same as('on') %}checked{% endif%} name="excludeWithTeam">Beschikbaar
+                                            <input type="checkbox" {% if app.request.query.get('excludeWithTeam') is same as('on') %}checked{% endif %} name="excludeWithTeam">Beschikbaar
                                         </label>
                                     </div>
                                 </div>
@@ -41,7 +41,7 @@
                 </div>
 
                 <div id="navigation">
-                    {{ knp_pagination_render(pagination, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'renner_index'}) }}
+                    {{ knp_pagination_render(pagination, null, {seizoen: seizoen.slug}, {firstPageRoute: 'renner_index'}) }}
                 </div>
 
                 <div class="table-responsive">
@@ -55,7 +55,7 @@
                         {% for rider_search_view in pagination %}
                             <tr>
                                 <td>
-                                    {% include "renner/_singleRow.html.twig" with {"renner": rider_search_view, "rennerPloeg": null, "seizoen": seizoen} %}
+                                    {{ include('renner/_singleRow.html.twig', {renner: rider_search_view, rennerPloeg: null, seizoen: seizoen}) }}
                                 </td>
                                 <td>{{ rider_search_view.punten }}</td>
                                 <td>{{ rider_search_view.team }}</td>
@@ -65,7 +65,7 @@
                 </div>
 
                 <div id="navigation">
-                    {{ knp_pagination_render(pagination, null, {'seizoen': seizoen.slug}, {'firstPageRoute': 'renner_index'}) }}
+                    {{ knp_pagination_render(pagination, null, {seizoen: seizoen.slug}, {firstPageRoute: 'renner_index'}) }}
                 </div>
             </div>
         </div>

@@ -1,18 +1,22 @@
 <?php
 
-use Rector\Symfony\Set\SymfonySetList;
+declare(strict_types=1);
+
 use Rector\Config\RectorConfig;
-use Rector\Symfony\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->symfonyContainerXml(__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml');
-
-    $rectorConfig->sets([
-//        SymfonySetList::SYMFONY_62,
-//        SymfonySetList::SYMFONY_CODE_QUALITY,
-//        SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
-//        SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
-//        TemplateAnnotationToThisRenderRector::class,
-    ]);
-//    $rectorConfig->rule(TemplateAnnotationToThisRenderRector::class);
-};
+return RectorConfig::configure()
+    ->withPaths([
+        __DIR__ . '/config',
+        __DIR__ . '/public',
+        __DIR__ . '/src',
+        __DIR__ . '/tests',
+    ])
+    // uncomment to reach your current PHP version
+    //
+    ->withSets([
+            \Rector\Symfony\Set\SymfonySetList::SYMFONY_71,
+            \Rector\Symfony\Set\SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
+        ]
+    )
+    ->withTypeCoverageLevel(0)
+    ->withAttributesSets(symfony: true, doctrine: true);

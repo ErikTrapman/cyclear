@@ -4,7 +4,10 @@ doctrine:
 
         # IMPORTANT: You MUST configure your server version,
         # either here or in the DATABASE_URL env var (see .env file)
-        #server_version: '15'
+        #server_version: '16'
+
+        profiling_collect_backtrace: '%kernel.debug%'
+        use_savepoints: true
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
@@ -12,16 +15,15 @@ doctrine:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
-        controller_resolver:
-            auto_mapping: false
         mappings:
             App:
+                type: attribute
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
             gedmo_translatable:
-                type: annotation
+                type: attribute
                 prefix: Gedmo\Translatable\Entity
                 dir: "%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Translatable/Entity"
                 alias: GedmoTranslatable # this one is optional and will default to the name set for the mapping
@@ -32,6 +34,8 @@ doctrine:
                 if: DoctrineExtensions\Query\Mysql\IfElse
                 date: DoctrineExtensions\Query\Mysql\Date
                 date_format: DoctrineExtensions\Query\Mysql\DateFormat
+        controller_resolver:
+            auto_mapping: false
 
 when@test:
     doctrine:

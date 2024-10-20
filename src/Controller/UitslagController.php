@@ -65,20 +65,20 @@ class UitslagController extends AbstractController
         $list = $this->uitslagRepository->getCountForPosition($seizoen, $positie);
         return $this->render('uitslag/posities.html.twig', ['list' => $list, 'seizoen' => $seizoen, 'positie' => $positie]);
     }
-//
-//    #[Route(path: '/{seizoen}/uitslag/draft-klassement', name: 'uitslag_draft')]
-//    public function viewByDraftTransferAction(Seizoen $seizoen): array
-//    {
-//        $list = $this->uitslagRepository->getPuntenByPloegForDraftTransfers($seizoen);
-//        return ['list' => $list, 'seizoen' => $seizoen];
-//    }
-//
-//    #[Route(path: '/{seizoen}/uitslag/transfer-klassement', name: 'uitslag_transfers')]
-//    public function viewByUserTransferAction(Seizoen $seizoen): array
-//    {
-//        $list = $this->uitslagRepository->getPuntenByPloegForUserTransfers($seizoen);
-//        return ['list' => $list, 'seizoen' => $seizoen];
-//    }
+    //
+    //    #[Route(path: '/{seizoen}/uitslag/draft-klassement', name: 'uitslag_draft')]
+    //    public function viewByDraftTransferAction(Seizoen $seizoen): array
+    //    {
+    //        $list = $this->uitslagRepository->getPuntenByPloegForDraftTransfers($seizoen);
+    //        return ['list' => $list, 'seizoen' => $seizoen];
+    //    }
+    //
+    //    #[Route(path: '/{seizoen}/uitslag/transfer-klassement', name: 'uitslag_transfers')]
+    //    public function viewByUserTransferAction(Seizoen $seizoen): array
+    //    {
+    //        $list = $this->uitslagRepository->getPuntenByPloegForUserTransfers($seizoen);
+    //        return ['list' => $list, 'seizoen' => $seizoen];
+    //    }
 
     #[Route(path: '/{seizoen}/uitslag/overzicht', name: 'uitslag_overview')]
     public function overviewAction(Request $request, Seizoen $seizoen): \Symfony\Component\HttpFoundation\Response

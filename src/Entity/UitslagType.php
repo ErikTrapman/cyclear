@@ -4,46 +4,31 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * App\Entity\UitslagType
- *
- * @ORM\Table(name="uitslag_type")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'uitslag_type')]
 class UitslagType
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
-    /**
-     * @ORM\Column(name="naam", type="string")
-     */
+    #[ORM\Column(name: 'naam', type: 'string')]
     private $naam;
 
-    /**
-     * @ORM\Column(name="maxResults", type="integer")
-     */
+    #[ORM\Column(name: 'maxResults', type: 'integer')]
     private $maxResults;
 
-    /**
-     * @ORM\Column(name="isGeneralClassification", type="boolean")
-     */
+    #[ORM\Column(name: 'isGeneralClassification', type: 'boolean')]
     private $isGeneralClassification;
 
-    /**
-     * @ORM\Column(name="cqParsingStrategy", type="object")
-     */
+    #[ORM\Column(name: 'cqParsingStrategy', type: 'object')]
     private $cqParsingStrategy;
 
-    /**
-     * @ORM\Column(nullable=true, name="automaticResolvingCategories")
-     */
+    #[ORM\Column(nullable: true, name: 'automaticResolvingCategories')]
     private $automaticResolvingCategories;
 
     public function getId(): int

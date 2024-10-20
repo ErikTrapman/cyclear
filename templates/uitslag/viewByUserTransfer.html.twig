@@ -1,6 +1,6 @@
 {% macro tbody(index, ploeg, seizoen, shadowgained, shadowlost, transferCount) %}
     <tr>
-        <td>{{ "%02d"|format(index) }}</td>
+        <td>{{ '%02d'|format(index) }}</td>
         <td class="hidden-xs hidden-sm">
             <a href="{{ path('ploeg_show', {id: ploeg.id, seizoen: seizoen.slug}) }}">{{ ploeg.naam }}</a>
         </td>

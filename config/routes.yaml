@@ -35,3 +35,9 @@ fos_user_security_logout:
 
 _welcome:
     path: /
+
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute

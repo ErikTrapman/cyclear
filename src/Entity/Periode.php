@@ -4,42 +4,28 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * App\Entity\Periode
- *
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\PeriodeRepository")
- * @ORM\Table(name="periode")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\PeriodeRepository::class)]
+#[ORM\Table(name: 'periode')]
 class Periode
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
-    /**
-     * @ORM\Column(name="start", type="date")
-     */
+    #[ORM\Column(name: 'start', type: 'date')]
     private $start;
 
-    /**
-     * @ORM\Column(name="eind", type="date")
-     */
+    #[ORM\Column(name: 'eind', type: 'date')]
     private $eind;
 
-    /**
-     * @ORM\Column(name="transfers", type="smallint", nullable=true)
-     */
+    #[ORM\Column(name: 'transfers', type: 'smallint', nullable: true)]
     private $transfers;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Seizoen")
-     */
+    #[ORM\ManyToOne(targetEntity: Seizoen::class)]
     private $seizoen;
 
     public function getId(): int

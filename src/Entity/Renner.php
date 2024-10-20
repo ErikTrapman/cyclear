@@ -3,59 +3,39 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Mapping\Annotation\Slug;
 
-/**
- * App\Entity\Renner
- *
- * @ORM\Table(name="renner")
- * @ORM\Entity(repositoryClass="App\Repository\RennerRepository")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\RennerRepository::class)]
+#[ORM\Table(name: 'renner')]
 class Renner
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
-    /**
-     * @ORM\Column(name="naam", type="string", length=255)
-     */
+    #[ORM\Column(name: 'naam', type: 'string', length: 255)]
     private $naam;
 
-    /**
-     * @ORM\Column(name="cqranking_id", type="integer", length=11, nullable=true, unique=true)
-     */
+    #[ORM\Column(name: 'cqranking_id', type: 'integer', length: 11, nullable: true, unique: true)]
     private $cqranking_id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Transfer", mappedBy="renner")
-     * @ORM\OrderBy({"id" = "DESC"}))
-     */
+    #[ORM\OneToMany(targetEntity: Transfer::class, mappedBy: 'renner')]
+    #[ORM\OrderBy(['id' => 'DESC'])]
     private $transfers;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Country", fetch="EAGER")
-     */
+    #[ORM\ManyToOne(targetEntity: Country::class, fetch: 'EAGER')]
     private $country;
 
-    /**
-     * @Gedmo\Slug(fields={"naam"}, updatable=true)
-     * @ORM\Column(length=128, unique=true, nullable=true)
-     */
+    #[Slug(fields: ['naam'], updatable: true)]
+    #[ORM\Column(length: 128, unique: true, nullable: true)]
     private $slug;
 
-    /**
-     * @ORM\Column(nullable=true)
-     */
+    #[ORM\Column(nullable: true)]
     private $twitter;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contract", mappedBy="renner")
-     * @ORM\OrderBy({"id" = "DESC"}))
-     */
+    #[ORM\OneToMany(targetEntity: Contract::class, mappedBy: 'renner')]
+    #[ORM\OrderBy(['id' => 'DESC'])]
     private $contracts;
 
     public function __construct()
@@ -163,7 +143,7 @@ class Renner
         return $this->twitter;
     }
 
-    public function setTwitter(string|null $twitter): void
+    public function setTwitter(?string $twitter): void
     {
         $this->twitter = $twitter;
     }

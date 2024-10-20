@@ -17,21 +17,20 @@ class WedstrijdController extends AbstractController
 {
     public function __construct(
         private readonly WedstrijdRepository $wedstrijdRepository,
-        private readonly RennerRepository    $rennerRepository,
-        private readonly PaginatorInterface  $paginator,
-    )
-    {
+        private readonly RennerRepository $rennerRepository,
+        private readonly PaginatorInterface $paginator,
+    ) {
     }
 
-//    #[Route(path: '/{seizoen/wedstrijd/latest', name: 'wedstrijd_latest')]
-//    public function latestAction(Request $request, #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen): \Symfony\Component\HttpFoundation\Response
-//    {
-//        $uitslagenQb = $this->wedstrijdRepository->createQueryBuilder('w')
-//            ->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
-//            ->orderBy('w.datum', 'DESC')
-//            ->setMaxResults(20);
-//        return $this->render('wedstrijd/latest.html.twig', ['wedstrijden' => $uitslagenQb->getQuery()->getResult(), 'seizoen' => $seizoen]);
-//    }
+    //    #[Route(path: '/{seizoen/wedstrijd/latest', name: 'wedstrijd_latest')]
+    //    public function latestAction(Request $request, #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen): \Symfony\Component\HttpFoundation\Response
+    //    {
+    //        $uitslagenQb = $this->wedstrijdRepository->createQueryBuilder('w')
+    //            ->where('w.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
+    //            ->orderBy('w.datum', 'DESC')
+    //            ->setMaxResults(20);
+    //        return $this->render('wedstrijd/latest.html.twig', ['wedstrijden' => $uitslagenQb->getQuery()->getResult(), 'seizoen' => $seizoen]);
+    //    }
 
     #[Route(path: '/{seizoen}/wedstrijd/{wedstrijd}', name: 'wedstrijd_show')]
     public function showAction(Request $request, Wedstrijd $wedstrijd): \Symfony\Component\HttpFoundation\Response

@@ -14,7 +14,7 @@ class TransferController extends AbstractController
 {
     public function __construct(
         private readonly TransferRepository $transferRepository,
-        private readonly PaginatorInterface $paginator
+        private readonly PaginatorInterface $paginator,
     ) {
     }
 

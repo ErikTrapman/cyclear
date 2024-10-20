@@ -14,18 +14,18 @@ class RennerNameToRennerIdTransformer implements DataTransformerInterface
     {
     }
 
-    public function transform($value)
+    public function transform(mixed $value): mixed
     {
         if (null === $value) {
             return '';
         }
-        if ($value instanceof \App\Entity\Renner) {
+        if ($value instanceof Renner) {
             return $this->rennerManager->getRennerSelectorTypeString($value->getCqRanking_id(), $value->getNaam());
         }
         return 'unrecognised value';
     }
 
-    public function reverseTransform($value)
+    public function reverseTransform(mixed $value): mixed
     {
         if (null === $value) {
             return '';

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title "Posities" %}
+{% block title 'Posities' %}
 
 {% block content %}
     <div class="big-header hidden-xs hidden-sm">
@@ -14,11 +14,11 @@
                 <ul class="nav nav-pills" style="margin-bottom: 10px;">
                     {% for i in 1..20 %}
                         <li {% if i == positie %} class="active" {% endif %}><a
-                                    href="{{ path('uitslag_posities', {'seizoen': seizoen.slug, 'positie': i}) }}">{{ i }}</a>
+                                    href="{{ path('uitslag_posities', {seizoen: seizoen.slug, positie: i}) }}">{{ i }}</a>
                         </li>
                     {% endfor %}
                 </ul>
-                {% include "uitslag/viewByPosition.html.twig" %}
+                {{ include('uitslag/viewByPosition.html.twig') }}
 
             </div>
         </div>

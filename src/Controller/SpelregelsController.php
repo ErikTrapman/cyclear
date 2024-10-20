@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SpelregelsController extends AbstractController
 {
     public function __construct(
-        private readonly ManagerRegistry $doctrine
+        private readonly ManagerRegistry $doctrine,
     ) {
     }
 

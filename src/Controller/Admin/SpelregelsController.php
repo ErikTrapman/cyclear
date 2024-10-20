@@ -61,7 +61,6 @@ class SpelregelsController extends AbstractController
         ];
     }
 
-
     #[Route(path: '/{id}/edit', name: 'admin_spelregels_edit')]
     public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
@@ -82,7 +81,6 @@ class SpelregelsController extends AbstractController
             'delete_form' => $deleteForm->createView(),
         ]);
     }
-
 
     #[Route(path: '/{id}/update', name: 'admin_spelregels_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): array|RedirectResponse

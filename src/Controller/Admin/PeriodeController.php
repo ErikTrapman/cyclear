@@ -68,7 +68,6 @@ class PeriodeController extends AbstractController
         ];
     }
 
-
     #[Route(path: '/{id}/edit', name: 'admin_periode_edit')]
     public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
@@ -89,7 +88,6 @@ class PeriodeController extends AbstractController
             'delete_form' => $deleteForm->createView(),
         ]);
     }
-
 
     #[Route(path: '/{id}/update', name: 'admin_periode_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response

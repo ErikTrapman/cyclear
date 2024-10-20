@@ -20,13 +20,13 @@
 
         {% for entity in pagination %}
             <tr>
-                <td><a href="{{ path('admin_renner_edit', {'id': entity.cqrankingid}) }}">{{ entity.cqrankingid }}</a>
+                <td><a href="{{ path('admin_renner_edit', {id: entity.cqrankingid}) }}">{{ entity.cqrankingid }}</a>
                 </td>
                 <td>{{ entity.naam }}</td>
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('admin_renner_edit', {'id': entity.cqrankingid}) }}">edit</a>
+                            <a href="{{ path('admin_renner_edit', {id: entity.cqrankingid}) }}">edit</a>
                         </li>
                     </ul>
                 </td>
@@ -35,7 +35,7 @@
 
     </table>
     <div id="navigation">
-        {{ knp_pagination_render(pagination, null, {}, {'firstPageRoute': 'admin_renner'}) }}
+        {{ knp_pagination_render(pagination, null, {}, {firstPageRoute: 'admin_renner'}) }}
     </div>
     <ul>
         <li>

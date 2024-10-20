@@ -12,7 +12,7 @@ class UserTransferFixedValidator extends ConstraintValidator
     public function __construct(
         private readonly RennerRepository $rennerRepository,
         private readonly TransferRepository $transferRepository,
-        private readonly int $maxTransfers
+        private readonly int $maxTransfers,
     ) {
     }
 

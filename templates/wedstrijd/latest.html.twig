@@ -28,7 +28,7 @@
                 {% endif %}
             </tr>
             <tr class="results_match_{{ wedstrijd.id }}" style="display:none; background-color: #f9f9f9">
-                {# Punten	#	Renner  #}
+                {# Punten    #    Renner #}
                 <th>
                     <span class="hidden-xs hidden-sm">Punten</span>
                     <span class="hidden-md hidden-lg">P</span>
@@ -40,13 +40,13 @@
             {% for uitslag in wedstrijd.uitslagen %}
                 <tr class="results_match_{{ wedstrijd.id }}" style="display: none;">
                     <td>
-                        {% include 'uitslag/_singlePoints.html.twig' with {uitslag: uitslag} %}
+                        {{ include('uitslag/_singlePoints.html.twig', {uitslag: uitslag}) }}
                     </td>
                     <td>
-                        {{ "%02d"|format(loop.index) }}
+                        {{ '%02d'|format(loop.index) }}
                     </td>
                     <td>
-                        {% include "renner/_singleRow.html.twig" with {renner: uitslag.renner, seizoen: uitslag.wedstrijd.seizoen} %}
+                        {{ include('renner/_singleRow.html.twig', {renner: uitslag.renner, seizoen: uitslag.wedstrijd.seizoen}) }}
                         {% if uitslag.ploeg %}
                             {% if not rennerRepo.isDraftTransfer(uitslag.renner, uitslag.ploeg) %}
                                 <sup><i data-toggle="tooltip" title="Transfer" class="fa fa-euro"></i></sup>
@@ -61,7 +61,7 @@
                 </tr>
             {% endfor %}
             <tr class="results_match_{{ wedstrijd.id }}" style="display:none; background-color: #f9f9f9">
-                {# Punten	#	Renner  #}
+                {# Punten    #    Renner #}
                 <th>
                     <span class="hidden-xs hidden-sm">Punten</span>
                     <span class="hidden-md hidden-lg">P</span>
@@ -77,9 +77,9 @@
                     <td>
                         {% if uitslag.renners %}
                             {% for uitslag_renner in uitslag.renners %}
-                                {% include "renner/_singleRow.html.twig" with {renner: uitslag_renner.renner, seizoen: wedstrijd.seizoen} %}{% if not loop.last %}|{% endif %}
+                                {{ include('renner/_singleRow.html.twig', {renner: uitslag_renner.renner, seizoen: wedstrijd.seizoen}) }}{% if not loop.last %}|{% endif %}
                             {% endfor %}
-{#                            <a href="{{ path('ploeg_show', {id: uitslag.ploeg.id, seizoen: seizoen.slug}) }}">{{ uitslag.ploeg.naam }}</a>#}
+{# <a href="{{ path('ploeg_show', {id: uitslag.ploeg.id, seizoen: seizoen.slug}) }}">{{ uitslag.ploeg.naam }}</a> #}
                         {% endif %}
                     </td>
                     <td colspan="3">

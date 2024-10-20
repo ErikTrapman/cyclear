@@ -30,7 +30,7 @@ class UitslagManager
     ) {
     }
 
-    public function prepareUitslagen(UitslagType $uitslagType, Crawler $crawler, Wedstrijd $wedstrijd, Seizoen $seizoen, \DateTime $puntenReferentieDatum = null): array
+    public function prepareUitslagen(UitslagType $uitslagType, Crawler $crawler, Wedstrijd $wedstrijd, Seizoen $seizoen, ?\DateTime $puntenReferentieDatum = null): array
     {
         $parseStrategy = $uitslagType->getCqParsingStrategy();
         $uitslagregels = $this->cqParser->getResultRows($crawler, $parseStrategy);

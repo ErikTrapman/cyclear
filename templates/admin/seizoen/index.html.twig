@@ -15,14 +15,14 @@
 
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('admin_seizoen_edit', {'id': entity.id}) }}">{{ entity.id }}</a></td>
+                <td><a href="{{ path('admin_seizoen_edit', {id: entity.id}) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.identifier }}</td>
                 <td>{{ entity.current }}</td>
                 <td>{{ entity.closed }}</td>
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('admin_seizoen_edit', {'id': entity.id}) }}">edit</a>
+                            <a href="{{ path('admin_seizoen_edit', {id: entity.id}) }}">edit</a>
                         </li>
                     </ul>
                 </td>

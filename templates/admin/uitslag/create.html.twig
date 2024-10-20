@@ -1,6 +1,6 @@
 {% extends 'admin.base_normal.twig' %}
 
-{% block title "Nieuwe uitslag" %}
+{% block title 'Nieuwe uitslag' %}
 
 {% block content %}
 
@@ -22,15 +22,15 @@
             </div>
         </div>
 
-        {{ form_row(form.url, {'attr': {'class': 'span6'}}) }}
-        {{ form_row(form.url_manual, {'attr': {'class': 'span6'}}) }}
+        {{ form_row(form.url, {attr: {class: 'span6'}}) }}
+        {{ form_row(form.url_manual, {attr: {class: 'span6'}}) }}
         {{ form_row(form.wedstrijd.datum) }}
-        {{ form_row(form.wedstrijd.uitslagtype, {'attr': {'class': 'span4'}}) }}
+        {{ form_row(form.wedstrijd.uitslagtype, {attr: {class: 'span4'}}) }}
         {{ form_row(form.wedstrijd.seizoen) }}
-        {{ form_row(form.referentiewedstrijd, {'attr': {'class': 'span6'}}) }}
+        {{ form_row(form.referentiewedstrijd, {attr: {class: 'span6'}}) }}
         <span id="results_ajax">
                     <span style="display:none;">{{ form_widget(form.wedstrijd.naam) }}</span>
-            {% include "admin/uitslag/_ajaxTemplate.html.twig" with {"form": form} %}
+            {{ include('admin/uitslag/_ajaxTemplate.html.twig', {form: form}) }}
                 </span>
         {{ form_rest(form) }}
 

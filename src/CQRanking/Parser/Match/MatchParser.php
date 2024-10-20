@@ -8,7 +8,7 @@ class MatchParser
 {
     public function __construct(
         private readonly CrawlerManager $crawlerManager,
-        private readonly string $matchesFeed
+        private readonly string $matchesFeed,
     ) {
     }
 
@@ -18,7 +18,7 @@ class MatchParser
         // TODO refactor this to make it more testeable. e,g, the possibility to feed it with static content.
         $crawler = $this->crawlerManager->getCrawlerForMatchSelector($this->matchesFeed);
 
-        $crawler->filter('table.border tr')->each(function ($node, $i) use (&$ret) {
+        $crawler->filter('table.border tr')->each(function ($node, $i) use (&$ret): void {
             $date = $cat = $a = $name = null;
             if (0 === $i) {
                 return;

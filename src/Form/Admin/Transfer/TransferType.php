@@ -32,7 +32,7 @@ class TransferType extends AbstractType
         }
 
         $builder
-            ->add('datum', DateType::class, ['format' => 'dd-MM-y'])
+            ->add('datum', DateType::class, ['format' => 'dd-MM-y', 'html5' => false])
             ->add('seizoen', SeizoenSelectorType::class);
     }
 

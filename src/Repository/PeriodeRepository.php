@@ -15,7 +15,7 @@ class PeriodeRepository extends ServiceEntityRepository
         parent::__construct($registry, Periode::class);
     }
 
-    public function getCurrentPeriode(Seizoen $seizoen = null): ?Periode
+    public function getCurrentPeriode(?Seizoen $seizoen = null): ?Periode
     {
         if (null === $seizoen) {
             $seizoen = $this->seizoenRepository->getCurrent();

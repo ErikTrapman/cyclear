@@ -3,55 +3,37 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Mapping\Annotation\Slug;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\SeizoenRepository")
- * @ORM\Table(name="seizoen")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\SeizoenRepository::class)]
+#[ORM\Table(name: 'seizoen')]
 class Seizoen
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
-    /**
-     * @ORM\Column
-     */
+    #[ORM\Column]
     private $identifier;
 
-    /**
-     * @Gedmo\Slug(fields={"identifier"})
-     * @ORM\Column(length=128, unique=true)
-     */
+    #[Slug(fields: ['identifier'])]
+    #[ORM\Column(length: 128, unique: true)]
     private $slug;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private $closed = false;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private $current = false;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
+    #[ORM\Column(type: 'date', nullable: true)]
     private $start;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
+    #[ORM\Column(type: 'date', nullable: true)]
     private $end;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true, name="maxPointsPerRider")
-     */
+    #[ORM\Column(type: 'integer', nullable: true, name: 'maxPointsPerRider')]
     private $maxPointsPerRider;
 
     public function getId()

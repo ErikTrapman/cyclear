@@ -15,7 +15,7 @@
     <div id="stand" class="container">
         <div class="row">
             <div class="col-lg-12">
-                {% include "uitslag/viewByPloegen.html.twig" with {"list": stand, 'shadowlist': shadowstandingsById} %}
+                {{ include('uitslag/viewByPloegen.html.twig', {list: stand, shadowlist: shadowstandingsById}) }}
                 <p class="text-center">
                     <a href="{{ path('uitslag_overview', {seizoen: seizoen.slug}) }}">Meer standen</a>
                 </p>
@@ -32,7 +32,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                {% include 'transfer/_listWithInversion.html.twig' with {"listWithInversion": transfers, 'firstPageRoute': 'homepage', 'includePagination': false} %}
+                {{ include('transfer/_listWithInversion.html.twig', {listWithInversion: transfers, firstPageRoute: 'homepage', includePagination: false}) }}
                 <p class="text-center">
                     <a href="{{ path('transfer_list', {seizoen: seizoen.slug}) }}">Alle transfers</a>
                 </p>
@@ -48,7 +48,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                {% include "wedstrijd/latest.html.twig" with {"wedstrijden": wedstrijden} %}
+                {{ include('wedstrijd/latest.html.twig', {wedstrijden: wedstrijden}) }}
                 <p class="text-center">
                     <a href="{{ path('wedstrijd_list', {seizoen: seizoen.slug}) }}">Alle uitslagen</a>
                 </p>
@@ -87,13 +87,13 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    {% include "uitslag/viewByPeriode.html.twig" with {
-                        "list": periodestand,
-                        'transferpoints': transferpuntenPeriode,
-                        'transferRepo': transferRepo,
-                        'positionCount': zegesInPeriode} %}
+                    {{ include('uitslag/viewByPeriode.html.twig', {
+                        list: periodestand,
+                        transferpoints: transferpuntenPeriode,
+                        transferRepo: transferRepo,
+                        positionCount: zegesInPeriode}) }}
                     <p class="text-center">
-                        <a href="{{ path('uitslag_periodes', {'seizoen': seizoen.slug, 'periode': periode.id}) }}">Alle periodes</a>
+                        <a href="{{ path('uitslag_periodes', {seizoen: seizoen.slug, periode: periode.id}) }}">Alle periodes</a>
                     </p>
                 </div>
             </div>
@@ -108,9 +108,9 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                {% include "uitslag/viewByPosition.html.twig" with {"list": zegestand} %}
+                {{ include('uitslag/viewByPosition.html.twig', {list: zegestand}) }}
                 <p class="text-center">
-                    <a href="{{ path('uitslag_posities', {'seizoen': seizoen.slug, 'positie': 1}) }}">Alle posities</a></p>
+                    <a href="{{ path('uitslag_posities', {seizoen: seizoen.slug, positie: 1}) }}">Alle posities</a></p>
             </div>
             <h2>
                 <a style="color: #2f2f2f" href="#cyclear"><span style="vertical-align: bottom" class="glyphicon glyphicon-chevron-up"/></a>

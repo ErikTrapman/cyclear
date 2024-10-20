@@ -69,7 +69,6 @@ class SeizoenController extends AbstractController
         ];
     }
 
-
     #[Route(path: '/{id}/edit', name: 'admin_seizoen_edit')]
     public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
@@ -90,7 +89,6 @@ class SeizoenController extends AbstractController
             'delete_form' => $deleteForm->createView(),
         ]);
     }
-
 
     #[Route(path: '/{id}/update', name: 'admin_seizoen_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): array|RedirectResponse

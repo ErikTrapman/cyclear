@@ -6,7 +6,7 @@
 
     <h3>Renner edit</h3>
 
-    <form action="{{ path('admin_renner_edit', {'id': entity.cqranking_id}) }}"
+    <form action="{{ path('admin_renner_edit', {id: entity.cqranking_id}) }}"
           method="post" >
         {{ form_widget(edit_form) }}
         <p>
@@ -21,7 +21,7 @@
             </a>
         </li>
         <li>
-            <form action="{{ path('admin_renner_delete', {'id': entity.cqranking_id}) }}"
+            <form action="{{ path('admin_renner_delete', {id: entity.cqranking_id}) }}"
                   method="post">
                 {{ form_widget(delete_form) }}
                 <button class="btn btn-default" type="submit">Delete</button>

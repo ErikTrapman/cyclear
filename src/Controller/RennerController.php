@@ -120,7 +120,7 @@ class RennerController extends AbstractController
         $delimiter = ';';
         $filename = 'riders-' . $seizoen->getSlug() . date('-dmYHis') . '_65001utf8';
 
-        $response = new StreamedResponse(function () use ($em, $q, $delimiter) {
+        $response = new StreamedResponse(function () use ($em, $q, $delimiter): void {
             $stmt = $em->getConnection()->executeQuery($q);
             $handle = fopen('php://output', 'r+');
             fputcsv($handle, ['id', 'name', 'points'], $delimiter);

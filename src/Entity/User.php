@@ -5,31 +5,22 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
 
-/**
- * @ORM\Table(name="user")
- * @ORM\Entity()
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'user')]
 class User extends \FOS\UserBundle\Model\User implements \Serializable, LegacyPasswordAuthenticatedUserInterface
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
-    /**
-     * @ORM\OneToMany(
-     *  targetEntity="App\Entity\Ploeg", mappedBy="user"
-     * )
-     */
+    #[ORM\OneToMany(targetEntity: Ploeg::class, mappedBy: 'user')]
     private $ploeg;
 
-    /**
-     * @ORM\Column(nullable=true)
-     */
+    #[ORM\Column(nullable: true)]
     private ?string $firstName = null;
 
     public function __construct()
@@ -68,7 +59,7 @@ class User extends \FOS\UserBundle\Model\User implements \Serializable, LegacyPa
         return null;
     }
 
-    public function setFirstName(string $value = null): void
+    public function setFirstName(?string $value = null): void
     {
         $this->firstName = $value;
     }

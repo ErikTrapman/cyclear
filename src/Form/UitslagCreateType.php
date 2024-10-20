@@ -47,7 +47,7 @@ class UitslagCreateType extends AbstractType
             $factory,
             $request,
             $seizoen
-        ) {
+        ): void {
             $form = $e->getForm();
             $data = $e->getData();
             if (null === $data) {
@@ -59,15 +59,15 @@ class UitslagCreateType extends AbstractType
             $datum = $helper->transformPostedValue($data['wedstrijd']['datum'], $form->get('wedstrijd')->get('datum'));
             $form->add(
                 $factory->createNamed('uitslag', CollectionType::class, null, [
-                        'entry_type' => UitslagType::class,
-                        'allow_add' => true,
-                        'auto_initialize' => false,
-                        'by_reference' => false,
-                        'entry_options' => [
-                            'use_wedstrijd' => false,
-                            'seizoen' => $seizoen,
-                        ],
-                    ]
+                    'entry_type' => UitslagType::class,
+                    'allow_add' => true,
+                    'auto_initialize' => false,
+                    'by_reference' => false,
+                    'entry_options' => [
+                        'use_wedstrijd' => false,
+                        'seizoen' => $seizoen,
+                    ],
+                ]
                 )
             );
             if ($request->isXmlHttpRequest()) {
@@ -82,7 +82,7 @@ class UitslagCreateType extends AbstractType
             }
         });
 
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $e) {
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $e): void {
             $form = $e->getForm();
             $data = $e->getData();
             if (null === $data) {

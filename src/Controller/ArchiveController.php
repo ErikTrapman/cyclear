@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArchiveController extends AbstractController
 {
     public function __construct(
-        private readonly SeizoenRepository $seizoenRepository
+        private readonly SeizoenRepository $seizoenRepository,
     ) {
     }
 

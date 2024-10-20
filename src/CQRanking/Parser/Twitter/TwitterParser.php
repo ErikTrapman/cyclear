@@ -8,7 +8,7 @@ class TwitterParser
 {
     public function __construct(
         private readonly CrawlerManager $crawlerManager,
-        private readonly string $baseUrl
+        private readonly string $baseUrl,
     ) {
     }
 

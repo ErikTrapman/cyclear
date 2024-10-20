@@ -4,46 +4,30 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * App\Entity\Ploeg
- *
- * @ORM\Table(name="ploeg")
- * @ORM\Entity(repositoryClass="App\Repository\PloegRepository")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\PloegRepository::class)]
+#[ORM\Table(name: 'ploeg')]
 class Ploeg
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="ploeg")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'ploeg')]
     private $user;
 
-    /**
-     * @ORM\Column(name="naam", type="string", length=255)
-     */
+    #[ORM\Column(name: 'naam', type: 'string', length: 255)]
     private $naam;
 
-    /**
-     * @ORM\Column(name="afkorting", type="string", length=6)
-     */
+    #[ORM\Column(name: 'afkorting', type: 'string', length: 6)]
     private $afkorting;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Seizoen")
-     */
+    #[ORM\ManyToOne(targetEntity: Seizoen::class)]
     private $seizoen;
 
     private $punten;
 
-    /**
-     * @ORM\Column(type="text", nullable=true, length=16777215)
-     */
+    #[ORM\Column(type: 'text', nullable: true, length: 16777215)]
     private $memo;
 
     public function getUser()

@@ -3,9 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use App\Form\UserEditType;
-use App\Form\UserType;
 use Doctrine\Persistence\ManagerRegistry;
+use FOS\UserBundle\Form\Type\ProfileFormType;
+use FOS\UserBundle\Form\Type\RegistrationFormType;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -34,10 +34,10 @@ class UserController extends AbstractController
         return $this->render('admin/user/index.html.twig', ['entities' => $entities]);
     }
 
-    #[Route(path: '/new', name: 'admin_user_new')]
+    #[Route(path: '/new-user', name: 'admin_user_new')]
     public function newAction(): \Symfony\Component\HttpFoundation\Response
     {
-        $form = $this->createForm(UserType::class);
+        $form = $this->createForm(RegistrationFormType::class);
 
         return $this->render('admin/user/new.html.twig', [
             'form' => $form->createView(),
@@ -47,7 +47,7 @@ class UserController extends AbstractController
     #[Route(path: '/create', name: 'admin_user_create', methods: ['POST'])]
     public function createAction(Request $request): array|RedirectResponse
     {
-        $form = $this->createForm(UserType::class);
+        $form = $this->createForm(RegistrationFormType::class);
         $userManager = $this->userManager;
 
         $user = $userManager->createUser();
@@ -67,7 +67,6 @@ class UserController extends AbstractController
         ];
     }
 
-
     #[Route(path: '/{id}/edit', name: 'admin_user_edit')]
     public function editAction($id): \Symfony\Component\HttpFoundation\Response
     {
@@ -78,14 +77,13 @@ class UserController extends AbstractController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-        $editForm = $this->createForm(UserEditType::class, $entity);
+        $editForm = $this->createForm(ProfileFormType::class, $entity);
 
         return $this->render('admin/user/edit.html.twig', [
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
         ]);
     }
-
 
     #[Route(path: '/{id}/update', name: 'admin_user_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
@@ -97,44 +95,44 @@ class UserController extends AbstractController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-        $editForm = $this->createForm(UserEditType::class, $entity);
+        $editForm = $this->createForm(ProfileFormType::class, $entity);
 
-//        // http://symfony.com/doc/master/cookbook/form/form_collections.html - Ensuring the database persistence
-//        $originalPloegen = array();
-//        // Create an array of the current Tag objects in the database
-//        foreach ($entity->getPloeg() as $ploeg) {
-//            $originalPloegen[] = $ploeg;
-//        }
+        //        // http://symfony.com/doc/master/cookbook/form/form_collections.html - Ensuring the database persistence
+        //        $originalPloegen = array();
+        //        // Create an array of the current Tag objects in the database
+        //        foreach ($entity->getPloeg() as $ploeg) {
+        //            $originalPloegen[] = $ploeg;
+        //        }
 
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
-//            this is now done in PloegController
-//            $usermanager = $this->get('cyclear_game.manager.user');
-//            //$usermanager->updatePloegen($editForm, $entity);
-//            foreach ($entity->getPloeg() as $ploeg) {
-//                foreach ($originalPloegen as $key => $toDel) {
-//                    if ($toDel->getId() === $ploeg->getId()) {
-//                        unset($originalPloegen[$key]);
-//                    }
-//                }
-//                $usermanager->setOwnerAcl($entity, $ploeg);
-//                $ploeg->setUser($entity);
-//            }
-//
-//            // remove the relationship between the tag and the Task
-//            foreach ($originalPloegen as $ploeg) {
-//                // remove the Task from the Tag
-//                $ploeg->setUser(null);
-//                $usermanager->unsetOwnerAcl($entity, $ploeg);
-//
-//                // if it were a ManyToOne relationship, remove the relationship like this
-//                // $tag->setTask(null);
-//
-//                $em->persist($ploeg);
-//
-//                // if you wanted to delete the Tag entirely, you can also do that
-//                // $em->remove($tag);
-//            }
+            //            this is now done in PloegController
+            //            $usermanager = $this->get('cyclear_game.manager.user');
+            //            //$usermanager->updatePloegen($editForm, $entity);
+            //            foreach ($entity->getPloeg() as $ploeg) {
+            //                foreach ($originalPloegen as $key => $toDel) {
+            //                    if ($toDel->getId() === $ploeg->getId()) {
+            //                        unset($originalPloegen[$key]);
+            //                    }
+            //                }
+            //                $usermanager->setOwnerAcl($entity, $ploeg);
+            //                $ploeg->setUser($entity);
+            //            }
+            //
+            //            // remove the relationship between the tag and the Task
+            //            foreach ($originalPloegen as $ploeg) {
+            //                // remove the Task from the Tag
+            //                $ploeg->setUser(null);
+            //                $usermanager->unsetOwnerAcl($entity, $ploeg);
+            //
+            //                // if it were a ManyToOne relationship, remove the relationship like this
+            //                // $tag->setTask(null);
+            //
+            //                $em->persist($ploeg);
+            //
+            //                // if you wanted to delete the Tag entirely, you can also do that
+            //                // $em->remove($tag);
+            //            }
 
             $em->persist($entity);
             $em->flush();

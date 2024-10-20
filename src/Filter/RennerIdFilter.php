@@ -10,9 +10,9 @@ class RennerIdFilter extends \Doctrine\ORM\Query\Filter\SQLFilter
         if ("App\Entity\Renner" != $targetEntity->name) {
             return '';
         }
-//        if($value instanceof \App\Entity\Renner){
-//            throw new \UnexpectedValueException("filter expects an id, not an object");
-//        }
+        //        if($value instanceof \App\Entity\Renner){
+        //            throw new \UnexpectedValueException("filter expects an id, not an object");
+        //        }
         $value = $this->getParameter('renner');
         return sprintf('%s.renner = %d', $targetTableAlias, $value->getId());
     }

@@ -51,7 +51,7 @@ class UitslagRepository extends ServiceEntityRepository
         });
     }
 
-    public function getPuntenByPloeg($seizoen = null, $ploeg = null, \DateTime $maxDate = null)
+    public function getPuntenByPloeg($seizoen = null, $ploeg = null, ?\DateTime $maxDate = null)
     {
         $key = __FUNCTION__ . $seizoen?->getId() . $ploeg?->getId() . $maxDate?->format('YmdHis');
         $item = $this->cache->getItem($key);
@@ -87,7 +87,7 @@ class UitslagRepository extends ServiceEntityRepository
         return $value;
     }
 
-    public function getPuntenByPloegForPeriode(Periode $periode, Seizoen $seizoen = null): array
+    public function getPuntenByPloegForPeriode(Periode $periode, ?Seizoen $seizoen = null): array
     {
         $seizoen = $this->resolveSeizoen($seizoen);
         $start = clone $periode->getStart();
@@ -112,7 +112,7 @@ class UitslagRepository extends ServiceEntityRepository
         }, $qb->getQuery()->getArrayResult());
     }
 
-    public function getCountForPosition($seizoen = null, $pos = 1, \DateTime $start = null, \DateTime $end = null)
+    public function getCountForPosition($seizoen = null, $pos = 1, ?\DateTime $start = null, ?\DateTime $end = null)
     {
         $seizoen = $this->resolveSeizoen($seizoen);
         $key = __FUNCTION__ . $seizoen->getId() . $pos . $start?->format('YmdHis') . $end?->format('YmdHis');
@@ -168,7 +168,7 @@ class UitslagRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function getTotalPuntenForRenner(Renner $renner, Seizoen $seizoen = null)
+    public function getTotalPuntenForRenner(Renner $renner, ?Seizoen $seizoen = null)
     {
         $seizoen = $this->resolveSeizoen($seizoen);
         $qb = $this->getPuntenForRennerQb();
@@ -206,7 +206,7 @@ class UitslagRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getPuntenByPloegForDraftTransfers(Seizoen $seizoen, Ploeg $ploeg = null): array
+    public function getPuntenByPloegForDraftTransfers(Seizoen $seizoen, ?Ploeg $ploeg = null): array
     {
         $item = $this->cache->getItem('getPuntenByPloegForDraftTransfers' . $seizoen->getId() . $ploeg?->getId());
         if ($item->isHit()) {
@@ -251,7 +251,7 @@ class UitslagRepository extends ServiceEntityRepository
         return $item->get();
     }
 
-    public function getPuntenByPloegForUserTransfersWithoutLoss(Seizoen $seizoen, \DateTime $start = null, \DateTime $end = null)
+    public function getPuntenByPloegForUserTransfersWithoutLoss(Seizoen $seizoen, ?\DateTime $start = null, ?\DateTime $end = null)
     {
         $key = 'getPuntenByPloegForUserTransfersWithoutLoss_' . $seizoen->getId() . $start?->format('Ymd') . $end?->format('Ymd');
         $item = $this->cache->getItem($key);
@@ -300,7 +300,7 @@ class UitslagRepository extends ServiceEntityRepository
         return $item->get();
     }
 
-    public function getLostDraftPuntenByPloeg($seizoen = null, \DateTime $start = null, \DateTime $end = null)
+    public function getLostDraftPuntenByPloeg($seizoen = null, ?\DateTime $start = null, ?\DateTime $end = null)
     {
         $seizoen = $this->resolveSeizoen($seizoen);
         $key = __FUNCTION__ . $seizoen->getId() . $start?->format('YmdHis') . $end?->format('YmdHis');
@@ -378,7 +378,7 @@ class UitslagRepository extends ServiceEntityRepository
         return $ret;
     }
 
-    public function getUitslagenForPloegForNonDraftTransfersQb(Ploeg $ploeg, $seizoen = null, \DateTime $start = null, \DateTime $end = null)
+    public function getUitslagenForPloegForNonDraftTransfersQb(Ploeg $ploeg, $seizoen = null, ?\DateTime $start = null, ?\DateTime $end = null)
     {
         $seizoen = $this->resolveSeizoen($seizoen);
         $parameters = ['ploeg' => $ploeg, 'seizoen' => $seizoen];
@@ -401,9 +401,9 @@ class UitslagRepository extends ServiceEntityRepository
     /**
      * @param null $seizoen
      * @param mixed $ploeg
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
-    public function getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen = null, \DateTime $start = null, \DateTime $end = null)
+    public function getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen = null, ?\DateTime $start = null, ?\DateTime $end = null)
     {
         $seizoen = $this->resolveSeizoen($seizoen);
         $parameters = ['ploeg' => $ploeg, 'seizoen' => $seizoen];
@@ -459,7 +459,7 @@ class UitslagRepository extends ServiceEntityRepository
             ->orderBy('w.datum DESC, u.id', 'DESC');
     }
 
-    public function getBestTransfers(Seizoen $seizoen, \DateTime $start = null, \DateTime $end = null)
+    public function getBestTransfers(Seizoen $seizoen, ?\DateTime $start = null, ?\DateTime $end = null)
     {
         $key = __FUNCTION__ . $seizoen->getId() . $start?->format('Ymd') . $end?->format('Ymd');
         $item = $this->cache->getItem($key);
@@ -491,7 +491,7 @@ class UitslagRepository extends ServiceEntityRepository
         return $res;
     }
 
-    private function resolveSeizoen(Seizoen $seizoen = null): Seizoen
+    private function resolveSeizoen(?Seizoen $seizoen = null): Seizoen
     {
         if (null === $seizoen) {
             $seizoen = $this->seizoenRepository->getCurrent();

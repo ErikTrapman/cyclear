@@ -12,7 +12,7 @@ class WedstrijdType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $dateOptions = ['format' => 'dd-MM-y'];
+        $dateOptions = ['format' => 'dd-MM-y', 'html5' => false];
         if ($options['default_date']) {
             $dateOptions['data'] = $options['default_date'];
         }

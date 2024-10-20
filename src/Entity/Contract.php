@@ -4,45 +4,31 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- * @ORM\Entity(repositoryClass="App\Repository\ContractRepository")
- * @ORM\Table(name="contract")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\ContractRepository::class)]
+#[ORM\Table(name: 'contract')]
 class Contract
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Ploeg")
-     */
+    #[ORM\ManyToOne(targetEntity: Ploeg::class)]
     private $ploeg;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Renner", inversedBy="contracts")
-     */
+    #[ORM\ManyToOne(targetEntity: Renner::class, inversedBy: 'contracts')]
     private $renner;
 
-    /**
-     * @ORM\Column(name="start", type="datetime")
-     */
+    #[ORM\Column(name: 'start', type: 'datetime')]
     private $start;
 
-    /**
-     * @ORM\Column(name="eind", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'eind', type: 'datetime', nullable: true)]
     private $eind;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Seizoen")
-     */
+    #[ORM\ManyToOne(targetEntity: Seizoen::class)]
     private $seizoen;
 
     public function getId(): int

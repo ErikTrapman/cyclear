@@ -15,12 +15,12 @@ class UserTransfer extends Constraint
 
     public $property;
 
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return UserTransferFixedValidator::class;
     }
 
-    public function getTargets()
+    public function getTargets(): string
     {
         return self::CLASS_CONSTRAINT;
     }

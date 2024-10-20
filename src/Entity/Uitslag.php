@@ -4,50 +4,32 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * App\Entity\Uitslag
- *
- * @ORM\Table(name="uitslag")
- * @ORM\Entity(repositoryClass="App\Repository\UitslagRepository")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\UitslagRepository::class)]
+#[ORM\Table(name: 'uitslag')]
 class Uitslag
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Wedstrijd", inversedBy="uitslagen", cascade={"all"})
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: Wedstrijd::class, inversedBy: 'uitslagen', cascade: ['all'])]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private $wedstrijd;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Renner", fetch="EAGER")
-     */
+    #[ORM\ManyToOne(targetEntity: Renner::class, fetch: 'EAGER')]
     private $renner;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Ploeg")
-     */
+    #[ORM\ManyToOne(targetEntity: Ploeg::class)]
     private $ploeg;
 
-    /**
-     * @ORM\Column(name="positie", type="smallint")
-     */
+    #[ORM\Column(name: 'positie', type: 'smallint')]
     private $positie;
 
-    /**
-     * @ORM\Column(type="float", name="ploegPunten")
-     */
+    #[ORM\Column(type: 'float', name: 'ploegPunten')]
     private $ploegPunten;
 
-    /**
-     * @ORM\Column(type="float", name="rennerPunten")
-     */
+    #[ORM\Column(type: 'float', name: 'rennerPunten')]
     private $rennerPunten;
 
     public function getId()
@@ -75,7 +57,7 @@ class Uitslag
         return $this->renner;
     }
 
-    public function setPloeg(Ploeg $ploeg = null): void
+    public function setPloeg(?Ploeg $ploeg = null): void
     {
         $this->ploeg = $ploeg;
     }

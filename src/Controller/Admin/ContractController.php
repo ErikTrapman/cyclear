@@ -104,7 +104,6 @@ class ContractController extends AbstractController
         ]);
     }
 
-
     #[Route(path: '/{id}/update', name: 'admin_contract_update', methods: ['POST'])]
     public function updateAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
     {

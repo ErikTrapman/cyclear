@@ -21,7 +21,7 @@ class TransferManager
         private readonly TransferRepository $transferRepository,
         private readonly ContractRepository $contractRepository,
         private readonly PeriodeRepository $periodeRepository,
-        private $maxTransfers = null
+        private $maxTransfers = null,
     ) {
     }
 

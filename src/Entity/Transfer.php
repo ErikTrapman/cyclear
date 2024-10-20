@@ -4,67 +4,45 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * App\Entity\Transfer
- *
- * @ORM\Table(name="transfer")
- * @ORM\Entity(repositoryClass="App\Repository\TransferRepository")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\TransferRepository::class)]
+#[ORM\Table(name: 'transfer')]
 class Transfer
 {
     public const DRAFTTRANSFER = 32;
     public const ADMINTRANSFER = 64;
     public const USERTRANSFER = 128;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
-    /**
-     * @ORM\JoinColumn(name="renner_id")
-     * @ORM\ManyToOne(targetEntity="App\Entity\Renner",inversedBy="transfers", fetch="EAGER")
-     */
+    #[ORM\JoinColumn(name: 'renner_id')]
+    #[ORM\ManyToOne(targetEntity: Renner::class, inversedBy: 'transfers', fetch: 'EAGER')]
     private $renner;
 
-    /**
-     * @ORM\JoinColumn(name="ploegvan_id", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Ploeg")
-     */
+    #[ORM\JoinColumn(name: 'ploegvan_id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: Ploeg::class)]
     private $ploegVan;
 
-    /**
-     * @ORM\JoinColumn(name="ploegnaar_id", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Ploeg")
-     */
+    #[ORM\JoinColumn(name: 'ploegnaar_id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: Ploeg::class)]
     private $ploegNaar;
 
-    /**
-     * @ORM\Column(name="datum", type="datetime")
-     */
+    #[ORM\Column(name: 'datum', type: 'datetime')]
     private $datum;
 
-    /**
-     * @ORM\Column(type="integer", name="transferType")
-     */
+    #[ORM\Column(type: 'integer', name: 'transferType')]
     private $transferType;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Seizoen")
-     */
+    #[ORM\ManyToOne(targetEntity: Seizoen::class)]
     private $seizoen;
 
-    /**
-     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE", name="inversionTransfer_id")
-     * @ORM\OneToOne(targetEntity="App\Entity\Transfer", cascade={"all"})
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE', name: 'inversionTransfer_id')]
+    #[ORM\OneToOne(targetEntity: Transfer::class, cascade: ['all'])]
     private $inversionTransfer;
 
-    /**
-     * @ORM\Column(nullable=true, name="userComment")
-     */
+    #[ORM\Column(nullable: true, name: 'userComment')]
     private $userComment;
 
     public function getId()
@@ -82,7 +60,7 @@ class Transfer
         return $this->renner;
     }
 
-    public function setPloegVan(Ploeg|null $ploegVan): void
+    public function setPloegVan(?Ploeg $ploegVan): void
     {
         $this->ploegVan = $ploegVan;
     }
@@ -92,7 +70,7 @@ class Transfer
         return $this->ploegVan;
     }
 
-    public function setPloegNaar(Ploeg|null $ploegNaar): void
+    public function setPloegNaar(?Ploeg $ploegNaar): void
     {
         $this->ploegNaar = $ploegNaar;
     }

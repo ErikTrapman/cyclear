@@ -7,7 +7,7 @@
           content="wielrennen, wielersite, wielerspel, spel, wielerploegen, punten scoren, punten, scoren, wielrenners, 20 renners per ploeg, verschillende ploegen, cyclear, Cyclear, CYCLEAR, cyclea, yclear, wielerseizoen, koersen, coureurs"/>
     <meta name="description"
           content="Cyclear is een leuk spel voor mensen die van wielrennen houden, waarbij deelnemers een unieke ploeg samenstellen van twintig wielrenners die in alle wielerwedstrijden gedurende een heel seizoen punten scoren."/>
-    <title>{% block title %}Cyclear{% endblock %}{% if is_granted("ROLE_ADMIN") %} - Adminstrator{% else %}{% if is_granted("ROLE_USER") %} - User {% endif %}{% endif %}</title>
+    <title>{% block title %}Cyclear{% endblock %}{% if is_granted('ROLE_ADMIN') %} - Adminstrator{% else %}{% if is_granted('ROLE_USER') %} - User {% endif %}{% endif %}</title>
     {% block stylesheets %}
 
         <link href='//fonts.googleapis.com/css?family=Droid+Sans:400' rel='stylesheet' type='text/css'>
@@ -52,7 +52,7 @@
             <ul class="nav navbar-nav">
                 {% if app.request.attributes.has('seizoen') %}
                     <li>
-                        <a href="{{ path('rider_index', {'seizoen': app.request.attributes.get('seizoen').slug}) }}">Renners</a>
+                        <a href="{{ path('rider_index', {seizoen: app.request.attributes.get('seizoen').slug}) }}">Renners</a>
                     </li>
                 {% endif %}
                 <li><a href="{{ path('archief_index') }}">Archief</a></li>
@@ -61,18 +61,18 @@
                 {% set curSeizoen = getCurrentSeason() %}
                 {%- if seizoen and curSeizoen and seizoen.id != curSeizoen.id %}
                     <li><a style="color: #860087"
-                           href="{{ path("game", {"seizoen": app.request.attributes.get('seizoen').slug}) }}">{{ app.request.attributes.get('seizoen') }}</a>
+                           href="{{ path('game', {seizoen: app.request.attributes.get('seizoen').slug}) }}">{{ app.request.attributes.get('seizoen') }}</a>
                     </li>
                 {% endif -%}
-                {% if is_granted("ROLE_USER") %}
-                    {% include 'user/inc_menu.html.twig' %}
+                {% if is_granted('ROLE_USER') %}
+                    {{ include('user/inc_menu.html.twig') }}
                 {% endif %}
-                {% if is_granted("ROLE_ADMIN") %}
-                    {% include 'admin/inc_menu.html.twig' %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    {{ include('admin/inc_menu.html.twig') }}
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <li class="active">
                         <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
                     </li>
@@ -110,10 +110,10 @@
                 {% if seizoen %}
                     <li>
                         <a
-                            href="{{ path('spelregels_index', {'seizoen': app.request.attributes.get('seizoen').slug}) }}">Spelregels {{ app.request.attributes.get('seizoen') }}</a>
+                            href="{{ path('spelregels_index', {seizoen: app.request.attributes.get('seizoen').slug}) }}">Spelregels {{ app.request.attributes.get('seizoen') }}</a>
                     </li>
                     <li>
-                        <a href="{{ path('rider_index', {'seizoen': app.request.attributes.get('seizoen').slug}) }}">Renners</a>
+                        <a href="{{ path('rider_index', {seizoen: app.request.attributes.get('seizoen').slug}) }}">Renners</a>
                     </li>
                 {% endif %}
                 <li><a href="{{ path('archief_index') }}">Archief</a></li>
@@ -121,10 +121,10 @@
                 {% set curSeizoen = getCurrentSeason() %}
                 {%- if seizoen and curSeizoen and seizoen.id != curSeizoen.id %}
                     <li><a style="color: #860087"
-                           href="{{ path("game", {"seizoen": app.request.attributes.get('seizoen').slug}) }}">{{ app.request.attributes.get('seizoen') }}</a>
+                           href="{{ path('game', {seizoen: app.request.attributes.get('seizoen').slug}) }}">{{ app.request.attributes.get('seizoen') }}</a>
                     </li>
                 {% endif -%}
-                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <li class="active">
                         <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
                     </li>

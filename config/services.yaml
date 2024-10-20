@@ -42,13 +42,13 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Form\UserEditType:
-        tags:
-            - { name: 'form.type', alias: 'admin_user_edit' }
-        arguments:
-            $class: '%fos_user.model.user.class%'
-
-    App\Form\UserType:
+#    App\Form\UserEditType:
+#        tags:
+#            - { name: 'form.type', alias: 'admin_user_edit' }
+#        arguments:
+#            $class: '%fos_user.model.user.class%'
+#
+    FOS\UserBundle\Form\Type\ProfileFormType:
         tags:
             - { name: 'form.type', alias: 'admin_user_new' }
         arguments:

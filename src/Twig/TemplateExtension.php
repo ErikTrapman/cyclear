@@ -10,7 +10,7 @@ use Twig\TwigFunction;
 class TemplateExtension extends AbstractExtension
 {
     public function __construct(
-        private readonly SeizoenRepository $seizoenRepository
+        private readonly SeizoenRepository $seizoenRepository,
     ) {
     }
 
@@ -21,7 +21,7 @@ class TemplateExtension extends AbstractExtension
         ];
     }
 
-    public function currentSeason(): Seizoen|null
+    public function currentSeason(): ?Seizoen
     {
         return $this->seizoenRepository->findOneBy(['current' => true]);
     }

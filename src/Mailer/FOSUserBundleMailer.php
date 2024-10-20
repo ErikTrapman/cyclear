@@ -18,12 +18,12 @@ class FOSUserBundleMailer implements FOSMailerInterface
     ) {
     }
 
-    public function sendConfirmationEmailMessage(UserInterface $user)
+    public function sendConfirmationEmailMessage(UserInterface $user): void
     {
         throw new \LogicException('Not implemented');
     }
 
-    public function sendResettingEmailMessage(UserInterface $user)
+    public function sendResettingEmailMessage(UserInterface $user): void
     {
         $url = $this->router->generate('fos_user_resetting_reset', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
         $email = (new TemplatedEmail())

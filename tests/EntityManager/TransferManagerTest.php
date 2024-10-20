@@ -23,7 +23,7 @@ class TransferManagerTest extends WebTestCase
     private $em;
 
     /**
-     * @var \App\EntityManager\TransferManager
+     * @var TransferManager
      */
     private $transferManager;
 
@@ -54,7 +54,7 @@ class TransferManagerTest extends WebTestCase
         $this->transferRepo = $this->em->getRepository(Transfer::class);
     }
 
-    private function getSeizoen(): Seizoen|null
+    private function getSeizoen(): ?Seizoen
     {
         return $this->em->getRepository(Seizoen::class)->find(1);
     }
@@ -295,13 +295,13 @@ class TransferManagerTest extends WebTestCase
         $this->assertEquals($p1, $this->rennerRepo->getPloeg($r2, $seizoen));
     }
 
-//    public function testReleaseTransfersAreCreated()
-//    {
-//
-//    }
-//
-//    public function testInversionTransfersAreAsExpected()
-//    {
-//
-//    }
+    //    public function testReleaseTransfersAreCreated()
+    //    {
+    //
+    //    }
+    //
+    //    public function testInversionTransfersAreAsExpected()
+    //    {
+    //
+    //    }
 }

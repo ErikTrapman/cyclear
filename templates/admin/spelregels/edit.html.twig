@@ -3,14 +3,14 @@
 {% form_theme edit_form _self %}
 
 {% block _cyclear_gamebundle_spelregelstype_content_widget %}
-    {{ form_widget(form, {'attr': {'class': 'field span5'}}) }}
+    {{ form_widget(form, {attr: {class: 'field span5'}}) }}
 {% endblock %}
 
 {% block content %}
 
     <h3>Spelregels edit</h3>
 
-    <form action="{{ path('admin_spelregels_update', {'id': entity.id}) }}"
+    <form action="{{ path('admin_spelregels_update', {id: entity.id}) }}"
           method="post" >
         {{ form_widget(edit_form) }}
         <p>
@@ -25,7 +25,7 @@
             </a>
         </li>
         <li>
-            <form action="{{ path('admin_spelregels_delete', {'id': entity.id}) }}" method="post">
+            <form action="{{ path('admin_spelregels_delete', {id: entity.id}) }}" method="post">
                 {{ form_widget(delete_form) }}
                 <button class="btn btn-default" type="submit">Delete</button>
             </form>

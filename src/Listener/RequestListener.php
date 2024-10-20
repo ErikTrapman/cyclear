@@ -12,7 +12,7 @@ class RequestListener
 {
     public function __construct(
         private readonly TokenStorageInterface $tokenStorage,
-        private readonly SeizoenRepository $seizoenRepository
+        private readonly SeizoenRepository $seizoenRepository,
     ) {
     }
 

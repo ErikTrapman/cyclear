@@ -20,7 +20,7 @@ class RennerRepository extends ServiceEntityRepository
         parent::__construct($registry, Renner::class);
     }
 
-    public function findOneByNaam($naam): object|null
+    public function findOneByNaam($naam): ?object
     {
         return $this->findOneBy(['naam' => $naam]);
     }
@@ -81,7 +81,7 @@ class RennerRepository extends ServiceEntityRepository
         return $qb->setParameter('seizoen', $seizoen); // ->setMaxResults(20)->getQuery()->getResult();
     }
 
-    private function resolveSeizoen(Seizoen $seizoen = null): Seizoen
+    private function resolveSeizoen(?Seizoen $seizoen = null): Seizoen
     {
         if (null === $seizoen) {
             $seizoen = $this->seizoenRepository->getCurrent();

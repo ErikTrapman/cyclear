@@ -30,7 +30,7 @@
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('admin_uitslag_edit', {'uitslag': entity.id}) }}">edit</a>
+                            <a href="{{ path('admin_uitslag_edit', {uitslag: entity.id}) }}">edit</a>
                         </li>
                     </ul>
                 </td>
@@ -40,7 +40,7 @@
     </table>
 
     <div class="navigation">
-        {{ knp_pagination_render(pagination, null, {}, {'firstPageRoute': 'admin_uitslag'}) }}
+        {{ knp_pagination_render(pagination, null, {}, {firstPageRoute: 'admin_uitslag'}) }}
     </div>
 
     <ul>

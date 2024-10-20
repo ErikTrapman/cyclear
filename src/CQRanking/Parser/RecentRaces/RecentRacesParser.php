@@ -14,7 +14,7 @@ class RecentRacesParser
     ) {
     }
 
-    public function getRecentRaces(string $content = null, \DateTime $refDate = null): array
+    public function getRecentRaces(?string $content = null, ?\DateTime $refDate = null): array
     {
         if (null === $content) {
             $content = @file_get_contents($this->matchesFeed);
@@ -27,7 +27,7 @@ class RecentRacesParser
         if (null === $refDate) {
             $refDate = new \DateTime('today, 00:00:00');
         }
-        $crawler->filter('table.border tr')->each(function ($node, $i) use (&$ret, $refDate) {
+        $crawler->filter('table.border tr')->each(function ($node, $i) use (&$ret, $refDate): void {
             if (0 === $i) {
                 return;
             }

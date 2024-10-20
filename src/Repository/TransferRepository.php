@@ -186,7 +186,7 @@ class TransferRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    private function resolveSeizoen(Seizoen $seizoen = null): Seizoen
+    private function resolveSeizoen(?Seizoen $seizoen = null): Seizoen
     {
         if (null === $seizoen) {
             $seizoen = $this->seizoenRepository->getCurrent();

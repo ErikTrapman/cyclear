@@ -52,7 +52,6 @@ class RennerController extends AbstractController
         return $this->render('admin/renner/index.html.twig', ['pagination' => $pagination, 'filter' => $filter->createView()]);
     }
 
-
     #[Route(path: '/{id}/edit', name: 'admin_renner_edit')]
     public function editAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
     {
@@ -108,7 +107,6 @@ class RennerController extends AbstractController
 
         return ['entity' => $entity, 'form' => $form->createView()];
     }
-
 
     #[Route(path: '/{id}/delete', name: 'admin_renner_delete', methods: ['POST'])]
     public function deleteAction(Request $request, $id): RedirectResponse

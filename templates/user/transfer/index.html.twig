@@ -10,7 +10,7 @@
 {% block content %}
 
     <div class="big-header">
-        <h2>{% include "country/_image.html.twig" with {'size': 32, 'country': renner.country} %}{{ renner.naam }}</h2>
+        <h2>{{ include('country/_image.html.twig', {size: 32, country: renner.country}) }}{{ renner.naam }}</h2>
     </div>
 
     <div class="container">

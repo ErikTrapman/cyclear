@@ -16,7 +16,6 @@ return (new PhpCsFixer\Config())
         'blank_line_before_statement' => false,
         'cast_spaces' => ['space' => 'none'],
         'class_attributes_separation' => ['elements' => ['method' => 'one', 'property' => 'one']],
-        'comment_to_phpdoc' => [],
         'concat_space' => ['spacing' => 'one'],
         'declare_strict_types' => true,
         'linebreak_after_opening_tag' => false,

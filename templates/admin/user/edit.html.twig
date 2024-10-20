@@ -9,7 +9,7 @@
         })
     </script>
 
-    <form action="{{ path('admin_user_update', {'id': entity.id}) }}" method="post" >
+    <form action="{{ path('admin_user_update', {id: entity.id}) }}" method="post" >
         {{ form_widget(edit_form) }}
         <p>
             <button class="btn btn-default" type="submit">Edit</button>
