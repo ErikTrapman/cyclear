@@ -11,6 +11,7 @@ use App\Repository\TransferRepository;
 use App\Repository\UitslagRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,10 @@ class PloegController extends AbstractController
     }
 
     #[Route(path: '/{seizoen}/ploeg/{id}/show', name: 'ploeg_show')]
-    public function showAction(Request $request, Seizoen $seizoen, Ploeg $id): Response
+    public function showAction(
+        Request $request,
+        #[MapEntity(mapping: ['seizoen' => 'slug'])] Seizoen $seizoen,
+        Ploeg $id): Response
     {
         $entity = $id;
         $renners = $this->ploegRepository->getRennersWithPunten($entity);
