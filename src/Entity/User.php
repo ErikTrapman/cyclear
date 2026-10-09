@@ -65,7 +65,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, E
     #[ORM\Column(name: 'password_requested_at', type: 'datetime', nullable: true)]
     private ?\DateTime $passwordRequestedAt = null;
 
-    #[ORM\Column(type: 'array')]
+    #[ORM\Column(type: 'json')]
     private array $roles = [];
 
     #[ORM\OneToMany(targetEntity: Ploeg::class, mappedBy: 'user')]

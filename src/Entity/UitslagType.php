@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\CQRanking\Parser\Strategy\AbstractStrategy;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -25,8 +26,13 @@ class UitslagType
     #[ORM\Column(name: 'isGeneralClassification', type: 'boolean')]
     private $isGeneralClassification;
 
-    #[ORM\Column(name: 'cqParsingStrategy', type: 'object')]
-    private $cqParsingStrategy;
+    /**
+     * Class name of the parsing strategy. The strategies are stateless, so an instance is created on read.
+     *
+     * @var class-string<AbstractStrategy>|null
+     */
+    #[ORM\Column(name: 'cqParsingStrategy', length: 255)]
+    private ?string $cqParsingStrategy = null;
 
     #[ORM\Column(nullable: true, name: 'automaticResolvingCategories')]
     private $automaticResolvingCategories;
@@ -76,14 +82,14 @@ class UitslagType
         $this->isGeneralClassification = $isGeneralClassification;
     }
 
-    public function getCqParsingStrategy()
+    public function getCqParsingStrategy(): ?AbstractStrategy
     {
-        return $this->cqParsingStrategy;
+        return null !== $this->cqParsingStrategy ? new $this->cqParsingStrategy() : null;
     }
 
-    public function setCqParsingStrategy($cqParsingStrategy): void
+    public function setCqParsingStrategy(?AbstractStrategy $cqParsingStrategy): void
     {
-        $this->cqParsingStrategy = $cqParsingStrategy;
+        $this->cqParsingStrategy = null !== $cqParsingStrategy ? $cqParsingStrategy::class : null;
     }
 
     /**
@@ -102,7 +108,7 @@ class UitslagType
         $this->automaticResolvingCategories = $automaticResolvingCategories;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getNaam();
     }
