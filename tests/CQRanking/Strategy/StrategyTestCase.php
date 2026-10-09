@@ -5,7 +5,7 @@ namespace App\Tests\CQRanking\Strategy;
 use App\CQRanking\Parser\Crawler\CrawlerManager;
 use PHPUnit\Framework\TestCase;
 
-abstract class StrategyTest extends TestCase
+abstract class StrategyTestCase extends TestCase
 {
     public function getCrawler(string $url)
     {

@@ -3,9 +3,9 @@
 namespace App\Tests\CQRanking\Strategy\Y2013;
 
 use App\CQRanking\Parser\Strategy\Y2013\OneDay;
-use App\Tests\CQRanking\Strategy\StrategyTest;
+use App\Tests\CQRanking\Strategy\StrategyTestCase;
 
-class OneDayTest extends StrategyTest
+class OneDayTest extends StrategyTestCase
 {
     public function testResultsParseCorrect(): void
     {

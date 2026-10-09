@@ -3,9 +3,9 @@
 namespace App\Tests\CQRanking\Strategy\Y2013;
 
 use App\CQRanking\Parser\Strategy\Y2013\Stage;
-use App\Tests\CQRanking\Strategy\StrategyTest;
+use App\Tests\CQRanking\Strategy\StrategyTestCase;
 
-class StageTest extends StrategyTest
+class StageTest extends StrategyTestCase
 {
     public function testResultsFromGTParseCorrect(): void
     {

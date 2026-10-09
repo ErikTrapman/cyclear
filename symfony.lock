@@ -253,12 +253,6 @@
     "psr/simple-cache": {
         "version": "1.0.1"
     },
-    "sebastian/code-unit": {
-        "version": "1.0.5"
-    },
-    "sebastian/code-unit-reverse-lookup": {
-        "version": "2.0.2"
-    },
     "sebastian/comparator": {
         "version": "4.0.3"
     },
@@ -282,9 +276,6 @@
     },
     "sebastian/recursion-context": {
         "version": "4.0.2"
-    },
-    "sebastian/resource-operations": {
-        "version": "3.0.2"
     },
     "sebastian/type": {
         "version": "2.2.1"

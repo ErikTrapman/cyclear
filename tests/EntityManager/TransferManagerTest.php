@@ -91,11 +91,10 @@ class TransferManagerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider revertExchangeTransfersDataProvider
-     *
      * @param mixed $revertId1
      * @param mixed $revertId2
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('revertExchangeTransfersDataProvider')]
     public function testRevertExchangeTransfer($revertId1, $revertId2): void
     {
         $p1 = $this->ploegRepo->findOneByAfkorting('pl1');
@@ -145,7 +144,7 @@ class TransferManagerTest extends WebTestCase
      *
      * @psalm-return array{0: array{0: 6, 1: 4}, 1: array{0: 5, 1: 3}, 2: array{0: 3, 1: 5}, 3: array{0: 4, 1: 6}}
      */
-    public function revertExchangeTransfersDataProvider(): array
+    public static function revertExchangeTransfersDataProvider(): array
     {
         return [
             [6, 4],
@@ -156,10 +155,9 @@ class TransferManagerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider revertUserTransfersDataProvider
-     *
      * @param mixed $transferIdToRevert
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('revertUserTransfersDataProvider')]
     public function testRevertUserTransfer($transferIdToRevert): void
     {
         $p1 = $this->ploegRepo->find(1);
@@ -199,7 +197,7 @@ class TransferManagerTest extends WebTestCase
      *
      * @psalm-return array{0: array{0: 3}, 1: array{0: 2}}
      */
-    public function revertUserTransfersDataProvider(): array
+    public static function revertUserTransfersDataProvider(): array
     {
         return [
             [3],

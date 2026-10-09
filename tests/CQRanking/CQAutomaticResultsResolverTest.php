@@ -23,16 +23,16 @@ class CQAutomaticResultsResolverTest extends WebTestCase
         $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'recentraces-20151029.html');
         $races = $parser->getRecentRaces($content, new \DateTime(date('Y') . '-12-31'));
 
-        $wedstrijdRepo = $this->getMockBuilder('App\Repository\WedstrijdRepository')->disableOriginalConstructor()->getMock();
+        $wedstrijdRepo = $this->createStub('App\Repository\WedstrijdRepository');
 
-        $ploegRepo = $this->getMockBuilder(PloegRepository::class)->disableOriginalConstructor()->getMock();
+        $ploegRepo = $this->createStub(PloegRepository::class);
 
         $ploeg = new Ploeg();
         $ploegRepo->method('find')->willReturn($ploeg);
 
         $type = new UitslagType();
         $type->setMaxResults(1);
-        $categoryMatcher = $this->getMockBuilder('App\CQRanking\RaceCategoryMatcher')->disableOriginalConstructor()->getMock();
+        $categoryMatcher = $this->createStub('App\CQRanking\RaceCategoryMatcher');
         $categoryMatcher->method('getUitslagTypeAccordingToCategory')
             ->willReturn($type);
         $categoryMatcher->method('needsRefStage')->willReturn(false);
@@ -40,12 +40,12 @@ class CQAutomaticResultsResolverTest extends WebTestCase
         $uitslagen = [
             ['ploeg' => 1, 'rennerPunten' => 10, 'ploegPunten' => 10, 'renner' => 1, 'positie' => 1],
         ];
-        $uitslagManager = $this->getMockBuilder('App\EntityManager\UitslagManager')->disableOriginalConstructor()->getMock();
+        $uitslagManager = $this->createStub('App\EntityManager\UitslagManager');
         $uitslagManager->method('prepareUitslagen')->willReturn($uitslagen);
-        $logger = $this->getMockBuilder(Logger::class)->disableOriginalConstructor()->getMock();
+        $logger = $this->createStub(Logger::class);
 
         $renner = new Renner();
-        $transformer = $this->getMockBuilder('App\Form\DataTransformer\RennerNameToRennerIdTransformer')->disableOriginalConstructor()->getMock();
+        $transformer = $this->createStub('App\Form\DataTransformer\RennerNameToRennerIdTransformer');
         $transformer->method('reverseTransform')->willReturn($renner);
         $resolver = new CQAutomaticResultsResolver($categoryMatcher, $uitslagManager, new CrawlerManager(), $transformer, $logger, $wedstrijdRepo, $ploegRepo);
         $seizoen = new Seizoen();

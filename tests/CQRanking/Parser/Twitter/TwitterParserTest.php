@@ -9,10 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class TwitterParserTest extends WebTestCase
 {
     /**
-     * @dataProvider twitterDataProvider
      * @param mixed $cqId
      * @param mixed $exp
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('twitterDataProvider')]
     public function testTwitterHandleParser($cqId, $exp): void
     {
         static::createClient();
@@ -20,7 +20,7 @@ class TwitterParserTest extends WebTestCase
         $this->assertEquals($exp, $parser->getTwitterHandle($cqId));
     }
 
-    public function twitterDataProvider(): array
+    public static function twitterDataProvider(): array
     {
         return [
             [16941, 'estecharu'],
