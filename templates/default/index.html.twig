@@ -68,8 +68,8 @@
                     <div class="col-lg-12 index-news">
                         {{ nieuws.content|raw|markdown_to_html }}
                         <script>
-                            $(document).ready(function() {
-                                $('.index-news table').addClass('table table-bordered table-striped');
+                            document.querySelectorAll('.index-news table').forEach(function (table) {
+                                table.classList.add('table', 'table-bordered', 'table-striped');
                             });
                         </script>
                         <p class="text-center">

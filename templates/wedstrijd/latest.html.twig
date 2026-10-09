@@ -2,7 +2,9 @@
     <script type="text/javascript">
         function toggleResults(e, id) {
             e.preventDefault();
-            $(".results_match_" + id).toggle();
+            document.querySelectorAll(".results_match_" + id).forEach(function (row) {
+                row.style.display = row.style.display === 'none' ? '' : 'none';
+            });
         }
     </script>
     <table class="table table-bordered">

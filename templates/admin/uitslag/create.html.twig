@@ -37,30 +37,34 @@
     </form>
 
     <script type="text/javascript">
-        $(document).ready(function () {
-
-            var $form = $("#uitslag");
-            var url = $form.attr('action');
-            $("#refresh").on('click', function (event) {
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('uitslag');
+            var submit = document.getElementById('uitslag_submit');
+            var loading = document.getElementById('results_loading');
+            var results = document.getElementById('results_ajax');
+            document.getElementById('refresh').addEventListener('click', function (event) {
                 event.preventDefault();
-                $("#uitslag_submit").hide();
-                $("#results_loading").show();
-                var loadhtml = '<div class="control-group"><label class="control-label"></label></div>';
-                $("#results_ajax").html(loadhtml);
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: $form.serialize()
-                }).done(function (res) {
-                    $("#results_loading").hide();
-                    $("#uitslag_submit").show();
-                    $("#results_ajax").html(res);
-                }).fail(function () {
-                    $("#results_loading").hide();
-                    $("#results_ajax").html('<div class="control-group"><label class="control-label"></label><div class="controls"><span class="label label-warning">Warning</span> De uitslagen konden niet worden opgehaald. Probeer het evt. opnieuw.</div></div>');
+                submit.style.display = 'none';
+                loading.style.display = '';
+                results.innerHTML = '<div class="control-group"><label class="control-label"></label></div>';
+                fetch(form.getAttribute('action'), {
+                    method: 'POST',
+                    headers: {'X-Requested-With': 'XMLHttpRequest'},
+                    body: new URLSearchParams(new FormData(form))
+                }).then(function (response) {
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+                    return response.text();
+                }).then(function (res) {
+                    loading.style.display = 'none';
+                    submit.style.display = '';
+                    results.innerHTML = res;
+                }).catch(function () {
+                    loading.style.display = 'none';
+                    results.innerHTML = '<div class="control-group"><label class="control-label"></label><div class="controls"><span class="label label-warning">Warning</span> De uitslagen konden niet worden opgehaald. Probeer het evt. opnieuw.</div></div>';
                 });
             });
         });
-
     </script>
 {% endblock %}
