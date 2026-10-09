@@ -30,12 +30,12 @@
                     </tr>
                     {% for award in awards()|reverse %}
                         <tr>
-                            <td>{{ award.ploeg.seizoen.identifier }}</td>
+                            <td>{{ award.season }}</td>
                             <td title="{{ award.type.label }}">{{ award.type.icon }}</td>
                             <td>
-                                <a href="{{ path('ploeg_show', {seizoen: award.ploeg.seizoen.slug, id: award.ploeg.id}) }}">{{ award.ploeg.naam }}</a>
+                                {% if award.ploeg %}<a href="{{ path('ploeg_show', {seizoen: award.ploeg.seizoen.slug, id: award.ploeg.id}) }}">{{ award.team }}</a>{% else %}{{ award.team }}{% endif %}
                             </td>
-                            <td>{{ award.ploeg.user ? award.ploeg.user.firstName }}</td>
+                            <td>{{ award.user ? award.user.firstName }}</td>
                         </tr>
                     {% endfor %}
                 </table>

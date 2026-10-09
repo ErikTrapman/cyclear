@@ -96,9 +96,9 @@
                             <tr>
                                 <td>{{ award.type.icon }}</td>
                                 <td>{{ award.type.label }}</td>
-                                <td>{{ award.ploeg.seizoen.identifier }}</td>
+                                <td>{{ award.season }}</td>
                                 <td>
-                                    <a href="{{ path('ploeg_show', {seizoen: award.ploeg.seizoen.slug, id: award.ploeg.id}) }}">{{ award.ploeg.naam }}</a>
+                                    {% if award.ploeg %}<a href="{{ path('ploeg_show', {seizoen: award.ploeg.seizoen.slug, id: award.ploeg.id}) }}">{{ award.team }}</a>{% else %}{{ award.team }}{% endif %}
                                 </td>
                             </tr>
                         {% endfor %}

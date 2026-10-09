@@ -46,8 +46,8 @@ class AwardExtension extends AbstractExtension
         return array_values(array_filter(
             $this->getAwards(),
             static fn (Award $award): bool => null !== $userId
-                ? $award->getPloeg()->getUser()?->getId() === $userId
-                : $award->getPloeg()->getId() === $ploeg->getId(),
+                ? $award->getUser()?->getId() === $userId
+                : $award->getPloeg()?->getId() === $ploeg->getId(),
         ));
     }
 }

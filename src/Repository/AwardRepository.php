@@ -19,16 +19,22 @@ class AwardRepository extends ServiceEntityRepository
     }
 
     /**
+     * Awards without a ploeg come from an edition before the seasons in this database, so they are listed first.
+     *
      * @return Award[] oldest season first
      */
     public function findAllWithPloeg(): array
     {
         return $this->createQueryBuilder('a')
-            ->addSelect('p', 's', 'u')
-            ->innerJoin('a.ploeg', 'p')
-            ->innerJoin('p.seizoen', 's')
+            ->addSelect('p', 's', 'u', 'au')
+            ->addSelect('CASE WHEN p.id IS NULL THEN 0 ELSE 1 END AS HIDDEN withPloeg')
+            ->leftJoin('a.ploeg', 'p')
+            ->leftJoin('p.seizoen', 's')
             ->leftJoin('p.user', 'u')
-            ->orderBy('s.id', 'ASC')
+            ->leftJoin('a.user', 'au')
+            ->orderBy('withPloeg', 'ASC')
+            ->addOrderBy('a.season', 'ASC')
+            ->addOrderBy('s.id', 'ASC')
             ->getQuery()
             ->getResult();
     }
