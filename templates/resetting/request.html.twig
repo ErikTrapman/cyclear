@@ -1,4 +1,9 @@
+{% extends 'base.html.twig' %}
+
 {% block content %}
+    <div class="big-header hidden-xs hidden-sm">
+        <h2>Reset wachtwoord</h2>
+    </div>
 
     <div class="container">
         <div class="row">
@@ -9,11 +14,8 @@
                     </div>
                     <div class="panel-body">
                         <form class="form form-horizontal"
-                              action="{{ path('fos_user_resetting_send_email') }}"
+                              action="{{ path('app_resetting_send_email') }}"
                               method="POST">
-                            {% if invalid_username is defined %}
-                                <p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}</p>
-                            {% endif %}
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"
                                        for="username">E-mailadres</label>
@@ -24,7 +26,7 @@
                                 </div>
                             </div>
                             <button class="btn"
-                                    type="submit">{{ 'resetting.request.submit'|trans({}, 'FOSUserBundle') }}</button>
+                                    type="submit">Reset wachtwoord</button>
                         </form>
                     </div>
                 </div>

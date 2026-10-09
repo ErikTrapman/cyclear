@@ -2,15 +2,14 @@
 
 namespace App\Mailer;
 
-use FOS\UserBundle\Mailer\MailerInterface as FOSMailerInterface;
-use FOS\UserBundle\Model\UserInterface;
+use App\Entity\User;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class FOSUserBundleMailer implements FOSMailerInterface
+class UserMailer
 {
     public function __construct(
         private readonly MailerInterface $mailer,
@@ -18,14 +17,9 @@ class FOSUserBundleMailer implements FOSMailerInterface
     ) {
     }
 
-    public function sendConfirmationEmailMessage(UserInterface $user): void
+    public function sendResettingEmailMessage(User $user): void
     {
-        throw new \LogicException('Not implemented');
-    }
-
-    public function sendResettingEmailMessage(UserInterface $user): void
-    {
-        $url = $this->router->generate('fos_user_resetting_reset', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $url = $this->router->generate('app_resetting_reset', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
         $email = (new TemplatedEmail())
             ->from(new Address('veggatron+cyclear@gmail.com', 'Cyclear'))
             ->to(new Address($user->getEmail()))

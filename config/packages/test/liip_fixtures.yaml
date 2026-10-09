@@ -11,3 +11,5 @@ services:
         tags: [ 'doctrine.fixture.orm' ]
     App\Tests\Fixtures\LoadSeizoenData:
         tags: [ 'doctrine.fixture.orm' ]
+    App\Tests\Fixtures\LoadUserData:
+        tags: [ 'doctrine.fixture.orm' ]

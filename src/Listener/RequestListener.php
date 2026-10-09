@@ -2,8 +2,8 @@
 
 namespace App\Listener;
 
+use App\Entity\User;
 use App\Repository\SeizoenRepository;
-use FOS\UserBundle\Model\UserInterface as FOSUserInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -45,7 +45,7 @@ class RequestListener
         $request->attributes->set('current-seizoen', $this->seizoenRepository->getCurrent());
         if (null !== $token = $this->tokenStorage->getToken()) {
             $user = $token->getUser();
-            if ($user instanceof FOSUserInterface) {
+            if ($user instanceof User) {
                 $request->attributes->set('seizoen-ploeg', $user->getPloegBySeizoen($seizoen));
             }
         }

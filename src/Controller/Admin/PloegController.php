@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Ploeg;
-use App\EntityManager\UserManager;
 use App\Form\Filter\PloegFilterType;
 use App\Form\PloegType;
 use Doctrine\DBAL\Types\Type;
@@ -25,7 +24,6 @@ class PloegController extends AbstractController
     public function __construct(
         private readonly ManagerRegistry $doctrine,
         private readonly PaginatorInterface $paginator,
-        private readonly UserManager $userManager,
     ) {
     }
 
@@ -186,7 +184,6 @@ class PloegController extends AbstractController
         if (!$user) {
             return;
         }
-        $this->userManager->setOwnerAcl($user, $ploeg);
         $ploeg->setUser($user);
         $em = $this->doctrine->getManager();
         $em->flush();

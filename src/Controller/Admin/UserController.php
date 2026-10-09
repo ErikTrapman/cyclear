@@ -3,13 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Form\Admin\UserType;
 use Doctrine\Persistence\ManagerRegistry;
-use FOS\UserBundle\Form\Type\ProfileFormType;
-use FOS\UserBundle\Form\Type\RegistrationFormType;
-use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -20,12 +19,12 @@ class UserController extends AbstractController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserManagerInterface $userManager,
+        private readonly UserPasswordHasherInterface $passwordHasher,
     ) {
     }
 
     #[Route(path: '/', name: 'admin_user')]
-    public function indexAction(): \Symfony\Component\HttpFoundation\Response
+    public function indexAction(): Response
     {
         $em = $this->doctrine->getManager();
 
@@ -35,9 +34,9 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/new-user', name: 'admin_user_new')]
-    public function newAction(): \Symfony\Component\HttpFoundation\Response
+    public function newAction(): Response
     {
-        $form = $this->createForm(RegistrationFormType::class);
+        $form = $this->createForm(UserType::class, new User());
 
         return $this->render('admin/user/new.html.twig', [
             'form' => $form->createView(),
@@ -45,30 +44,29 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/create', name: 'admin_user_create', methods: ['POST'])]
-    public function createAction(Request $request): array|RedirectResponse
+    public function createAction(Request $request): Response
     {
-        $form = $this->createForm(RegistrationFormType::class);
-        $userManager = $this->userManager;
-
-        $user = $userManager->createUser();
+        $user = new User();
         $user->setEnabled(true);
-
-        $form->setData($user);
         // IMPORTANT. We vragen niet om een password in het formulier. Zet hier dus tenminste een wachtwoord!
-        $user->setPlainPassword(uniqid());
+        $user->setPassword($this->passwordHasher->hashPassword($user, bin2hex(random_bytes(16))));
+
+        $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            $userManager->updateUser($user);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->doctrine->getManager();
+            $em->persist($user);
+            $em->flush();
             return $this->redirect($this->generateUrl('admin_user_edit', ['id' => $user->getId()]));
         }
 
-        return [
+        return $this->render('admin/user/new.html.twig', [
             'form' => $form->createView(),
-        ];
+        ]);
     }
 
     #[Route(path: '/{id}/edit', name: 'admin_user_edit')]
-    public function editAction($id): \Symfony\Component\HttpFoundation\Response
+    public function editAction($id): Response
     {
         $em = $this->doctrine->getManager();
 
@@ -77,7 +75,7 @@ class UserController extends AbstractController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-        $editForm = $this->createForm(ProfileFormType::class, $entity);
+        $editForm = $this->createForm(UserType::class, $entity, ['edit' => true]);
 
         return $this->render('admin/user/edit.html.twig', [
             'entity' => $entity,
@@ -86,7 +84,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/{id}/update', name: 'admin_user_update', methods: ['POST'])]
-    public function updateAction(Request $request, $id): \Symfony\Component\HttpFoundation\Response
+    public function updateAction(Request $request, $id): Response
     {
         $em = $this->doctrine->getManager();
 
@@ -95,7 +93,7 @@ class UserController extends AbstractController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-        $editForm = $this->createForm(ProfileFormType::class, $entity);
+        $editForm = $this->createForm(UserType::class, $entity, ['edit' => true]);
 
         //        // http://symfony.com/doc/master/cookbook/form/form_collections.html - Ensuring the database persistence
         //        $originalPloegen = array();
@@ -105,7 +103,7 @@ class UserController extends AbstractController
         //        }
 
         $editForm->handleRequest($request);
-        if ($editForm->isValid()) {
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
             //            this is now done in PloegController
             //            $usermanager = $this->get('cyclear_game.manager.user');
             //            //$usermanager->updatePloegen($editForm, $entity);
@@ -115,16 +113,14 @@ class UserController extends AbstractController
             //                        unset($originalPloegen[$key]);
             //                    }
             //                }
-            //                $usermanager->setOwnerAcl($entity, $ploeg);
-            //                $ploeg->setUser($entity);
+            //            //                $ploeg->setUser($entity);
             //            }
             //
             //            // remove the relationship between the tag and the Task
             //            foreach ($originalPloegen as $ploeg) {
             //                // remove the Task from the Tag
             //                $ploeg->setUser(null);
-            //                $usermanager->unsetOwnerAcl($entity, $ploeg);
-            //
+            //            //
             //                // if it were a ManyToOne relationship, remove the relationship like this
             //                // $tag->setTask(null);
             //

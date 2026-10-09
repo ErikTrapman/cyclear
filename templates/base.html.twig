@@ -74,11 +74,11 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <li class="active">
-                        <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                        <a href="{{ logout_path() }}">Uitloggen</a>
                     </li>
                 {% else %}
                     <li>
-                        <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+                        <a href="{{ path('app_login') }}">Inloggen</a>
                     </li>
                 {% endif %}
             </ul>
@@ -90,9 +90,7 @@
 <!--Header_section-->
 
 {% block contentcontainer %}
-    {% block content %}
-        {% block fos_user_content %}{% endblock %}
-    {% endblock %}
+    {% block content %}{% endblock %}
 {% endblock %}
 
 <div id="footer">
@@ -126,11 +124,11 @@
                 {% endif -%}
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <li class="active">
-                        <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                        <a href="{{ logout_path() }}">Uitloggen</a>
                     </li>
                 {% else %}
                     <li>
-                        <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+                        <a href="{{ path('app_login') }}">Inloggen</a>
                     </li>
                 {% endif %}
             </ul>

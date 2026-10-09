@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="big-header hidden-xs hidden-sm">
+        <h2>Reset wachtwoord</h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Reset wachtwoord</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(form, {action: path('app_resetting_reset', {token: token})}) }}
+                        {{ form_widget(form) }}
+                        <div>
+                            <input type="submit" value="Wijzig wachtwoord"/>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

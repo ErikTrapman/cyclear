@@ -5,11 +5,11 @@ namespace App\Controller\User;
 use App\Entity\Ploeg;
 use App\Entity\Renner;
 use App\EntityManager\TransferManager;
-use App\EntityManager\UserManager;
 use App\Form\Entity\UserTransfer;
 use App\Form\TransferUserType;
 use App\Repository\PloegRepository;
 use App\Repository\RennerRepository;
+use App\Security\PloegVoter;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,13 +33,12 @@ class TransferController extends AbstractController
 
     #[Route(path: '/user/transfer/ploeg/{id}/renner/{renner}', name: 'user_transfer')]
     public function indexAction(
-        UserManager $userManager,
         TransferManager $transferManager,
         Request $request,
         Ploeg $ploeg,
         #[MapEntity(mapping: ['renner' => 'slug'])] Renner $renner): Response|RedirectResponse
     {
-        if (!$userManager->isOwner($this->getUser(), $ploeg)) {
+        if (!$this->isGranted(PloegVoter::OWNER, $ploeg)) {
             throw new AccessDeniedHttpException('Dit is niet jouw ploeg');
         }
         $transferUser = new UserTransfer();

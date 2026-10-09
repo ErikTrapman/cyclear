@@ -1,30 +1,33 @@
 security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
-        App\Entity\User:
+        # Hashes from the FOSUserBundle era. They are rehashed with 'auto' on the user's next login.
+        legacy:
             algorithm: sha512
-            encode-as-base64: true
+            encode_as_base64: true
             iterations: 10
+        App\Entity\User:
+            algorithm: auto
+            migrate_from:
+                - legacy
     providers:
-        fos_userbundle:
-            id: fos_user.user_provider.username
+        app_user_provider:
+            entity:
+                class: App\Entity\User
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        login:
-            pattern:  ^/login-user/login
-            security: false
         main:
             pattern: ^/
-            user_checker: fos_user.user_checker
+            user_checker: App\Security\UserChecker
             form_login:
-                provider: fos_userbundle
-                login_path:  /login-user/login
-                #csrf_token_generator: security.csrf.token_manager
+                login_path: app_login
+                check_path: app_login
                 enable_csrf: true
-            logout:       true
-            provider: fos_userbundle
+            logout:
+                path: /logout
+            provider: app_user_provider
             lazy: true
 
             # activate different ways to authenticate
@@ -36,14 +39,11 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/login-user/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, role: ROLE_ADMIN }
         - { path: ^/user, role: ROLE_USER }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
-acl:
-    connection: default
 
 when@test:
     security:

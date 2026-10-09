@@ -21,8 +21,8 @@
                             <div style="color:red">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                         {% endif %}
 
-                        <form class="form-horizontal" action="{{ path('fos_user_security_check') }}" method="post">
-                            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+                        <form class="form-horizontal" action="{{ path('app_login') }}" method="post">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
 
                             <div class="form-group">
                                 <label for="filter_naam" class="col-sm-2 control-label">
@@ -38,7 +38,7 @@
 
                             <div class="form-group">
                                 <label class="col-sm-2  control-label"
-                                       for="password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
+                                       for="password">Wachtwoord</label>
 
                                 <div class="col-sm-10">
                                     <input class="form-control" type="password" id="password" name="_password"
@@ -46,13 +46,13 @@
                                 </div>
                             </div>
                             <button class="btn btn-default" type="submit" id="_submit"
-                                    name="_submit">{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}</button>
+                                    name="_submit">Inloggen</button>
                         </form>
                     </div>
                 </div>
             </div>
             <div>
-                <p class="text-center"><a href="{{ path('fos_user_resetting_request') }}">Wachtwoord vergeten?</a></p>
+                <p class="text-center"><a href="{{ path('app_resetting_request') }}">Wachtwoord vergeten?</a></p>
             </div>
         </div>
     </div>
