@@ -15,12 +15,12 @@ final class Version20261009170000 extends AbstractMigration
 {
     /** [season, team, user id] */
     private const array WINNERS = [
-        ['2008', 'RVL', 45],
-        ['2009', 'TBI', 34],
-        ['2010', 'TGF', 34],
-        ['2011', 'INK', 44],
-        ['2012', 'DUK', 52],
-        ['2013', 'CSC', 34],
+        ['Cyclear 2008', 'RVL', 45],
+        ['Cyclear 2009', 'TBI', 34],
+        ['Cyclear 2010', 'TGF', 34],
+        ['Cyclear 2011', 'INK', 44],
+        ['Cyclear 2012', 'DUK', 52],
+        ['Cyclear 2013', 'CSC', 34],
     ];
 
     public function getDescription(): string
