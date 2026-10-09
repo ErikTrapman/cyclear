@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Seizoen;
+use App\EntityManager\AwardManager;
 use App\Form\SeizoenType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,8 +15,10 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/admin/seizoen')]
 class SeizoenController extends AbstractController
 {
-    public function __construct(private readonly ManagerRegistry $doctrine)
-    {
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly AwardManager $awardManager,
+    ) {
     }
 
     #[Route(path: '/', name: 'admin_seizoen')]
@@ -108,6 +111,9 @@ class SeizoenController extends AbstractController
 
         if ($editForm->isValid()) {
             $em->persist($entity);
+            if ($entity->getClosed()) {
+                $this->awardManager->awardSeasonWinner($entity);
+            }
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_seizoen_edit', ['id' => $id]));

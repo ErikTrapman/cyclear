@@ -18,5 +18,28 @@
                 </ul>
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Erelijst</h3>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Seizoen</th>
+                        <th></th>
+                        <th>Ploeg</th>
+                        <th>Speler</th>
+                    </tr>
+                    {% for award in awards()|reverse %}
+                        <tr>
+                            <td>{{ award.ploeg.seizoen.identifier }}</td>
+                            <td title="{{ award.type.label }}">{{ award.type.icon }}</td>
+                            <td>
+                                <a href="{{ path('ploeg_show', {seizoen: award.ploeg.seizoen.slug, id: award.ploeg.id}) }}">{{ award.ploeg.naam }}</a>
+                            </td>
+                            <td>{{ award.ploeg.user ? award.ploeg.user.firstName }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}
