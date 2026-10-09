@@ -46,6 +46,10 @@ class PointsCalculator
 
     public function calculateRiderTeamPoints(Renner $renner, Seizoen $seizoen, int $givenPoints): int
     {
+        if (null === $seizoen->getMaxPointsPerRider()) {
+            return $givenPoints;
+        }
+
         // can the rider still get points, or passed the max of this season?
         $currentSeasonalRiderPoints = $this->uitslagRepository->getTotalPuntenForRenner($renner, $seizoen);
 

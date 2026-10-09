@@ -153,6 +153,17 @@ class PointsCalculatorTest extends WebTestCase
         $this->assertEquals($expected, $c->calculateRiderTeamPoints(new Renner(), $seizoen, $given));
     }
 
+    public function testRiderCalculatesTeamPointsWithoutSeasonalMax(): void
+    {
+        $transferRepo = $this->getMockBuilder(TransferRepository::class)->disableOriginalConstructor()->getMock();
+        $uitslagRepo = $this->getMockBuilder(UitslagRepository::class)->disableOriginalConstructor()->getMock();
+        $uitslagRepo->method('getTotalPuntenForRenner')->willReturn(100);
+
+        $c = new PointsCalculator($transferRepo, $uitslagRepo);
+
+        $this->assertEquals(110, $c->calculateRiderTeamPoints(new Renner(), new Seizoen(), 110));
+    }
+
     public static function seasonalPointsDataProvider()
     {
         return [
