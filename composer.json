@@ -56,7 +56,6 @@
         "symfony/security-http": "^7",
         "symfony/serializer": "^7",
         "symfony/string": "^7",
-        "symfony/templating": "^6",
         "symfony/translation": "^7",
         "symfony/twig-bridge": "^7",
         "symfony/twig-bundle": "^7",
