@@ -6,7 +6,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class UitslagTypeType extends \Symfony\Component\Form\AbstractType
 {
-    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
+    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('naam')

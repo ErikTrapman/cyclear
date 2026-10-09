@@ -46,7 +46,7 @@ abstract class AbstractStrategy implements ParserStrategyInterface
         return array_values(array_filter($data, fn ($a) => !empty($a)));
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return get_class($this);
     }

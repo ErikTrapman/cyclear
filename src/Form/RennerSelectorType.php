@@ -37,13 +37,13 @@ class RennerSelectorType extends AbstractType
         $this->router = $router;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $transformer = new DataTransformer\RennerNameToRennerIdTransformer($this->em, $this->rennerManager);
         $builder->addViewTransformer($transformer);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $url = $this->router->generate('get_riders', ['_format' => 'json']);
         $resolver->setDefaults(
@@ -56,7 +56,7 @@ class RennerSelectorType extends AbstractType
         );
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return TextType::class;
     }

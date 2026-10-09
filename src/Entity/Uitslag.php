@@ -97,7 +97,7 @@ class Uitslag
         $this->rennerPunten = $rennerPunten;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'uitslag nr ' . $this->getId();
     }

@@ -65,7 +65,7 @@ class Ploeg
         $this->afkorting = $afkorting;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->getAfkorting();
     }

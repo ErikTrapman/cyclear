@@ -17,7 +17,7 @@ class UserTransferFixedValidator extends ConstraintValidator
     ) {
     }
 
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if (null === $value->getRennerIn() || null === $value->getRennerUit()) {
             $this->context->addViolation('Onbekende renner opgegeven.');

@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class TransferEditType extends \Symfony\Component\Form\AbstractType
 {
-    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
+    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options): void
     {
         $choices = [
             Transfer::DRAFTTRANSFER => 'draft transfer',

@@ -7,7 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContractType extends \Symfony\Component\Form\AbstractType
 {
-    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
+    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options): void
     {
         $seizoen = $options['seizoen'];
         $timeoptions = ['widget' => 'single_text', 'format' => 'd-M-yyyy k:m', 'html5' => false];
@@ -22,7 +22,7 @@ class ContractType extends \Symfony\Component\Form\AbstractType
             ->add('seizoen');
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

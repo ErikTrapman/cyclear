@@ -43,10 +43,6 @@ services:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest' }
 
-    App\Listener\Doctrine\GeneralPurposeSubscriber:
-        tags:
-            - { name: 'doctrine.event_subscriber' }
-
     League\CommonMark\Extension\Table\TableExtension:
         tags:
             - { name: 'twig.markdown.league_extension' }

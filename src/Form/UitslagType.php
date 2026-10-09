@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UitslagType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $seizoen = $options['seizoen'];
         // array( 'allow_add' => true, 'type' => $w)
@@ -35,7 +35,7 @@ class UitslagType extends AbstractType
             ->add('renner', RennerSelectorType::class);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => 'App\Entity\Uitslag',

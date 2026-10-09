@@ -79,7 +79,7 @@ class UitslagRepository extends ServiceEntityRepository
             $qb->andWhere('p = :ploeg');
             $params['ploeg'] = $ploeg;
         }
-        $qb->orderBy('punten', 'DESC, p.afkorting ASC');
+        $qb->orderBy('punten', 'DESC')->addOrderBy('p.afkorting', 'ASC');
         $qb->setParameters(Util::buildParameters($params));
         $value = $qb->getQuery()->getResult();
         $item->set($value);
@@ -259,7 +259,7 @@ class UitslagRepository extends ServiceEntityRepository
         if ($item->isHit()) {
             return $item->get();
         }
-        $params = [':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER];
+        $params = ['seizoen_id' => $seizoen->getId()];
         $startEndWhere = null;
         if ($start && $end) {
             $startEndWhere = ' AND (w.datum >= :start AND w.datum <= :end)';
@@ -292,9 +292,7 @@ class UitslagRepository extends ServiceEntityRepository
                 FROM ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
                 ', $startEndWhere, $transfers);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->prepare($sql);
-        $res = $stmt->executeQuery($params)->fetchAllAssociative();
+        $res = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetchAllAssociative();
         $item->set($res);
         $item->tag(self::CACHE_TAG);
         $this->cache->save($item);
@@ -370,9 +368,7 @@ class UitslagRepository extends ServiceEntityRepository
                 FROM ploeg p WHERE p.seizoen_id = :seizoen_id
                 ORDER BY punten DESC, p.afkorting ASC
                 ', $transfers);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->prepare($sql);
-        $ret = $stmt->executeQuery([':seizoen_id' => $seizoen->getId(), 'transfertype_draft' => Transfer::DRAFTTRANSFER])->fetchAllAssociative();
+        $ret = $this->getEntityManager()->getConnection()->executeQuery($sql, ['seizoen_id' => $seizoen->getId()])->fetchAllAssociative();
         $item->set($ret);
         $item->tag(self::CACHE_TAG);
         $this->cache->save($item);

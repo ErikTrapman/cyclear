@@ -58,7 +58,7 @@ class Country implements Translatable
         $this->locale = $locale;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }

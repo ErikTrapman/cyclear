@@ -72,7 +72,8 @@ class RennerRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('r')
             ->addSelect('IFNULL((' . $puntenQb->getDQL() . '), 0) AS punten')
             ->leftJoin('r.country', 'cty')->addSelect('cty')
-            ->orderBy('punten', 'DESC, r.naam ASC');
+            ->orderBy('punten', 'DESC')
+            ->addOrderBy('r.naam', 'ASC');
         if (true === $excludeWithTeam) {
             $qb->andWhere('IFNULL((' . $teamQb->getDQL() . '), -1) < 0');
         } else {

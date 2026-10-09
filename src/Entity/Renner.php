@@ -98,7 +98,7 @@ class Renner
         $this->country = $country;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $m = new \App\EntityManager\RennerManager();
         return $m->getRennerSelectorTypeStringFromRenner($this);

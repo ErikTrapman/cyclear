@@ -13,7 +13,7 @@ class MatchSelectorType extends AbstractType
     {
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $options = [];
         $options['empty_value'] = 'Maak keuze';
@@ -21,7 +21,7 @@ class MatchSelectorType extends AbstractType
         $resolver->setDefaults($options);
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return ChoiceType::class;
     }

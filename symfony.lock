@@ -2,12 +2,6 @@
     "beberlei/doctrineextensions": {
         "version": "v1.2.7"
     },
-    "behat/transliterator": {
-        "version": "v1.3.0"
-    },
-    "doctrine/cache": {
-        "version": "v1.6.2"
-    },
     "doctrine/collections": {
         "version": "v1.4.0"
     },

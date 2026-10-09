@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class NieuwsType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('seizoen', SeizoenSelectorType::class)

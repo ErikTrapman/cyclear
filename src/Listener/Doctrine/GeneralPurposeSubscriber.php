@@ -5,23 +5,17 @@ namespace App\Listener\Doctrine;
 use App\Entity\User;
 use App\Repository\TransferRepository;
 use App\Repository\UitslagRepository;
-use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
-class GeneralPurposeSubscriber implements EventSubscriberInterface
+#[AsDoctrineListener(event: Events::onFlush)]
+class GeneralPurposeSubscriber
 {
     public function __construct(
         private readonly TagAwareCacheInterface $cache,
     ) {
-    }
-
-    public function getSubscribedEvents(): array
-    {
-        return [
-            Events::onFlush,
-        ];
     }
 
     public function onFlush(OnFlushEventArgs $args): void

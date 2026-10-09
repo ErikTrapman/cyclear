@@ -31,8 +31,9 @@ class RequestListener
             return;
         }
 
-        if (null !== $request->get('seizoen')) {
-            if (!$seizoen = $this->seizoenRepository->findOneBy(['slug' => $request->get('seizoen')])) {
+        $slug = $request->attributes->get('seizoen') ?? $request->query->get('seizoen');
+        if (null !== $slug) {
+            if (!$seizoen = $this->seizoenRepository->findOneBy(['slug' => $slug])) {
                 throw new \UnexpectedValueException('Cannot locate Seizoen for url ' . $request->getUri());
             }
         } else {

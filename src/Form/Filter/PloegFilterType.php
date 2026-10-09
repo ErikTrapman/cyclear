@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class PloegFilterType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('naam', TextType::class, ['required' => false]);

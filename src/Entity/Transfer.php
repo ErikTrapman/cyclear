@@ -132,7 +132,7 @@ class Transfer
         $this->inversionTransfer = $inversionTransfer;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->getId();
     }
