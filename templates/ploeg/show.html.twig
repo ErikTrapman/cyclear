@@ -54,7 +54,7 @@
                     </div>
                     <div class="tab-pane" id="lostdrafts">
                         <div class="table-responsive">
-                            {{ include('uitslag/_listPloeg.html.twig', {uitslagen: lostDrafts, show: 'rennerPunten'}) }}
+                            {{ include('uitslag/_listPloeg.html.twig', {uitslagen: lostDrafts, show: 'rennerPunten', struckRenners: maxedOutDraftRenners}) }}
                         </div>
                     </div>
                 </div>

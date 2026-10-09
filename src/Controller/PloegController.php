@@ -60,6 +60,15 @@ class PloegController extends AbstractController
 
         $punten = $this->uitslagRepository->getPuntenByPloeg($seizoen, $entity);
         $draftRenners = $this->ploegRepository->getDraftRennersWithPunten($entity, false);
+        // Draft riders that reached the seasonal points limit are not counted as lost draft points
+        $maxedOutDraftRenners = [];
+        if (null !== $seizoen->getMaxPointsPerRider()) {
+            foreach ($draftRenners as $draftRenner) {
+                if ($draftRenner['punten'] >= $seizoen->getMaxPointsPerRider()) {
+                    $maxedOutDraftRenners[] = $draftRenner[0]->getId();
+                }
+            }
+        }
 
         $form = $this->createFormBuilder($entity)
             ->add('memo', null, ['attr' => ['placeholder' => '...', 'rows' => 16]])
@@ -82,6 +91,7 @@ class PloegController extends AbstractController
             'rennerRepo' => $this->rennerRepository,
             'transferUitslagen' => $transferUitslagen,
             'lostDrafts' => $lostDrafts,
+            'maxedOutDraftRenners' => $maxedOutDraftRenners,
             'zeges' => $zeges,
             'punten' => $punten[0]['punten'],
             'draftRenners' => $draftRenners,

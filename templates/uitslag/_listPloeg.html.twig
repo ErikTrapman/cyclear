@@ -1,5 +1,6 @@
 {% block content %}
     {% set show = show is defined ? show : 'ploegPunten' %}
+    {% set struckRenners = struckRenners is defined ? struckRenners : [] %}
 
     <table class="table table-bordered table-striped">
         <tr>
@@ -18,7 +19,12 @@
 
             <tr>
                 <td nowrap>
-                    {% if show == 'rennerPunten' %}{{ uitslag.rennerPunten }}{% else %}{{ uitslag.ploegPunten }}{% endif %}
+                    {% set points = show == 'rennerPunten' ? uitslag.rennerPunten : uitslag.ploegPunten %}
+                    {% if uitslag.renner.id in struckRenners %}
+                        <s data-toggle="tooltip" title="Max punten bereikt">{{ points }}</s>
+                    {% else %}
+                        {{ points }}
+                    {% endif %}
                 </td>
                 <td>{{ uitslag.positie }}</td>
                 <td>
