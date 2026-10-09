@@ -1,41 +1,39 @@
 {% extends 'base.html.twig' %}
 {% block content %}
 
-    <div class="big-header" style="margin-bottom: 0;">
+    <div class="big-header">
         <h2>Archieven</h2>
     </div>
 
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <ul style="margin:20px; display: inline-block">
-                    {% for seizoen in seizoenen|reverse %}
-                        <li style="margin:12px;">
-                            <a class="btn btn-default"
-                               href="{{ path('game', {seizoen: seizoen.slug}) }}">{{ seizoen.identifier }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <h3>Erelijst</h3>
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped archive">
                     <tr>
                         <th>Seizoen</th>
                         <th></th>
-                        <th>Ploeg</th>
-                        <th>Speler</th>
+                        <th>Winnaar</th>
                     </tr>
-                    {% for award in awards()|reverse %}
+                    {% for row in rows %}
+                        {% set award = row.winner %}
                         <tr>
-                            <td>{{ award.season }}</td>
-                            <td title="{{ award.type.label }}">{{ award.type.icon }}</td>
                             <td>
-                                {% if award.ploeg %}<a href="{{ path('ploeg_show', {seizoen: award.ploeg.seizoen.slug, id: award.ploeg.id}) }}">{{ award.team }}</a>{% else %}{{ award.team }}{% endif %}
+                                {% if row.seizoen %}
+                                    <a class="btn btn-default" href="{{ path('game', {seizoen: row.seizoen.slug}) }}">
+                                        {{ row.label }} <span class="glyphicon glyphicon-arrow-right"></span>
+                                    </a>
+                                {% else %}
+                                    {{ row.label }}
+                                {% endif %}
                             </td>
-                            <td>{{ award.user ? award.user.firstName }}</td>
+                            <td title="{{ award ? award.type.label }}">{{ award ? award.type.icon }}</td>
+                            <td>
+                                {% if award and award.ploeg %}
+                                    <a href="{{ path('ploeg_show', {seizoen: award.ploeg.seizoen.slug, id: award.ploeg.id}) }}">{{ award.team }}</a>
+                                {% elseif award %}
+                                    {{ award.team }}
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                 </table>
