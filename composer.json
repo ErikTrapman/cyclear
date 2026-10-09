@@ -70,7 +70,6 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^4",
         "friendsofphp/php-cs-fixer": "^3",
-        "liip/functional-test-bundle": "^4.16",
         "liip/test-fixtures-bundle": "^3.4",
         "phpunit/phpunit": "^12",
         "rector/rector": "^2",
