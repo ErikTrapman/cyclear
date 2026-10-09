@@ -20,7 +20,7 @@
                             <td>
                                 {% if row.seizoen %}
                                     <a class="btn btn-default" href="{{ path('game', {seizoen: row.seizoen.slug}) }}">
-                                        {{ row.label }} <span class="glyphicon glyphicon-arrow-right"></span>
+                                        {{ row.label }}
                                     </a>
                                 {% else %}
                                     {{ row.label }}
