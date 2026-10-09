@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation\Locale;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
 
 #[ORM\Entity]
@@ -21,11 +21,11 @@ class Country implements Translatable
     #[ORM\Column(type: 'string', length: 2)]
     private $iso2; // varchar(2) NOT NULL default '',
 
-    #[Translatable]
+    #[Gedmo\Translatable]
     #[ORM\Column(nullable: true)]
     private $name;
 
-    #[Locale]
+    #[Gedmo\Locale]
     private $locale;
 
     public function getId(): int
