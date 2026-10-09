@@ -9,7 +9,6 @@
         <h2>
             {% if entity.user.firstName %}{{ entity.user.firstName }} &bull; {% endif %}
             {{ entity.naam }} - {{ punten }}
-            {{ include('award/_trophies.html.twig', {ploeg: entity}) }}
         </h2>
     </div>
     <div class="container">
@@ -71,6 +70,40 @@
         <div class="row">
             <div class="col-lg-12">
                 {{ include('uitslag/_listPloeg.html.twig', {uitslagen: uitslagen, entity: entity}) }}
+            </div>
+        </div>
+    </div>
+    <div class="big-header">
+        <h2 style="margin-bottom: 0px;">
+            Awards
+        </h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                {% set awards = trophies(entity) %}
+                {% if awards is empty %}
+                    <p>Nog geen awards.</p>
+                {% else %}
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th></th>
+                            <th>Award</th>
+                            <th>Seizoen</th>
+                            <th>Ploeg</th>
+                        </tr>
+                        {% for award in awards|reverse %}
+                            <tr>
+                                <td>{{ award.type.icon }}</td>
+                                <td>{{ award.type.label }}</td>
+                                <td>{{ award.ploeg.seizoen.identifier }}</td>
+                                <td>
+                                    <a href="{{ path('ploeg_show', {seizoen: award.ploeg.seizoen.slug, id: award.ploeg.id}) }}">{{ award.ploeg.naam }}</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
             </div>
         </div>
         <h2>
