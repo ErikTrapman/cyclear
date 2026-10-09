@@ -1,6 +1,0 @@
-{% set trophies = trophies(ploeg) %}
-{%- if trophies is not empty -%}
-    <span class="trophies" title="{% for award in trophies %}{{ award.type.label }} {{ award.ploeg.seizoen.identifier }}{{ not loop.last ? ', ' }}{% endfor %}">
-        {%- for award in trophies %}{{ award.type.icon }}{% endfor -%}
-    </span>
-{%- endif -%}
