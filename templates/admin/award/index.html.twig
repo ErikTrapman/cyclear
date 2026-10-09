@@ -1,0 +1,41 @@
+{% extends 'admin.base_normal.twig' %}
+
+{% block content %}
+    <h3>Awards</h3>
+
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Id</th>
+            <th>Award</th>
+            <th>Seizoen</th>
+            <th>Ploeg</th>
+            <th>Speler</th>
+            <th>&nbsp;</th>
+        </tr>
+
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('admin_award_edit', {id: entity.id}) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.type.icon }} {{ entity.type.label }}</td>
+                <td>{{ entity.season }}</td>
+                <td>{{ entity.team }}{% if not entity.ploeg %} <em>(geen ploeg)</em>{% endif %}</td>
+                <td>{{ entity.user ? (entity.user.firstName ?: entity.user.username) }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_award_edit', {id: entity.id}) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_award_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+{% endblock %}

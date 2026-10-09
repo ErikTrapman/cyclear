@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * A trophy or badge. Normally won by a ploeg, so the user is derived from it and linking a ploeg to a user later
@@ -12,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: \App\Repository\AwardRepository::class)]
 #[ORM\Table(name: 'award')]
 #[ORM\UniqueConstraint(name: 'award_ploeg_type_unique', columns: ['ploeg_id', 'type'])]
+#[UniqueEntity(fields: ['ploeg', 'type'], message: 'Deze ploeg heeft deze award al.')]
 class Award
 {
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -38,13 +42,17 @@ class Award
     ) {
     }
 
-    public static function withoutPloeg(User $user, AwardType $type, string $season, string $team): self
+    #[Assert\Callback]
+    public function validatePloegOrDetails(ExecutionContextInterface $context): void
     {
-        $award = new self(null, $type);
-        $award->user = $user;
-        $award->season = $season;
-        $award->team = $team;
-        return $award;
+        $hasDetails = null !== $this->user || null !== $this->season || null !== $this->team;
+        if (null !== $this->ploeg && $hasDetails) {
+            $context->buildViolation('Kies een ploeg óf vul speler, seizoen en ploegnaam in, niet allebei.')
+                ->atPath('ploeg')->addViolation();
+        } elseif (null === $this->ploeg && (null === $this->user || null === $this->season || null === $this->team)) {
+            $context->buildViolation('Zonder ploeg zijn speler, seizoen en ploegnaam verplicht.')
+                ->atPath('ploeg')->addViolation();
+        }
     }
 
     public function getId(): int
@@ -65,6 +73,49 @@ class Award
     public function getUser(): ?User
     {
         return $this->ploeg?->getUser() ?? $this->user;
+    }
+
+    public function setPloeg(?Ploeg $ploeg): void
+    {
+        $this->ploeg = $ploeg;
+    }
+
+    public function setType(AwardType $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * The user stored on the award itself, only used when there is no ploeg.
+     */
+    public function getOwnUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setOwnUser(?User $user): void
+    {
+        $this->user = $user;
+    }
+
+    public function getOwnSeason(): ?string
+    {
+        return $this->season;
+    }
+
+    public function setOwnSeason(?string $season): void
+    {
+        $this->season = $season;
+    }
+
+    public function getOwnTeam(): ?string
+    {
+        return $this->team;
+    }
+
+    public function setOwnTeam(?string $team): void
+    {
+        $this->team = $team;
     }
 
     public function getSeason(): string
