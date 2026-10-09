@@ -23,7 +23,7 @@
                                         {{ row.label }}
                                     </a>
                                 {% else %}
-                                    {{ row.label }}
+                                    <button type="button" class="btn btn-default" disabled>{{ row.label }}</button>
                                 {% endif %}
                             </td>
                             <td title="{{ award ? award.type.label }}">{{ award ? award.type.icon }}</td>
