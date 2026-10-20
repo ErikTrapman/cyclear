@@ -44,6 +44,8 @@ when@prod:
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
                 formatter: monolog.formatter.json
+                # The web (www-data) and the crons (cyclear, group www-data) both write this log
+                file_permission: '0664'
             console:
                 type: console
                 process_psr_3_messages: false
