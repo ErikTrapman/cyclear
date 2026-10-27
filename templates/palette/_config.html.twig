@@ -7,11 +7,9 @@
 {% endif %}
 {% if paletteSeizoen %}
     {% set paletteLinks = paletteLinks|merge([
-        {label: 'Stand', url: path('uitslag_overview', {seizoen: paletteSeizoen.slug})},
         {label: 'Transfers', url: path('transfer_list', {seizoen: paletteSeizoen.slug})},
         {label: 'Uitslagen', url: path('wedstrijd_list', {seizoen: paletteSeizoen.slug})},
         {label: 'Renners', url: path('rider_index', {seizoen: paletteSeizoen.slug})},
-        {label: 'Nieuws', url: path('nieuws', {seizoen: paletteSeizoen.slug})},
         {label: 'Spelregels', url: path('spelregels_index', {seizoen: paletteSeizoen.slug})},
     ]) %}
 {% endif %}

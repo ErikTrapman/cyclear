@@ -7,6 +7,9 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
+    assets:
+        version_strategy: App\Asset\ContentHashVersionStrategy
+
     #esi: true
     #fragments: true
 
@@ -15,8 +18,3 @@ when@test:
         test: true
         session:
             storage_factory_id: session.storage.factory.mock_file
-
-when@prod:
-    framework:
-        assets:
-            version: 20231124
