@@ -5,6 +5,7 @@ namespace App\Listener;
 use App\Entity\User;
 use App\Repository\SeizoenRepository;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -34,7 +35,7 @@ class RequestListener
         $slug = $request->attributes->get('seizoen') ?? $request->query->get('seizoen');
         if (null !== $slug) {
             if (!$seizoen = $this->seizoenRepository->findOneBy(['slug' => $slug])) {
-                throw new \UnexpectedValueException('Cannot locate Seizoen for url ' . $request->getUri());
+                throw new NotFoundHttpException('Cannot locate Seizoen for url ' . $request->getUri());
             }
         } else {
             $seizoen = $this->seizoenRepository->getCurrent();
