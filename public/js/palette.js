@@ -174,7 +174,8 @@
         if (s.type === 'confirm') {
             renderConfirm(s);
         } else if (debounce) {
-            timer = setTimeout(load, 200);
+            // wait for a pause in typing, so the list does not jump around on every keystroke
+            timer = setTimeout(load, 400);
         } else {
             load();
         }
