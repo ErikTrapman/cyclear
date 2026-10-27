@@ -82,6 +82,21 @@ class RennerRepository extends ServiceEntityRepository
         return $qb->setParameter('seizoen', $seizoen); // ->setMaxResults(20)->getQuery()->getResult();
     }
 
+    /**
+     * Riders whose name contains every word of the query, most points first.
+     *
+     * @return array<int, array{0: Renner, punten: int|string}>
+     */
+    public function searchWithPunten(Seizoen $seizoen, string $query, bool $onlyAvailable, int $limit): array
+    {
+        $qb = $this->getRennersWithPuntenQueryBuilder($seizoen, $onlyAvailable);
+        foreach (preg_split('/\s+/', mb_strtolower(trim($query)), -1, PREG_SPLIT_NO_EMPTY) as $i => $word) {
+            $qb->andWhere('LOWER(r.naam) LIKE :word' . $i)
+                ->setParameter('word' . $i, '%' . addcslashes($word, '%_') . '%');
+        }
+        return $qb->setMaxResults($limit)->getQuery()->getResult();
+    }
+
     private function resolveSeizoen(?Seizoen $seizoen = null): Seizoen
     {
         if (null === $seizoen) {

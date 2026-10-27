@@ -20,6 +20,7 @@
     {% endblock %}
     {% block javascripts %}
         <script type="text/javascript" src="{{ asset('js/cyclear.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/palette.js') }}" defer></script>
     {% endblock %}
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}"/>
     <script type="text/javascript">
@@ -39,16 +40,19 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            <button type="button" class="navbar-toggle palette-toggle" data-palette-open aria-label="Zoek renner of pagina">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
             <a class="navbar-brand" href="/">Cyclear</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <form class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                    <input type="text" class="ajax-typeahead form-control" style="width: 300px;" placeholder="Zoek renner..." do-redirect="true">
-                </div>
-            </form>
+            <div class="navbar-form navbar-left hidden-xs">
+                <button type="button" class="form-control palette-trigger" data-palette-open>
+                    <span class="glyphicon glyphicon-search"></span> Zoek renner of pagina&hellip; <kbd>/</kbd>
+                </button>
+            </div>
             <ul class="nav navbar-nav">
                 {% if app.request.attributes.has('seizoen') %}
                     <li>
@@ -135,5 +139,6 @@
         </div>
     </div>
 </div>
+{{ include('palette/_config.html.twig') }}
 </body>
 </html>

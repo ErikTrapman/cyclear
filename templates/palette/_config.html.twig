@@ -1,0 +1,30 @@
+{# Configuration for the command palette (public/js/palette.js). #}
+{% set paletteSeizoen = app.request.attributes.get('seizoen') %}
+{% set paletteTeam = app.request.attributes.get('seizoen-ploeg') %}
+{% set paletteLinks = [] %}
+{% if paletteTeam %}
+    {% set paletteLinks = paletteLinks|merge([{label: 'Mijn ploeg', url: path('ploeg_show', {seizoen: paletteTeam.seizoen.slug, id: paletteTeam.id})}]) %}
+{% endif %}
+{% if paletteSeizoen %}
+    {% set paletteLinks = paletteLinks|merge([
+        {label: 'Stand', url: path('uitslag_overview', {seizoen: paletteSeizoen.slug})},
+        {label: 'Transfers', url: path('transfer_list', {seizoen: paletteSeizoen.slug})},
+        {label: 'Uitslagen', url: path('wedstrijd_list', {seizoen: paletteSeizoen.slug})},
+        {label: 'Renners', url: path('rider_index', {seizoen: paletteSeizoen.slug})},
+        {label: 'Nieuws', url: path('nieuws', {seizoen: paletteSeizoen.slug})},
+        {label: 'Spelregels', url: path('spelregels_index', {seizoen: paletteSeizoen.slug})},
+    ]) %}
+{% endif %}
+{% set paletteLinks = paletteLinks|merge([{label: 'Archief', url: path('archief_index')}]) %}
+<script type="application/json" id="palette-config">
+    {{- {
+        ridersUrl: paletteSeizoen ? path('palette_riders', {seizoen: paletteSeizoen.slug}) : null,
+        team: paletteTeam and not paletteSeizoen.closed ? {
+            name: paletteTeam.naam,
+            ridersUrl: path('user_transfer_palette_team', {id: paletteTeam.id}),
+            transferUrl: path('user_transfer_palette', {id: paletteTeam.id}),
+            token: csrf_token('palette-transfer'),
+        } : null,
+        links: paletteLinks,
+    }|json_encode|raw -}}
+</script>

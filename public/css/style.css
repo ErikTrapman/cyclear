@@ -354,3 +354,246 @@ body {
 .table.archive > tbody > tr > td {
     vertical-align: middle;
 }
+
+/* Command palette (public/js/palette.js) */
+.palette-trigger {
+    width: 300px;
+    text-align: left;
+    color: #999;
+    cursor: text;
+}
+
+.palette-trigger kbd {
+    float: right;
+    background: #eee;
+    color: #555;
+    box-shadow: none;
+}
+
+.navbar-toggle.palette-toggle {
+    padding: 6px 10px;
+    font-size: 16px;
+    color: #555;
+}
+
+body.palette-open {
+    overflow: hidden;
+}
+
+.palette-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.palette-overlay.palette-visible {
+    display: block;
+}
+
+.palette {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    max-width: calc(100% - 32px);
+    max-height: 70vh;
+    margin: 10vh auto 0;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+}
+
+.palette-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.palette-input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    padding: 14px 4px;
+    /* 16px keeps iOS from zooming in on focus */
+    font-size: 16px;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.palette-icon-button {
+    border: 0;
+    background: none;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 20px;
+    color: #777;
+}
+
+.palette-title {
+    padding: 10px 16px;
+    background: #2e002f;
+    color: #fff;
+    font-weight: bold;
+}
+
+.palette-close {
+    margin-left: auto;
+}
+
+.palette-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.palette-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    min-height: 44px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+    cursor: pointer;
+}
+
+a.palette-item:hover, a.palette-item:focus {
+    text-decoration: none;
+    color: #333;
+}
+
+.palette-item.palette-active {
+    background: #f3e6f3;
+}
+
+.palette-link .glyphicon {
+    color: #860087;
+}
+
+.palette-rider-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.palette-rider-name {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.palette-flag {
+    margin: 0 6px 2px 0;
+}
+
+.palette-rider-meta {
+    font-size: 12px;
+    color: #777;
+}
+
+.palette-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.palette-empty {
+    padding: 14px 16px;
+    color: #777;
+}
+
+.palette-confirm {
+    padding: 16px;
+}
+
+.palette-confirm-row {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.palette-confirm-label {
+    display: inline-block;
+    width: 36px;
+}
+
+.palette-transfers-left {
+    margin: 12px 0;
+    color: #555;
+}
+
+.palette-comment {
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.palette-errors .alert {
+    padding: 8px 12px;
+    margin-bottom: 8px;
+}
+
+.palette-footer {
+    padding: 6px 16px;
+    border-top: 1px solid #eee;
+    font-size: 12px;
+    color: #999;
+}
+
+@media (max-width: 767px) {
+    .palette {
+        width: 100%;
+        max-width: none;
+        height: 100vh;
+        /* the visible height, so the on-screen keyboard does not cover the list */
+        height: 100dvh;
+        max-height: none;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .palette-actions .btn {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    /* the confirm button sits at the bottom of the screen, within thumb reach */
+    .palette-confirm {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+    }
+
+    .palette-confirm-button {
+        margin-top: auto;
+    }
+
+    .palette-footer {
+        display: none;
+    }
+}
+
+.palette-back:disabled {
+    color: #bbb;
+    cursor: default;
+}
+
+.palette-actions {
+    align-items: center;
+}
+
+.palette-transfer {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+.palette-transfer:hover, .palette-transfer:focus {
+    background: rgba(0, 0, 0, 0.06);
+    text-decoration: none;
+}
