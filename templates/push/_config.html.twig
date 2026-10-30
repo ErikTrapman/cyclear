@@ -1,0 +1,12 @@
+{# Configuration for push notifications (public/js/push.js); push is off until the VAPID keys are set. #}
+{% if vapid_public_key and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+    <script type="application/json" id="push-config">
+        {{- {
+            publicKey: vapid_public_key,
+            user: app.user.id,
+            subscribeUrl: path('user_push_subscribe'),
+            unsubscribeUrl: path('user_push_unsubscribe'),
+            token: csrf_token('push'),
+        }|json_encode|raw -}}
+    </script>
+{% endif %}

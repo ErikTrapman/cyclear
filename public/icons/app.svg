@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" fill="#1F57C3"/>
+  <line x1="10.2" y1="43.8" x2="27.3" y2="43.8" stroke="#fff" stroke-width="2.57" stroke-linecap="round"/>
+  <line x1="6.6" y1="51.0" x2="24.6" y2="51.0" stroke="#fff" stroke-width="2.57" stroke-linecap="round"/>
+  <line x1="10.2" y1="58.2" x2="27.3" y2="58.2" stroke="#fff" stroke-width="2.57" stroke-linecap="round"/>
+  <path d="M55.6 18.0 Q58.4 26.4 61.7 26.7 Q65.2 26.9 71.4 19.3 Q69.2 27.9 71.0 29.0 Q73.1 30.1 80.5 24.5 Q75.3 32.7 75.9 34.9 Q80.9 38.7 93.7 38.3 Q83.5 43.6 81.8 46.4 Q84.7 51.3 96.5 56.4 Q84.4 57.2 81.2 60.0 Q78.5 63.1 82.8 70.1 Q74.8 67.8 72.7 71.0 Q73.0 70.2 78.4 75.7 Q72.1 71.7 70.8 74.3 Q67.4 76.2 67.4 86.2 Q62.1 77.2 58.4 76.7 Q54.6 75.6 49.9 82.4 Q50.2 74.7 48.1 74.6 Q43.7 73.0 35.0 78.7 Q39.0 70.4 37.2 68.4 Q35.8 66.0 27.5 68.5 Q33.3 61.7 31.3 58.3 Q30.4 56.8 20.9 57.1 Q29.7 53.1 29.8 49.7 Q31.6 45.1 25.1 38.7 Q34.8 39.2 37.3 35.8 Q36.1 33.7 28.1 26.0 Q37.3 31.7 40.1 31.1 Q41.6 28.6 38.1 18.7 Q45.8 26.2 49.8 25.7 Q53.3 25.9 55.6 18.0Z" fill="#FFE014" stroke="#111" stroke-width="1.98" stroke-linejoin="round"/>
+  <g transform="translate(57 51) skewX(-14) translate(-57 -51)">
+  <path d="M73.53 34.81 A22.5 22.5 0 1 0 73.53 67.19 L65.40 58.77 A10.8 10.8 0 1 1 65.40 43.23Z" transform="translate(3.78 3.78)" fill="#111" stroke="#111" stroke-width="1.98" stroke-linejoin="round"/>
+  <path d="M73.53 34.81 A22.5 22.5 0 1 0 73.53 67.19 L65.40 58.77 A10.8 10.8 0 1 1 65.40 43.23Z" fill="#E2238F" stroke="#111" stroke-width="1.98" stroke-linejoin="round"/>
+  </g>
+</svg>

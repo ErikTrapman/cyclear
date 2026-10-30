@@ -1,0 +1,6 @@
+# Workers that "symfony server:start" runs alongside the local web server.
+workers:
+    # Sends the queued push notifications
+    messenger_consume_async:
+        cmd: ['symfony', 'console', 'messenger:consume', 'async', '-vv']
+        watch: ['config', 'src', 'templates', 'vendor/composer/installed.json']

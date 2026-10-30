@@ -604,3 +604,36 @@ a.palette-item:hover, a.palette-item:focus {
     background: rgba(0, 0, 0, 0.06);
     text-decoration: none;
 }
+
+/* Push notifications (public/js/push.js): feedback floats over the page, below the menu */
+.push-toast {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    z-index: 1040;
+    width: calc(100% - 32px);
+    max-width: 480px;
+    margin: 0;
+    transform: translateX(-50%);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    animation: push-toast-in 0.2s ease-out;
+}
+
+@keyframes push-toast-in {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -8px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .push-toast {
+        animation: none;
+    }
+}
+
+.navbar-brand > .navbar-brand-logo {
+    display: inline-block;
+    margin: -4px 6px 0 0;
+    vertical-align: middle;
+}

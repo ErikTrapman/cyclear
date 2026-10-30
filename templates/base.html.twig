@@ -21,8 +21,13 @@
     {% block javascripts %}
         <script type="text/javascript" src="{{ asset('js/cyclear.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/palette.js') }}" defer></script>
+        <script type="text/javascript" src="{{ asset('js/push.js') }}" defer></script>
     {% endblock %}
-    <link rel="shortcut icon" href="{{ asset('favicon.png') }}"/>
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml"/>
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png"/>
+    <link rel="apple-touch-icon" href="{{ asset('icons/apple-touch-icon.png') }}"/>
+    <link rel="manifest" href="{{ path('app_manifest') }}"/>
+    <meta name="theme-color" content="#f8f8f8"/>
     <script type="text/javascript">
         var seizoenSlug = {% if app.request.attributes.has('seizoen') %}'{{ app.request.attributes.get('seizoen').slug }}'{% else %}'null'{% endif %};
     </script>
@@ -43,7 +48,7 @@
             <button type="button" class="navbar-toggle palette-toggle" data-palette-open aria-label="Zoek renner of pagina">
                 <span class="glyphicon glyphicon-search"></span>
             </button>
-            <a class="navbar-brand" href="/">Cyclear</a>
+            <a class="navbar-brand" href="/"><img class="navbar-brand-logo" src="{{ asset('icons/logo.svg') }}" alt="" width="28" height="28"/>Cyclear</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -76,6 +81,11 @@
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                {% if vapid_public_key and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <li data-push-toggle-item hidden>
+                        <a href="#" data-push-toggle><span class="glyphicon glyphicon-bell"></span> <span data-push-label>Meldingen uit</span></a>
+                    </li>
+                {% endif %}
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <li class="active">
                         <a href="{{ logout_path() }}">Uitloggen</a>
@@ -140,5 +150,6 @@
     </div>
 </div>
 {{ include('palette/_config.html.twig') }}
+{{ include('push/_config.html.twig') }}
 </body>
 </html>

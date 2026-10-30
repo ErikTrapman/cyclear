@@ -45,3 +45,8 @@ services:
     League\CommonMark\Extension\Table\TableExtension:
         tags:
             - { name: 'twig.markdown.league_extension' }
+
+when@test:
+    services:
+        App\Tests\Push\PushServiceMock:
+            public: true

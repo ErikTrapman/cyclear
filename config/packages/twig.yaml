@@ -10,6 +10,7 @@ twig:
         logging_address: '%logging_address%'
         corresponding_address: '%corresponding_address%'
         project_dir: '%kernel.project_dir%'
+        vapid_public_key: '%env(VAPID_PUBLIC_KEY)%'
     file_name_pattern: '*.twig'
 
 when@test:
