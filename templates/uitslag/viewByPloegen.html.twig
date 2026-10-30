@@ -11,21 +11,30 @@
         {% for ploeg in list %}
             <tr{% if isMyTeam(ploeg[0]) %} class="my-team" title="Jouw ploeg"{% endif %}>
                 {% set curpos = '%02d'|format(loop.index) %}
-                {% set trophy %}
-                    {%- if loop.index <= 3 %} <i class="fa fa-trophy standings-trophy standings-trophy-{{ loop.index }}" title="{{ loop.index }}e plaats"></i>{% endif -%}
+                {% set badge %}
+                    {%- if loop.index <= 3 %} <i class="fa fa-trophy standings-trophy standings-trophy-{{ loop.index }}" title="{{ loop.index }}e plaats"></i>
+                    {%- elseif loop.last %} <svg class="standings-lantern" viewBox="0 0 16 16" role="img"><title>Rode lantaarn</title>
+                        <circle cx="8" cy="1.8" r="1.2" fill="none" stroke="currentColor" stroke-width="1"/>
+                        <path d="M4 6.5 5.5 3.5h5L12 6.5z" fill="currentColor"/>
+                        <rect x="5" y="6.5" width="6" height="5.5" fill="#d9261c"/>
+                        <ellipse cx="8" cy="9.2" rx="1.3" ry="1.8" fill="#ffb199"/>
+                        <path d="M6.5 6.5v5.5M9.5 6.5v5.5" stroke="currentColor" stroke-width=".6"/>
+                        <rect x="4" y="12" width="8" height="2.5" rx=".5" fill="currentColor"/>
+                    </svg>
+                    {%- endif -%}
                 {% endset %}
                 {% if shadowlist %}
                     {% set prevpos = shadowlist[ploeg[0].id].position %}
                     {% set posdiff = prevpos - curpos %}
                     <td>
                         {{- curpos -}}
-                        {{- trophy -}}
+                        {{- badge -}}
                         {%- if posdiff > 0 %} <img title=" + {{ posdiff }} " src="/icons/famfamfam/bullet_green.png"/>
                         {%- elseif posdiff < 0 %} <img title=" {{ posdiff }} " src="/icons/famfamfam/bullet_red.png"/>
                         {%- endif -%}
                     </td>
                 {% else %}
-                    <td>{{ curpos }}{{ trophy }}</td>
+                    <td>{{ curpos }}{{ badge }}</td>
                 {% endif %}
 
                 <td class="hidden-xs hidden-sm">

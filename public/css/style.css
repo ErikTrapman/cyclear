@@ -729,6 +729,15 @@ body {
     color: #a0522d;
 }
 
+/* the lanterne rouge for the last team; currentColor is the lantern's frame */
+.standings-lantern {
+    width: 1.15em;
+    height: 1.15em;
+    margin-left: 4px;
+    color: #444;
+    vertical-align: -0.2em;
+}
+
 .table > tbody > tr.my-team > td {
     background-color: #f3e6f3;
     font-weight: bold;

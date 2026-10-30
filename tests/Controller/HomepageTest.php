@@ -68,6 +68,14 @@ class HomepageTest extends WebTestCase
         $this->assertCount(0, $rows->eq(3)->filter('.fa-trophy'));
     }
 
+    public function testLastPlaceGetsTheLanternRouge(): void
+    {
+        $rows = $this->standingsRows();
+
+        $this->assertCount(1, $rows->filter('.standings-lantern'));
+        $this->assertCount(1, $rows->last()->filter('.standings-lantern'));
+    }
+
     public function testOwnTeamIsMarked(): void
     {
         // warm the standings cache first, so the marked row comes from unserialized teams
