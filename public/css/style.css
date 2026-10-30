@@ -218,10 +218,14 @@ a.read_more:hover {
     margin-bottom: 20px;
 }
 
-/* the footer opens with the world champion's rainbow bands */
+/* the world champion's rainbow bands, drawn 10px high under the homepage's dashboard bar and on top of the footer */
+:root {
+    --rainbow-bands: linear-gradient(to bottom, #0072ce 0 20%, #e2001a 20% 40%, #000 40% 60%, #ffd500 60% 80%, #009e3d 80% 100%);
+}
+
 #footer {
     background-color: #2f2f2f;
-    background-image: linear-gradient(to bottom, #0072ce 0 20%, #e2001a 20% 40%, #000 40% 60%, #ffd500 60% 80%, #009e3d 80% 100%);
+    background-image: var(--rainbow-bands);
     background-size: 100% 10px;
     background-repeat: no-repeat;
     color: whitesmoke;
@@ -259,7 +263,13 @@ a.read_more:hover {
 
 .big-header-dashboard {
     margin-bottom: 30px;
+    /* room for the rainbow bands along the bottom */
+    padding-bottom: 20px;
     font-size: 18px;
+    background-image: var(--rainbow-bands);
+    background-size: 100% 10px;
+    background-position: bottom;
+    background-repeat: no-repeat;
 }
 
 .big-header-dashboard a {
