@@ -710,3 +710,30 @@ body {
     color: #2e002f;
     font-weight: bold;
 }
+
+/* Standings on the homepage (templates/uitslag/viewByPloegen.html.twig) */
+.standings-trophy {
+    margin-left: 4px;
+    font-size: 1.15em;
+}
+
+.standings-trophy-1 {
+    color: #f0b400;
+}
+
+.standings-trophy-2 {
+    color: #9aa0a6;
+}
+
+.standings-trophy-3 {
+    color: #a0522d;
+}
+
+.table > tbody > tr.my-team > td {
+    background-color: #f3e6f3;
+    font-weight: bold;
+}
+
+.table > tbody > tr.my-team > td:first-child {
+    box-shadow: inset 4px 0 0 #860087;
+}

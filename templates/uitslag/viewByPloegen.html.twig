@@ -9,20 +9,23 @@
             {% endif %}
         </tr>
         {% for ploeg in list %}
-            <tr>
+            <tr{% if isMyTeam(ploeg[0]) %} class="my-team" title="Jouw ploeg"{% endif %}>
                 {% set curpos = '%02d'|format(loop.index) %}
-                {% set tdclass = loop.index == 1 ? 'success' : null %}
+                {% set trophy %}
+                    {%- if loop.index <= 3 %} <i class="fa fa-trophy standings-trophy standings-trophy-{{ loop.index }}" title="{{ loop.index }}e plaats"></i>{% endif -%}
+                {% endset %}
                 {% if shadowlist %}
                     {% set prevpos = shadowlist[ploeg[0].id].position %}
                     {% set posdiff = prevpos - curpos %}
                     <td>
                         {{- curpos -}}
+                        {{- trophy -}}
                         {%- if posdiff > 0 %} <img title=" + {{ posdiff }} " src="/icons/famfamfam/bullet_green.png"/>
                         {%- elseif posdiff < 0 %} <img title=" {{ posdiff }} " src="/icons/famfamfam/bullet_red.png"/>
                         {%- endif -%}
                     </td>
                 {% else %}
-                    <td>{{ curpos }}</td>
+                    <td>{{ curpos }}{{ trophy }}</td>
                 {% endif %}
 
                 <td class="hidden-xs hidden-sm">

@@ -32,7 +32,8 @@ class CyclearSecurityExtension extends AbstractExtension
         if (null === $requestTeam = $this->getLoggedInTeam()) {
             return false;
         }
-        return $requestTeam === $ploeg;
+        // by id: cached query results hold unserialized copies, not the managed instance
+        return $requestTeam->getId() === $ploeg->getId();
     }
 
     private function getSeason(): ?Seizoen

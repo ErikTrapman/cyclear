@@ -50,3 +50,6 @@ when@test:
     services:
         App\Tests\Push\PushServiceMock:
             public: true
+
+        App\Tests\Doctrine\SqliteMysqlFunctionsMiddleware:
+            autoconfigure: true
