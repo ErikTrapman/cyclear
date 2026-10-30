@@ -27,6 +27,11 @@ security:
                 enable_csrf: true
             logout:
                 path: /logout
+            # "Ingelogd blijven" on the login form. The cookie is signed with the password hash, so changing the
+            # password logs out every device.
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 31536000 # a year
             provider: app_user_provider
             lazy: true
 

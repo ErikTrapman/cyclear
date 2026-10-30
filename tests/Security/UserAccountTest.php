@@ -3,6 +3,7 @@
 namespace App\Tests\Security;
 
 use App\Entity\Ploeg;
+use App\Entity\Seizoen;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\PloegVoter;
@@ -74,6 +75,64 @@ class UserAccountTest extends WebTestCase
 
         $this->assertResponseRedirects('http://localhost/login-user/login');
         $this->assertNull($this->findUser('uit')->getLastLogin());
+    }
+
+    /**
+     * Whether a page shows the menu of a logged-in user, given the cookies the browser has.
+     */
+    private function isLoggedIn(): bool
+    {
+        $seizoen = self::getContainer()->get('doctrine')->getRepository(Seizoen::class)->findOneBy([]);
+        $this->client->request('GET', '/' . $seizoen->getSlug() . '/spelregels');
+        $this->assertResponseIsSuccessful();
+        return str_contains((string)$this->client->getResponse()->getContent(), 'Uitloggen');
+    }
+
+    public function testRememberMeKeepsYouLoggedInAfterTheSession(): void
+    {
+        // Ticked by default. The legacy password is rehashed on this login, which the cookie's signature must survive.
+        $this->login('speler', LoadUserData::PASSWORD);
+        $rememberMe = $this->client->getCookieJar()->get('REMEMBERME');
+        $this->assertNotNull($rememberMe);
+        $this->assertGreaterThan(strtotime('+360 days'), (int)$rememberMe->getExpiresTime());
+
+        // The app was closed, or the session expired on the server
+        $this->client->getCookieJar()->clear();
+        $this->client->getCookieJar()->set($rememberMe);
+        $this->assertTrue($this->isLoggedIn());
+
+        // Logging out removes the cookie, so you stay logged out
+        $this->client->request('GET', '/logout');
+        $this->assertNull($this->client->getCookieJar()->get('REMEMBERME'));
+        $this->assertFalse($this->isLoggedIn());
+    }
+
+    public function testWithoutRememberMeTheLoginEndsWithTheSession(): void
+    {
+        $crawler = $this->client->request('GET', '/login-user/login');
+        $form = $crawler->selectButton('Inloggen')->form(['_username' => 'speler', '_password' => LoadUserData::PASSWORD]);
+        $form['_remember_me']->untick();
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects('http://localhost/');
+        $this->assertNull($this->client->getCookieJar()->get('REMEMBERME'));
+        $this->client->getCookieJar()->clear();
+        $this->assertFalse($this->isLoggedIn());
+    }
+
+    public function testChangingThePasswordEndsRememberedLogins(): void
+    {
+        $this->login('speler', LoadUserData::PASSWORD);
+        $rememberMe = $this->client->getCookieJar()->get('REMEMBERME');
+
+        $hasher = self::getContainer()->get('security.user_password_hasher');
+        $user = $this->findUser('speler');
+        $user->setPassword($hasher->hashPassword($user, 'nieuw-wachtwoord'));
+        self::getContainer()->get('doctrine')->getManager()->flush();
+
+        $this->client->getCookieJar()->clear();
+        $this->client->getCookieJar()->set($rememberMe);
+        $this->assertFalse($this->isLoggedIn());
     }
 
     public function testPasswordReset(): void
