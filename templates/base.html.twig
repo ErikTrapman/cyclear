@@ -32,7 +32,8 @@
         var seizoenSlug = {% if app.request.attributes.has('seizoen') %}'{{ app.request.attributes.get('seizoen').slug }}'{% else %}'null'{% endif %};
     </script>
 </head>
-<body id="cyclear">
+{% set grandTour = grandTour() %}
+<body id="cyclear"{% if grandTour %} class="grand-tour-{{ grandTour }}"{% endif %}>
 <!--Header_section-->
 <nav id="main-navbar" class="navbar navbar-default">
     <div class="container-fluid">
@@ -101,6 +102,7 @@
     </div>
     <!-- /.container-fluid -->
 </nav>
+<div class="rainbow-bands" aria-hidden="true"></div>
 <!--Header_section-->
 
 {% block contentcontainer %}
