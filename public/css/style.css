@@ -306,9 +306,16 @@ body {
     color: #999
 }
 
+/* 400px wide, but never wider than the column on a phone */
 .twitter-typeahead {
     position: relative;
     display: inline-block;
+    width: 400px;
+    max-width: 100%;
+}
+
+.twitter-typeahead > .ajax-typeahead {
+    width: 100%;
 }
 
 .tt-menu {
@@ -317,7 +324,7 @@ body {
     top: 100%;
     left: 0;
     z-index: 100;
-    width: 422px;
+    width: 100%;
     margin: 0px 0;
     padding: 8px 0;
     background-color: #fff;

@@ -49,7 +49,6 @@ class RennerSelectorType extends AbstractType
         $resolver->setDefaults(
             ['invalid_message' => 'De ingevulde renner is niet teruggevonden',
                 'attr' => [
-                    'style' => 'width: 400px',
                     'autocomplete' => 'off',
                     'data-link' => $url, ],
             ]
