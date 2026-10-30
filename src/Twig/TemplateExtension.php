@@ -5,7 +5,6 @@ namespace App\Twig;
 use App\Entity\Seizoen;
 use App\Repository\SeizoenRepository;
 use Psr\Clock\ClockInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -17,7 +16,6 @@ class TemplateExtension extends AbstractExtension
     public function __construct(
         private readonly SeizoenRepository $seizoenRepository,
         private readonly ClockInterface $clock,
-        private readonly RequestStack $requestStack,
     ) {
     }
 
@@ -36,10 +34,6 @@ class TemplateExtension extends AbstractExtension
 
     public function grandTour(): ?string
     {
-        $month = (int)$this->clock->now()->format('n');
-        // TEMPORARY: ?maand=5 previews the ribbon of another month
-        $month = $this->requestStack->getMainRequest()?->query->getInt('maand') ?: $month;
-
-        return self::GRAND_TOURS[$month] ?? null;
+        return self::GRAND_TOURS[(int)$this->clock->now()->format('n')] ?? null;
     }
 }
