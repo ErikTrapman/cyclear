@@ -90,12 +90,6 @@ a:active {
     margin-bottom: 30px;
 }
 
-/* the world champion's rainbow bands between the masthead and the title ribbon */
-.rainbow-bands {
-    height: 10px;
-    background: linear-gradient(to bottom, #0072ce 0 20%, #e2001a 20% 40%, #000 40% 60%, #ffd500 60% 80%, #009e3d 80% 100%);
-}
-
 /* the title ribbon takes the leader's jersey color during each grand tour (TemplateExtension::grandTour()) */
 .grand-tour-giro .big-header {
     background: #f02790;
@@ -113,9 +107,11 @@ a:active {
     background: #d50f25;
 }
 
+/* sections open with the world champion's rainbow bands; an image, so an inline background-color keeps them */
 .subheader {
-    border-top: 2px solid #720073;
-    border-top: 2px solid #2e002f;
+    background-image: linear-gradient(to bottom, #0072ce 0 20%, #e2001a 20% 40%, #000 40% 60%, #ffd500 60% 80%, #009e3d 80% 100%);
+    background-size: 100% 10px;
+    background-repeat: no-repeat;
     padding: 52px 0;
     margin: 0px;
 }
