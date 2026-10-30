@@ -107,9 +107,14 @@ a:active {
     background: #d50f25;
 }
 
-/* sections open with the world champion's rainbow bands; an image, so an inline background-color keeps them */
+/* the world champion's rainbow bands, drawn 10px high on top of the sections and the footer */
+:root {
+    --rainbow-bands: linear-gradient(to bottom, #0072ce 0 20%, #e2001a 20% 40%, #000 40% 60%, #ffd500 60% 80%, #009e3d 80% 100%);
+}
+
+/* an image, so the inline background-color of a section keeps the bands */
 .subheader {
-    background-image: linear-gradient(to bottom, #0072ce 0 20%, #e2001a 20% 40%, #000 40% 60%, #ffd500 60% 80%, #009e3d 80% 100%);
+    background-image: var(--rainbow-bands);
     background-size: 100% 10px;
     background-repeat: no-repeat;
     padding: 52px 0;
@@ -222,6 +227,9 @@ a.read_more:hover {
 
 #footer {
     background-color: #2f2f2f;
+    background-image: var(--rainbow-bands);
+    background-size: 100% 10px;
+    background-repeat: no-repeat;
     color: whitesmoke;
     margin-top: 22px;
     padding-top: 42px;
