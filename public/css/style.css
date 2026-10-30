@@ -637,3 +637,76 @@ a.palette-item:hover, a.palette-item:focus {
     margin: -4px 6px 0 0;
     vertical-align: middle;
 }
+
+/* Cross-fade from page to page (Chrome, Edge, Safari 18.2+); other browsers just navigate */
+@media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+        navigation: auto;
+    }
+}
+
+/* viewport-fit=cover lets the page run under the notch in landscape; keep the content out of it */
+body {
+    padding-right: env(safe-area-inset-right);
+    padding-left: env(safe-area-inset-left);
+}
+
+/* Tab bar (templates/pwa/_tabbar.html.twig): only on phones when Cyclear runs as an installed app */
+.tabbar {
+    display: none;
+}
+
+@media (max-width: 767px) and (display-mode: standalone) {
+    body {
+        padding-bottom: calc(56px + env(safe-area-inset-bottom));
+    }
+
+    .tabbar {
+        display: flex;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1030;
+        padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        background: #f8f8f8;
+        border-top: 1px solid #e7e7e7;
+        /* stays put while the page underneath cross-fades */
+        view-transition-name: tabbar;
+    }
+
+    /* while typing; on Android the bar would otherwise ride on top of the keyboard */
+    body:has(:is(input, textarea, select):focus) .tabbar {
+        display: none;
+    }
+}
+
+.tabbar-item {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+    min-height: 56px;
+    padding: 0;
+    color: #777;
+    font-size: 11px;
+    background: none;
+    border: 0;
+}
+
+.tabbar-item .glyphicon {
+    font-size: 20px;
+}
+
+.tabbar-item:hover, .tabbar-item:focus {
+    color: #2f2f2f;
+    text-decoration: none;
+}
+
+.tabbar-item.active {
+    color: #2e002f;
+    font-weight: bold;
+}

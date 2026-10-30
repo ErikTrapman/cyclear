@@ -169,3 +169,47 @@ function riderTypeahead(input) {
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.ajax-typeahead').forEach(riderTypeahead);
 });
+
+// Tab bar (templates/pwa/_tabbar.html.twig): on the homepage Transfers and Uitslagen are sections of the page, so the
+// highlighted tab follows the section scrolled into view. Periode and Zeges further down are standings again.
+document.addEventListener('DOMContentLoaded', function () {
+    var bar = document.querySelector('.tabbar');
+    // Only the homepage's Stand tab jumps to the top of the page
+    var stand = bar && bar.querySelector('a[href="#cyclear"]');
+    if (!stand) {
+        return;
+    }
+    var sections = [
+        ['transfers', bar.querySelector('a[href="#transfers"]')],
+        ['uitslagen', bar.querySelector('a[href="#uitslagen"]')],
+        ['periodes', stand],
+        ['zeges', stand],
+    ].map(function (section) {
+        return {element: document.getElementById(section[0]), tab: section[1]};
+    }).filter(function (section) {
+        return section.element;
+    });
+
+    function update() {
+        // The last section whose heading passed the top third of the screen
+        var active = stand;
+        sections.forEach(function (section) {
+            if (section.element.getBoundingClientRect().top <= window.innerHeight / 3) {
+                active = section.tab;
+            }
+        });
+        bar.querySelectorAll('a.tabbar-item').forEach(function (tab) {
+            tab.classList.toggle('active', tab === active);
+            if (tab === active) {
+                tab.setAttribute('aria-current', 'page');
+            } else {
+                tab.removeAttribute('aria-current');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', update, {passive: true});
+    // Arriving at /#uitslagen from another page scrolls there after DOMContentLoaded
+    window.addEventListener('load', update);
+    update();
+});

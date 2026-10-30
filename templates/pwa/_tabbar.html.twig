@@ -1,0 +1,25 @@
+{# Tab bar at the bottom of the screen. style.css only shows it on phones when Cyclear runs as an installed app, which has no browser toolbar. #}
+{%- set seizoen = app.request.attributes.get('seizoen') -%}
+{%- if seizoen -%}
+    {%- set route = app.request.attributes.get('_route') -%}
+    {#- Transfers and Uitslagen are sections of the homepage: jump to them there, open the homepage at them elsewhere -#}
+    {%- set home = route in ['index', 'game'] ? '' : path('game', {seizoen: seizoen.slug}) -%}
+    {%- set tabs = [
+        {label: 'Stand', icon: 'stats', url: home ?: '#cyclear', active: home == '' or route starts with 'uitslag_'},
+        {label: 'Transfers', icon: 'transfer', url: home ~ '#transfers', active: route == 'transfer_list'},
+        {label: 'Uitslagen', icon: 'flag', url: home ~ '#uitslagen', active: route in ['wedstrijd_list', 'wedstrijd_show']},
+        {label: 'Renners', icon: 'th-list', url: path('rider_index', {seizoen: seizoen.slug}), active: route in ['rider_index', 'renner_show']},
+    ] -%}
+    <nav class="tabbar" aria-label="Hoofdmenu">
+        {% for tab in tabs %}
+            <a class="tabbar-item{{ tab.active ? ' active' }}" href="{{ tab.url }}"{% if tab.active %} aria-current="page"{% endif %}>
+                <span class="glyphicon glyphicon-{{ tab.icon }}" aria-hidden="true"></span>
+                <span class="tabbar-label">{{ tab.label }}</span>
+            </a>
+        {% endfor %}
+        <button type="button" class="tabbar-item" data-palette-open>
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            <span class="tabbar-label">Zoek</span>
+        </button>
+    </nav>
+{%- endif -%}
