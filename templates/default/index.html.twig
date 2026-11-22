@@ -95,7 +95,7 @@
                     {{ include('uitslag/viewByPeriode.html.twig', {
                         list: periodestand,
                         transferpoints: transferpuntenPeriode,
-                        transferRepo: transferRepo,
+                        transferCounts: transferCounts,
                         positionCount: zegesInPeriode}) }}
                     <p class="text-center">
                         <a href="{{ path('uitslag_periodes', {seizoen: seizoen.slug, periode: periode.id}) }}">Alle periodes</a>

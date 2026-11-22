@@ -45,7 +45,7 @@ class DefaultController extends AbstractController
                 $gainedTransferPoints[$teamResult['id']] = $teamResult['punten'];
             }
             foreach ($this->uitslagRepository->getLostDraftPuntenByPloeg($seizoen, $periode->getStart(), $periode->getEind()) as $teamResult) {
-                $lostDraftPoints[$teamResult->getId()] = $teamResult->getPunten();
+                $lostDraftPoints[$teamResult['id']] = $teamResult['punten'];
             }
             foreach ($this->uitslagRepository->getCountForPosition($seizoen, 1, $periode->getStart(), $periode->getEind()) as $teamResult) {
                 $zegesInPeriode[$teamResult[0]->getId()] = $teamResult['freqByPos'];
@@ -64,7 +64,7 @@ class DefaultController extends AbstractController
             'shadowstandingsById' => $shadowStandingsById,
             'stand' => $this->uitslagRepository->getPuntenByPloeg($seizoen),
             'transferpuntenPeriode' => $transferSaldo,
-            'transferRepo' => $this->transferRepository,
+            'transferCounts' => $periode ? $this->transferRepository->getTransferCountsPerTeam($seizoen, $periode->getStart(), $periode->getEind()) : [],
             'transfers' => $this->transferRepository->getLatest($seizoen, [Transfer::ADMINTRANSFER, Transfer::USERTRANSFER], 20),
             'wedstrijden' => $this->wedstrijdRepository->getLatest($seizoen, 12),
             'zegesInPeriode' => $zegesInPeriode,

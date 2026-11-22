@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Periode;
-use App\Entity\Ploeg;
 use App\Entity\Seizoen;
 use App\Repository\PeriodeRepository;
 use App\Repository\TransferRepository;
@@ -33,11 +32,7 @@ class UitslagController extends AbstractController
         }
         $lostDraftPoints = [];
         foreach ($this->uitslagRepository->getLostDraftPuntenByPloeg($seizoen, $periode->getStart(), $periode->getEind()) as $teamResult) {
-            if ($teamResult instanceof Ploeg) {
-                $lostDraftPoints[$teamResult->getId()] = $teamResult->getPunten();
-            } else {
-                $lostDraftPoints[$teamResult['id']] = $teamResult['punten'];
-            }
+            $lostDraftPoints[$teamResult['id']] = $teamResult['punten'];
         }
         $transferSaldo = [];
         foreach ($gainedTransferpoints as $teamId => $gainedPoints) {
@@ -55,7 +50,7 @@ class UitslagController extends AbstractController
             'periode' => $periode,
             'transferpoints' => $transferSaldo,
             'positionCount' => $zegesInPeriode,
-            'transferRepo' => $this->transferRepository,
+            'transferCounts' => $this->transferRepository->getTransferCountsPerTeam($seizoen, $periode->getStart(), $periode->getEind()),
         ]);
     }
 
@@ -91,11 +86,7 @@ class UitslagController extends AbstractController
         }
         $lost = [];
         foreach ($this->uitslagRepository->getLostDraftPuntenByPloeg($seizoen) as $teamResult) {
-            if ($teamResult instanceof Ploeg) {
-                $lost[$teamResult->getId()] = $teamResult->getPunten();
-            } else {
-                $lost[$teamResult['id']] = $teamResult['punten'];
-            }
+            $lost[$teamResult['id']] = $teamResult['punten'];
         }
         // postprocess $transfer
         foreach ($transfer as &$item) {
@@ -119,7 +110,10 @@ class UitslagController extends AbstractController
             'shadowlost' => $lost,
             'stand' => $stand,
             'draft' => $draft,
-            'transferRepo' => $this->transferRepository,
+            // without season dates every team counts as having no transfers
+            'transferCounts' => $seizoen->getStart() && $seizoen->getEnd()
+                ? $this->transferRepository->getTransferCountsPerTeam($seizoen, $seizoen->getStart(), $seizoen->getEnd())
+                : [],
             'bestTransfers' => $bestTransfers,
         ]);
     }

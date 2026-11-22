@@ -18,7 +18,7 @@ class TransferRepository extends ServiceEntityRepository
         ManagerRegistry $registry,
         private readonly TagAwareCacheInterface $cache,
         private readonly SeizoenRepository $seizoenRepository,
-        private readonly PloegRepository $ploegRepository, private readonly ManagerRegistry $managerRegistry,
+        private readonly PloegRepository $ploegRepository,
     ) {
         parent::__construct($registry, Transfer::class);
     }
@@ -153,19 +153,6 @@ class TransferRepository extends ServiceEntityRepository
     }
 
     /**
-     * Creates a temporary table following this scheme:
-     * CREATE TEMPORARY TABLE IF NOT EXISTS $tableName (ploeg_id int, renner_id int)
-     */
-    public function generateTempTableWithDraftRiders(Seizoen $seizoen, string $tableName = 'draftriders'): void
-    {
-        $conn = $this->managerRegistry->getConnection();
-        $conn->executeQuery("DROP TABLE IF EXISTS $tableName; CREATE TEMPORARY TABLE " . $tableName . ' (ploeg_id int, renner_id int) ENGINE=MEMORY');
-        $conn->executeQuery('INSERT INTO ' . $tableName . '
-          ( SELECT ploegNaar_id, renner_id FROM transfer t
-          WHERE t.transferType = ' . Transfer::DRAFTTRANSFER . ' AND t.seizoen_id = ' . $seizoen->getId() . ' )');
-    }
-
-    /**
      * The drafted riders of every team in a season, in one query.
      *
      * @return array<int, array<int, true>> rider ids as keys, per team id
@@ -185,6 +172,73 @@ class TransferRepository extends ServiceEntityRepository
             $perTeam[(int)$row['ploeg']][(int)$row['renner']] = true;
         }
         return $perTeam;
+    }
+
+    /**
+     * Per team, the riders it transferred in during a season without having drafted them:
+     * getTransferredInNonDraftRenners() for every team at once.
+     *
+     * @return array<int, array<int, true>> rider ids as keys, per team id
+     */
+    public function getNonDraftRiderIdsPerTeam(Seizoen $seizoen): array
+    {
+        $rows = $this->createQueryBuilder('t')
+            ->select('DISTINCT IDENTITY(t.ploegNaar) AS ploeg, IDENTITY(t.renner) AS renner')
+            ->innerJoin('t.ploegNaar', 'p')
+            ->where('t.transferType != :draft')
+            ->andWhere('t.seizoen = :seizoen')
+            ->andWhere('p.seizoen = :seizoen')
+            ->setParameter('draft', Transfer::DRAFTTRANSFER)
+            ->setParameter('seizoen', $seizoen)
+            ->getQuery()->getScalarResult();
+        $draftRiderIds = $this->getDraftRiderIdsPerTeam($seizoen);
+        $perTeam = [];
+        foreach ($rows as $row) {
+            $ploegId = (int)$row['ploeg'];
+            $rennerId = (int)$row['renner'];
+            if (!isset($draftRiderIds[$ploegId][$rennerId])) {
+                $perTeam[$ploegId][$rennerId] = true;
+            }
+        }
+        return $perTeam;
+    }
+
+    /**
+     * getTransferCountByType() for every team of a season, in one query.
+     *
+     * @return array<int, int> transfer count per team id; teams without transfers are left out
+     */
+    public function getTransferCountsPerTeam(Seizoen $seizoen, \DateTime $start, \DateTime $end, array $types = [Transfer::USERTRANSFER, Transfer::ADMINTRANSFER]): array
+    {
+        $key = __FUNCTION__ . $seizoen->getId() . $start->format('YmdHis') . $end->format('YmdHis') . implode('', $types);
+        $item = $this->cache->getItem($key);
+        if ($item->isHit()) {
+            return $item->get();
+        }
+        $cloneStart = clone $start;
+        $cloneStart->setTime(0, 0, 0);
+        $cloneEnd = clone $end;
+        $cloneEnd->setTime(23, 59, 59);
+        $rows = $this->createQueryBuilder('t')
+            ->select('IDENTITY(t.ploegNaar) AS ploeg, COUNT(t.id) AS freq')
+            ->innerJoin('t.ploegNaar', 'p')
+            ->where('p.seizoen = :seizoen')
+            ->andWhere('t.datum BETWEEN :start AND :end')
+            ->andWhere('t.transferType IN (:types)')
+            ->groupBy('t.ploegNaar')
+            ->setParameter('seizoen', $seizoen)
+            ->setParameter('start', $cloneStart)
+            ->setParameter('end', $cloneEnd)
+            ->setParameter('types', $types)
+            ->getQuery()->getScalarResult();
+        $counts = [];
+        foreach ($rows as $row) {
+            $counts[(int)$row['ploeg']] = (int)$row['freq'];
+        }
+        $item->set($counts);
+        $item->tag(self::CACHE_TAG);
+        $this->cache->save($item);
+        return $counts;
     }
 
     public function hasDraftTransfer(Renner $renner, Ploeg $ploeg)

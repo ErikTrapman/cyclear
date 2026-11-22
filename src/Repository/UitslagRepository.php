@@ -219,18 +219,18 @@ class UitslagRepository extends ServiceEntityRepository
         if ($item->isHit()) {
             return $item->get();
         }
-        $subQ = $this->rennerRepository->createQueryBuilder('r');
-        $subQ->innerJoin('App\Entity\Transfer', 't', 'WITH',
-            't.renner = r AND t.transferType = :draft AND t.seizoen = :seizoen')->andWhere('t.ploegNaar = :p');
-        $subQ->select('DISTINCT r.id');
-        $subQPoints = $this->createQueryBuilder('u');
-        $subQPoints->select('IFNULL(SUM(u.rennerPunten),0)')
-            ->groupBy('u.renner')
-            ->innerJoin('u.wedstrijd', 'w')
-            ->where('w.seizoen = :seizoen')
-            ->andWhere($subQ->expr()->in('u.renner', $subQ->getDQL()));
-        $subQPoints->setParameter('draft', Transfer::DRAFTTRANSFER)->setParameter('seizoen', $seizoen);
         if ($ploeg) {
+            $subQ = $this->rennerRepository->createQueryBuilder('r');
+            $subQ->innerJoin('App\Entity\Transfer', 't', 'WITH',
+                't.renner = r AND t.transferType = :draft AND t.seizoen = :seizoen')->andWhere('t.ploegNaar = :p');
+            $subQ->select('DISTINCT r.id');
+            $subQPoints = $this->createQueryBuilder('u');
+            $subQPoints->select('IFNULL(SUM(u.rennerPunten),0)')
+                ->groupBy('u.renner')
+                ->innerJoin('u.wedstrijd', 'w')
+                ->where('w.seizoen = :seizoen')
+                ->andWhere($subQ->expr()->in('u.renner', $subQ->getDQL()));
+            $subQPoints->setParameter('draft', Transfer::DRAFTTRANSFER)->setParameter('seizoen', $seizoen);
             $retPloeg = $this->ploegRepository->createQueryBuilder('p')->where($subQ->expr()->eq('p', $ploeg->getId()))->getQuery()->getArrayResult();
             $subRes = $subQPoints->setParameter('p', $ploeg)->getQuery()->getScalarResult();
             $retPloeg['punten'] = array_sum(array_map(function ($item) {
@@ -240,15 +240,16 @@ class UitslagRepository extends ServiceEntityRepository
         }
         $res = [];
         $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : pow(8, 8);
+        $draftRiderIds = $this->transferRepository->getDraftRiderIdsPerTeam($seizoen);
+        $seasonPoints = $this->getRennerPuntenPerRider($seizoen, self::riderIdsOf($draftRiderIds));
         foreach ($this->ploegRepository
                      ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
                      ->setParameter('seizoen', $seizoen)->getQuery()->getArrayResult() as $ploeg) {
-            $subQPoints->setParameter('p', $ploeg['id']);
-            $subRes = $subQPoints->getQuery()->getArrayResult();
-            // results are grouped by rider. all riders can score the max amounts of maxPointsPerRider.
-            $ploeg['punten'] = array_sum(array_map(function ($item) use ($maxPointsPerRider) {
-                return (int)min($maxPointsPerRider, reset($item));
-            }, $subRes));
+            // all riders can score the max amounts of maxPointsPerRider.
+            $ploeg['punten'] = 0;
+            foreach (array_keys($draftRiderIds[$ploeg['id']] ?? []) as $riderId) {
+                $ploeg['punten'] += (int)min($maxPointsPerRider, $seasonPoints[$riderId] ?? 0);
+            }
             $res[] = $ploeg;
         }
         static::puntenSort($res, 'afkorting');
@@ -305,41 +306,72 @@ class UitslagRepository extends ServiceEntityRepository
         return $item->get();
     }
 
-    public function getLostDraftPuntenByPloeg($seizoen = null, ?\DateTime $start = null, ?\DateTime $end = null)
+    /**
+     * Per team, the points its draft riders scored while not riding for it (or riding for it without team points).
+     *
+     * @return array<array{id: int, afkorting: string, punten: float|int}> sorted by punten
+     */
+    public function getLostDraftPuntenByPloeg(?Seizoen $seizoen = null, ?\DateTime $start = null, ?\DateTime $end = null)
     {
         $seizoen = $this->resolveSeizoen($seizoen);
-        $key = __FUNCTION__ . $seizoen->getId() . $start?->format('YmdHis') . $end?->format('YmdHis');
+        $key = __FUNCTION__ . self::TEAM_IDS_KEY . $seizoen->getId() . $start?->format('YmdHis') . $end?->format('YmdHis');
         $item = $this->cache->getItem($key);
         if ($item->isHit()) {
             return $item->get();
         }
-        $res = [];
         $maxPointsPerRider = null !== $seizoen->getMaxPointsPerRider() ? $seizoen->getMaxPointsPerRider() : pow(8, 8);
-        foreach ($this->ploegRepository
-                     ->createQueryBuilder('p')->where('p.seizoen = :seizoen')
-                     ->setParameter('seizoen', $seizoen)->getQuery()->getResult() as $ploeg) {
-            $ploegDraftRenners = [];
-            foreach ($this->ploegRepository->getDraftRennersWithPunten($ploeg) as $draftRenner) {
-                $ploegDraftRenners[$draftRenner[0]->getId()] = (int)$draftRenner['punten'];
-            }
+        $draftRiderIds = $this->transferRepository->getDraftRiderIdsPerTeam($seizoen);
+        $allDraftRiderIds = self::riderIdsOf($draftRiderIds);
+        $seasonPoints = $this->getRennerPuntenPerRider($seizoen, $allDraftRiderIds);
 
-            $teamResults = $this->getUitslagenForPloegForLostDraftsQb($ploeg, $seizoen, $start, $end);
+        // the scoring results of all draft riders, for every team at once
+        $resultsPerRider = [];
+        if ([] !== $allDraftRiderIds) {
+            $qb = $this->createQueryBuilder('u')
+                ->select('IDENTITY(u.renner) AS renner, IDENTITY(u.ploeg) AS ploeg, u.rennerPunten, u.ploegPunten')
+                ->innerJoin('u.wedstrijd', 'w')
+                ->where('w.seizoen = :seizoen')
+                ->andWhere('u.renner IN (:renners)')
+                ->andWhere('u.rennerPunten > 0')
+                ->setParameter('seizoen', $seizoen)
+                ->setParameter('renners', $allDraftRiderIds);
+            if ($start && $end) {
+                $start = clone $start;
+                $start->setTime(0, 0, 0);
+                $end = clone $end;
+                $end->setTime(0, 0, 0);
+                $qb->andWhere('w.datum >= :start AND w.datum <= :end')->setParameter('start', $start)->setParameter('end', $end);
+            }
+            foreach ($qb->getQuery()->getScalarResult() as $result) {
+                $resultsPerRider[(int)$result['renner']][] = $result;
+            }
+        }
+
+        $res = [];
+        foreach ($this->ploegRepository
+                     ->createQueryBuilder('p')->select('p.id, p.afkorting')->where('p.seizoen = :seizoen')
+                     ->setParameter('seizoen', $seizoen)->getQuery()->getArrayResult() as $ploeg) {
             $teamPointsPerRider = [];
-            /** @var Uitslag $teamResult */
-            foreach ($teamResults->getQuery()->getResult() as $teamResult) {
-                $riderId = $teamResult->getRenner()->getId();
-                if (!array_key_exists($riderId, $teamPointsPerRider)) {
-                    $teamPointsPerRider[$riderId] = 0;
+            foreach (array_keys($draftRiderIds[$ploeg['id']] ?? []) as $riderId) {
+                $draftPunten = $seasonPoints[$riderId] ?? 0;
+                if (null !== $seizoen->getMaxPointsPerRider()) {
+                    $draftPunten = min($seizoen->getMaxPointsPerRider(), $draftPunten);
                 }
                 // If a drafted rider has > maxPoints we do not calculate the points as "lost"
                 // This rider has a valid reason to be transferred and should not be taken into account.
                 // This might not be a waterproof solution because a rider can be transferred early and get maxPoints at another team.
-                if (array_key_exists($riderId, $ploegDraftRenners) && $ploegDraftRenners[$riderId] >= $maxPointsPerRider) {
+                if ((int)$draftPunten >= $maxPointsPerRider) {
                     continue;
                 }
-                $teamPointsPerRider[$riderId] += $teamResult->getRennerPunten();
+                foreach ($resultsPerRider[$riderId] ?? [] as $result) {
+                    // points the rider scored for this team aren't lost
+                    if ((int)$result['ploeg'] === $ploeg['id'] && 0.0 != (float)$result['ploegPunten']) {
+                        continue;
+                    }
+                    $teamPointsPerRider[$riderId] = ($teamPointsPerRider[$riderId] ?? 0) + (float)$result['rennerPunten'];
+                }
             }
-            $ploeg->setPunten(array_sum($teamPointsPerRider));
+            $ploeg['punten'] = array_sum($teamPointsPerRider);
             $res[] = $ploeg;
         }
         static::puntenSort($res);
@@ -349,36 +381,13 @@ class UitslagRepository extends ServiceEntityRepository
         return $res;
     }
 
-    public function getPuntenByPloegForUserTransfers($seizoen = null): array
+    /**
+     * The same standings as getPuntenByPloegForUserTransfersWithoutLoss() over the whole season,
+     * so both share its cached result.
+     */
+    public function getPuntenByPloegForUserTransfers(?Seizoen $seizoen = null): array
     {
-        $seizoen = $this->resolveSeizoen($seizoen);
-        $key = __FUNCTION__ . $seizoen->getId();
-        $item = $this->cache->getItem($key);
-        if ($item->isHit()) {
-            return $item->get();
-        }
-        $this->transferRepository->generateTempTableWithDraftRiders($seizoen);
-
-        // TODO DQL'en net als getCountForPosition
-        $transfers = 'SELECT DISTINCT t.renner_id FROM transfer t
-            WHERE t.transferType != ' . Transfer::DRAFTTRANSFER . ' AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id
-                AND t.renner_id NOT IN ( SELECT t.renner_id FROM transfer t WHERE t.transferType = ' . Transfer::DRAFTTRANSFER . ' AND t.ploegNaar_id = p.id AND t.seizoen_id = :seizoen_id )';
-        $sql = sprintf('SELECT p.id AS id, p.naam AS naam, p.afkorting AS afkorting, 400 as d,
-                ((SELECT IFNULL(SUM(u.ploegPunten),0)
-                FROM uitslag u
-                INNER JOIN wedstrijd w ON u.wedstrijd_id = w.id
-                WHERE w.seizoen_id = :seizoen_id AND u.ploeg_id = p.id AND u.renner_id IN (%s))
-
-                ) AS punten
-
-                FROM ploeg p WHERE p.seizoen_id = :seizoen_id
-                ORDER BY punten DESC, p.afkorting ASC
-                ', $transfers);
-        $ret = $this->getEntityManager()->getConnection()->executeQuery($sql, ['seizoen_id' => $seizoen->getId()])->fetchAllAssociative();
-        $item->set($ret);
-        $item->tag(self::CACHE_TAG);
-        $this->cache->save($item);
-        return $ret;
+        return $this->getPuntenByPloegForUserTransfersWithoutLoss($this->resolveSeizoen($seizoen));
     }
 
     public function getUitslagenForPloegForNonDraftTransfersQb(Ploeg $ploeg, $seizoen = null, ?\DateTime $start = null, ?\DateTime $end = null)
@@ -462,33 +471,42 @@ class UitslagRepository extends ServiceEntityRepository
             ->orderBy('w.datum DESC, u.id', 'DESC');
     }
 
+    /**
+     * The points every team got from the riders it transferred in (not drafted), best first.
+     *
+     * @return array<array{rider: Renner, team: Ploeg, points: float}>
+     */
     public function getBestTransfers(Seizoen $seizoen, ?\DateTime $start = null, ?\DateTime $end = null)
     {
-        $key = __FUNCTION__ . $seizoen->getId() . $start?->format('Ymd') . $end?->format('Ymd');
+        $key = __FUNCTION__ . self::TEAM_IDS_KEY . $seizoen->getId() . $start?->format('Ymd') . $end?->format('Ymd');
         $item = $this->cache->getItem($key);
         if ($item->isHit()) {
-            return $item->get();
+            return $this->withRidersAndTeams($item->get());
         }
-        $res = [];
-        $ploegen = $this->ploegRepository->findBy(['seizoen' => $seizoen]);
-        foreach ($ploegen as $ploeg) {
-            foreach ($this->getUitslagenForPloegForNonDraftTransfersQb($ploeg, $seizoen)
-                         ->getQuery()->getResult() as $transferResult) {
-                $index = $transferResult->getRenner() . $ploeg->getAfkorting();
-                if (!array_key_exists($index, $res)) {
-                    $res[$index] = [
-                        'rider' => $transferResult->getRenner(),
-                        'team' => $transferResult->getPloeg(),
-                        'points' => 0,
-                    ];
+        $riderIdsPerTeam = $this->transferRepository->getNonDraftRiderIdsPerTeam($seizoen);
+        $rows = [];
+        if ([] !== $riderIdsPerTeam) {
+            foreach ($this->createQueryBuilder('u')
+                         ->select('IDENTITY(u.renner) AS renner, IDENTITY(u.ploeg) AS ploeg, SUM(u.ploegPunten) AS points')
+                         ->innerJoin('u.wedstrijd', 'w')
+                         ->where('w.seizoen = :seizoen')
+                         ->andWhere('u.ploeg IN (:ploegen)')
+                         ->andWhere('u.renner IN (:renners)')
+                         ->andWhere('u.ploegPunten > 0')
+                         ->groupBy('u.renner')->addGroupBy('u.ploeg')
+                         ->setParameter('seizoen', $seizoen)
+                         ->setParameter('ploegen', array_keys($riderIdsPerTeam))
+                         ->setParameter('renners', self::riderIdsOf($riderIdsPerTeam))
+                         ->getQuery()->getScalarResult() as $row) {
+                if (isset($riderIdsPerTeam[(int)$row['ploeg']][(int)$row['renner']])) {
+                    $rows[] = ['rider' => (int)$row['renner'], 'team' => (int)$row['ploeg'], 'points' => (float)$row['points']];
                 }
-                $res[$index]['points'] += $transferResult->getPloegPunten();
             }
         }
-        uasort($res, function ($a, $b) {
-            return $a['points'] > $b['points'] ? -1 : 1;
-        });
-        $item->set($res);
+        $res = $this->withRidersAndTeams($rows);
+        usort($res, fn (array $a, array $b) => [$b['points'], $a['team']->getAfkorting(), $a['rider']->getNaam()]
+            <=> [$a['points'], $b['team']->getAfkorting(), $b['rider']->getNaam()]);
+        $item->set(array_map(fn (array $row) => ['rider' => $row['rider']->getId(), 'team' => $row['team']->getId(), 'points' => $row['points']], $res));
         $item->tag(self::CACHE_TAG);
         $this->cache->save($item);
         return $res;
@@ -510,23 +528,107 @@ class UitslagRepository extends ServiceEntityRepository
      */
     private function withTeams(array $rows, string $valueKey): array
     {
+        $teams = $this->teamsById(array_column($rows, 'id'));
+        $ret = [];
+        foreach ($rows as $row) {
+            // a team deleted since the entry was cached is left out
+            if (isset($teams[$row['id']])) {
+                $ret[] = [0 => $teams[$row['id']], $valueKey => $row[$valueKey]];
+            }
+        }
+        return $ret;
+    }
+
+    /**
+     * Managed teams by id, loading the ones not yet in the identity map with a single query.
+     *
+     * @return array<int, Ploeg>
+     */
+    private function teamsById(array $ids): array
+    {
         $uow = $this->getEntityManager()->getUnitOfWork();
-        $missing = array_filter(array_column($rows, 'id'), function ($id) use ($uow): bool {
+        $missing = array_filter($ids, function ($id) use ($uow): bool {
             $ploeg = $uow->tryGetById($id, Ploeg::class);
             // an uninitialized proxy would still load on its own when the template reads its name
             return false === $ploeg || $uow->isUninitializedObject($ploeg);
         });
         if ([] !== $missing) {
-            $this->ploegRepository->findBy(['id' => array_values($missing)]);
+            $this->ploegRepository->findBy(['id' => array_values(array_unique($missing))]);
         }
+        $teams = [];
+        foreach ($ids as $id) {
+            if (false !== $ploeg = $uow->tryGetById($id, Ploeg::class)) {
+                $teams[$id] = $ploeg;
+            }
+        }
+        return $teams;
+    }
+
+    /**
+     * Turns cached [rider id, team id, points] rows back into rows with managed riders (and their countries) and teams.
+     */
+    private function withRidersAndTeams(array $rows): array
+    {
+        if ([] === $rows) {
+            return [];
+        }
+        $riders = [];
+        foreach ($this->rennerRepository->createQueryBuilder('r')
+                     ->leftJoin('r.country', 'c')->addSelect('c')
+                     ->where('r.id IN (:ids)')->setParameter('ids', array_values(array_unique(array_column($rows, 'rider'))))
+                     ->getQuery()->getResult() as $renner) {
+            $riders[$renner->getId()] = $renner;
+        }
+        $teams = $this->teamsById(array_column($rows, 'team'));
         $ret = [];
         foreach ($rows as $row) {
-            // a team deleted since the entry was cached is left out
-            if (false !== $ploeg = $uow->tryGetById($row['id'], Ploeg::class)) {
-                $ret[] = [0 => $ploeg, $valueKey => $row[$valueKey]];
+            if (isset($riders[$row['rider']], $teams[$row['team']])) {
+                $ret[] = ['rider' => $riders[$row['rider']], 'team' => $teams[$row['team']], 'points' => $row['points']];
             }
         }
         return $ret;
+    }
+
+    /**
+     * Season total of rennerPunten per rider: getTotalPuntenForRenner() for many riders in one query.
+     * Riders without results are left out.
+     *
+     * @return array<int, float>
+     */
+    private function getRennerPuntenPerRider(Seizoen $seizoen, array $riderIds): array
+    {
+        if ([] === $riderIds) {
+            return [];
+        }
+        $points = [];
+        foreach ($this->createQueryBuilder('u')
+                     ->select('IDENTITY(u.renner) AS renner, SUM(u.rennerPunten) AS punten')
+                     ->innerJoin('u.wedstrijd', 'w')
+                     ->where('w.seizoen = :seizoen')
+                     ->andWhere('u.renner IN (:renners)')
+                     ->groupBy('u.renner')
+                     ->setParameter('seizoen', $seizoen)
+                     ->setParameter('renners', $riderIds)
+                     ->getQuery()->getScalarResult() as $row) {
+            $points[(int)$row['renner']] = (float)$row['punten'];
+        }
+        return $points;
+    }
+
+    /**
+     * @param array<int, array<int, true>> $riderIdsPerTeam
+     *
+     * @return int[] every rider id once
+     */
+    private static function riderIdsOf(array $riderIdsPerTeam): array
+    {
+        $ids = [];
+        foreach ($riderIdsPerTeam as $riderIds) {
+            foreach (array_keys($riderIds) as $id) {
+                $ids[$id] = $id;
+            }
+        }
+        return array_values($ids);
     }
 
     private function resolveSeizoen(?Seizoen $seizoen = null): Seizoen
