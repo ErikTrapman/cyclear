@@ -1,0 +1,84 @@
+<?php declare(strict_types=1);
+
+namespace App\Tests\Repository;
+
+use App\Entity\Ploeg;
+use App\Entity\Seizoen;
+use App\Repository\UitslagRepository;
+use App\Tests\Fixtures\LoadPloegData;
+use App\Tests\Fixtures\LoadSeizoenData;
+use Doctrine\ORM\EntityManagerInterface;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+
+/**
+ * Cached standings must come back with teams Doctrine manages, not detached copies.
+ */
+class UitslagRepositoryTest extends KernelTestCase
+{
+    private EntityManagerInterface $em;
+
+    private UitslagRepository $repository;
+
+    protected function setUp(): void
+    {
+        self::bootKernel();
+        self::getContainer()->get(DatabaseToolCollection::class)->get()->loadFixtures([
+            LoadSeizoenData::class,
+            LoadPloegData::class,
+        ]);
+        $this->em = self::getContainer()->get(EntityManagerInterface::class);
+        $this->repository = self::getContainer()->get(UitslagRepository::class);
+        $seizoen = $this->seizoen();
+        foreach ($this->em->getRepository(Ploeg::class)->findAll() as $ploeg) {
+            $ploeg->setSeizoen($seizoen);
+        }
+        // the flush also invalidates the cached standings
+        $this->em->flush();
+        $this->em->clear();
+    }
+
+    public function testCachedPointsStandingsHoldManagedTeams(): void
+    {
+        $fresh = $this->teamsOf($this->repository->getPuntenByPloeg($this->seizoen()), 'punten');
+        $this->em->clear();
+
+        $cached = $this->repository->getPuntenByPloeg($this->seizoen());
+
+        $this->assertSame($fresh, $this->teamsOf($cached, 'punten'));
+        $this->assertAllManaged($cached);
+    }
+
+    public function testCachedPositionCountsHoldManagedTeams(): void
+    {
+        $fresh = $this->teamsOf($this->repository->getCountForPosition($this->seizoen(), 1), 'freqByPos');
+        $this->em->clear();
+
+        $cached = $this->repository->getCountForPosition($this->seizoen(), 1);
+
+        $this->assertSame($fresh, $this->teamsOf($cached, 'freqByPos'));
+        $this->assertAllManaged($cached);
+    }
+
+    private function seizoen(): Seizoen
+    {
+        return $this->em->getRepository(Seizoen::class)->findOneBy([]);
+    }
+
+    /**
+     * @return array<array{string, string}> abbreviation and value per row, in order
+     */
+    private function teamsOf(array $rows, string $valueKey): array
+    {
+        return array_map(fn (array $row) => [$row[0]->getAfkorting(), (string)$row[$valueKey]], $rows);
+    }
+
+    private function assertAllManaged(array $rows): void
+    {
+        $this->assertCount(2, $rows);
+        foreach ($rows as $row) {
+            $this->assertInstanceOf(Ploeg::class, $row[0]);
+            $this->assertTrue($this->em->contains($row[0]), $row[0]->getAfkorting() . ' is not managed');
+        }
+    }
+}

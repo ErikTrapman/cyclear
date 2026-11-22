@@ -59,7 +59,7 @@ class WedstrijdController extends AbstractController
     }
 
     #[Route(path: '/{seizoen}/wedstrijden', name: 'wedstrijd_list')]
-    public function indexAction(Request $request, Seizoen $seizoen, RennerRepository $rennerRepository): \Symfony\Component\HttpFoundation\Response
+    public function indexAction(Request $request, Seizoen $seizoen): \Symfony\Component\HttpFoundation\Response
     {
         $qb = $this->wedstrijdRepository->createQueryBuilder('n')
             ->where('n.seizoen = :seizoen')->setParameter('seizoen', $seizoen)
@@ -68,6 +68,6 @@ class WedstrijdController extends AbstractController
         $pagination = $this->paginator->paginate(
             $qb, (int)$request->query->get('page', 1), 20
         );
-        return $this->render('wedstrijd/index.html.twig', ['pagination' => $pagination, 'seizoen' => $seizoen, 'rennerRepository' => $rennerRepository]);
+        return $this->render('wedstrijd/index.html.twig', ['pagination' => $pagination, 'seizoen' => $seizoen]);
     }
 }

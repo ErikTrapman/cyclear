@@ -48,8 +48,15 @@ class TransferRepository extends ServiceEntityRepository
     public function getLatest($seizoen = null, $types = [], $limit = 20, $ploegNaar = null, $renner = null)
     {
         $seizoen = $this->resolveSeizoen($seizoen);
+        // fetch-join everything the transfer lists render, so they don't lazy-load per row
         $qb = $this
             ->createQueryBuilder('t')
+            ->leftJoin('t.ploegNaar', 'ploegNaar')->addSelect('ploegNaar')
+            ->leftJoin('t.renner', 'renner')->addSelect('renner')
+            ->leftJoin('renner.country', 'rennerCountry')->addSelect('rennerCountry')
+            ->leftJoin('t.inversionTransfer', 'inversion')->addSelect('inversion')
+            ->leftJoin('inversion.renner', 'inversionRenner')->addSelect('inversionRenner')
+            ->leftJoin('inversionRenner.country', 'inversionCountry')->addSelect('inversionCountry')
             ->where('t.ploegNaar IS NOT NULL')
             ->andWhere('t.seizoen = :seizoen')
             ->setParameter('seizoen', $seizoen)
@@ -156,6 +163,28 @@ class TransferRepository extends ServiceEntityRepository
         $conn->executeQuery('INSERT INTO ' . $tableName . '
           ( SELECT ploegNaar_id, renner_id FROM transfer t
           WHERE t.transferType = ' . Transfer::DRAFTTRANSFER . ' AND t.seizoen_id = ' . $seizoen->getId() . ' )');
+    }
+
+    /**
+     * The drafted riders of every team in a season, in one query.
+     *
+     * @return array<int, array<int, true>> rider ids as keys, per team id
+     */
+    public function getDraftRiderIdsPerTeam(Seizoen $seizoen): array
+    {
+        $rows = $this->createQueryBuilder('t')
+            ->select('IDENTITY(t.ploegNaar) AS ploeg, IDENTITY(t.renner) AS renner')
+            ->innerJoin('t.ploegNaar', 'p')
+            ->where('t.transferType = :draft')
+            ->andWhere('p.seizoen = :seizoen')
+            ->setParameter('draft', Transfer::DRAFTTRANSFER)
+            ->setParameter('seizoen', $seizoen)
+            ->getQuery()->getScalarResult();
+        $perTeam = [];
+        foreach ($rows as $row) {
+            $perTeam[(int)$row['ploeg']][(int)$row['renner']] = true;
+        }
+        return $perTeam;
     }
 
     public function hasDraftTransfer(Renner $renner, Ploeg $ploeg)

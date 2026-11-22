@@ -18,6 +18,12 @@ class UitslagRepository extends ServiceEntityRepository
 {
     public const CACHE_TAG = 'UitslagRepository';
 
+    /**
+     * Marks cache keys whose entries hold team ids instead of serialized Ploeg entities,
+     * so entries written in the old format are never read back.
+     */
+    private const TEAM_IDS_KEY = '-teamids-';
+
     public function __construct(
         ManagerRegistry $registry,
         private readonly TagAwareCacheInterface $cache,
@@ -53,10 +59,10 @@ class UitslagRepository extends ServiceEntityRepository
 
     public function getPuntenByPloeg($seizoen = null, $ploeg = null, ?\DateTime $maxDate = null)
     {
-        $key = __FUNCTION__ . $seizoen?->getId() . $ploeg?->getId() . $maxDate?->format('YmdHis');
+        $key = __FUNCTION__ . self::TEAM_IDS_KEY . $seizoen?->getId() . $ploeg?->getId() . $maxDate?->format('YmdHis');
         $item = $this->cache->getItem($key);
         if ($item->isHit()) {
-            return $item->get();
+            return $this->withTeams($item->get(), 'punten');
         }
         $seizoen = $this->resolveSeizoen($seizoen);
         $params = ['seizoen' => $seizoen];
@@ -82,7 +88,7 @@ class UitslagRepository extends ServiceEntityRepository
         $qb->orderBy('punten', 'DESC')->addOrderBy('p.afkorting', 'ASC');
         $qb->setParameters(Util::buildParameters($params));
         $value = $qb->getQuery()->getResult();
-        $item->set($value);
+        $item->set($this->withTeamIds($value, 'punten'));
         $item->tag(self::CACHE_TAG);
         $this->cache->save($item);
         return $value;
@@ -116,10 +122,10 @@ class UitslagRepository extends ServiceEntityRepository
     public function getCountForPosition($seizoen = null, $pos = 1, ?\DateTime $start = null, ?\DateTime $end = null)
     {
         $seizoen = $this->resolveSeizoen($seizoen);
-        $key = __FUNCTION__ . $seizoen->getId() . $pos . $start?->format('YmdHis') . $end?->format('YmdHis');
+        $key = __FUNCTION__ . self::TEAM_IDS_KEY . $seizoen->getId() . $pos . $start?->format('YmdHis') . $end?->format('YmdHis');
         $item = $this->cache->getItem($key);
         if ($item->isHit()) {
-            return $item->get();
+            return $this->withTeams($item->get(), 'freqByPos');
         }
         $parameters = ['seizoen' => $seizoen, 'pos' => $pos];
         $qb2 = $this->createQueryBuilder('u')
@@ -145,7 +151,7 @@ class UitslagRepository extends ServiceEntityRepository
             ->orderBy('freqByPos DESC, p.afkorting', 'ASC')
             ->setParameters(Util::buildParameters($parameters));
         $ret = $qb->getQuery()->getResult();
-        $item->set($ret);
+        $item->set($this->withTeamIds($ret, 'freqByPos'));
         $item->tag(self::CACHE_TAG);
         $this->cache->save($item);
         return $ret;
@@ -486,6 +492,41 @@ class UitslagRepository extends ServiceEntityRepository
         $item->tag(self::CACHE_TAG);
         $this->cache->save($item);
         return $res;
+    }
+
+    /**
+     * Turns [0 => Ploeg, $valueKey => x] rows into cacheable [id, $valueKey] rows.
+     * Caching the entities themselves loads every team's user on serialize, and reads them back
+     * as detached copies that Doctrine doesn't know, so later lazy loads of those teams query again.
+     */
+    private function withTeamIds(array $rows, string $valueKey): array
+    {
+        return array_map(fn (array $row) => ['id' => $row[0]->getId(), $valueKey => $row[$valueKey]], $rows);
+    }
+
+    /**
+     * The reverse of withTeamIds(): puts managed Ploeg entities back in the rows, loading the teams
+     * that aren't in the identity map yet with a single query.
+     */
+    private function withTeams(array $rows, string $valueKey): array
+    {
+        $uow = $this->getEntityManager()->getUnitOfWork();
+        $missing = array_filter(array_column($rows, 'id'), function ($id) use ($uow): bool {
+            $ploeg = $uow->tryGetById($id, Ploeg::class);
+            // an uninitialized proxy would still load on its own when the template reads its name
+            return false === $ploeg || $uow->isUninitializedObject($ploeg);
+        });
+        if ([] !== $missing) {
+            $this->ploegRepository->findBy(['id' => array_values($missing)]);
+        }
+        $ret = [];
+        foreach ($rows as $row) {
+            // a team deleted since the entry was cached is left out
+            if (false !== $ploeg = $uow->tryGetById($row['id'], Ploeg::class)) {
+                $ret[] = [0 => $ploeg, $valueKey => $row[$valueKey]];
+            }
+        }
+        return $ret;
     }
 
     private function resolveSeizoen(?Seizoen $seizoen = null): Seizoen

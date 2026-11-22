@@ -85,13 +85,32 @@ class WedstrijdRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * The latest races with their results, riders, countries and teams loaded up front.
+     * Two queries: a limit can't go on the fetch-joined one, since it would cut result rows, not races.
+     */
     public function getLatest(Seizoen $seizoen, int $limit = 20): array
     {
-        return $this->createQueryBuilder('w')
+        $ids = $this->createQueryBuilder('w')
+            ->select('w.id')
             ->where('w.seizoen = :seizoen')
             ->setParameter('seizoen', $seizoen)
             ->orderBy('w.datum DESC, w.id', 'DESC')
             ->setMaxResults($limit)
+            ->getQuery()->getSingleColumnResult();
+        if ([] === $ids) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('w')
+            ->leftJoin('w.uitslagen', 'u')->addSelect('u')
+            ->leftJoin('u.renner', 'r')->addSelect('r')
+            ->leftJoin('r.country', 'c')->addSelect('c')
+            ->leftJoin('u.ploeg', 'p')->addSelect('p')
+            ->where('w.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->orderBy('w.datum DESC, w.id', 'DESC')
+            ->addOrderBy('u.positie', 'ASC')
             ->getQuery()->getResult();
     }
 }

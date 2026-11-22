@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\News;
 use App\Entity\Transfer;
 use App\Repository\PeriodeRepository;
-use App\Repository\RennerRepository;
 use App\Repository\TransferRepository;
 use App\Repository\UitslagRepository;
 use App\Repository\WedstrijdRepository;
@@ -23,7 +22,6 @@ class DefaultController extends AbstractController
         private readonly UitslagRepository $uitslagRepository,
         private readonly WedstrijdRepository $wedstrijdRepository,
         private readonly TransferRepository $transferRepository,
-        private readonly RennerRepository $rennerRepository,
     ) {
     }
 
@@ -59,11 +57,9 @@ class DefaultController extends AbstractController
         }
 
         return $this->render('default/index.html.twig', [
-            'drafts' => $this->uitslagRepository->getPuntenByPloegForDraftTransfers($seizoen),
             'nieuws' => $this->doctrine->getRepository(News::class)->findBy(['seizoen' => $seizoen], ['id' => 'DESC'], 1)[0] ?? null,
             'periode' => $periode,
             'periodestand' => $periode ? $this->uitslagRepository->getPuntenByPloegForPeriode($periode, $seizoen) : [],
-            'rennerRepo' => $this->rennerRepository,
             'seizoen' => $seizoen,
             'shadowstandingsById' => $shadowStandingsById,
             'stand' => $this->uitslagRepository->getPuntenByPloeg($seizoen),
